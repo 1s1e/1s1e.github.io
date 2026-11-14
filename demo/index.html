@@ -17,16 +17,13 @@
         --mat: #dfe2e6;
         --terra: #93a7c9;
         --frame: #1b2a4a;
-        --band: #101a30;
-        --band-text: #C0C0C0;
         --shadow: 27, 42, 74;
         --serif: "Cinzel", "Times New Roman", Georgia, serif;
 
-        /* The page is a column: the masthead at the top, the framed
-           poster in the space between, and the footer band across the
-           bottom. --masthead-h and --footer-h are the fixed heights of
-           those two pieces; the poster's size is worked out from the
-           height that remains once both are taken away, so the whole
+        /* The page is a column: the masthead at the top and the framed
+           poster in the space below it. --masthead-h is the fixed height
+           of the masthead; the poster's size is worked out from the
+           height that remains once it is taken away, so the whole
            composition always fits the screen with no scrolling.
            --frame-pad is the sand mat width; it shrinks on small and
            short screens so the poster itself keeps as much of the
@@ -34,14 +31,12 @@
         --page-margin: clamp(8px, 2vmin, 16px);
         --frame-pad: clamp(10px, 3vmin, 28px);
         --masthead-h: 112px;
-        --footer-h: 62px;
       }
 
       @media (max-height: 620px) {
         :root {
           --frame-pad: clamp(8px, 2.5vh, 14px);
           --masthead-h: 78px;
-          --footer-h: 48px;
         }
       }
 
@@ -135,28 +130,19 @@
         border: 1px solid var(--frame);
         padding: var(--frame-pad);
         /* Width is the smaller of: the viewport width minus margins,
-           and the width implied by the height left between the
-           masthead and the footer band, minus margins, for a 2:3
+           and the width implied by the height left below the
+           masthead, minus margins, for a 2:3
            poster plus its mat and rule. The 2px terms are the
            frame's two 1px rules. */
         width: min(
           calc(100vw - (2 * var(--page-margin))),
-          calc((100vh - var(--masthead-h) - var(--footer-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px),
-          calc((100dvh - var(--masthead-h) - var(--footer-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)
+          calc((100vh - var(--masthead-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px),
+          calc((100dvh - var(--masthead-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)
         );
         box-shadow:
           0 1px 2px rgba(var(--shadow), 0.14),
           0 12px 28px rgba(var(--shadow), 0.20),
           0 32px 64px rgba(var(--shadow), 0.14);
-      }
-
-      /* ---------- Footer band ---------- */
-
-      .footer-band {
-        flex: 0 0 var(--footer-h);
-        height: var(--footer-h);
-        width: 100%;
-        background: var(--band);
       }
 
       .viewport {
@@ -195,7 +181,6 @@
         </div>
       </div>
     </main>
-    <footer class="footer-band"></footer>
 
     <script>
       // The single poster list. Rotation and preloading read from this
