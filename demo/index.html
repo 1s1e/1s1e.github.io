@@ -157,39 +157,6 @@
         height: var(--footer-h);
         width: 100%;
         background: var(--band);
-        color: var(--band-text);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 16px 16px;
-        text-align: center;
-      }
-
-      .footer-band span {
-        font-family: var(--serif);
-        font-weight: 500;
-        font-size: clamp(13px, 1.9vmin, 16px);
-        line-height: 1;
-        letter-spacing: 0.42em;
-        /* Compensate for the trailing letter space so the line
-           sits optically centred in the band. */
-        padding-left: 0.42em;
-        text-transform: uppercase;
-        white-space: nowrap;
-      }
-
-      .footer-band .one {
-        font-size: 1.0196em;
-        letter-spacing: 0.10em;
-      }
-
-      .footer-band .one ~ .one {
-        margin-left: -0.30em;
-      }
-
-      @media (max-height: 620px) {
-        .footer-band { padding: 12px 16px; }
-        .footer-band span { font-size: 12px; }
       }
 
       .viewport {
@@ -228,9 +195,7 @@
         </div>
       </div>
     </main>
-    <footer class="footer-band">
-      <span><span class="one">1</span>S<span class="one">1</span>E.COM</span>
-    </footer>
+    <footer class="footer-band"></footer>
 
     <script>
       // The single poster list. Rotation and preloading read from this
