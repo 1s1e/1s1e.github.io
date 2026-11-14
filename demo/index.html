@@ -208,7 +208,7 @@
 
       var layers = [document.getElementById("layerA"), document.getElementById("layerB")];
 
-      var current = Math.floor(Math.random() * POSTERS.length); // random start each visit
+      var current = 0; // always starts on the first poster
       var topLayer = 0;              // index into layers of the visible poster
       var playing = !reducedMotion;  // reduced motion: no auto-advance
       var timer = null;
@@ -285,7 +285,7 @@
         pre.src = p.file;
       });
 
-      // First paint: the random starting poster, shown at once.
+      // First paint: the first poster, shown at once.
       layers[0].src = POSTERS[current].file;
       layers[0].alt = POSTERS[current].title;
       layers[0].style.zIndex = 2;
