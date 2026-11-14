@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="0">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="dark" />
     <meta name="author" content="MDS" />
     <link rel="icon" href="data:," />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,14 +12,14 @@
     <title>1s1e.com</title>
     <style>
       :root {
-        --ground: #ece4d4;
-        --ink: #2b211a;
-        --mat: #e0d2b8;
-        --terra: #b0512c;
-        --frame: #2b211a;
-        --band: #2b211a;
-        --band-text: #ece4d4;
-        --shadow: 90, 58, 32;
+        --ground: #1b2a4a;
+        --ink: #C0C0C0;
+        --mat: #dfe2e6;
+        --terra: #93a7c9;
+        --frame: #1b2a4a;
+        --band: #101a30;
+        --band-text: #C0C0C0;
+        --shadow: 27, 42, 74;
         --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
 
         /* The page is a column: the masthead at the top, the framed
@@ -204,58 +204,6 @@
       @media (prefers-reduced-motion: reduce) {
         .viewport img { transition: none; }
       }
-
-      /* ---------- Palette themes (demo switch) ----------
-         Theme 0, Warm Editorial, is the :root default above.
-         Each block below changes colours only. */
-      html[data-theme="1"] { --ground: #101a2c; --ink: #f0e7d3; --mat: #e9e0cb; --terra: #c69a4a; --frame: #101a2c; --band: #0a111f; --band-text: #c69a4a; --shadow: 16, 26, 44; }
-      html[data-theme="2"] { --ground: #17251d; --ink: #efe8d5; --mat: #e7ddc6; --terra: #b3905a; --frame: #17251d; --band: #0d1712; --band-text: #efe8d5; --shadow: 23, 37, 29; }
-      html[data-theme="3"] { --ground: #f6f4ef; --ink: #141414; --mat: #ffffff; --terra: #6f6f6f; --frame: #141414; --band: #141414; --band-text: #f6f4ef; --shadow: 20, 20, 20; }
-      html[data-theme="4"] { --ground: #ece1d4; --ink: #4a1f22; --mat: #ddc9ae; --terra: #a9714b; --frame: #4a1f22; --band: #4a1f22; --band-text: #ece1d4; --shadow: 74, 31, 34; }
-      html[data-theme="5"] { --ground: #20262c; --ink: #e9e5da; --mat: #ddd6c6; --terra: #c07a45; --frame: #20262c; --band: #14181c; --band-text: #e9e5da; --shadow: 32, 38, 44; }
-      html[data-theme="6"] { --ground: #C0C0C0; --ink: #1e3d2c; --mat: #e6e8e3; --terra: #57785f; --frame: #1e3d2c; --band: #1e3d2c; --band-text: #C0C0C0; --shadow: 30, 61, 44; }
-      html[data-theme="7"] { --ground: #1e3d2c; --ink: #C0C0C0; --mat: #dde0da; --terra: #8ba888; --frame: #1e3d2c; --band: #122619; --band-text: #C0C0C0; --shadow: 30, 61, 44; }
-      html[data-theme="8"] { --ground: #C0C0C0; --ink: #1b2a4a; --mat: #e5e7ea; --terra: #7186a8; --frame: #1b2a4a; --band: #1b2a4a; --band-text: #C0C0C0; --shadow: 27, 42, 74; }
-      html[data-theme="9"] { --ground: #1b2a4a; --ink: #C0C0C0; --mat: #dfe2e6; --terra: #93a7c9; --frame: #1b2a4a; --band: #101a30; --band-text: #C0C0C0; --shadow: 27, 42, 74; }
-
-      /* ---------- Palette switch (demo only) ---------- */
-
-      .palette-switch {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: calc(var(--footer-h) + 10px);
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(18, 14, 10, 0.72);
-        color: #f2ead8;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 999px;
-        padding: 6px 10px;
-        font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        -webkit-backdrop-filter: blur(6px);
-        backdrop-filter: blur(6px);
-        transition: opacity 0.6s ease;
-      }
-
-      .palette-switch.dim { opacity: 0.35; }
-
-      .palette-switch button {
-        appearance: none;
-        background: transparent;
-        border: 0;
-        color: inherit;
-        font-size: 16px;
-        line-height: 1;
-        padding: 4px 6px;
-        cursor: pointer;
-      }
-
-      .palette-switch span { white-space: nowrap; }
     </style>
   </head>
   <body>
@@ -274,12 +222,6 @@
     <footer class="footer-band">
       <span>1S1E.COM</span>
     </footer>
-
-    <div class="palette-switch" id="paletteSwitch">
-      <button type="button" id="palPrev" aria-label="Previous palette">&#8249;</button>
-      <span id="palLabel">0 \u00b7 Warm Editorial</span>
-      <button type="button" id="palNext" aria-label="Next palette">&#8250;</button>
-    </div>
 
     <script>
       // The single poster list. Rotation and preloading read from this
@@ -389,48 +331,6 @@
       layers[0].style.zIndex = 2;
       layers[0].style.opacity = "1";
       schedule();
-
-      // ---------- Palette switch (demo only) ----------
-      var THEMES = [
-        { name: "Warm Editorial", dark: false },
-        { name: "Midnight Brass", dark: true },
-        { name: "Forest Cream", dark: true },
-        { name: "Gallery Mono", dark: false },
-        { name: "Oxblood Stone", dark: false },
-        { name: "Slate Copper", dark: true },
-        { name: "Silver Forest", dark: false },
-        { name: "Forest Silver", dark: true },
-        { name: "Silver Navy", dark: false },
-        { name: "Navy Silver", dark: true }
-      ];
-      var themeIndex = 0;
-      var palLabel = document.getElementById("palLabel");
-      var palSwitch = document.getElementById("paletteSwitch");
-      var schemeMeta = document.querySelector('meta[name="color-scheme"]');
-      var dimTimer = null;
-
-      function armDim() {
-        clearTimeout(dimTimer);
-        dimTimer = setTimeout(function () { palSwitch.classList.add("dim"); }, 4000);
-      }
-
-      function applyTheme(i) {
-        themeIndex = ((i % THEMES.length) + THEMES.length) % THEMES.length;
-        document.documentElement.setAttribute("data-theme", String(themeIndex));
-        palLabel.textContent = themeIndex + " \u00b7 " + THEMES[themeIndex].name;
-        if (schemeMeta) { schemeMeta.setAttribute("content", THEMES[themeIndex].dark ? "dark" : "light"); }
-        palSwitch.classList.remove("dim");
-        armDim();
-      }
-
-      document.getElementById("palPrev").addEventListener("click", function () { applyTheme(themeIndex - 1); });
-      document.getElementById("palNext").addEventListener("click", function () { applyTheme(themeIndex + 1); });
-      palSwitch.addEventListener("pointerdown", function () { palSwitch.classList.remove("dim"); armDim(); });
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "[") { applyTheme(themeIndex - 1); }
-        else if (e.key === "]") { applyTheme(themeIndex + 1); }
-      });
-      armDim();
     </script>
   </body>
 </html>
