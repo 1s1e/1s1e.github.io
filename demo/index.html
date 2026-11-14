@@ -33,27 +33,27 @@
            space as possible. */
         --page-margin: clamp(8px, 2vmin, 16px);
         --frame-pad: clamp(10px, 3vmin, 28px);
-        --masthead-h: 92px;
+        --masthead-h: 112px;
         --footer-h: 62px;
       }
 
       @media (max-height: 620px) {
         :root {
           --frame-pad: clamp(8px, 2.5vh, 14px);
-          --masthead-h: 66px;
+          --masthead-h: 78px;
           --footer-h: 48px;
         }
       }
 
       @media (max-width: 480px) {
         :root {
-          --masthead-h: 82px;
+          --masthead-h: 100px;
         }
       }
 
       @media (max-height: 620px) and (max-width: 480px) {
         :root {
-          --masthead-h: 62px;
+          --masthead-h: 74px;
         }
       }
 
@@ -94,7 +94,7 @@
         margin: 0;
         font-family: var(--serif);
         font-weight: 600;
-        font-size: clamp(26px, 4.6vmin, 38px);
+        font-size: clamp(34px, 6vmin, 50px);
         line-height: 1;
         letter-spacing: 0.34em;
         /* Compensate for the trailing letter space so the word
@@ -112,7 +112,7 @@
 
       @media (max-height: 620px) {
         .masthead { gap: 6px; padding: 10px 16px 6px; }
-        .masthead h1 { font-size: 22px; }
+        .masthead h1 { font-size: 28px; }
       }
 
       /* ---------- Poster stage ---------- */
@@ -178,6 +178,11 @@
         white-space: nowrap;
       }
 
+      .footer-band .one {
+        font-size: 1.68em;
+        letter-spacing: 0.25em;
+      }
+
       @media (max-height: 620px) {
         .footer-band { padding: 12px 16px; }
         .footer-band span { font-size: 12px; }
@@ -220,7 +225,7 @@
       </div>
     </main>
     <footer class="footer-band">
-      <span>1S1E.COM</span>
+      <span><span class="one">1</span>S1E.COM</span>
     </footer>
 
     <script>
