@@ -6,26 +6,50 @@
     <meta name="color-scheme" content="light" />
     <meta name="author" content="MDS" />
     <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
     <title>1s1e.com</title>
     <style>
       :root {
         --ground: #ece4d4;
         --ink: #2b211a;
         --mat: #e0d2b8;
+        --terra: #b0512c;
+        --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
 
-        /* The framed poster is the only thing on the page. It is sized
-           from the viewport itself: the frame takes the full height or
-           width available, whichever runs out first, leaving only a
-           small margin of bone ground around it. --frame-pad is the
-           sand mat width; it shrinks on small and short screens so the
-           poster itself keeps as much of the screen as possible. */
+        /* The page is a column: the masthead at the top, the framed
+           poster in the space between, and the footer band across the
+           bottom. --masthead-h and --footer-h are the fixed heights of
+           those two pieces; the poster's size is worked out from the
+           height that remains once both are taken away, so the whole
+           composition always fits the screen with no scrolling.
+           --frame-pad is the sand mat width; it shrinks on small and
+           short screens so the poster itself keeps as much of the
+           space as possible. */
         --page-margin: clamp(8px, 2vmin, 16px);
         --frame-pad: clamp(10px, 3vmin, 28px);
+        --masthead-h: 92px;
+        --footer-h: 62px;
       }
 
       @media (max-height: 620px) {
         :root {
           --frame-pad: clamp(8px, 2.5vh, 14px);
+          --masthead-h: 66px;
+          --footer-h: 48px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --masthead-h: 82px;
+        }
+      }
+
+      @media (max-height: 620px) and (max-width: 480px) {
+        :root {
+          --masthead-h: 62px;
         }
       }
 
@@ -42,19 +66,62 @@
         height: 100vh;
         height: 100dvh;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
         overflow: hidden;
         -webkit-font-smoothing: antialiased;
       }
 
-      main {
+      /* ---------- Masthead ---------- */
+
+      .masthead {
+        flex: 0 0 var(--masthead-h);
+        height: var(--masthead-h);
         width: 100%;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 16px 10px;
+        text-align: center;
+      }
+
+      .masthead h1 {
+        margin: 0;
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: clamp(26px, 4.6vmin, 38px);
+        line-height: 1;
+        letter-spacing: 0.34em;
+        /* Compensate for the trailing letter space so the word
+           sits optically centred. */
+        padding-left: 0.34em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .masthead .rule {
+        width: clamp(120px, 24vw, 200px);
+        height: 1px;
+        background: var(--terra);
+      }
+
+      @media (max-height: 620px) {
+        .masthead { gap: 6px; padding: 10px 16px 6px; }
+        .masthead h1 { font-size: 22px; }
+      }
+
+      /* ---------- Poster stage ---------- */
+
+      main {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: var(--page-margin);
+        padding-top: 2px;
       }
 
       /* ---------- Framed poster (Style 2) ---------- */
@@ -64,18 +131,52 @@
         border: 1px solid var(--ink);
         padding: var(--frame-pad);
         /* Width is the smaller of: the viewport width minus margins,
-           and the width implied by the viewport height minus margins
-           for a 2:3 poster plus its mat and rule. The 2px terms are
-           the frame's two 1px rules. */
+           and the width implied by the height left between the
+           masthead and the footer band, minus margins, for a 2:3
+           poster plus its mat and rule. The 2px terms are the
+           frame's two 1px rules. */
         width: min(
           calc(100vw - (2 * var(--page-margin))),
-          calc((100vh - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px),
-          calc((100dvh - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)
+          calc((100vh - var(--masthead-h) - var(--footer-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px),
+          calc((100dvh - var(--masthead-h) - var(--footer-h) - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)
         );
         box-shadow:
           0 1px 2px rgba(90, 58, 32, 0.14),
           0 12px 28px rgba(90, 58, 32, 0.20),
           0 32px 64px rgba(90, 58, 32, 0.14);
+      }
+
+      /* ---------- Footer band ---------- */
+
+      .footer-band {
+        flex: 0 0 var(--footer-h);
+        height: var(--footer-h);
+        width: 100%;
+        background: var(--ink);
+        color: var(--ground);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 16px;
+        text-align: center;
+      }
+
+      .footer-band span {
+        font-family: var(--serif);
+        font-weight: 500;
+        font-size: clamp(13px, 1.9vmin, 16px);
+        line-height: 1;
+        letter-spacing: 0.42em;
+        /* Compensate for the trailing letter space so the line
+           sits optically centred in the band. */
+        padding-left: 0.42em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      @media (max-height: 620px) {
+        .footer-band { padding: 12px 16px; }
+        .footer-band span { font-size: 12px; }
       }
 
       .viewport {
@@ -102,6 +203,10 @@
     </style>
   </head>
   <body>
+    <header class="masthead">
+      <h1>The Isle</h1>
+      <div class="rule" aria-hidden="true"></div>
+    </header>
     <main>
       <div class="frame">
         <div class="viewport" id="viewport">
@@ -110,6 +215,9 @@
         </div>
       </div>
     </main>
+    <footer class="footer-band">
+      <span>1S1E.COM</span>
+    </footer>
 
     <script>
       // The single poster list. Rotation and preloading read from this
