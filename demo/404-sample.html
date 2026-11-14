@@ -62,9 +62,26 @@
         color: var(--ink);
       }
 
+      .masthead .title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
       .masthead .tree {
-        height: 76px;
+        height: 44px;
         width: auto;
+        flex: none;
+      }
+
+      @media (max-width: 480px) {
+        .masthead h1 {
+          font-size: 30px;
+          letter-spacing: 0.26em;
+          padding-left: 0.26em;
+        }
+
+        .masthead .tree { height: 32px; }
       }
 
       .masthead .rule {
@@ -109,8 +126,11 @@
   <body>
     <main>
       <div class="masthead">
-        <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
-        <h1>The Isle</h1>
+        <div class="title-row">
+          <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
+          <h1>The Isle</h1>
+          <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
+        </div>
         <div class="rule" aria-hidden="true"></div>
       </div>
       <h2>Page Not Found</h2>
