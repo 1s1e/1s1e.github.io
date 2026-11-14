@@ -7,70 +7,25 @@
     <meta name="author" content="MDS" />
     <link rel="icon" href="data:," />
     <title>1s1e.com</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
     <style>
       :root {
         --ground: #ece4d4;
         --ink: #2b211a;
-        --accent: #b0512c;
         --mat: #e0d2b8;
-        --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
-        --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
 
-        /* Vertical rhythm. Every value below also feeds the height budget
-           (--chrome) that limits the framed poster, so the whole composition
-           fits the viewport with no page scrolling at any size. */
-        --pad-main-top: clamp(2.5rem, 7vh, 4.5rem);
-        --pad-main-bottom: clamp(2rem, 5vh, 3rem);
-        --name-size: clamp(2.75rem, 11vw, 4.75rem);
-        --rule-mt: clamp(1.1rem, 3vh, 1.6rem);
-        --rule-mb: clamp(1.9rem, 5vh, 2.9rem);
-        --frame-pad: clamp(14px, 4.5vw, 30px);
-        --caption-mt: clamp(1.7rem, 4.5vh, 2.5rem);
-        --title-size: clamp(1.45rem, 5.5vw, 1.8rem);
-        --counter-mt: 0.65rem;
-        --controls-mt: 0.85rem;
-        --controls-h: 44px;
-        --foot-pt: 1.35rem;
-        --foot-pb: 1.6rem;
-        --marker-mb: 0.8rem;
-
-        --chrome: calc(
-          var(--pad-main-top) + var(--pad-main-bottom)
-          + (var(--name-size) * 1.05)
-          + var(--rule-mt) + 1px + var(--rule-mb)
-          + var(--caption-mt)
-          + (var(--title-size) * 1.2)
-          + var(--counter-mt) + 1rem
-          + var(--controls-mt) + var(--controls-h)
-          + 1px + var(--foot-pt) + var(--foot-pb) + 7px + var(--marker-mb) + 1.1rem
-          + 18px
-        );
+        /* The framed poster is the only thing on the page. It is sized
+           from the viewport itself: the frame takes the full height or
+           width available, whichever runs out first, leaving only a
+           small margin of bone ground around it. --frame-pad is the
+           sand mat width; it shrinks on small and short screens so the
+           poster itself keeps as much of the screen as possible. */
+        --page-margin: clamp(8px, 2vmin, 16px);
+        --frame-pad: clamp(10px, 3vmin, 28px);
       }
 
-      /* Short screens (landscape phones, small windows): the same
-         composition, tightened so the poster still gets its share. */
       @media (max-height: 620px) {
         :root {
-          --pad-main-top: 0.85rem;
-          --pad-main-bottom: 0.6rem;
-          --name-size: clamp(1.7rem, 5.5vh, 2.1rem);
-          --rule-mt: 0.5rem;
-          --rule-mb: 0.85rem;
           --frame-pad: clamp(8px, 2.5vh, 14px);
-          --caption-mt: 0.75rem;
-          --title-size: 1.2rem;
-          --counter-mt: 0.3rem;
-          --controls-mt: 0.45rem;
-          --controls-h: 40px;
-          --foot-pt: 0.65rem;
-          --foot-pb: 0.75rem;
-          --marker-mb: 0.4rem;
         }
       }
 
@@ -84,58 +39,38 @@
       body {
         background: var(--ground);
         color: var(--ink);
-        font-family: var(--serif);
         height: 100vh;
         height: 100dvh;
         display: flex;
-        flex-direction: column;
         align-items: center;
+        justify-content: center;
         overflow: hidden;
         -webkit-font-smoothing: antialiased;
       }
 
       main {
-        flex: 1 0 auto;
         width: 100%;
+        height: 100%;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: var(--pad-main-top) 1.25rem var(--pad-main-bottom);
-        text-align: center;
+        padding: var(--page-margin);
       }
 
-      /* ---------- Name ---------- */
-
-      .name {
-        margin: 0;
-        font-family: var(--serif);
-        font-weight: 500;
-        font-size: var(--name-size);
-        line-height: 1.05;
-        letter-spacing: 0.22em;
-        text-indent: 0.22em; /* optically re-centres letterspaced text */
-        color: var(--ink);
-      }
-
-      .name-rule {
-        width: 72px;
-        height: 1px;
-        background: var(--accent);
-        margin: var(--rule-mt) auto var(--rule-mb);
-      }
-
-      /* ---------- Framed poster ---------- */
+      /* ---------- Framed poster (Style 2) ---------- */
 
       .frame {
         background: var(--mat);
         border: 1px solid var(--ink);
         padding: var(--frame-pad);
+        /* Width is the smaller of: the viewport width minus margins,
+           and the width implied by the viewport height minus margins
+           for a 2:3 poster plus its mat and rule. The 2px terms are
+           the frame's two 1px rules. */
         width: min(
-          430px,
-          88vw,
-          max(96px, calc((100vh - var(--chrome) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)),
-          max(96px, calc((100dvh - var(--chrome) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px))
+          calc(100vw - (2 * var(--page-margin))),
+          calc((100vh - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px),
+          calc((100dvh - (2 * var(--page-margin)) - (2 * var(--frame-pad)) - 2px) * 2 / 3 + (2 * var(--frame-pad)) + 2px)
         );
         box-shadow:
           0 1px 2px rgba(90, 58, 32, 0.14),
@@ -164,150 +99,22 @@
       @media (prefers-reduced-motion: reduce) {
         .viewport img { transition: none; }
       }
-
-      /* ---------- Caption ---------- */
-
-      .caption {
-        margin-top: var(--caption-mt);
-      }
-
-      .poster-name {
-        margin: 0;
-        font-family: var(--serif);
-        font-style: italic;
-        font-weight: 500;
-        font-size: var(--title-size);
-        line-height: 1.2;
-        color: var(--ink);
-      }
-
-      .poster-count {
-        margin: var(--counter-mt) 0 0;
-        font-family: var(--sans);
-        font-weight: 500;
-        font-size: 0.7rem;
-        letter-spacing: 0.34em;
-        text-indent: 0.34em;
-        text-transform: uppercase;
-        color: rgba(43, 33, 26, 0.62);
-      }
-
-      /* ---------- Controls ---------- */
-
-      .controls {
-        margin-top: var(--controls-mt);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .controls button {
-        width: var(--controls-h);
-        height: var(--controls-h);
-        min-width: 40px;
-        min-height: 40px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border: none;
-        border-radius: 50%;
-        color: var(--ink);
-        opacity: 0.62;
-        cursor: pointer;
-        transition: opacity 0.25s ease;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      .controls button:hover { opacity: 1; }
-
-      .controls button:focus-visible {
-        opacity: 1;
-        outline: 1px solid var(--ink);
-        outline-offset: 3px;
-      }
-
-      .controls svg {
-        display: block;
-        width: 17px;
-        height: 17px;
-      }
-
-      .controls svg.hidden { display: none; }
-
-      .controls .icon-play { margin-left: 2px; }
-
-      .hidden { display: none; }
-
-      /* ---------- Footer ---------- */
-
-      footer {
-        flex: 0 0 auto;
-        width: min(680px, calc(100% - 2.5rem));
-        border-top: 1px solid rgba(43, 33, 26, 0.38);
-        padding: var(--foot-pt) 0 var(--foot-pb);
-        text-align: center;
-      }
-
-      .footer-marker {
-        width: 7px;
-        height: 7px;
-        background: var(--accent);
-        margin: 0 auto var(--marker-mb);
-      }
-
-      .footer-name {
-        margin: 0;
-        font-family: var(--sans);
-        font-weight: 500;
-        font-size: 0.72rem;
-        letter-spacing: 0.42em;
-        text-indent: 0.42em;
-        color: var(--ink);
-      }
     </style>
   </head>
   <body>
     <main>
-      <h1 class="name">THE ISLE</h1>
-      <div class="name-rule" aria-hidden="true"></div>
-
       <div class="frame">
         <div class="viewport" id="viewport">
           <img id="layerA" alt="" width="1200" height="1800" />
           <img id="layerB" alt="" width="1200" height="1800" />
         </div>
       </div>
-
-      <div class="caption">
-        <p class="poster-name" id="posterTitle"></p>
-        <p class="poster-count" id="posterCount"></p>
-      </div>
-
-      <div class="controls">
-        <button type="button" id="prevBtn" aria-label="Previous poster">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
-        </button>
-        <button type="button" id="toggleBtn" aria-label="Pause rotation" aria-pressed="true">
-          <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.4" height="14" /><rect x="14.1" y="5" width="3.4" height="14" /></svg>
-          <svg class="icon-play hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L20 13a1.15 1.15 0 0 0 0-2L9.8 4.2C9 3.7 8 4.3 8 5.2Z" /></svg>
-        </button>
-        <button type="button" id="nextBtn" aria-label="Next poster">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
-        </button>
-      </div>
     </main>
 
-    <footer>
-      <div class="footer-marker" aria-hidden="true"></div>
-      <p class="footer-name">1S1E.COM</p>
-    </footer>
-
     <script>
-      // The single poster list. Rotation, captions, counter and preloading
-      // all read from this array only; swap a poster by replacing one entry.
+      // The single poster list. Rotation and preloading read from this
+      // array only; swap a poster by replacing one entry. Titles stay as
+      // the images' alt text; nothing is shown on the page.
       var POSTERS = [
         { file: "assets/poster-set-01.jpg", title: "The Mountain Poster" },
         { file: "assets/poster-set-04.jpg", title: "The Sunset Poster" },
@@ -328,11 +135,6 @@
       var reducedMotion = motionQuery.matches;
 
       var layers = [document.getElementById("layerA"), document.getElementById("layerB")];
-      var titleEl = document.getElementById("posterTitle");
-      var countEl = document.getElementById("posterCount");
-      var toggleBtn = document.getElementById("toggleBtn");
-      var iconPause = toggleBtn.querySelector(".icon-pause");
-      var iconPlay = toggleBtn.querySelector(".icon-play");
 
       var current = Math.floor(Math.random() * POSTERS.length); // random start each visit
       var topLayer = 0;              // index into layers of the visible poster
@@ -340,11 +142,6 @@
       var timer = null;
       var fadeTimer = null;
       var zTop = 2;
-
-      function setCaption(i) {
-        titleEl.textContent = POSTERS[i].title;
-        countEl.textContent = (i + 1) + " of " + POSTERS.length;
-      }
 
       function show(i, instant) {
         var incoming = layers[1 - topLayer];
@@ -364,7 +161,6 @@
         }
         topLayer = 1 - topLayer;
         current = i;
-        setCaption(i);
       }
 
       function schedule() {
@@ -382,19 +178,7 @@
         schedule(); // manual navigation restarts the full 6 seconds
       }
 
-      function setPlaying(value) {
-        playing = value;
-        iconPause.classList.toggle("hidden", !playing);
-        iconPlay.classList.toggle("hidden", playing);
-        toggleBtn.setAttribute("aria-label", playing ? "Pause rotation" : "Play rotation");
-        toggleBtn.setAttribute("aria-pressed", playing ? "true" : "false");
-        schedule();
-      }
-
-      document.getElementById("nextBtn").addEventListener("click", function () { goTo(current + 1); });
-      document.getElementById("prevBtn").addEventListener("click", function () { goTo(current - 1); });
-      toggleBtn.addEventListener("click", function () { setPlaying(!playing); });
-
+      // No on-screen controls: the arrow keys still move through the set.
       document.addEventListener("keydown", function (e) {
         if (e.key === "ArrowRight") { goTo(current + 1); }
         else if (e.key === "ArrowLeft") { goTo(current - 1); }
@@ -434,8 +218,7 @@
       layers[0].alt = POSTERS[current].title;
       layers[0].style.zIndex = 2;
       layers[0].style.opacity = "1";
-      setCaption(current);
-      setPlaying(playing);
+      schedule();
     </script>
   </body>
 </html>
