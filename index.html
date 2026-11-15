@@ -19,6 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet" />
     <title>The Isle</title>
+    <link rel="preload" as="image" href="assets/poster-set-01.jpg" fetchpriority="high" />
     <style>
       :root {
         --ground: #1b2a4a;
@@ -193,7 +194,7 @@
     <main>
       <div class="frame">
         <div class="viewport" id="viewport">
-          <img id="layerA" alt="" width="1200" height="1800" />
+          <img id="layerA" src="assets/poster-set-01.jpg" alt="The Mountain Poster" width="1200" height="1800" fetchpriority="high" />
           <img id="layerB" alt="" width="1200" height="1800" />
         </div>
       </div>
@@ -234,21 +235,32 @@
       function show(i, instant) {
         var incoming = layers[1 - topLayer];
         var outgoing = layers[topLayer];
-        incoming.src = POSTERS[i].file;
         incoming.alt = POSTERS[i].title;
-        zTop += 1;
-        incoming.style.zIndex = zTop;
-        outgoing.style.zIndex = zTop - 1;
-        incoming.style.opacity = "1";
-        clearTimeout(fadeTimer);
-        if (instant) {
-          outgoing.style.opacity = "0";
+        var swapped = false;
+        var swap = function () {
+          if (swapped) { return; }
+          swapped = true;
+          zTop += 1;
+          incoming.style.zIndex = zTop;
+          outgoing.style.zIndex = zTop - 1;
+          incoming.style.opacity = "1";
+          clearTimeout(fadeTimer);
+          if (instant) {
+            outgoing.style.opacity = "0";
+          } else {
+            var out = outgoing;
+            fadeTimer = setTimeout(function () { out.style.opacity = "0"; }, FADE_MS);
+          }
+          topLayer = 1 - topLayer;
+          current = i;
+        };
+        if (incoming.src && incoming.src.indexOf(POSTERS[i].file) !== -1 && incoming.complete && incoming.naturalWidth > 0) {
+          swap();
         } else {
-          var out = outgoing;
-          fadeTimer = setTimeout(function () { out.style.opacity = "0"; }, FADE_MS);
+          incoming.onload = function () { incoming.onload = null; swap(); };
+          incoming.src = POSTERS[i].file;
+          if (incoming.complete && incoming.naturalWidth > 0) { incoming.onload = null; swap(); }
         }
-        topLayer = 1 - topLayer;
-        current = i;
       }
 
       function schedule() {
@@ -295,18 +307,25 @@
         else { schedule(); }
       });
 
-      // Preload every poster from the same single list.
-      POSTERS.forEach(function (p) {
+      // Preload the remaining posters one at a time, in order, so they
+      // never compete with the first poster or with each other. The
+      // visible crossfade is gated on the incoming image being ready,
+      // so a slow poster can never fade in blank.
+      function preloadRest(n) {
+        if (n >= POSTERS.length) { return; }
         var pre = new Image();
-        pre.src = p.file;
-      });
+        pre.onload = pre.onerror = function () { preloadRest(n + 1); };
+        pre.src = POSTERS[n].file;
+      }
+      if (document.readyState === "complete") { preloadRest(1); }
+      else { window.addEventListener("load", function () { preloadRest(1); }); }
 
-      // First paint: the first poster, shown at once.
-      layers[0].src = POSTERS[current].file;
-      layers[0].alt = POSTERS[current].title;
+      // First paint: the first poster is already in the HTML layer,
+      // shown at once.
       layers[0].style.zIndex = 2;
       layers[0].style.opacity = "1";
       schedule();
     </script>
+    <script data-goatcounter="https://muse.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </body>
 </html>
