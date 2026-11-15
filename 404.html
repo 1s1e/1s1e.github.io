@@ -90,6 +90,14 @@
         }
 
         .masthead .tree { height: 32px; }
+
+      }
+
+      .masthead h1 .wordmark {
+        display: block;
+        width: 7.1652em;
+        height: auto;
+        margin: -0.3338em 0.1994em -0.2889em -0.1346em;
       }
 
       .masthead .rule {
@@ -129,6 +137,12 @@
       }
 
       a.home:hover { color: #ffffff; }
+          @media (max-width: 480px) {
+        .masthead h1 .wordmark {
+          width: 6.583em;
+          margin: -0.2583em 0.1217em -0.2326em -0.1141em;
+        }
+      }
     </style>
   </head>
   <body>
@@ -136,7 +150,7 @@
       <div class="masthead">
         <div class="title-row">
           <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
-          <h1>The Isle</h1>
+          <h1><img class="wordmark" src="/assets/the-isle-text-white.svg" alt="The Isle" /></h1>
           <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
         </div>
         <div class="rule" aria-hidden="true"></div>
