@@ -104,7 +104,7 @@
       .hero h1 {
         font-family: var(--serif); font-weight: 500;
         font-size: clamp(54px, 9vw, 88px);
-        line-height: 1.05; margin: 22px 0 0; letter-spacing: 0.01em;
+        line-height: 1.05; margin: 22px 0 0; letter-spacing: 0.01em; display: flow-root;
       }
       .hero-series {
         font-family: var(--serif); font-weight: 500;
@@ -387,6 +387,10 @@
       footer .f-imprint {
         margin: 5px auto 0; font-size: 13px; font-weight: 600;
         letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase; color: var(--gold-bright);
+      }
+      .hero h1 .hero-wordmark {
+        display: block; max-width: none; width: 4.7449em; height: auto;
+        margin: -0.3004em auto -0.2513em; position: relative; left: -0.008em;
       }
       .reader-brand .brand-wordmark {
         display: inline-block; max-width: none; width: 85.10px; height: auto;
@@ -766,7 +770,7 @@
     <header class="hero">
       <div class="hero-inner">
         <div class="ornament" aria-hidden="true"><i></i></div>
-        <h1>THE ISLE</h1>
+        <h1><img class="hero-wordmark" src="assets/the-isle-hero-cream.svg" alt="THE ISLE" /></h1>
         <p class="hero-series">Reference Catalogues</p>
         <div class="hero-rule" aria-hidden="true"></div>
         <div class="hero-intro"><p class="hi-s1"><span class="s-a">The complete record of the home,</span> <span class="s-b">in three volumes</span><span class="brk-t" aria-hidden="true"></span> <span class="s-c">and a companion</span> <span class="s-d">appendix by <span class="hi-name">M&nbsp;&amp;&nbsp;D&nbsp;Silver</span>.</span></p><p class="hi-s2">Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page, and the build selections are shown first as composed previews and then element by element, and last, the appendix gathers inspiration for the next phase, using curated photographs from resorts and hotels around the world.</p></div>
