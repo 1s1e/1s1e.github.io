@@ -16,9 +16,6 @@
     <meta name="theme-color" content="#1b2a4a" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
     <title>Page Not Found · 1s1e.com</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet" />
     <style>
       :root {
         --ground: #1b2a4a;
@@ -49,61 +46,10 @@
         padding: 24px;
       }
 
-      /* The same masthead as the home page: the word in Playfair
-         Display, flat silver, with the silver line underneath. */
-      .masthead {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .masthead h1 {
-        font-family: "Playfair Display", "Iowan Old Style", Georgia, serif;
-        font-weight: 500;
-        font-size: clamp(38px, 6.7vmin, 56px);
-        line-height: 1;
-        letter-spacing: 0.34em;
-        padding-left: 0.34em;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: var(--ink);
-      }
-
-      .masthead .title-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .masthead .tree {
-        height: 44px;
-        width: auto;
-        flex: none;
-      }
-
-      @media (max-width: 480px) {
-        .masthead h1 {
-          font-size: 30px;
-          letter-spacing: 0.26em;
-          padding-left: 0.26em;
-        }
-
-        .masthead .tree { height: 32px; }
-
-      }
-
-      .masthead h1 .wordmark {
-        display: block;
-        width: 7.1652em;
+      .logo img {
+        width: min(720px, 86vw);
         height: auto;
-        margin: -0.3338em 0.1994em -0.2889em -0.1346em;
-      }
-
-      .masthead .rule {
-        width: clamp(140px, 28vw, 240px);
-        height: 1px;
-        background: var(--ink);
+        display: block;
       }
 
       h2 {
@@ -147,12 +93,9 @@
   </head>
   <body>
     <main>
-      <div class="masthead">
-        <div class="title-row">
-          <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
-          <h1><img class="wordmark" src="/assets/the-isle-text-white.svg" alt="The Isle" /></h1>
-          <img class="tree" src="/assets/palm-tree.png" alt="" width="414" height="326" />
-        </div>
+      <div class="logo">
+        <img src="/assets/the-isle-vertical-silver.png" alt="The Isle" />
+      </div>
         <div class="rule" aria-hidden="true"></div>
       </div>
       <h2>Page Not Found</h2>
