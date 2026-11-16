@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Isle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+  :root { --ground:#1b2a4a; --silver:#C0C0C0; --dim:#8e9bb5; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ground); color:var(--silver); font-family:Inter, -apple-system, "Segoe UI", sans-serif; font-weight:300; min-height:100vh; padding:0 24px 24px; }
+  .wrap { max-width:880px; margin:0 auto; }
+  .bar { display:flex; justify-content:space-between; align-items:baseline; padding:28px 0 16px; }
+  .bar .name { font-family:"Playfair Display", Georgia, serif; font-size:17px; letter-spacing:.36em; text-transform:uppercase; }
+  .bar .mark { font-size:10px; letter-spacing:.38em; text-transform:uppercase; color:var(--dim); }
+  .rails { border-top:1px solid var(--silver); }
+  .rails .r2 { border-top:1px solid rgba(192,192,192,.45); margin-top:4px; }
+  .rails .r3 { border-top:1px solid rgba(192,192,192,.22); margin-top:4px; }
+  .cols { display:flex; gap:56px; margin-top:10vh; flex-wrap:wrap; }
+  .left { flex:1 1 260px; }
+  .it { font-family:"Playfair Display", Georgia, serif; font-style:italic; font-size:24px; line-height:1.45; }
+  .sub { font-size:12.5px; color:var(--dim); line-height:1.75; margin-top:16px; max-width:300px; }
+  .box { flex:0 1 300px; }
+  label { display:block; font-size:10px; letter-spacing:.38em; text-transform:uppercase; color:var(--dim); margin:6px 0 10px; }
+  input { width:100%; padding:11px 2px; font-size:16px; color:var(--silver); background:transparent; border:none; border-bottom:1px solid rgba(192,192,192,.5); border-radius:0; outline:none; }
+  input:focus { border-bottom-color:var(--silver); }
+  button { margin-top:28px; padding:12px 32px; font-size:11px; letter-spacing:.4em; text-transform:uppercase; text-indent:.4em; color:var(--silver); background:transparent; border:1px solid rgba(192,192,192,.7); cursor:pointer; }
+  button:active { background:rgba(192,192,192,.16); }
+  .err { margin-top:16px; font-size:13px; color:#d8a7a7; min-height:18px; }
+  .foot { margin-top:12vh; font-size:9px; letter-spacing:.34em; text-transform:uppercase; color:var(--dim); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar"><span class="name">The Isle</span><span class="mark">The Terrace · Private</span></div>
+    <div class="rails"><div class="r2"></div><div class="r3"></div></div>
+    <div class="cols">
+      <div class="left">
+        <div class="it">The quiet side<br />of the house.</div>
+        <div class="sub">Beyond this point, The Isle is private. Everything here is kept for the house and its guests.</div>
+      </div>
+      <form class="box" id="f">
+        <label for="p">Password</label>
+        <input id="p" type="password" autocomplete="current-password" />
+        <button type="submit">Enter</button>
+        <div class="err" id="e"></div>
+      </form>
+    </div>
+    <div class="foot">Private · Not linked · Not indexed</div>
+  </div>
+<script>
+  var PAYLOAD = "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";
+  var ITER = 250000;
+  function b64ToBytes(b64) {
+    var bin = atob(b64), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  document.getElementById("f").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var err = document.getElementById("e");
+    err.textContent = "";
+    try {
+      var raw = b64ToBytes(PAYLOAD);
+      var salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+      var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(document.getElementById("p").value), "PBKDF2", false, ["deriveKey"]);
+      var key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct);
+      var html = new TextDecoder().decode(plain);
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (e) {
+      err.textContent = "That password does not open this page.";
+    }
+  });
+</script>
+</body>
+</html>
