@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Isle</title>
+<style>
+  :root { --ground:#1b2a4a; --silver:#C0C0C0; --dim:#8e9bb5; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ground); color:var(--silver); font-family:-apple-system, "Segoe UI", Inter, sans-serif; min-height:100vh; padding:64px 22px; }
+  .sheet { width:100%; max-width:560px; margin:0 auto; text-align:left; }
+  .head { display:flex; justify-content:space-between; align-items:baseline; font-size:13px; letter-spacing:.32em; text-transform:uppercase; }
+  .head .mark { color:var(--dim); font-size:11px; }
+  .rule { height:1px; background:var(--silver); margin-top:14px; }
+  .rule.thin { background:rgba(192,192,192,.45); margin-top:3px; }
+  label { display:block; font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--dim); margin:38px 0 8px; }
+  input { width:100%; padding:10px 2px; font-size:17px; text-align:left; color:var(--silver); background:transparent; border:none; border-bottom:1px solid rgba(192,192,192,.55); border-radius:0; outline:none; }
+  input:focus { border-bottom-color:var(--silver); }
+  button { margin-top:26px; padding:11px 26px; font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--silver); background:transparent; border:1px solid var(--silver); cursor:pointer; }
+  button:active { background:rgba(192,192,192,.16); }
+  .err { margin-top:16px; font-size:13px; color:#d8a7a7; min-height:18px; }
+  .foot { margin-top:12px; font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--dim); }
+</style>
+</head>
+<body>
+  <form class="sheet" id="f">
+    <div class="head"><span>The Isle</span><span class="mark">Secure</span></div>
+    <div class="rule"></div>
+    <div class="rule thin"></div>
+    <label for="p">Password</label>
+    <input id="p" type="password" autocomplete="current-password" />
+    <button type="submit">Open</button>
+    <div class="err" id="e"></div>
+    <div class="rule"></div>
+    <div class="foot">Private · Not linked · Not indexed</div>
+  </form>
+<script>
+  var PAYLOAD = "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";
+  var ITER = 250000;
+  function b64ToBytes(b64) {
+    var bin = atob(b64), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  document.getElementById("f").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var err = document.getElementById("e");
+    err.textContent = "";
+    try {
+      var raw = b64ToBytes(PAYLOAD);
+      var salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+      var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(document.getElementById("p").value), "PBKDF2", false, ["deriveKey"]);
+      var key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct);
+      var html = new TextDecoder().decode(plain);
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (e) {
+      err.textContent = "That password does not open this page.";
+    }
+  });
+</script>
+</body>
+</html>
