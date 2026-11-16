@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Isle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+  :root { --ground:#1b2a4a; --silver:#C0C0C0; --dim:#8e9bb5; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ground); color:var(--silver); font-family:Inter, -apple-system, "Segoe UI", sans-serif; font-weight:300; min-height:100vh; padding:0 24px; }
+  .col { max-width:480px; margin:0 auto; min-height:100vh; border-left:1px solid rgba(192,192,192,.35); border-right:1px solid rgba(192,192,192,.35); padding:15vh 34px 40px; }
+  .box { text-align:center; }
+  h1 { font-family:"Playfair Display", Georgia, serif; font-weight:400; letter-spacing:.4em; font-size:28px; text-transform:uppercase; text-indent:.4em; }
+  .it { font-family:"Playfair Display", Georgia, serif; font-style:italic; font-size:18px; margin-top:22px; }
+  .sub { font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--dim); margin-top:14px; text-indent:.3em; }
+  label { display:block; font-size:10px; letter-spacing:.42em; text-transform:uppercase; color:var(--dim); margin:70px 0 12px; text-indent:.42em; }
+  input { width:220px; padding:10px 4px; font-size:17px; letter-spacing:.25em; text-align:center; color:var(--silver); background:transparent; border:none; border-bottom:1px solid rgba(192,192,192,.5); border-radius:0; outline:none; }
+  input:focus { border-bottom-color:var(--silver); }
+  button { margin-top:40px; padding:12px 34px; font-size:11px; letter-spacing:.42em; text-transform:uppercase; text-indent:.42em; color:var(--silver); background:transparent; border:1px solid rgba(192,192,192,.7); cursor:pointer; }
+  button:active { background:rgba(192,192,192,.16); }
+  .err { margin-top:20px; font-size:13px; color:#d8a7a7; min-height:18px; }
+  .foot { margin-top:54px; font-size:9px; letter-spacing:.34em; text-transform:uppercase; color:var(--dim); text-indent:.34em; }
+</style>
+</head>
+<body>
+  <div class="col">
+  <form class="box" id="f">
+    <h1>The Isle</h1>
+    <div class="it">You are expected.</div>
+    <div class="sub">The Veranda · Private</div>
+    <label for="p">Password</label>
+    <input id="p" type="password" autocomplete="current-password" />
+    <br />
+    <button type="submit">Enter</button>
+    <div class="err" id="e"></div>
+    <div class="foot">Private · Not linked · Not indexed</div>
+  </form>
+  </div>
+<script>
+  var PAYLOAD = "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";
+  var ITER = 250000;
+  function b64ToBytes(b64) {
+    var bin = atob(b64), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  document.getElementById("f").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var err = document.getElementById("e");
+    err.textContent = "";
+    try {
+      var raw = b64ToBytes(PAYLOAD);
+      var salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+      var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(document.getElementById("p").value), "PBKDF2", false, ["deriveKey"]);
+      var key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct);
+      var html = new TextDecoder().decode(plain);
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (e) {
+      err.textContent = "That password does not open this page.";
+    }
+  });
+</script>
+</body>
+</html>
