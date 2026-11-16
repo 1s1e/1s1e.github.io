@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Isle</title>
+<style>
+  :root { --ground:#1b2a4a; --silver:#C0C0C0; --dim:#8e9bb5; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ground); color:var(--silver); font-family:-apple-system, "Segoe UI", Inter, sans-serif; min-height:100vh; padding:9vh 22px 24px; }
+  .card { width:100%; max-width:520px; margin:0 auto; border:1px solid rgba(192,192,192,.6); background:rgba(192,192,192,.03); padding:24px 28px 28px; }
+  .chead { display:flex; justify-content:space-between; align-items:baseline; padding-bottom:12px; border-bottom:1px solid rgba(192,192,192,.4); }
+  .chead .name { font-size:13px; letter-spacing:.32em; text-transform:uppercase; }
+  .chead .no { font-family:"Courier New", Courier, monospace; font-size:12px; color:var(--dim); }
+  .cline { padding:11px 0; border-bottom:1px solid rgba(192,192,192,.22); font-size:13px; }
+  .cline .k { font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--dim); display:block; margin-bottom:3px; }
+  label { display:block; font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--dim); margin:20px 0 2px; }
+  input { width:100%; padding:9px 2px; font-size:16px; font-family:"Courier New", Courier, monospace; color:var(--silver); background:transparent; border:none; border-bottom:1px solid rgba(192,192,192,.55); border-radius:0; outline:none; }
+  input:focus { border-bottom-color:var(--silver); }
+  button { margin-top:24px; padding:10px 24px; font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--silver); background:transparent; border:1px solid var(--silver); cursor:pointer; }
+  button:active { background:rgba(192,192,192,.16); }
+  .err { margin-top:14px; font-size:13px; color:#d8a7a7; min-height:18px; }
+  .cfoot { margin-top:18px; padding-top:10px; border-top:1px solid rgba(192,192,192,.4); font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--dim); }
+</style>
+</head>
+<body>
+  <form class="card" id="f">
+    <div class="chead"><span class="name">The Isle</span><span class="no">Card No. 1</span></div>
+    <div class="cline"><span class="k">Subject</span>Private papers · Secure</div>
+    <label for="p">Password</label>
+    <input id="p" type="password" autocomplete="current-password" />
+    <button type="submit">Open</button>
+    <div class="err" id="e"></div>
+    <div class="cfoot">Filed privately · Not linked · Not indexed</div>
+  </form>
+<script>
+  var PAYLOAD = "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";
+  var ITER = 250000;
+  function b64ToBytes(b64) {
+    var bin = atob(b64), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  document.getElementById("f").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var err = document.getElementById("e");
+    err.textContent = "";
+    try {
+      var raw = b64ToBytes(PAYLOAD);
+      var salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+      var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(document.getElementById("p").value), "PBKDF2", false, ["deriveKey"]);
+      var key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct);
+      var html = new TextDecoder().decode(plain);
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (e) {
+      err.textContent = "That password does not open this page.";
+    }
+  });
+</script>
+</body>
+</html>
