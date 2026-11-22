@@ -125,20 +125,21 @@
   var LOT = { x: 3789, y: 3755 };                        // lot centre in image pixels
   var SECTIONS = ["Satellite Imagery", "The Isle", "Property Data", "FEMA Data", "Miscellaneous"];
   var LAYERS = [
-    { file: "layers/01-street-map.png",        name: "Street Map",       sec: "Miscellaneous",    ord: 13, on: false, op: 100 },
+    { file: "layers/01-street-map.png",        name: "Street Map",       sec: "Miscellaneous",    ord: 14, on: false, op: 100 },
     { file: "layers/02-satellite.jpg",        name: "Neighborhood",     sec: "Satellite Imagery", ord: 1,  on: false, op: 100 },
     { file: "layers/02b-satellite-cleaned.jpg", name: "Neighbors",       sec: "Satellite Imagery", ord: 2,  on: false, op: 100 },
     { file: "layers/02c-satellite-render.jpg",  name: "Empty",           sec: "Satellite Imagery", ord: 3,  on: true,  op: 100 },
     { file: "layers/03-property-lines.png",    name: "Property Lines",   sec: "Property Data",     ord: 6,  on: true,  op: 100, detail: "layers/03-property-lines-detail.png", drect: [3417, 3312, 720, 1000] },
     { file: "layers/08-survey-lines.png",      name: "Survey Lines",     sec: "Property Data",     ord: 7,  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
     { file: "layers/09-survey-data.png",       name: "Survey Data",      sec: "Property Data",     ord: 8,  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
-    { file: "layers/04-flood-lines-2026.png",  name: "Flood Lines",      sec: "FEMA Data",         ord: 9,  on: false, op: 100, detail: "layers/04-flood-lines-2026-detail.png", drect: [3417, 3312, 720, 1000] },
-    { file: "layers/05-flood-lines-previous.png", name: "Flood Lines (Old)", sec: "FEMA Data",     ord: 11, on: false, op: 100, detail: "layers/05-flood-lines-previous-detail.png", drect: [3417, 3312, 720, 1000] },
-    { file: "layers/06-fema-map-2026.png",     name: "Flood Map",        sec: "FEMA Data",         ord: 10, on: false, op: 100 },
-    { file: "layers/07-fema-map-previous.png", name: "Flood Map (Old)",  sec: "FEMA Data",         ord: 12, on: false, op: 100 },
-    { file: "layers/10-lot-highlight.png",     name: "Lot Highlight",    sec: "Miscellaneous",     ord: 14, on: false, op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/04-flood-lines-2026.png",  name: "Flood Lines",      sec: "FEMA Data",         ord: 10,  on: false, op: 100, detail: "layers/04-flood-lines-2026-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/05-flood-lines-previous.png", name: "Flood Lines (Old)", sec: "FEMA Data",     ord: 12, on: false, op: 100, detail: "layers/05-flood-lines-previous-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/06-fema-map-2026.png",     name: "Flood Map",        sec: "FEMA Data",         ord: 11, on: false, op: 100 },
+    { file: "layers/07-fema-map-previous.png", name: "Flood Map (Old)",  sec: "FEMA Data",         ord: 13, on: false, op: 100 },
+    { file: "layers/10-lot-highlight.png",     name: "Lot Highlight",    sec: "Miscellaneous",     ord: 15, on: false, op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
     { file: "layers/11-floor-plan-house.png",  name: "Interior",         sec: "The Isle",          ord: 4,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
-    { file: "layers/12-floor-plan-pool.png",   name: "Exterior",         sec: "The Isle",          ord: 5,  on: true,  op: 100, rect: [3457, 3332, 590, 840] }
+    { file: "layers/12-floor-plan-pool.png",   name: "Exterior",         sec: "The Isle",          ord: 5,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
+    { file: "layers/13-measurements.png",     name: "Measurements",     sec: "Property Data",     ord: 9,  on: false, op: 100, detail: "layers/13-measurements-detail.png", drect: [3417, 3312, 720, 1000] }
   ];
   // ---- remembered view and shareable links ----
   var STORE_KEY = "isle-lot-view-v1";
