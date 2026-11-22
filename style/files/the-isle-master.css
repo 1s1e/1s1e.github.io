@@ -142,3 +142,17 @@ a{ color:inherit; }
 @media (prefers-reduced-motion: reduce){
   .drift-a,.drift-b,.drift-c,.pulse-a,.pulse-b,.pulse-c{ animation:none !important; }
 }
+
+/* The switch: one form everywhere, the slider from /ref.
+   A pill on Deep, a gold knob resting on the side of the mode in use. */
+.switch{
+  width:96px; height:36px; border-radius:999px; padding:0; position:relative;
+  background:rgba(21,33,48,.94); border:1px solid var(--gold-line);
+}
+.switch:hover{ border-color:var(--gold); }
+.switch:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.switch .knob{
+  position:absolute; top:50%; left:4px; width:44px; height:26px; border-radius:999px;
+  background:var(--gold); transform:translate(0,-50%); transition:transform .25s ease;
+}
+.switch[data-mode="dark"] .knob{ transform:translate(42px,-50%); }

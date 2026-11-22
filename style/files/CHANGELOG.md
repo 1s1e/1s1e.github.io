@@ -2,6 +2,12 @@
 
 ## November 22, 2026
 
+- The switch was made part of the standard, at the user's
+  direction: one form everywhere, the pill slider from /ref, specified
+  in section 12 of the guide and carried in the style sheet. A button
+  style is directed as well and joins the same section when it is
+  picked.
+
 - The chart plate was redrawn as Survey Lines, at the user's pick: a
   shore with a point and a bay, soundings taken along survey lines run
   off the shore, deepening line by line. The plate is unboxed

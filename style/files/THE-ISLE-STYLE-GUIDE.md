@@ -248,3 +248,19 @@ The splash's own tokens sit inside this family: ground The Isle Navy, the name i
   by Web Crypto. Passwords are never published, filed or recorded.
 - Pages open in dark mode where a toggle exists, and the toggle switches
   the whole page. Both modes are always built and always checked.
+
+## 12. The switch
+
+- The light and dark switch is one form everywhere: the slider from
+  /ref. A pill, 96 by 36px, fully rounded, on a Deep ground at 94
+  percent, with a 1px gold line border that brightens to The Isle Gold
+  on hover. A sun glyph stands at the left, 11px in, and a moon glyph
+  at the right, both in The Isle Gold at 85 percent.
+- The knob is 44 by 26px, fully rounded, in The Isle Gold, carrying the
+  glyph of the mode in use in Deep. It rests on the side of the mode in
+  use and slides 42px to change, on a .25 second ease. The switch is a
+  real switch, role switch with its checked state carried for
+  assistive technology, and its focus outline is The Isle Gold.
+- The standard governs the switch's form. Where it sits is each page's
+  own furniture: on /ref it docks at the top right in the reader and
+  rests at the bottom right on the home page.
