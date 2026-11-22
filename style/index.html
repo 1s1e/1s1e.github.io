@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <title>The Isle · Style Guide</title>
-<meta name="description" content="The style guide of The Isle: colours, icon, logo, type, spacing, the chart, and the rules, in one place.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
@@ -13,154 +12,154 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b">
+<meta name="theme-color" content="#1d2a3b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --serif:"Playfair Display","Iowan Old Style",Georgia,serif;
-  --sans:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
-}
-html[data-theme="dark"]{
   --ground:#1d2a3b; --panel:#22344a; --deep:#152130;
   --ink:#f0e8d5; --ink-soft:#d9d0ba; --ink-dim:#a89f88;
-  --gold:#c9ab72; --gold-page:#c2a15c; --hairline:rgba(201,171,114,.28); --hairline-soft:rgba(201,171,114,.14);
+  --gold:#c9ab72; --gold-page:#c2a15c;
+  --hairline:rgba(194,161,92,.30); --hairline-soft:rgba(194,161,92,.16);
   --plate:#152130; --link:#d8bc7d;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Avenir Next","Segoe UI",sans-serif;
 }
 html[data-theme="light"]{
-  --ground:#faf7ee; --panel:#f3eee0; --deep:#152130;
+  --ground:#faf7ee; --panel:#f3eee0; --deep:#1d2a3b;
   --ink:#1d2a3b; --ink-soft:#3c4763; --ink-dim:#767c8d;
-  --gold:#c9ab72; --gold-page:#a07f3a; --hairline:#ddd5bd; --hairline-soft:#e7dfc9;
-  --plate:#1d2a3b; --link:#85683a;
+  --gold:#c9ab72; --gold-page:#a07f3a;
+  --hairline:#ddd5bd; --hairline-soft:#e7dfc9;
+  --plate:#1d2a3b; --link:#a07f3a;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:var(--link);text-decoration:underline;text-underline-offset:3px}
-a:hover{text-decoration-thickness:2px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
-header{padding:64px 0 10px;text-align:center;position:relative}
-header .lockup{width:min(430px,84%);height:auto}
-.tagline{font-family:var(--serif);font-style:italic;font-weight:500;font-size:19px;color:var(--ink-soft);margin:26px 0 0}
-.hrule{width:56px;height:1px;background:var(--gold-page);opacity:.75;margin:20px auto 0}
-.kicker{max-width:none;font-size:10.5px;font-weight:600;letter-spacing:.30em;color:var(--gold-page);text-transform:uppercase;margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-text-size-adjust:100%}
+.wrap{max-width:1060px;margin:0 auto;padding:0 34px}
+header{position:relative;text-align:center;padding:64px 0 8px}
+header img.lockup{width:min(430px,84%);height:auto}
+.tagline{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(19px,2vw,23px);margin:26px 0 0}
+.grule{width:56px;height:1px;background:var(--gold-page);opacity:.75;margin:20px auto 0}
+.kicker{font-size:10.5px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--gold-page);text-align:center;max-width:none}
 header .kicker{margin-top:22px}
-#toggle{position:absolute;top:20px;right:4px;background:none;border:1px solid var(--hairline);color:var(--ink-dim);font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.26em;padding:9px 15px;cursor:pointer}
-#toggle:hover{color:var(--ink);border-color:var(--gold-page)}
-nav.contents{margin:44px 0 6px;border-top:1px solid var(--hairline-soft);border-bottom:1px solid var(--hairline-soft);padding:14px 0;text-align:center}
-nav.contents a{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:var(--ink-soft);margin:0 13px;white-space:nowrap;line-height:2.1}
-nav.contents a:hover{color:var(--link);text-decoration:underline}
-section{padding:52px 0 46px;border-bottom:1px solid var(--hairline-soft)}
+#toggle{position:absolute;top:26px;right:0;background:none;border:1px solid var(--hairline);color:var(--ink-soft);font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;padding:10px 16px;cursor:pointer}
+nav.contents{display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;border-top:1px solid var(--hairline-soft);border-bottom:1px solid var(--hairline-soft);padding:16px 0;margin-top:38px}
+nav.contents a{color:var(--ink-soft);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+section{padding:52px 0 8px;border-bottom:1px solid var(--hairline-soft)}
 section:last-of-type{border-bottom:none}
-h2{font-family:var(--serif);font-weight:500;font-size:29px;margin:0 0 8px;color:var(--ink)}
-h2 .no{color:var(--gold-page);font-size:21px;margin-right:10px}
-section .kicker{margin-bottom:20px}
-p{color:var(--ink-soft);margin:0 0 14px;max-width:74ch}
-p strong, li strong{color:var(--ink);font-weight:600}
-ul{color:var(--ink-soft);margin:0 0 14px;padding-left:20px;max-width:74ch}
-li{margin-bottom:9px}
-.masters{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin:22px 0 30px}
-.master .chip{height:92px;border:1px solid var(--hairline-soft)}
-.master .mname{font-weight:600;color:var(--ink);margin-top:10px;font-size:15.5px}
-.master .mhex{font-size:12.5px;color:var(--ink-dim);white-space:nowrap}
-.master .mrgb{font-size:12px;color:var(--ink-dim);white-space:nowrap}
- .steps{margin:6px 0 18px}
-.srow{display:grid;grid-template-columns:40px 170px 110px 1fr;align-items:baseline;column-gap:10px;padding:9px 0;border-bottom:1px solid var(--hairline-soft);color:var(--ink-soft);line-height:1.45}
-.srow i{display:block;width:30px;height:17px;border:1px solid var(--hairline-soft);align-self:center}
-.srow .nm{color:var(--ink);font-weight:600;white-space:nowrap}
-.srow .hx{white-space:nowrap;color:var(--ink-dim);font-size:14.5px}
-.subhead{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--gold-page);text-transform:uppercase;margin:26px 0 4px}
-.iconrow{display:flex;align-items:flex-end;gap:44px;flex-wrap:wrap;margin:22px 0 12px;background:#152130;padding:30px 28px 22px}
-.iconcell{text-align:center}
-.iconcell img{display:block;margin:0 auto}
-.iconcell .cap{font-size:12px;color:#a89f88;margin-top:9px;white-space:nowrap}
-.way{padding:40px 30px;text-align:center;margin:20px 0 0}
-.way img{width:min(480px,92%);height:auto}
-.waycap{color:var(--ink-soft);margin:12px 0 4px}
-.waycap strong{color:var(--ink)}
-.role{border-bottom:1px solid var(--hairline-soft);padding:20px 0 16px}
-.role .spec{font-size:12.5px;color:var(--ink-dim);margin-top:7px}
-.r-display{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1.08;color:var(--ink)}
-.r-serifline{font-family:var(--serif);font-weight:500;font-style:italic;font-size:19px;color:var(--ink)}
-.r-heading{font-family:var(--serif);font-weight:500;font-size:34px;color:var(--ink)}
-.r-body{font-size:17px;line-height:1.65;color:var(--ink-soft);max-width:62ch}
-.r-label{font-size:11px;font-weight:600;letter-spacing:.34em;color:var(--ink)}
-.r-small{font-size:10.5px;letter-spacing:.26em;color:var(--ink-soft)}
-.splitfig{display:flex;border:1px solid var(--hairline);margin:20px 0 8px}
-.splitfig .l{flex:0 0 46%;background:var(--panel);padding:20px 22px;color:var(--ink-soft);font-size:14.5px}
-.splitfig .r{flex:1;padding:20px 22px;color:var(--ink-soft);font-size:14.5px;border-left:1px solid var(--hairline)}
-.splitfig .big{font-family:var(--serif);font-size:30px;color:var(--ink);display:block;margin-bottom:4px}
-.platebox{background:var(--plate);padding:34px 30px 26px;margin:22px 0 16px}
+h2{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.2;margin:0 0 10px}
+h2 .num{font-style:italic;color:var(--gold-page);font-size:22px;margin-right:12px}
+section .kicker{text-align:left;margin:0 0 26px}
+p{max-width:72ch}
+ul{max-width:72ch;padding-left:20px}
+li{margin-bottom:12px}
+a{color:var(--link)}
+.masters{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin:26px 0 8px}
+.chip{height:104px;border:1px solid var(--hairline-soft)}
+.master .name{font-weight:600;margin-top:12px}
+.master .hex,.master .rgb{font-size:13.5px;color:var(--ink-soft);white-space:nowrap}
+.steps{margin-top:30px}
+.steprow{display:grid;grid-template-columns:34px 170px 110px 1fr;column-gap:18px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hairline-soft)}
+.steprow .sw{width:30px;height:16px;align-self:center;border:1px solid var(--hairline-soft)}
+.steprow .nm{font-weight:600;white-space:nowrap}
+.steprow .hx{color:var(--ink-soft);white-space:nowrap;font-size:15px}
+.steprow .ds{color:var(--ink-soft)}
+.subhead{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--gold-page);margin:34px 0 6px}
+.iconpanel{background:var(--deep);padding:38px 30px 26px;display:flex;align-items:flex-end;gap:44px;flex-wrap:wrap}
+.iconfig{text-align:center}
+.iconfig img{display:block;margin:0 auto}
+.iconfig figcaption{font-size:12.5px;color:#a89f88;margin-top:12px}
+.logopanel{padding:44px 30px;text-align:center;margin-bottom:14px}
+.logopanel img{width:min(560px,88%);height:auto}
+.logopanel.ivory{background:#f0e8d5}
+.logopanel.navy{background:#1d2a3b}
+.cap{color:var(--ink-soft);max-width:72ch;margin:0 0 34px}
+.cap b{color:var(--ink)}
+.role{padding:20px 0;border-bottom:1px solid var(--hairline-soft)}
+.role .what{font-size:12.5px;color:var(--ink-dim);letter-spacing:.08em;margin-top:8px}
+.r-display{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1.1}
+.r-serifline{font-family:var(--serif);font-weight:500;font-style:italic;font-size:19px}
+.r-heading{font-family:var(--serif);font-weight:500;font-size:34px}
+.r-body{font-size:17px;line-height:1.65;max-width:72ch}
+.r-label{font-size:11px;font-weight:600;letter-spacing:.34em;text-transform:uppercase}
+.r-small{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase}
+.splitfig{display:grid;grid-template-columns:46fr 54fr;border:1px solid var(--hairline);margin:24px 0}
+.splitfig .cell{padding:24px 26px}
+.splitfig .cell:first-child{background:var(--panel);border-right:1px solid var(--hairline)}
+.splitfig .big{font-family:var(--serif);font-weight:500;font-size:40px}
+.splitfig p{color:var(--ink-soft);margin:8px 0 0}
+.platebox{background:var(--plate);padding:30px 26px 18px;margin:24px 0}
 .platebox svg{width:100%;height:auto;display:block}
-.platebox .shore{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round}
-.platebox .shore2{fill:none;stroke:var(--gold);stroke-width:1;opacity:.75;stroke-linecap:round}
-.platebox .curve{fill:none;stroke:#f0e8d5;stroke-width:1.1;stroke-dasharray:1 5;stroke-linecap:round;opacity:.5}
-.platebox .fig{font-family:"Playfair Display",serif;font-style:italic;font-weight:500;font-size:15px;fill:#f0e8d5;text-anchor:middle}
-.platebox .platecap{font-family:"Source Sans 3",sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;fill:var(--gold)}
-.platebox .platei{font-family:"Playfair Display",serif;font-weight:600;font-size:13px;letter-spacing:.30em;fill:var(--gold);text-anchor:middle}
-
-@keyframes drift1{from{transform:translateX(0)}to{transform:translateX(9px)}}
-@keyframes drift2{from{transform:translateX(0)}to{transform:translateX(-7px)}}
-.cv1{animation:drift1 13s ease-in-out infinite alternate}
-.cv2{animation:drift2 17s ease-in-out infinite alternate}
-.cv3{animation:drift1 21s ease-in-out infinite alternate}
+.platebox .shore{stroke:#c9ab72;stroke-width:1.6;fill:none}
+.platebox .shore2{stroke:#c9ab72;stroke-width:.8;fill:none;opacity:.75}
+.platebox .curve{stroke:#f0e8d5;stroke-width:1;fill:none;stroke-dasharray:1.5 5;opacity:.8}
+.platebox .fig{fill:#f0e8d5;font-family:var(--serif);font-style:italic;font-weight:500;font-size:13px}
+.platebox .platecap{fill:#c2a15c;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.34em}
+.platebox .platei{fill:#c2a15c;font-family:var(--serif);font-weight:600;font-size:10.5px;letter-spacing:.30em}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(5px,3px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-6px,4px)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(4px,-3px)}}
+.cv1{animation:drift1 13s ease-in-out infinite}
+.cv2{animation:drift2 17s ease-in-out infinite}
+.cv3{animation:drift3 21s ease-in-out infinite}
 @media (prefers-reduced-motion: reduce){.cv1,.cv2,.cv3{animation:none}}
-.report{background:var(--plate);color:#f0e8d5;padding:30px 32px;margin:22px 0 16px}
-.report .grp{font-size:11px;font-weight:600;letter-spacing:.30em;color:#c2a15c;text-transform:uppercase}
-.report .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#c2a15c;box-shadow:0 0 0 3px rgba(194,161,92,.18);margin-right:9px;vertical-align:2px}
-.report .when{font-family:var(--serif);font-weight:500;font-size:21px;margin:9px 0 13px;color:#f0e8d5}
-.report table{border-collapse:collapse}
-.report td{padding:3px 0;vertical-align:top}
-.report td.k{font-size:10.5px;font-weight:600;letter-spacing:.24em;color:#a89f88;padding-right:22px;white-space:nowrap;padding-top:6px}
-.report td.v{font-size:15.5px;color:#d9d0ba}
-.report .div{height:1px;background:rgba(201,171,114,.22);margin:18px 0}
-.entry{display:flex;gap:26px;align-items:flex-start;background:var(--plate);color:#f0e8d5;padding:28px 32px;margin:0 0 16px}
-.entry .num{font-family:var(--serif);font-weight:500;font-size:52px;line-height:1;color:rgba(240,232,213,.20)}
-.entry .eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.30em;color:#c2a15c;text-transform:uppercase}
-.entry .etitle{font-family:var(--serif);font-weight:500;font-size:23px;margin:5px 0 5px;color:#f0e8d5}
-.entry .edesc{font-size:15px;color:#d9d0ba;max-width:56ch}
-.entry .estatus{font-size:10.5px;font-weight:600;letter-spacing:.26em;color:#a89f88;margin-top:10px}
-.entry .estatus b{display:inline-block;width:26px;height:1px;background:#c2a15c;vertical-align:middle;margin-right:10px}
-.docs{margin:16px 0 8px}
-.drow{display:grid;grid-template-columns:1fr 170px 90px;align-items:baseline;column-gap:10px;padding:13px 0;border-bottom:1px solid var(--hairline-soft);line-height:1.45}
-.drow .nm a{font-size:16.5px;font-weight:600}
-.drow .kind{color:var(--ink-dim);white-space:nowrap;font-size:14.5px}
-.drow .sz{color:var(--ink-dim);white-space:nowrap;text-align:right;font-size:14.5px}
-footer{text-align:center;padding:54px 0 64px}
-footer img.palm{width:54px;height:auto}
-footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--ink);margin-top:13px}
+.reportpanel{background:var(--deep);padding:30px 32px;margin:24px 0}
+html[data-theme="light"] .reportpanel{color:#f0e8d5}
+.rp-head{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#c2a15c;display:flex;align-items:center;gap:10px}
+.rp-dot{width:5px;height:5px;border-radius:50%;background:#c9ab72;box-shadow:0 0 0 3px rgba(201,171,114,.18);flex:none}
+.rp-lead{font-family:var(--serif);font-weight:600;font-size:22px;margin:14px 0 16px}
+.rp-row{display:grid;grid-template-columns:104px 1fr;column-gap:18px;align-items:baseline;margin-bottom:10px}
+.rp-row .k{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#a89f88}
+.rp-div{border-top:1px solid rgba(194,161,92,.16);margin:20px 0}
+.entrypanel{background:var(--deep);padding:30px 32px;margin:24px 0}
+html[data-theme="light"] .entrypanel{color:#f0e8d5}
+.entry{display:grid;grid-template-columns:96px 1fr;column-gap:22px}
+.entry .numeral{font-family:var(--serif);font-weight:500;font-size:58px;line-height:1;color:rgba(240,232,213,.14)}
+.entry .eyebrow{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#c2a15c}
+.entry .etitle{font-family:var(--serif);font-weight:600;font-size:30px;margin:6px 0 8px}
+.entry .edesc{font-size:16.5px;line-height:1.55;color:#d9d0ba;max-width:56ch}
+.entry .estatus{display:flex;align-items:center;gap:12px;margin-top:16px;font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#a89f88}
+.entry .estatus::before{content:"";width:26px;height:1px;background:#c2a15c}
+.docrow{display:grid;grid-template-columns:1fr 250px 74px;column-gap:20px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--hairline-soft)}
+.docrow a{font-weight:600}
+.docrow .kind{color:var(--ink-soft)}
+.docrow .size{color:var(--ink-soft);text-align:right;white-space:nowrap}
+footer{text-align:center;padding:56px 0 64px}
+footer img{width:56px;height:auto}
+footer .fname{font-size:10.5px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--ink-soft);margin-top:14px}
 @media (max-width:760px){
+  .wrap{padding:0 20px}
   .masters{grid-template-columns:repeat(2,1fr)}
-  .splitfig{flex-direction:column}
-  .splitfig .r{border-left:none;border-top:1px solid var(--hairline)}
-  .entry{flex-direction:column;gap:10px}
-  table.steps td.nm{width:auto}
-  nav.contents a{margin:0 8px}
+  .steprow{grid-template-columns:34px 1fr 96px;grid-template-rows:auto auto}
+  .steprow .ds{grid-column:2 / 4}
+  .docrow{grid-template-columns:1fr 74px}
+  .docrow .kind{grid-column:1 / 2}
+  .entry{grid-template-columns:64px 1fr}
+  .entry .numeral{font-size:40px}
+  #toggle{position:static;margin-bottom:18px}
+  header{padding-top:34px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-
 <header>
-  <button id="toggle" type="button">LIGHT / DARK</button>
+  <button id="toggle" type="button">Light / Dark</button>
   <img class="lockup" id="lockup" src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle">
   <p class="tagline">More than a place you come to, a place you stay.</p>
-  <div class="hrule"></div>
+  <div class="grule"></div>
   <p class="kicker">The Style Guide · Settled November 22, 2026</p>
+  <nav class="contents">
+    <a href="#name">Name</a><a href="#colours">Colours</a><a href="#icon">Icon</a><a href="#logo">Logo</a><a href="#type">Type</a><a href="#spacing">Spacing</a><a href="#chart">Chart</a><a href="#report">Report</a><a href="#rules">Rules</a><a href="#references">References</a><a href="#technical">Technical</a><a href="#documents">Documents</a>
+  </nav>
 </header>
 
-<nav class="contents">
-  <a href="#name">Name</a><a href="#colours">Colours</a><a href="#icon">Icon</a><a href="#logo">Logo</a><a href="#type">Type</a><a href="#spacing">Spacing</a><a href="#chart">Chart</a><a href="#report">Report</a><a href="#rules">Rules</a><a href="#references">References</a><a href="#technical">Technical</a><a href="#documents">Documents</a>
-</nav>
-
-<main>
-
 <section id="name">
-  <h2><span class="no">1</span>The name and the words</h2>
+  <h2><span class="num">1</span>The name and the words</h2>
   <p class="kicker">How The Isle is named and how it speaks</p>
   <ul>
-    <li>The house and the place are called <strong>The Isle</strong>, with a capital T, in every use, including mid sentence and the possessive, The Isle's.</li>
+    <li>The house and the place are called <b>The Isle</b>, with a capital T, in every use, including mid sentence and the possessive, The Isle's.</li>
     <li>The street address never appears in anything created, presented, published or filed, including file names. Everything is just The Isle.</li>
     <li>Regalia is the builder's plan and model name. It appears only inside source documents, never as the home's name in anything presented, written or published.</li>
     <li>The register: high end, elusive, exclusive, and at the same time barefoot luxury, down to earth and easy going. Nothing boasts and nothing sells. Quality is stated plainly and warmly; confidence comes through restraint and ease.</li>
@@ -169,83 +168,83 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
 </section>
 
 <section id="colours">
-  <h2><span class="no">2</span>The colours</h2>
+  <h2><span class="num">2</span>The colours</h2>
   <p class="kicker">Seventeen in total · Every colour carries the house name</p>
   <p>Five master colours, settled exactly, and twelve working steps beneath them. Every master colour is referred to as The Isle plus the colour name, in conversation, in records and in files.</p>
   <div class="masters">
-    <div class="master"><div class="chip" style="background:#1d2a3b"></div><div class="mname">The Isle Navy</div><div class="mhex">#1D2A3B</div><div class="mrgb">RGB 29 42 59</div></div>
-    <div class="master"><div class="chip" style="background:#46936a"></div><div class="mname">The Isle Green</div><div class="mhex">#46936A</div><div class="mrgb">RGB 70 147 106</div></div>
-    <div class="master"><div class="chip" style="background:#c9ab72"></div><div class="mname">The Isle Gold</div><div class="mhex">#C9AB72</div><div class="mrgb">RGB 201 171 114</div></div>
-    <div class="master"><div class="chip" style="background:#C0C0C0"></div><div class="mname">The Isle Silver</div><div class="mhex">#C0C0C0</div><div class="mrgb">RGB 192 192 192</div></div>
-    <div class="master"><div class="chip" style="background:#f0e8d5"></div><div class="mname">The Isle Ivory</div><div class="mhex">#F0E8D5</div><div class="mrgb">RGB 240 232 213</div></div>
+    <div class="master"><div class="chip" style="background:#1d2a3b"></div><div class="name">The Isle Navy</div><div class="hex">#1D2A3B</div><div class="rgb">RGB 29 42 59</div></div>
+    <div class="master"><div class="chip" style="background:#46936a"></div><div class="name">The Isle Green</div><div class="hex">#46936A</div><div class="rgb">RGB 70 147 106</div></div>
+    <div class="master"><div class="chip" style="background:#c9ab72"></div><div class="name">The Isle Gold</div><div class="hex">#C9AB72</div><div class="rgb">RGB 201 171 114</div></div>
+    <div class="master"><div class="chip" style="background:#C0C0C0"></div><div class="name">The Isle Silver</div><div class="hex">#C0C0C0</div><div class="rgb">RGB 192 192 192</div></div>
+    <div class="master"><div class="chip" style="background:#f0e8d5"></div><div class="name">The Isle Ivory</div><div class="hex">#F0E8D5</div><div class="rgb">RGB 240 232 213</div></div>
   </div>
   <p class="subhead">The working steps</p>
   <div class="steps">
-    <div class="srow"><i style="background:#22344a"></i><span class="nm">Panel</span><span class="hx">#22344A</span><span>Panels and cards on the navy ground</span></div>
-    <div class="srow"><i style="background:#152130"></i><span class="nm">Deep</span><span class="hx">#152130</span><span>The deepest ground, page fields, wells and plates</span></div>
-    <div class="srow"><i style="background:#d9d0ba"></i><span class="nm">Ivory Soft</span><span class="hx">#D9D0BA</span><span>Secondary text on dark</span></div>
-    <div class="srow"><i style="background:#a89f88"></i><span class="nm">Ivory Dim</span><span class="hx">#A89F88</span><span>Labels and meta text on dark</span></div>
-    <div class="srow"><i style="background:#c2a15c"></i><span class="nm">Page Gold, dark</span><span class="hx">#C2A15C</span><span>Labels, rules and the gold dot on dark</span></div>
-    <div class="srow"><i style="background:#a07f3a"></i><span class="nm">Page Gold, light</span><span class="hx">#A07F3A</span><span>Gold text and rules on light</span></div>
-    <div class="srow"><i style="background:#faf7ee"></i><span class="nm">Light Ground</span><span class="hx">#FAF7EE</span><span>The light page ground</span></div>
-    <div class="srow"><i style="background:#f3eee0"></i><span class="nm">Light Tint</span><span class="hx">#F3EEE0</span><span>Tinted panels on light</span></div>
-    <div class="srow"><i style="background:#3c4763"></i><span class="nm">Soft Ink</span><span class="hx">#3C4763</span><span>Secondary text on light</span></div>
-    <div class="srow"><i style="background:#767c8d"></i><span class="nm">Dim Ink</span><span class="hx">#767C8D</span><span>Labels and meta text on light</span></div>
-    <div class="srow"><i style="background:#dfe2e6"></i><span class="nm">Poster Mat</span><span class="hx">#DFE2E6</span><span>The mat inside the splash poster frame</span></div>
-    <div class="srow"><i style="background:#93a7c9"></i><span class="nm">Terra</span><span class="hx">#93A7C9</span><span>The splash's quiet secondary tone</span></div>
-  </table>
-  <p>The full swatch sheet, every colour on one page: <a href="files/the-isle-colour-swatches.png">PNG</a> · <a href="files/The-Isle-Colour-Swatches.pdf">PDF</a>. The palette as files: <a href="files/the-isle-palette.ase">Adobe Swatch Exchange</a> · <a href="files/the-isle-palette.gpl">GIMP palette</a> · <a href="files/the-isle-tokens.json">Design tokens, JSON</a>.</p>
+    <div class="steprow"><span class="sw" style="background:#22344a"></span><span class="nm">Panel</span><span class="hx">#22344A</span><span class="ds">Panels and cards on the navy ground</span></div>
+    <div class="steprow"><span class="sw" style="background:#152130"></span><span class="nm">Deep</span><span class="hx">#152130</span><span class="ds">The deepest ground, page fields, wells and plates</span></div>
+    <div class="steprow"><span class="sw" style="background:#d9d0ba"></span><span class="nm">Ivory Soft</span><span class="hx">#D9D0BA</span><span class="ds">Secondary text on dark</span></div>
+    <div class="steprow"><span class="sw" style="background:#a89f88"></span><span class="nm">Ivory Dim</span><span class="hx">#A89F88</span><span class="ds">Labels and meta text on dark</span></div>
+    <div class="steprow"><span class="sw" style="background:#c2a15c"></span><span class="nm">Page Gold, dark</span><span class="hx">#C2A15C</span><span class="ds">Labels, rules and the gold dot on dark</span></div>
+    <div class="steprow"><span class="sw" style="background:#a07f3a"></span><span class="nm">Page Gold, light</span><span class="hx">#A07F3A</span><span class="ds">Gold text and rules on light</span></div>
+    <div class="steprow"><span class="sw" style="background:#faf7ee"></span><span class="nm">Light Ground</span><span class="hx">#FAF7EE</span><span class="ds">The light page ground</span></div>
+    <div class="steprow"><span class="sw" style="background:#f3eee0"></span><span class="nm">Light Tint</span><span class="hx">#F3EEE0</span><span class="ds">Tinted panels on light</span></div>
+    <div class="steprow"><span class="sw" style="background:#3c4763"></span><span class="nm">Soft Ink</span><span class="hx">#3C4763</span><span class="ds">Secondary text on light</span></div>
+    <div class="steprow"><span class="sw" style="background:#767c8d"></span><span class="nm">Dim Ink</span><span class="hx">#767C8D</span><span class="ds">Labels and meta text on light</span></div>
+    <div class="steprow"><span class="sw" style="background:#dfe2e6"></span><span class="nm">Poster Mat</span><span class="hx">#DFE2E6</span><span class="ds">The mat inside the splash poster frame</span></div>
+    <div class="steprow"><span class="sw" style="background:#93a7c9"></span><span class="nm">Terra</span><span class="hx">#93A7C9</span><span class="ds">The splash's quiet secondary tone</span></div>
+  </div>
+  <p style="margin-top:26px">The full swatch sheet, every colour on one page: <a href="files/the-isle-colour-swatches.png">PNG</a> · <a href="files/The-Isle-Colour-Swatches.pdf">PDF</a>. The palette as files: <a href="files/the-isle-palette.ase">Adobe Swatch Exchange</a> · <a href="files/the-isle-palette.gpl">GIMP palette</a> · <a href="files/the-isle-tokens.json">Design tokens, JSON</a>.</p>
 </section>
 
 <section id="icon">
-  <h2><span class="no">3</span>The icon</h2>
+  <h2><span class="num">3</span>The icon</h2>
   <p class="kicker">The windswept palm, on The Isle Navy, on every page</p>
   <p>Every page on the site carries the full favicon set, without exception: favicon.ico, PNG icons at 512, 48, 32 and 16, the apple touch icon at 180, the mask icon coloured The Isle Navy, and the theme-color meta in The Isle Navy. The artwork stands on its ground of The Isle Navy, always; the ground is part of the icon.</p>
-  <div class="iconrow">
-    <div class="iconcell"><img src="/assets/favicon.png" width="150" height="150" alt="The icon at 512"><div class="cap">512, shown at 150</div></div>
-    <div class="iconcell"><img src="/assets/apple-touch-icon.png" width="90" height="90" alt="The apple touch icon"><div class="cap">180, shown at 90</div></div>
-    <div class="iconcell"><img src="/assets/favicon-48.png" width="48" height="48" alt="The icon at 48"><div class="cap">48, true size</div></div>
-    <div class="iconcell"><img src="/assets/favicon-32.png" width="32" height="32" alt="The icon at 32"><div class="cap">32, true size</div></div>
-    <div class="iconcell"><img src="/assets/favicon-16.png" width="16" height="16" alt="The icon at 16"><div class="cap">16, true size</div></div>
+  <div class="iconpanel">
+    <figure class="iconfig"><img src="/assets/favicon.png" width="150" height="150" alt="The icon at 512"><figcaption>512, shown at 150</figcaption></figure>
+    <figure class="iconfig"><img src="/assets/apple-touch-icon.png" width="90" height="90" alt="The apple touch icon at 180"><figcaption>180, shown at 90</figcaption></figure>
+    <figure class="iconfig"><img src="/assets/favicon-48.png" width="48" height="48" alt="The icon at 48"><figcaption>48, true size</figcaption></figure>
+    <figure class="iconfig"><img src="/assets/favicon-32.png" width="32" height="32" alt="The icon at 32"><figcaption>32, true size</figcaption></figure>
+    <figure class="iconfig"><img src="/assets/favicon-16.png" width="16" height="16" alt="The icon at 16"><figcaption>16, true size</figcaption></figure>
   </div>
   <p>On the 512 icon the artwork is 299 by 230, at position 105, 141. The smaller sizes keep the same placement in proportion: 240 by 184 at 135, 164 on the maskable, 113 by 87 at 39, 53 at 192, 105 by 81 at 37, 50 on the apple touch icon, 89 by 68 at 30, 41 on the tile.</p>
 </section>
 
 <section id="logo">
-  <h2><span class="no">4</span>The logo and the artwork</h2>
-  <p class="kicker">The colourways · The artwork itself, never redrawn</p>
+  <h2><span class="num">4</span>The logo and the artwork</h2>
+  <p class="kicker">Five colourways · The artwork itself, never redrawn</p>
   <p>The anatomy never changes: the crown is The Isle Green, the trunk is The Isle Gold. What changes by colourway is the island and the text beneath it. In dark mode the island and the text are The Isle Silver, and that stays. In the colour artwork for light grounds, the island and the text are The Isle Navy.</p>
-  <div class="way" style="background:#faf7ee"><img src="assets/the-isle-horizontal-colour.png" alt="The Isle lockup, colour"></div>
-  <p class="waycap"><strong>Colour, for light grounds.</strong> Crown The Isle Green, trunk The Isle Gold, island and text The Isle Navy.</p>
-  <div class="way" style="background:#1d2a3b"><img src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle lockup, silver with a colour tree"></div>
-  <p class="waycap"><strong>Silver with a colour tree, the dark mode form.</strong> The island and the text are The Isle Silver; the tree keeps its colours.</p>
-  <div class="way" style="background:#1d2a3b"><img src="assets/the-isle-horizontal-silver.png" alt="The Isle lockup, silver"></div>
-  <p class="waycap"><strong>Silver.</strong> The whole lockup in The Isle Silver.</p>
-  <div class="way" style="background:#faf7ee"><img src="assets/the-isle-horizontal-black.png" alt="The Isle lockup, black"></div>
-  <p class="waycap"><strong>Black.</strong> For print and single colour work.</p>
-  <div class="way" style="background:#1d2a3b"><img src="assets/the-isle-horizontal-white.png" alt="The Isle lockup, white"></div>
-  <p class="waycap"><strong>White.</strong> For reversal out of dark grounds and photographs.</p>
+  <div class="logopanel ivory"><img src="assets/the-isle-horizontal-colour.png" alt="The Isle lockup in colour"></div>
+  <p class="cap"><b>Colour, for light grounds.</b> Crown The Isle Green, trunk The Isle Gold, island and text The Isle Navy.</p>
+  <div class="logopanel navy"><img src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle lockup in silver with a colour tree"></div>
+  <p class="cap"><b>Silver with a colour tree, the dark mode form.</b> The island and the text are The Isle Silver; the tree keeps its colours.</p>
+  <div class="logopanel navy"><img src="assets/the-isle-horizontal-silver.png" alt="The Isle lockup in silver"></div>
+  <p class="cap"><b>Silver.</b> The whole lockup in The Isle Silver.</p>
+  <div class="logopanel ivory"><img src="assets/the-isle-horizontal-black.png" alt="The Isle lockup in black"></div>
+  <p class="cap"><b>Black.</b> For print and single colour work.</p>
+  <div class="logopanel navy"><img src="assets/the-isle-horizontal-white.png" alt="The Isle lockup in white"></div>
+  <p class="cap"><b>White.</b> For reversal out of dark grounds and photographs.</p>
   <p>The wordmarks are Playfair Display, weight 500, held as master artwork. The master logo set carries the mark, horizontal and vertical lockups in every colourway, in PNG and vector.</p>
 </section>
 
 <section id="type">
-  <h2><span class="no">5</span>Type</h2>
+  <h2><span class="num">5</span>Type</h2>
   <p class="kicker">Two faces · Six roles · At their true sizes</p>
-  <div class="role"><div class="r-display">The Isle</div><div class="spec">DISPLAY · Playfair Display 500 · 64px</div></div>
-  <div class="role"><div class="r-serifline">More than a place you come to, a place you stay.</div><div class="spec">SERIF LINE · Playfair Display 500 italic · 19px</div></div>
-  <div class="role"><div class="r-heading">Furniture</div><div class="spec">HEADING · Playfair Display 500 · 34px</div></div>
-  <div class="role"><div class="r-body">The complete record of the home, in three volumes and a companion appendix. Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page.</div><div class="spec">BODY · Source Sans 3 400 · 17px · line height 1.65</div></div>
-  <div class="role"><div class="r-label">THE LAST CHECK · OPEN · 18 LAYERS</div><div class="spec">LABEL · Source Sans 3 600 · 11px · letterspacing .34em</div></div>
-  <div class="role"><div class="r-small">1S1E.COM · THE ISLE</div><div class="spec">SMALL · Source Sans 3 400 · 10.5px · letterspacing .26em</div></div>
-  <p style="margin-top:20px">All fonts, sizing, spacing and weights match across the whole group. A page does not keep a private typography. Cormorant Garamond and Jost are retired from the group.</p>
+  <div class="role"><div class="r-display">The Isle</div><div class="what">DISPLAY · Playfair Display 500 · 64px</div></div>
+  <div class="role"><div class="r-serifline">More than a place you come to, a place you stay.</div><div class="what">SERIF LINE · Playfair Display 500 italic · 19px</div></div>
+  <div class="role"><div class="r-heading">Furniture</div><div class="what">HEADING · Playfair Display 500 · 34px</div></div>
+  <div class="role"><div class="r-body">The complete record of the home, in three volumes and a companion appendix. Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page.</div><div class="what">BODY · Source Sans 3 400 · 17px · line height 1.65</div></div>
+  <div class="role"><div class="r-label">The Last Check · Open · 18 Layers</div><div class="what">LABEL · Source Sans 3 600 · 11px · letterspacing .34em</div></div>
+  <div class="role"><div class="r-small">1s1e.com · The Isle</div><div class="what">SMALL · Source Sans 3 400 · 10.5px · letterspacing .26em</div></div>
+  <p style="margin-top:24px">All fonts, sizing, spacing and weights match across the whole group. A page does not keep a private typography. Cormorant Garamond and Jost are retired from the group.</p>
 </section>
 
 <section id="spacing">
-  <h2><span class="no">6</span>Spacing and layout</h2>
+  <h2><span class="num">6</span>Spacing and layout</h2>
   <p class="kicker">The measures of the two settled compositions</p>
   <div class="splitfig">
-    <div class="l"><span class="big">46</span>The left panel of the index: the lockup, the tagline, the report. Padding 52, 46, 30.</div>
-    <div class="r"><span class="big">54</span>The right panel: the entries. Padding 34, 50, 78. One hairline divides the two, inset 52px at the top and the bottom.</div>
+    <div class="cell"><div class="big">46</div><p>The left panel of the index: the lockup, the tagline, the report. Padding 52, 46, 30.</p></div>
+    <div class="cell"><div class="big">54</div><p>The right panel: the entries. Padding 34, 50, 78. One hairline divides the two, inset 52px at the top and the bottom.</p></div>
   </div>
   <ul>
     <li>The lockup sits at the top of the left panel, width min(252px, 72%). The tagline sits 26px below it, then the tagline rule, 56px wide, 1px, gold at .75 opacity. The report begins 40px below.</li>
@@ -256,10 +255,9 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
 </section>
 
 <section id="chart">
-  <h2><span class="no">7</span>The chart</h2>
+  <h2><span class="num">7</span>The chart</h2>
   <p class="kicker">Soundings in fathoms · A fragment of an engraved chart</p>
-  <div class="platebox">
-    <svg viewBox="0 0 640 400" role="img" aria-label="The chart plate: a shore with soundings taken along survey lines">
+  <div class="platebox"><svg viewBox="0 0 640 400" role="img" aria-label="The chart plate: a shore with soundings taken along survey lines">
       <text class="platecap" x="30" y="42">SOUNDINGS IN FATHOMS</text>
       <path class="curve cv1" d="M -10 186 C 60 162 110 138 170 142 C 230 146 260 182 320 188 C 380 194 420 162 480 158 C 540 154 600 172 650 166"/>
       <path class="curve cv2" d="M -10 240 C 60 216 110 192 170 196 C 230 200 260 236 320 242 C 380 248 420 216 480 212 C 540 208 600 226 650 220"/>
@@ -281,48 +279,45 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
       <text class="fig" x="580" y="146">4</text>
       <text class="fig" x="588" y="196">9</text>
       <text class="fig" x="584" y="300">17</text>
-      <text class="platei" x="592" y="372">PLATE I</text>
-    </svg>
-  </div>
+      <text class="platei" x="610" y="372" text-anchor="end">PLATE I</text>
+    </svg></div>
   <ul>
     <li>One coastline, a fine double shore line in The Isle Gold, with a point and a bay, the land above it empty. No anchor, no hachures, no headlands, no names or labels on the water.</li>
-    <li>Three depth curves follow the shore as true parallel offsets. The soundings are taken along survey lines run off the shore, deepening along each line in small steps: 2, 5, 11 and 19 down the first line, 4, 9 and 17 down the last, every figure clear of the curves.</li>
+    <li>Three depth curves follow the shore as true parallel offsets. The soundings are taken along survey lines run off the shore, deepening along each line in small steps: 2, 5, 11 and 19 down the first line, 3, 7, 14 and 23 down the second, 2, 6, 13 and 22 down the third, 4, 9 and 17 down the last, every figure clear of the curves.</li>
     <li>Motion is gentle and on the water only: the depth curves drift a few units on slow cycles. Under reduced motion the chart is still. PLATE I stands in its bottom right corner, and the plate carries no frame: it sits unboxed, as the chart sits on the site.</li>
   </ul>
 </section>
 
 <section id="report">
-  <h2><span class="no">8</span>The report and the entries</h2>
+  <h2><span class="num">8</span>The report and the entries</h2>
   <p class="kicker">The settled forms, as they stand on the index</p>
   <p>The check report stands in two headed groups: the last thing that happened, then what happens next, automatically. It always signifies itself as the most recent update.</p>
-  <div class="report">
-    <div class="grp"><span class="dot"></span>The Last Check</div>
-    <div class="when">November 22, 2026 · 7:21 AM</div>
-    <table>
-      <tr><td class="k">DOCUMENTS</td><td class="v">No new documents found</td></tr>
-      <tr><td class="k">ACTION</td><td class="v">Full check completed against the record. Nothing to publish.</td></tr>
-    </table>
-    <div class="div"></div>
-    <div class="grp">What Happens Next</div>
-    <table style="margin-top:11px">
-      <tr><td class="k">PAUSED</td><td class="v">The county watch is paused while the house server is set up.</td></tr>
-      <tr><td class="k">NEXT CHECK</td><td class="v">A full check of the <a href="https://1s1e.com/site/permits/" style="color:#d8bc7d">county site</a> runs first when the watch resumes.</td></tr>
-    </table>
+  <div class="reportpanel">
+    <div class="rp-head"><span class="rp-dot"></span>The Last Check</div>
+    <div class="rp-lead">November 22, 2026 · 7:21 AM</div>
+    <div class="rp-row"><span class="k">Documents</span><span>No new documents found</span></div>
+    <div class="rp-row"><span class="k">Action</span><span>Full check completed against the record. Nothing to publish.</span></div>
+    <div class="rp-div"></div>
+    <div class="rp-head">What Happens Next</div>
+    <div class="rp-row" style="margin-top:14px"><span class="k">Paused</span><span>The county watch is paused while the house server is set up.</span></div>
+    <div class="rp-row"><span class="k">Next Check</span><span>A full check of the <a href="https://1s1e.com/site/permits/">county site</a> runs first when the watch resumes.</span></div>
   </div>
   <p>An entry carries a large pale numeral, a gold eyebrow, a Playfair title, the exact description, and a quiet status line.</p>
-  <div class="entry">
-    <div class="num">01</div>
-    <div>
-      <div class="eyebrow">The Land</div>
-      <div class="etitle">Lot Viewer</div>
-      <div class="edesc">The lot in full: its maps, boundaries, flood lines, survey and floor plans, layer upon layer.</div>
-      <div class="estatus"><b></b>OPEN · 18 LAYERS</div>
+  <div class="entrypanel">
+    <div class="entry">
+      <div class="numeral">01</div>
+      <div>
+        <div class="eyebrow">The Land</div>
+        <div class="etitle">Lot Viewer</div>
+        <div class="edesc">The lot in full: its maps, boundaries, flood lines, survey and floor plans, layer upon layer.</div>
+        <div class="estatus">Open · 18 Layers</div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="rules">
-  <h2><span class="no">9</span>Rules for creating anything</h2>
+  <h2><span class="num">9</span>Rules for creating anything</h2>
   <p class="kicker">The discipline that keeps the guide true</p>
   <ul>
     <li>This guide governs. One approved sample precedes any full round. Alternatives differ in composition, organisation and visual world, never in cover imagery alone.</li>
@@ -335,14 +330,14 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
 </section>
 
 <section id="references">
-  <h2><span class="no">10</span>References</h2>
+  <h2><span class="num">10</span>References</h2>
   <p class="kicker">Precedents and sources of truth</p>
   <p>Precedents, researched November 2026: the Four Seasons Residences app and the Four Seasons app itinerary and chat; Aman; Six Senses; Belmond; Cheval Blanc Randheli; Waldorf Astoria Residences; and the great private islands, North Island, COMO Laucala and Necker Island. The recognition principle: at this level there are no points and no tiers; the guest is known.</p>
   <p>Sources of truth, in order: this guide; the master file set and its manifest; the live pages at 1s1e.com; the local publishing clone. The catalogue PDFs linked from /ref are finished print documents with their own settled interior design; the site palette does not govern their contents.</p>
 </section>
 
 <section id="technical">
-  <h2><span class="no">11</span>Technical requirements</h2>
+  <h2><span class="num">11</span>Technical requirements</h2>
   <p class="kicker">How the site stands</p>
   <ul>
     <li>GitHub Pages, repository 1s1e/1s1e.github.io, branch main, published by git over SSH with the repository's dedicated key.</li>
@@ -354,45 +349,34 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
 </section>
 
 <section id="documents">
-  <h2>The documents</h2>
+  <h2><span class="num">12</span>The documents</h2>
   <p class="kicker">The guide and its files, to open in the browser</p>
   <p>Everything in the master, as files. Each name opens the file itself.</p>
-  <div class="docs">
-    <div class="drow"><span class="nm"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a></span><span class="kind">PDF · 13 pages</span><span class="sz">527 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a></span><span class="kind">Markdown</span><span class="sz">13.6 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/the-isle-master.css">The style sheet</a></span><span class="kind">CSS</span><span class="sz">5.2 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/the-isle-tokens.json">Design tokens</a></span><span class="kind">JSON</span><span class="sz">1.7 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/The-Isle-Colour-Swatches.pdf">The swatch sheet</a></span><span class="kind">PDF</span><span class="sz">310 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/the-isle-colour-swatches.png">The swatch sheet</a></span><span class="kind">PNG</span><span class="sz">180 KB</span></div>
-    <div class="drow"><span class="nm"><a href="files/the-isle-palette.ase">The palette</a></span><span class="kind">Adobe Swatch Exchange</span><span class="sz">848 B</span></div>
-    <div class="drow"><span class="nm"><a href="files/the-isle-palette.gpl">The palette</a></span><span class="kind">GIMP palette</span><span class="sz">427 B</span></div>
-    <div class="drow"><span class="nm"><a href="files/CHANGELOG.md">The change log</a></span><span class="kind">Markdown · kept separate, by design</span><span class="sz">2.2 KB</span></div>
-  </div>
+  <div class="docrow"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a><span class="kind">PDF · 13 pages</span><span class="size">527 KB</span></div>
+  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">13.6 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">5.2 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-tokens.json">Design tokens</a><span class="kind">JSON</span><span class="size">1.7 KB</span></div>
+  <div class="docrow"><a href="files/The-Isle-Colour-Swatches.pdf">The swatch sheet</a><span class="kind">PDF</span><span class="size">310 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-colour-swatches.png">The swatch sheet</a><span class="kind">PNG</span><span class="size">180 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-palette.ase">The palette</a><span class="kind">Adobe Swatch Exchange</span><span class="size">848 B</span></div>
+  <div class="docrow"><a href="files/the-isle-palette.gpl">The palette</a><span class="kind">GIMP palette</span><span class="size">427 B</span></div>
+  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">2.5 KB</span></div>
 </section>
 
-</main>
-
 <footer>
-  <img class="palm" src="assets/the-isle-tree.png" alt="The Isle palm">
-  <div class="fname">THE ISLE · STYLE GUIDE</div>
+  <img src="assets/the-isle-tree.png" alt="The windswept palm">
+  <div class="fname">The Isle · Style Guide</div>
 </footer>
-
 </div>
 <script>
 (function(){
   var root = document.documentElement;
   var lockup = document.getElementById('lockup');
-  var btn = document.getElementById('toggle');
-  function apply(){
-    lockup.src = root.getAttribute('data-theme') === 'dark'
-      ? 'assets/the-isle-horizontal-silver-colourtree.png'
-      : 'assets/the-isle-horizontal-colour.png';
-  }
-  btn.addEventListener('click', function(){
-    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    apply();
+  document.getElementById('toggle').addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    lockup.src = next === 'dark' ? 'assets/the-isle-horizontal-silver-colourtree.png' : 'assets/the-isle-horizontal-colour.png';
   });
-  apply();
 })();
 </script>
 </body>
