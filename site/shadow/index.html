@@ -25,6 +25,7 @@
     --input-bg: #152130; --btn: #22344a; --btn-border: rgba(194,161,92,0.30); --btn-hover: #22344a;
     --accent: #c2a15c; --gold-bright: #c9ab72; --accent-ink: #1d2a3b; --readout: #d9d0ba; --hint: #a89f88; --facts: #d9d0ba;
     --word: #C0C0C0;
+    color-scheme: dark;
   }
   :root[data-theme="light"] {
     --body-bg: #faf7ee; --ink: #1d2a3b; --muted: #767c8d; --panel: #faf7ee; --hairline: rgba(160,127,58,0.38);
@@ -32,6 +33,7 @@
     --input-bg: #f3eee0; --btn: #f3eee0; --btn-border: rgba(160,127,58,0.38); --btn-hover: #f3eee0;
     --accent: #a07f3a; --gold-bright: #a07f3a; --accent-ink: #faf7ee; --readout: #3c4763; --hint: #767c8d; --facts: #3c4763;
     --word: #1d2a3b;
+    color-scheme: light;
   }
   #topbar { display: flex; align-items: center; gap: 14px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--hairline); }
   #topbar .tb-tree { height: 30px; width: auto; display: block; }
@@ -103,6 +105,8 @@
   #readout { font-size: 13px; color: var(--readout); }
   #readout b { color: var(--accent); font-weight: 600; }
   .hint { font-size: 11px; color: var(--hint); }
+  .hint-touch { display: none; }
+  @media (pointer: coarse) { .hint-mouse { display: none; } .hint-touch { display: inline; } }
 </style>
 <script type="importmap">
 { "imports": {
@@ -157,7 +161,7 @@
     </div>
     <div class="grp readoutgrp">
       <span id="readout">Loading scene...</span>
-      <span class="hint">Drag to orbit, scroll or pinch to zoom, right-drag to pan.</span>
+      <span class="hint"><span class="hint-mouse">Drag to orbit, scroll or pinch to zoom, right-drag to pan.</span><span class="hint-touch">Drag to orbit, pinch to zoom, two-finger drag to pan.</span></span>
     </div>
     <div id="sunfacts" class="sec closed">
       <div class="sec-head">
