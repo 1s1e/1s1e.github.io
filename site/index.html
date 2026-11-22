@@ -103,7 +103,7 @@
     min-height:100dvh;
     display:grid;
     grid-template-columns: 46fr 54fr;
-    background:linear-gradient(168deg, var(--sea) 0%, var(--sea-deep) 58%, var(--sea-far) 100%);
+    background:linear-gradient(168deg, var(--sea) 0%, var(--sea) 20%, var(--sea-deep) 58%, var(--sea-far) 100%);
     overflow:hidden;
   }
   :root[data-theme="light"] .page{ background:var(--sea); }
@@ -500,8 +500,10 @@
     var root = document.documentElement;
     var btnLight = document.getElementById('btnLight');
     var btnDark = document.getElementById('btnDark');
+    var metaTheme = document.querySelector('meta[name="theme-color"]');
     function setTheme(t){
       root.setAttribute('data-theme', t);
+      if (metaTheme) metaTheme.setAttribute('content', (t === 'light') ? '#faf7ee' : '#1d2a3b');
       var light = (t === 'light');
       btnLight.classList.toggle('on', light);
       btnDark.classList.toggle('on', !light);
