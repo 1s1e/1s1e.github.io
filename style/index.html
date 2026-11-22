@@ -95,7 +95,8 @@ footer button{background:none;border:1px solid var(--hairline);color:var(--ink-s
 </style>
 </head>
 <body>
-<header>
+<header style="position:relative">
+  <button id="toggle" type="button" style="position:absolute;top:18px;right:20px;background:none;border:1px solid var(--hairline);color:var(--ink-soft);font-family:var(--sans);font-size:10.5px;letter-spacing:.26em;padding:8px 14px;cursor:pointer">LIGHT / DARK</button>
   <img id="lockup" src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle">
   <p class="tagline">More than a place you come to, a place you stay.</p>
   <div class="rule"></div>
@@ -294,9 +295,9 @@ footer button{background:none;border:1px solid var(--hairline);color:var(--ink-s
 </section>
 
 </main>
-<footer>
-  <span>1S1E.COM · THE ISLE · STYLE GUIDE</span>
-  <button id="toggle" type="button">LIGHT / DARK</button>
+<footer style="display:block;text-align:center">
+  <img src="assets/the-isle-tree.png" alt="The Isle palm" style="width:56px;height:auto">
+  <div style="font-size:11px;letter-spacing:.30em;color:var(--ink);margin-top:12px">THE ISLE · STYLE GUIDE</div>
 </footer>
 <script>
 var root = document.documentElement, lock = document.getElementById('lockup');
