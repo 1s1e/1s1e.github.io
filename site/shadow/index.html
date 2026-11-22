@@ -41,8 +41,8 @@
   #topbar .tb-div { width: 1px; align-self: stretch; background: var(--hairline); }
   #topbar .tb-title { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; letter-spacing: 0.02em; color: var(--ink); white-space: nowrap; }
   #topbar .tb-spacer { flex: 1; }
-  #topbar .tb-back { font-size: 12.5px; color: var(--accent); text-decoration: none; white-space: nowrap; }
-  #topbar .tb-back:hover { color: var(--gold-bright); }
+  #topbar .tb-back { font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 7px 12px; text-decoration: none; white-space: nowrap; }
+  #topbar .tb-back:hover { color: var(--ink); border-color: var(--gold-bright); }
   #themesw { display: flex; align-items: center; gap: 8px; }
   @media (max-width: 760px) {
     #topbar { flex-wrap: wrap; row-gap: 4px; padding: 8px 14px; }
@@ -96,7 +96,11 @@
   label { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); }
   input[type="date"] { background: var(--input-bg); color: var(--ink); border: 1px solid var(--btn-border);
     border-radius: 0; padding: 5px 7px; font-family: inherit; font-size: 13.5px; }
-  input[type="range"] { flex: 1 1 220px; accent-color: var(--accent); }
+  input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1 1 220px; height: 20px; background: transparent; cursor: pointer; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: var(--hairline); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; margin-top: -6px; background: var(--accent); border: none; border-radius: 0; }
+  input[type="range"]::-moz-range-track { height: 4px; background: var(--hairline); }
+  input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--accent); border: none; border-radius: 0; }
   button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0;
     padding: 7px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; }
   button:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
@@ -944,7 +948,7 @@ renderer.setAnimationLoop(function (ts) {
 (function () {
   var root = document.documentElement;
   var btns = document.querySelectorAll('#themesw button');
-  function sync() { var t = root.dataset.theme || 'dark'; btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
+  function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#faf7ee' : '#1d2a3b'); btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
   btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
   sync();
   var sf = document.getElementById('sunfacts');
