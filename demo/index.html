@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-grounds="master">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -18,12 +18,6 @@
 <style>
   :root, :root[data-theme="dark"]{
     color-scheme:dark;
-    --field:#081019;
-    --ground-1:#101c2c;
-    --ground-2:#0d1622;
-    --ground-3:#0b141f;
-    --panel:#0e1928;
-    --raised:#132236;
     --ink:#f0e8d5;
     --soft:#d9d0ba;
     --dim:#a89f88;
@@ -41,9 +35,30 @@
     --ghost-title:rgba(240,232,213,.42);
     --ghost-text:rgba(217,208,186,.42);
     --toggle-bg:#f0e8d5;
-    --toggle-ink:#101c2c;
     --serif:"Playfair Display", serif;
     --sans:"Source Sans 3", sans-serif;
+  }
+  /* Dark grounds, Master set (opens by default) */
+  :root[data-theme="dark"], :root[data-theme="dark"][data-grounds="master"]{
+    --field:#101a2e;
+    --ground-1:#1b2a4a;
+    --ground-2:#16233c;
+    --ground-3:#131f36;
+    --panel:#1f2f52;
+    --raised:#26395e;
+    --frame:#182842;
+    --toggle-ink:#1b2a4a;
+  }
+  /* Dark grounds, Night Chart set */
+  :root[data-theme="dark"][data-grounds="night"]{
+    --field:#081019;
+    --ground-1:#101c2c;
+    --ground-2:#0d1622;
+    --ground-3:#0b141f;
+    --panel:#0e1928;
+    --raised:#132236;
+    --frame:#0c1725;
+    --toggle-ink:#101c2c;
   }
   :root[data-theme="light"]{
     color-scheme:light;
@@ -53,6 +68,7 @@
     --ground-3:#faf7ee;
     --panel:#faf7ee;
     --raised:#f3ecd9;
+    --frame:rgba(160,127,58,.16);
     --ink:#1b2a4a;
     --soft:#4a556e;
     --dim:#767c8d;
@@ -108,6 +124,14 @@
   }
   .theme-toggle button.on{ background:var(--toggle-bg); color:var(--toggle-ink); }
   .theme-toggle button:focus-visible{ outline:1px solid var(--gold); outline-offset:2px; }
+  .controls-row{ display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:center; align-items:center; }
+  .grounds-wrap{ display:inline-flex; flex-wrap:wrap; gap:8px 12px; justify-content:center; align-items:center; }
+  .grounds-label{
+    font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.26em; color:var(--gold-bright);
+  }
+  .grounds-status{
+    margin:0; font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.26em; color:var(--dim); line-height:1.7;
+  }
 
   .token-strip{
     max-width:1560px; margin:14px auto 0; padding:0 28px;
@@ -132,6 +156,7 @@
     background:linear-gradient(168deg, var(--ground-1) 0%, var(--ground-2) 58%, var(--ground-3) 100%);
   }
   :root[data-theme="light"] .ground{ background:var(--ground-1); border:1px solid var(--hair-soft); }
+  :root[data-theme="dark"] .ground{ box-shadow:inset 0 0 0 1px var(--frame); }
 
   /* Shared footer pattern, identical in each half */
   .foot{
@@ -321,15 +346,27 @@
 <header class="sample-top">
   <p class="kicker">1S1E.COM · ONE HOUSE, ONE SYSTEM</p>
   <h1>The unified sample</h1>
-  <p class="sub">The Index and the Reference Catalogues rebuilt side by side in a single set of tokens, fonts and furniture. One toggle switches both pages together.</p>
-  <div class="theme-toggle" role="group" aria-label="Colour mode for both pages">
-    <button type="button" id="btnLight" aria-pressed="false">LIGHT</button>
-    <button type="button" id="btnDark" class="on" aria-pressed="true">DARK</button>
+  <p class="sub">The Index and the Reference Catalogues rebuilt side by side in a single set of tokens, fonts and furniture. One toggle switches both pages together. In dark, the Grounds switch compares the Master grounds against the Night Chart grounds across both pages and the specimen at once.</p>
+  <div class="controls-row">
+    <div class="theme-toggle" role="group" aria-label="Colour mode for both pages">
+      <button type="button" id="btnLight" aria-pressed="false">LIGHT</button>
+      <button type="button" id="btnDark" class="on" aria-pressed="true">DARK</button>
+    </div>
+    <div class="grounds-wrap">
+      <span class="grounds-label" id="groundsLabel">GROUNDS</span>
+      <div class="theme-toggle" role="group" aria-labelledby="groundsLabel">
+        <button type="button" id="btnMaster" class="on" aria-pressed="true">MASTER</button>
+        <button type="button" id="btnNight" aria-pressed="false">NIGHT CHART</button>
+      </div>
+    </div>
   </div>
+  <p class="grounds-status" id="groundsStatus" aria-live="polite">NOW SHOWING · DARK · MASTER GROUNDS</p>
 </header>
 
 <div class="token-strip" aria-label="Shared tokens">
-  <span><b>GROUND</b> #101C2C TO #0B141F · IVORY #FAF7EE</span>
+  <span><b>MASTER GROUND</b> #1B2A4A TO #131F36</span>
+  <span><b>NIGHT CHART GROUND</b> #101C2C TO #0B141F</span>
+  <span><b>LIGHT GROUND</b> IVORY #FAF7EE</span>
   <span><b>INK</b> #F0E8D5 · #1B2A4A</span>
   <span><b>GOLD</b> #C2A15C · #A07F3A</span>
   <span><b>TYPE</b> PLAYFAIR DISPLAY · SOURCE SANS 3</span>
@@ -531,6 +568,18 @@
     var root = document.documentElement;
     var btnLight = document.getElementById('btnLight');
     var btnDark = document.getElementById('btnDark');
+    var btnMaster = document.getElementById('btnMaster');
+    var btnNight = document.getElementById('btnNight');
+    var groundsStatus = document.getElementById('groundsStatus');
+    function updateStatus(){
+      var light = root.getAttribute('data-theme') === 'light';
+      var master = root.getAttribute('data-grounds') !== 'night';
+      if (light){
+        groundsStatus.textContent = 'LIGHT · SHARED IVORY GROUND · DARK GROUNDS SET TO ' + (master ? 'MASTER' : 'NIGHT CHART');
+      } else {
+        groundsStatus.textContent = 'NOW SHOWING · DARK · ' + (master ? 'MASTER GROUNDS' : 'NIGHT CHART GROUNDS');
+      }
+    }
     function setTheme(t){
       root.setAttribute('data-theme', t);
       var light = (t === 'light');
@@ -538,9 +587,22 @@
       btnDark.classList.toggle('on', !light);
       btnLight.setAttribute('aria-pressed', light ? 'true' : 'false');
       btnDark.setAttribute('aria-pressed', light ? 'false' : 'true');
+      updateStatus();
+    }
+    function setGrounds(g){
+      root.setAttribute('data-grounds', g);
+      var master = (g === 'master');
+      btnMaster.classList.toggle('on', master);
+      btnNight.classList.toggle('on', !master);
+      btnMaster.setAttribute('aria-pressed', master ? 'true' : 'false');
+      btnNight.setAttribute('aria-pressed', master ? 'false' : 'true');
+      updateStatus();
     }
     btnLight.addEventListener('click', function(){ setTheme('light'); });
     btnDark.addEventListener('click', function(){ setTheme('dark'); });
+    btnMaster.addEventListener('click', function(){ setGrounds('master'); });
+    btnNight.addEventListener('click', function(){ setGrounds('night'); });
+    updateStatus();
 
     var els = document.querySelectorAll('.local-time');
     function tick(){
