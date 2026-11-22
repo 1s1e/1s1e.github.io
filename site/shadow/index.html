@@ -88,6 +88,7 @@
       <label>Ground</label>
       <button id="groundSat" type="button">Satellite</button>
       <button id="groundNat" type="button" class="active">Natural</button>
+      <button id="groundBare" type="button">Ground only</button>
     </div>
     <div class="row">
       <span id="readout">Loading scene...</span>
@@ -648,6 +649,7 @@ var occluders = null;
 var poolRay = new THREE.Raycaster();
 function visibleChain(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
 function poolSunFraction(dir) {
+  scene.updateMatrixWorld(true);
   if (!occluders) {
     occluders = [];
     scene.traverse(function (o) { if (o.isMesh && o.castShadow) occluders.push(o); });
@@ -686,7 +688,7 @@ function updateSunExtras(dt, sp, dir) {
     var label = f >= 0.95 ? 'in full sun' : (f <= 0.05 ? 'in shade' : 'partly shaded, ' + Math.round(f * 100) + '% in sun');
     readoutEl.innerHTML += ' &nbsp; Pool <b>' + label + '</b>';
   }
-  if (typeof groundIsNatural !== 'undefined' && !groundIsNatural) {
+  if (typeof groundMode !== 'undefined' && groundMode === 'sat') {
     readoutEl.innerHTML += ' &nbsp; Neighbours <b>are the photograph itself, their shadows fixed in it</b>';
   }
 }
@@ -805,19 +807,22 @@ groundNatTex.colorSpace = THREE.SRGBColorSpace;
 groundNatTex.anisotropy = 8;
 var groundSatBtn = document.getElementById('groundSat');
 var groundNatBtn = document.getElementById('groundNat');
-var groundIsNatural = true;
-function setGround(natural) {
-  groundIsNatural = natural;
-  ground.material.map = natural ? groundNatTex : groundTex;
+var groundMode = 'nat';
+var groundBareBtn = document.getElementById('groundBare');
+function setGround(mode) {
+  groundMode = mode;
+  ground.material.map = mode === 'sat' ? groundTex : groundNatTex;
   ground.material.needsUpdate = true;
-  nbrMeshes.forEach(function (m) { m.visible = natural; });
-  groundSatBtn.classList.toggle('active', !natural);
-  groundNatBtn.classList.toggle('active', natural);
+  nbrMeshes.forEach(function (m) { m.visible = mode === 'nat'; });
+  groundSatBtn.classList.toggle('active', mode === 'sat');
+  groundNatBtn.classList.toggle('active', mode === 'nat');
+  groundBareBtn.classList.toggle('active', mode === 'bare');
   updateSun();
 }
-groundSatBtn.addEventListener('click', function () { setGround(false); });
-groundNatBtn.addEventListener('click', function () { setGround(true); });
-setGround(true);
+groundSatBtn.addEventListener('click', function () { setGround('sat'); });
+groundNatBtn.addEventListener('click', function () { setGround('nat'); });
+groundBareBtn.addEventListener('click', function () { setGround('bare'); });
+setGround('nat');
 dateEl.addEventListener('input', updateSun);
 timeEl.addEventListener('input', function () { mode = null; playDayBtn.classList.remove('active'); playYearBtn.classList.remove('active'); updateSun(); });
 
