@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{var t=localStorage.getItem('isle-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>Shadow Study</title>
@@ -9,29 +10,46 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; background: #101418; color: #e8e8e4;
+
+  :root {
+    --body-bg: #081019; --ink: #f0e8d5; --muted: #a89f88; --panel: #0e1928; --hairline: rgba(194,161,92,0.30);
+    --input-bg: #081019; --btn: #132236; --btn-border: rgba(194,161,92,0.30); --btn-hover: #1b2c44;
+    --accent: #c2a15c; --accent-ink: #101c2c; --readout: #d9d0ba; --hint: #a89f88;
+  }
+  :root[data-theme="light"] {
+    --body-bg: #e9e2cf; --ink: #1b2a4a; --muted: #5f6a7a; --panel: #faf7ee; --hairline: #ddd5bd;
+    --input-bg: #fffdf6; --btn: #fffdf6; --btn-border: #d8cfb2; --btn-hover: #f1ead6;
+    --accent: #a67c3d; --accent-ink: #fffdf6; --readout: #2a3648; --hint: #8a8272;
+  }
+  header { display: flex; align-items: flex-start; gap: 16px; }
+  header .hgroup { flex: 1; }
+  #themesw { display: flex; align-items: center; gap: 8px; padding-top: 4px; }
+  #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #themesw button[aria-pressed="true"] { color: var(--accent); }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--body-bg); color: var(--ink);
     font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
   #app { display: flex; flex-direction: column; height: 100%; }
   header { padding: 10px 16px 6px 16px; }
   header h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: 0.04em; }
-  header p { font-size: 12px; color: #9aa4ad; margin: 3px 0 0 0; }
+  header p { font-size: 12px; color: var(--muted); margin: 3px 0 0 0; }
   #scene { flex: 1 1 auto; min-height: 240px; position: relative; }
   #scene canvas { display: block; }
-  #controls { padding: 10px 16px 14px 16px; background: #171d23; border-top: 1px solid #2a323a; }
+  #controls { padding: 10px 16px 14px 16px; background: var(--panel); border-top: 1px solid var(--hairline); }
   .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 8px; }
   .row:last-child { margin-bottom: 0; }
-  label { font-size: 12px; color: #9aa4ad; }
-  input[type="date"] { background: #0f1418; color: #e8e8e4; border: 1px solid #39434d;
+  label { font-size: 12px; color: var(--muted); }
+  input[type="date"] { background: var(--input-bg); color: var(--ink); border: 1px solid var(--btn-border);
     border-radius: 4px; padding: 5px 7px; font-size: 14px; }
-  input[type="range"] { flex: 1 1 220px; accent-color: #d8a03c; }
-  button { background: #232c34; color: #e8e8e4; border: 1px solid #39434d; border-radius: 4px;
+  input[type="range"] { flex: 1 1 220px; accent-color: var(--accent); }
+  button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 4px;
     padding: 6px 12px; font-size: 13px; cursor: pointer; }
-  button:hover { background: #2c3742; }
-  button.active { background: #8a6420; border-color: #d8a03c; }
+  button:hover { background: var(--btn-hover); }
+  button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   #clock { font-size: 15px; font-weight: 600; min-width: 118px; }
-  #readout { font-size: 13px; color: #cfd6dc; }
-  #readout b { color: #f0c56a; font-weight: 600; }
-  .hint { font-size: 11px; color: #77828c; }
+  #readout { font-size: 13px; color: var(--readout); }
+  #readout b { color: var(--accent); font-weight: 600; }
+  .hint { font-size: 11px; color: var(--hint); }
 </style>
 <script type="importmap">
 { "imports": {
@@ -43,9 +61,12 @@
 <body>
 <div id="app">
   <header>
+    <div class="hgroup">
     <h1>Shadow Study</h1>
     <p>The Isle. Sun position by the NOAA algorithm, America/New_York time.</p>
-    <p><a href="/site/" style="color: #d8a03c;">Back to The Isle index</a></p>
+    <p><a href="/site/" style="color: var(--accent);">Back to The Isle index</a></p>
+    </div>
+    <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
   </header>
   <div id="scene"></div>
   <div id="controls">
@@ -141,7 +162,9 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
 var scene = new THREE.Scene();
-scene.background = new THREE.Color(0x101418);
+function applySceneTheme() { var t = document.documentElement.dataset.theme; scene.background = new THREE.Color(t === 'light' ? 0xe9e2cf : 0x081019); }
+applySceneTheme();
+new MutationObserver(applySceneTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
 camera.position.set(-38, 52, 62);
 
@@ -824,6 +847,15 @@ renderer.setAnimationLoop(function (ts) {
   controls.update();
   renderer.render(scene, camera);
 });
+</script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var btns = document.querySelectorAll('#themesw button');
+  function sync() { var t = root.dataset.theme || 'dark'; btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
+  btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
+  sync();
+})();
 </script>
 </body>
 </html>

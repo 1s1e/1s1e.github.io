@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow, noarchive">
+<script>try{var t=localStorage.getItem('isle-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>The Isle · Lot viewer</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -10,67 +11,86 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <style>
   :root { --panel-w: 308px; }
+  :root {
+    --body-bg: #081019; --ink: #f0e8d5; --panel: #0e1928; --hairline: rgba(194,161,92,0.30); --hairline-soft: rgba(194,161,92,0.16);
+    --btn: #132236; --btn-border: rgba(194,161,92,0.30); --btn-hover: #1b2c44; --muted: #a89f88; --off-name: #a89f88;
+    --accent: #c2a15c; --accent-ink: #101c2c; --facts: #d9d0ba; --viewer-bg: #081019;
+    --chip-bg: rgba(8,16,25,0.85); --bar-bg: rgba(8,16,25,0.92); --load-bg: rgba(8,16,25,0.88);
+    --chip-border: rgba(194,161,92,0.30); --chip-ink: #d9d0ba; --track: #132236;
+  }
+  :root[data-theme="light"] {
+    --body-bg: #e9e2cf; --ink: #1b2a4a; --panel: #faf7ee; --hairline: #ddd5bd; --hairline-soft: #e7dfc9;
+    --btn: #fffdf6; --btn-border: #d8cfb2; --btn-hover: #f1ead6; --muted: #5f6a7a; --off-name: #9a917c;
+    --accent: #a67c3d; --accent-ink: #fffdf6; --facts: #44506a; --viewer-bg: #e9e2cf;
+    --chip-bg: rgba(250,247,238,0.92); --bar-bg: rgba(250,247,238,0.96); --load-bg: rgba(250,247,238,0.92);
+    --chip-border: #d8cfb2; --chip-ink: #2a3648; --track: #e0d7ba;
+  }
+  #themesw { display: flex; align-items: center; gap: 8px; margin-top: 9px; }
+  #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #themesw button[aria-pressed="true"] { color: var(--accent); }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #14161a; color: #e8eaed; overflow: hidden; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--body-bg); color: var(--ink); overflow: hidden; }
   #app { display: flex; height: 100%; }
   /* ---------- control panel ---------- */
-  #panel { width: var(--panel-w); flex: 0 0 var(--panel-w); background: #152130; border-right: 1px solid #2a3646; display: flex; flex-direction: column; z-index: 20; }
-  #panel header { padding: 16px 16px 12px; border-bottom: 1px solid #2a3646; }
+  #panel { width: var(--panel-w); flex: 0 0 var(--panel-w); background: var(--panel); border-right: 1px solid var(--hairline); display: flex; flex-direction: column; z-index: 20; }
+  #panel header { padding: 16px 16px 12px; border-bottom: 1px solid var(--hairline); }
   #panel h1 { font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; letter-spacing: 0.04em; line-height: 1.25; }
-  #panel header p { font-size: 12px; color: #9aa0a6; margin-top: 3px; line-height: 1.45; }
-  #viewbtns { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #2a3646; }
-  #viewbtns button, #bulk button { background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; }
-  #viewbtns button:hover, #bulk button:hover { background: #27374c; }
+  #panel header p { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  #viewbtns { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-bottom: 1px solid var(--hairline); }
+  #viewbtns button, #bulk button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; }
+  #viewbtns button:hover, #bulk button:hover { background: var(--btn-hover); }
   #bulk { display: flex; gap: 6px; padding: 10px 16px 2px; }
   #layers { flex: 1; overflow-y: auto; padding: 2px 10px 10px; }
-  .layer { padding: 9px 6px; border-bottom: 1px solid #22304a; }
+  .layer { padding: 9px 6px; border-bottom: 1px solid var(--hairline-soft); }
   .layer .row1 { display: flex; align-items: center; gap: 8px; }
-  .sec { border-bottom: 1px solid #2a3646; }
+  .sec { border-bottom: 1px solid var(--hairline); }
   .sec-head { display: flex; align-items: center; gap: 4px; padding: 11px 6px 8px; }
-  .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b08d57; text-align: left; }
-  .sec-toggle .chev { margin-left: auto; color: #9aa0a6; font-size: 11px; transition: transform 0.15s; }
+  .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); text-align: left; }
+  .sec-toggle .chev { margin-left: auto; color: var(--muted); font-size: 11px; transition: transform 0.15s; }
   .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
-  .sec-all { background: none; border: 1px solid #33445a; border-radius: 5px; color: #9aa0a6; font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
-  .sec-all:hover { color: #e8eaed; background: #27374c; }
-  #viewbtns button.on { background: #b08d57; color: #14100a; border-color: #b08d57; font-weight: 600; }
-  #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: rgba(16,18,21,0.92); border: 1px solid #3c414b; border-radius: 8px; padding: 8px 10px 8px 14px; font-size: 13px; color: #e8eaed; max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
+  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 5px; color: var(--muted); font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
+  .sec-all:hover { color: var(--ink); background: var(--btn-hover); }
+  #viewbtns button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: var(--bar-bg); border: 1px solid var(--chip-border); border-radius: 8px; padding: 8px 10px 8px 14px; font-size: 13px; color: var(--ink); max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
   #measurebar.show { display: flex; }
   #measurebar .mtext { line-height: 1.35; }
-  #measurebar .mtext b { color: #b08d57; font-variant-numeric: tabular-nums; }
+  #measurebar .mtext b { color: var(--accent); font-variant-numeric: tabular-nums; }
   #measurebar #mbtns { display: flex; gap: 6px; }
-  #measurebar button { background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 8px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
-  #measurebar button.primary { background: #b08d57; border-color: #b08d57; color: #14100a; font-weight: 600; }
+  #measurebar button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  #measurebar button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   #viewer.measuring { cursor: crosshair; }
   .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
-  .layer .eye { background: none; border: 1px solid #33445a; border-radius: 6px; color: #e8eaed; width: 34px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
-  .layer.off .name { color: #7d8288; }
+  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .layer.off .name { color: var(--off-name); }
   .layer.off .eye { opacity: 0.45; }
   .layer.off .row2 { opacity: 0.45; }
   .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-  .layer input[type=range] { flex: 1; accent-color: #b08d57; height: 20px; }
-  .layer .pct { font-size: 12px; color: #9aa0a6; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
-  #facts { border-top: 1px solid #2a3646; padding: 10px 16px 14px; font-size: 12px; color: #b9bec6; line-height: 1.55; }
-  #facts b { color: #e8eaed; font-weight: 600; }
-  #facts a { color: #b08d57; }
+  .layer input[type=range] { flex: 1; accent-color: var(--accent); height: 20px; }
+  .layer .pct { font-size: 12px; color: var(--muted); width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
+  #facts { border-top: 1px solid var(--hairline); padding: 10px 16px 14px; font-size: 12px; color: var(--facts); line-height: 1.55; }
+  #facts b { color: var(--ink); font-weight: 600; }
+  #facts a { color: var(--accent); }
   /* ---------- viewer ---------- */
-  #viewer { flex: 1; position: relative; overflow: hidden; background: #101215; touch-action: none; cursor: grab; }
+  #viewer { flex: 1; position: relative; overflow: hidden; background: var(--viewer-bg); touch-action: none; cursor: grab; }
   #viewer.dragging { cursor: grabbing; }
   #cv { position: absolute; left: 0; top: 0; }
-  #readout { position: absolute; left: 12px; bottom: 12px; background: rgba(16,18,21,0.82); border: 1px solid #3c414b; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #cfd3d9; font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1.5; }
-  #scalebar { position: absolute; right: 12px; bottom: 12px; background: rgba(16,18,21,0.82); border: 1px solid #3c414b; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #cfd3d9; pointer-events: none; text-align: center; }
-  #scalebar .bar { height: 5px; border-left: 2px solid #e8eaed; border-right: 2px solid #e8eaed; border-bottom: 2px solid #e8eaed; margin-top: 3px; }
-  #loading { position: absolute; inset: 0; background: rgba(16,18,21,0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 30; }
+  #readout { position: absolute; left: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1.5; }
+  #scalebar { position: absolute; right: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); pointer-events: none; text-align: center; }
+  #scalebar .bar { height: 5px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); margin-top: 3px; }
+  #loading { position: absolute; inset: 0; background: var(--load-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 30; }
   #loading .t { font-size: 15px; }
-  #loading .track { width: min(420px, 70%); height: 8px; background: #2b2f36; border-radius: 4px; overflow: hidden; }
-  #loading .fill { height: 100%; width: 0%; background: #b08d57; transition: width 0.2s; }
-  #loading .s { font-size: 12px; color: #9aa0a6; }
+  #loading .track { width: min(420px, 70%); height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+  #loading .fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.2s; }
+  #loading .s { font-size: 12px; color: var(--muted); }
   #paneltoggle { display: none; }
   @media (max-width: 760px) {
     #panel { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.2s; box-shadow: 4px 0 18px rgba(0,0,0,0.5); }
     #panel.open { transform: translateX(0); }
-    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
   }
 </style>
 </head>
@@ -80,7 +100,8 @@
     <header>
       <h1>The Isle</h1>
       <p>Lot viewer. Every layer aligned to the same survey. Drag to pan, scroll or pinch to zoom.</p>
-    </header>
+        <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+  </header>
     <div id="viewbtns">
       <button id="btn-fit" type="button">Fit view</button>
       <button id="btn-lot" type="button">Zoom to lot</button>
@@ -407,7 +428,7 @@
     var pts = measure.pts, pen = measure.pending;
     if (!pts.length && !pen) return;
     g.save();
-    g.strokeStyle = "#b08d57"; g.fillStyle = "#b08d57";
+    g.strokeStyle = "#c2a15c"; g.fillStyle = "#c2a15c";
     g.lineWidth = 2 / s; g.lineJoin = "round"; g.lineCap = "round";
     if (pts.length > 1) {
       g.beginPath();
@@ -423,9 +444,9 @@
     pts.forEach(function (p) {
       var X = p.x * s + ox, Y = p.y * s + oy;
       g.beginPath(); g.arc(X, Y, 5.5 / s, 0, 7); g.fill();
-      g.fillStyle = "#152130";
+      g.fillStyle = "#101c2c";
       g.beginPath(); g.arc(X, Y, 2.2 / s, 0, 7); g.fill();
-      g.fillStyle = "#b08d57";
+      g.fillStyle = "#c2a15c";
     });
     if (pen) {
       var X2 = pen.x * s + ox, Y2 = pen.y * s + oy;
@@ -601,6 +622,15 @@
   sizeCanvas();
   if (initialState && initialState.c && initialState.s) centerOn(initialState.c[0], initialState.c[1], initialState.s);
   else lotView();
+})();
+</script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var btns = document.querySelectorAll('#themesw button');
+  function sync() { var t = root.dataset.theme || 'dark'; btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
+  btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
+  sync();
 })();
 </script>
 </body>
