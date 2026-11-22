@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>The Isle Unified Sample: Index and Ref</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root, :root[data-theme="dark"]{
+    color-scheme:dark;
+    --field:#081019;
+    --ground-1:#101c2c;
+    --ground-2:#0d1622;
+    --ground-3:#0b141f;
+    --panel:#0e1928;
+    --raised:#132236;
+    --ink:#f0e8d5;
+    --soft:#d9d0ba;
+    --dim:#a89f88;
+    --gold:#c2a15c;
+    --gold-bright:#d8bc7d;
+    --hair:rgba(194,161,92,.30);
+    --hair-soft:rgba(194,161,92,.16);
+    --coast:#d8bc7d;
+    --curve:#e9dfc6;
+    --figure:#e9dfc6;
+    --hover:rgba(240,232,213,.035);
+    --num:rgba(240,232,213,.13);
+    --num-h:rgba(216,188,125,.32);
+    --ghost-num:rgba(240,232,213,.07);
+    --ghost-title:rgba(240,232,213,.42);
+    --ghost-text:rgba(217,208,186,.42);
+    --toggle-bg:#f0e8d5;
+    --toggle-ink:#101c2c;
+    --serif:"Playfair Display", Georgia, serif;
+    --sans:"Jost", sans-serif;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --field:#faf7ee;
+    --ground-1:#faf7ee;
+    --ground-2:#faf7ee;
+    --ground-3:#faf7ee;
+    --panel:#faf7ee;
+    --raised:#f3ecd9;
+    --ink:#1b2a4a;
+    --soft:#4a556e;
+    --dim:#767c8d;
+    --gold:#a07f3a;
+    --gold-bright:#8a6a2a;
+    --hair:rgba(160,127,58,.30);
+    --hair-soft:rgba(160,127,58,.16);
+    --coast:#a07f3a;
+    --curve:#2a3a5c;
+    --figure:#1b2a4a;
+    --hover:rgba(27,42,74,.045);
+    --num:rgba(27,42,74,.12);
+    --num-h:rgba(27,42,74,.24);
+    --ghost-num:rgba(27,42,74,.06);
+    --ghost-title:rgba(27,42,74,.36);
+    --ghost-text:rgba(74,85,110,.42);
+    --toggle-bg:#1b2a4a;
+    --toggle-ink:#faf7ee;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--field);
+    color:var(--ink);
+    font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background .35s ease, color .35s ease;
+  }
+  a{ color:inherit; }
+  button{ min-height:2.25rem; }
+
+  /* Sample chrome: one shared toggle for both halves */
+  .sample-top{
+    max-width:1560px; margin:0 auto;
+    padding:26px 28px 6px;
+    display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;
+  }
+  .sample-top .kicker{
+    font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.34em; color:var(--dim); margin:0;
+  }
+  .sample-top h1{
+    margin:0; font-size:clamp(24px,3vw,34px); font-weight:600; line-height:1.15; color:var(--ink);
+  }
+  .sample-top .sub{
+    margin:0; font-family:var(--sans); font-size:12.5px; font-weight:400; letter-spacing:.06em; line-height:1.6; color:var(--soft); max-width:62ch;
+  }
+  .theme-toggle{ display:inline-flex; gap:2px; border:1px solid var(--hair); padding:3px; }
+  .theme-toggle button{
+    appearance:none; border:0; background:transparent; cursor:pointer;
+    font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.22em;
+    color:var(--dim); padding:8px 16px 8px 18px;
+  }
+  .theme-toggle button.on{ background:var(--toggle-bg); color:var(--toggle-ink); }
+  .theme-toggle button:focus-visible{ outline:1px solid var(--gold); outline-offset:2px; }
+
+  .token-strip{
+    max-width:1560px; margin:14px auto 0; padding:0 28px;
+    display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:center;
+    font-family:var(--sans); font-size:10px; letter-spacing:.18em; color:var(--dim); text-align:center;
+  }
+  .token-strip b{ color:var(--gold-bright); font-weight:500; }
+
+  /* Comparison layout */
+  .compare{
+    max-width:1560px; margin:0 auto; padding:22px 28px 36px;
+    display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:stretch;
+  }
+  .half{ display:flex; flex-direction:column; min-width:0; }
+  .half-label{
+    font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.32em;
+    color:var(--gold-bright); margin:0 0 12px 2px; display:flex; align-items:center; gap:12px;
+  }
+  .half-label::after{ content:""; flex:1; height:1px; background:var(--hair-soft); }
+  .ground{
+    flex:1; display:flex; flex-direction:column; position:relative;
+    background:linear-gradient(168deg, var(--ground-1) 0%, var(--ground-2) 58%, var(--ground-3) 100%);
+  }
+  :root[data-theme="light"] .ground{ background:var(--ground-1); border:1px solid var(--hair-soft); }
+
+  /* Shared footer pattern, identical in each half */
+  .foot{
+    display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;
+    padding:18px 30px 20px;
+    font-family:var(--sans); font-size:10.5px; letter-spacing:.26em; color:var(--dim); white-space:nowrap;
+  }
+  .foot .site{ color:var(--soft); }
+  .foot time{ color:var(--soft); letter-spacing:.18em; }
+
+  /* LEFT HALF: THE INDEX */
+  .index-cols{ flex:1; display:grid; grid-template-columns:46fr 54fr; position:relative; }
+  .idx-left{ padding:38px 30px 8px; display:flex; flex-direction:column; position:relative; }
+  .idx-left::after{
+    content:""; position:absolute; top:52px; bottom:52px; right:0; width:1px; background:var(--hair); pointer-events:none;
+  }
+  .idx-right{ padding:26px 30px 54px; display:flex; flex-direction:column; justify-content:center; position:relative; }
+  .lockup{ text-align:center; padding:2px 4px 0; }
+  .lockup img{ display:block; margin:0 auto; width:min(210px,78%); height:auto; }
+  .lockup img.mark-colour{ display:none; }
+  :root[data-theme="light"] .lockup img.mark-colour{ display:block; }
+  :root[data-theme="light"] .lockup img.mark-dark{ display:none; }
+  .tagline{
+    margin:20px auto 0; max-width:32ch; text-align:center;
+    font-size:19px; line-height:1.4; font-style:italic; font-weight:500; color:var(--ink);
+  }
+  .tagline-rule{ margin:20px auto 0; width:52px; height:1px; background:var(--gold); opacity:.75; }
+
+  .report{ margin-top:32px; }
+  .report h2{
+    margin:0; font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.34em; color:var(--gold-bright);
+    display:flex; align-items:center; gap:10px;
+  }
+  .report h2 .dot{ width:5px; height:5px; border-radius:50%; background:var(--gold); flex:none; box-shadow:0 0 0 3px var(--hair-soft); }
+  .report .lead{ margin:11px 0 0; font-size:20px; font-weight:600; line-height:1.25; color:var(--ink); }
+  .rows{ margin:14px 0 0; padding:0; display:grid; gap:11px; }
+  .row{ display:grid; grid-template-columns:92px 1fr; gap:12px; align-items:baseline; }
+  .row dt{ font-family:var(--sans); font-size:9.5px; font-weight:500; letter-spacing:.22em; color:var(--dim); padding-top:3px; }
+  .row dd{ margin:0; font-size:14.5px; line-height:1.5; font-weight:500; color:var(--soft); }
+  .row dd a{ color:var(--ink); text-decoration:underline; text-decoration-color:var(--gold); text-underline-offset:3px; padding:2px 0; }
+  .row dd a:hover{ color:var(--gold-bright); }
+  .report .divide{ border:0; border-top:1px solid var(--hair-soft); margin:20px 0 18px; }
+
+  .chart-zone{ position:relative; margin-top:26px; flex:1; min-height:300px; border-top:1px solid var(--hair-soft); }
+  .chart-zone svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .chart-cap{
+    position:absolute; left:2px; top:10px; font-family:var(--sans); font-size:8.5px; letter-spacing:.30em; color:var(--gold-bright); opacity:.65;
+  }
+  .sounding{ font-family:var(--serif); font-style:italic; font-size:13px; fill:var(--figure); }
+  .chart-zone .coast{ stroke:var(--coast); }
+  .chart-zone .curves{ stroke:var(--curve); }
+  .drift-a{ animation:driftA 13s ease-in-out infinite; }
+  .drift-b{ animation:driftB 17s ease-in-out infinite; animation-delay:-6s; }
+  .drift-c{ animation:driftC 21s ease-in-out infinite; animation-delay:-11s; }
+  .pulse-a{ animation:pulseA 10s ease-in-out infinite; }
+  .pulse-b{ animation:pulseB 14s ease-in-out infinite; animation-delay:-5s; }
+  .pulse-c{ animation:pulseC 18s ease-in-out infinite; animation-delay:-9s; }
+  @keyframes driftA{ 0%,100%{ transform:translateX(0); opacity:.45; } 50%{ transform:translateX(7px); opacity:.8; } }
+  @keyframes driftB{ 0%,100%{ transform:translateX(0); opacity:.55; } 50%{ transform:translateX(-6px); opacity:.28; } }
+  @keyframes driftC{ 0%,100%{ transform:translateX(0); opacity:.32; } 50%{ transform:translateX(5px); opacity:.62; } }
+  @keyframes pulseA{ 0%,100%{ opacity:.38; } 50%{ opacity:.85; } }
+  @keyframes pulseB{ 0%,100%{ opacity:.7; } 50%{ opacity:.3; } }
+  @keyframes pulseC{ 0%,100%{ opacity:.45; } 50%{ opacity:.78; } }
+
+  .entry{
+    display:grid; grid-template-columns:72px 1fr; gap:6px 16px;
+    padding:24px 10px 22px; text-decoration:none; position:relative; transition:background .35s ease;
+  }
+  .entry + .entry{ border-top:1px solid var(--hair-soft); }
+  .entry:hover, .entry:focus-visible{ background:var(--hover); }
+  .entry:focus-visible{ outline:1px solid var(--hair); outline-offset:-1px; }
+  .num{ grid-row:1 / span 4; font-size:48px; line-height:.95; font-weight:500; color:var(--num); padding-top:2px; transition:color .35s ease; }
+  .entry:hover .num{ color:var(--num-h); }
+  .eyebrow{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.32em; color:var(--gold-bright); margin:2px 0 0; }
+  .entry h3{ margin:6px 0 0; font-size:27px; font-weight:600; line-height:1.08; color:var(--ink); }
+  .entry p.desc{ margin:8px 0 0; font-size:15px; line-height:1.55; font-weight:500; color:var(--soft); max-width:42ch; }
+  .status{ margin:13px 0 0; display:flex; align-items:center; gap:12px; font-family:var(--sans); font-size:10px; letter-spacing:.26em; color:var(--dim); }
+  .status::before{ content:""; width:24px; height:1px; background:var(--gold); flex:none; }
+  .entry.ghost{ pointer-events:none; }
+  .entry.ghost .num{ color:var(--ghost-num); }
+  .entry.ghost .eyebrow{ color:var(--gold); opacity:.55; }
+  .entry.ghost h3{ color:var(--ghost-title); }
+  .entry.ghost p.desc{ color:var(--ghost-text); }
+  .plate{
+    position:absolute; right:20px; bottom:14px; z-index:2;
+    font-family:var(--sans); font-size:9px; letter-spacing:.30em; color:var(--gold-bright); opacity:.7;
+  }
+
+  /* RIGHT HALF: /REF */
+  .ref-body{ flex:1; padding:38px 36px 8px; display:flex; flex-direction:column; }
+  .ref-body .eyebrow-top{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.32em; color:var(--gold-bright); margin:0; }
+  .ref-body h2.title{ margin:12px 0 0; font-size:clamp(32px,3.4vw,42px); font-weight:600; line-height:1.08; color:var(--ink); }
+  .ref-serif{ margin:14px 0 0; font-size:18.5px; line-height:1.5; font-style:italic; font-weight:500; color:var(--ink); max-width:46ch; }
+  .ref-standfirst{ margin:14px 0 0; font-family:var(--sans); font-size:13.5px; font-weight:400; line-height:1.65; letter-spacing:.02em; color:var(--soft); max-width:52ch; }
+  .stats{
+    margin:22px 0 0; display:flex; flex-wrap:wrap; gap:10px 0; align-items:baseline;
+    font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.22em; color:var(--dim);
+  }
+  .stats span{ white-space:nowrap; }
+  .stats span + span::before{ content:"·"; margin:0 14px; color:var(--gold); }
+  .stats b{ font-family:var(--serif); font-size:19px; font-weight:600; letter-spacing:0; color:var(--ink); margin-right:7px; }
+  .rule{ border:0; border-top:1px solid var(--hair); margin:24px 0 0; }
+  .rule.soft{ border-top-color:var(--hair-soft); }
+
+  .vol{
+    display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:baseline;
+    padding:19px 10px 17px; text-decoration:none; transition:background .35s ease;
+  }
+  .vol + .vol{ border-top:1px solid var(--hair-soft); }
+  .vol:hover, .vol:focus-visible{ background:var(--hover); }
+  .vol:focus-visible{ outline:1px solid var(--hair); outline-offset:-1px; }
+  .vol .v-name{ font-size:20px; font-weight:600; line-height:1.2; color:var(--ink); }
+  .vol .v-name em{ font-style:italic; font-weight:500; color:var(--soft); }
+  .vol .v-meta{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.22em; color:var(--dim); white-space:nowrap; text-align:right; }
+  .vol .v-sub{ grid-column:1 / -1; font-family:var(--sans); font-size:11px; letter-spacing:.14em; color:var(--soft); margin:0; }
+
+  .vol-open{ margin-top:28px; }
+  .vol-open .eyebrow{ margin:0; }
+  .vol-open h3{ margin:9px 0 0; font-size:34px; font-weight:600; line-height:1.05; color:var(--ink); }
+  .vol-open .italic{ margin:8px 0 0; font-size:18px; font-style:italic; font-weight:500; color:var(--soft); }
+  .facts{ margin:16px 0 0; font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.22em; color:var(--dim); line-height:1.9; }
+  .ref-links{ margin:18px 0 6px; display:flex; flex-wrap:wrap; gap:12px 28px; }
+  .ref-links a{
+    font-family:var(--sans); font-size:11px; font-weight:500; letter-spacing:.22em; color:var(--ink);
+    text-decoration:underline; text-decoration-color:var(--gold); text-underline-offset:4px; padding:8px 0;
+  }
+  .ref-links a:hover{ color:var(--gold-bright); }
+
+  .sample-note{
+    max-width:1560px; margin:0 auto; padding:0 28px 34px;
+    font-family:var(--sans); font-size:11px; letter-spacing:.08em; line-height:1.7; color:var(--dim); text-align:center;
+  }
+
+  @media (max-width: 980px){
+    .compare{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 640px){
+    .sample-top{ padding:22px 18px 4px; }
+    .compare{ padding:18px 14px 28px; gap:24px; }
+    .token-strip{ padding:0 16px; }
+    .index-cols{ grid-template-columns:1fr; }
+    .idx-left{ padding:32px 22px 4px; }
+    .idx-left::after{ display:none; }
+    .idx-right{ padding:8px 18px 52px; justify-content:flex-start; }
+    .chart-zone{ min-height:270px; }
+    .entry{ grid-template-columns:58px 1fr; padding:22px 6px 20px; }
+    .num{ font-size:38px; }
+    .row{ grid-template-columns:86px 1fr; }
+    .ref-body{ padding:32px 22px 4px; }
+    .foot{ padding:16px 20px 18px; white-space:normal; }
+    .vol{ grid-template-columns:1fr; }
+    .vol .v-meta{ text-align:left; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .drift-a,.drift-b,.drift-c,.pulse-a,.pulse-b,.pulse-c{ animation:none !important; }
+    .entry,.vol{ transition:none; }
+    body{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="sample-top">
+  <p class="kicker">1S1E.COM · ONE HOUSE, ONE SYSTEM</p>
+  <h1>The unified sample</h1>
+  <p class="sub">The Index and the Reference Catalogues rebuilt side by side in a single set of tokens, fonts and furniture. One toggle switches both pages together.</p>
+  <div class="theme-toggle" role="group" aria-label="Colour mode for both pages">
+    <button type="button" id="btnLight" aria-pressed="false">LIGHT</button>
+    <button type="button" id="btnDark" class="on" aria-pressed="true">DARK</button>
+  </div>
+</header>
+
+<div class="token-strip" aria-label="Shared tokens">
+  <span><b>GROUND</b> #101C2C TO #0B141F · IVORY #FAF7EE</span>
+  <span><b>INK</b> #F0E8D5 · #1B2A4A</span>
+  <span><b>GOLD</b> #C2A15C · #A07F3A</span>
+  <span><b>TYPE</b> PLAYFAIR DISPLAY · JOST</span>
+</div>
+
+<main class="compare">
+
+  <!-- LEFT HALF: THE INDEX -->
+  <section class="half" aria-label="The Index, site home">
+    <p class="half-label">THE INDEX · /SITE</p>
+    <div class="ground">
+      <div class="index-cols">
+        <div class="idx-left">
+          <div class="lockup">
+            <img class="mark-dark" src="assets/mark-dark.png" alt="The Isle" />
+            <img class="mark-colour" src="assets/mark-colour.png" alt="The Isle" />
+            <p class="tagline">More than a place you come to, a place you stay.</p>
+            <div class="tagline-rule" aria-hidden="true"></div>
+          </div>
+
+          <div class="report">
+            <h2><span class="dot" aria-hidden="true"></span>THE LAST CHECK</h2>
+            <p class="lead">November 22, 2026 · 7:21 AM</p>
+            <dl class="rows">
+              <div class="row"><dt>DOCUMENTS</dt><dd>No new documents found</dd></div>
+              <div class="row"><dt>ACTION</dt><dd>Full check completed against the record. Nothing to publish.</dd></div>
+            </dl>
+            <hr class="divide" />
+            <h2>WHAT HAPPENS NEXT</h2>
+            <dl class="rows">
+              <div class="row"><dt>RETRYING</dt><dd>The 10:00 AM check was blocked at the <a href="https://1s1e.com/site/permits/">county site</a>. It retries automatically every five minutes until it completes.</dd></div>
+              <div class="row"><dt>NEXT CHECK</dt><dd>Today at 4:00 PM, automatically.</dd></div>
+            </dl>
+          </div>
+
+          <div class="chart-zone" aria-hidden="true">
+            <span class="chart-cap">SOUNDINGS IN FATHOMS</span>
+            <svg viewBox="0 0 420 292" preserveAspectRatio="xMidYMid meet" focusable="false">
+              <path d="M -6 50 C 60 38, 112 48, 166 58 C 220 68, 274 64, 328 48 C 368 38, 398 42, 426 38" fill="none" class="coast" stroke-width="1.3" opacity="0.88"/>
+              <path d="M -6 42 C 60 30, 112 40, 166 50 C 220 60, 274 56, 328 40 C 368 30, 398 34, 426 30" fill="none" class="coast" stroke-width="0.7" opacity="0.30"/>
+              <g fill="none" class="curves" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.1 6">
+                <path class="drift-a" d="M -6 94 C 60 82, 112 92, 166 102 C 220 112, 274 108, 328 92 C 368 82, 398 86, 426 82"/>
+                <path class="drift-b" d="M -6 138 C 60 126, 112 136, 166 146 C 220 156, 274 152, 328 136 C 368 126, 398 130, 426 126"/>
+                <path class="drift-c" d="M -6 182 C 60 170, 112 180, 166 190 C 220 200, 274 196, 328 180 C 368 170, 398 174, 426 170"/>
+              </g>
+              <g class="pulse-a"><text class="sounding" x="74" y="80">2</text><text class="sounding" x="210" y="80">3</text><text class="sounding" x="336" y="80">4</text></g>
+              <g class="pulse-b"><text class="sounding" x="102" y="124">5</text><text class="sounding" x="236" y="124">6</text><text class="sounding" x="352" y="124">8</text></g>
+              <g class="pulse-c"><text class="sounding" x="78" y="172">10</text><text class="sounding" x="200" y="172">13</text><text class="sounding" x="342" y="172">16</text></g>
+              <g class="pulse-a" style="animation-delay:-3s"><text class="sounding" x="104" y="216">20</text><text class="sounding" x="232" y="216">24</text><text class="sounding" x="350" y="216">28</text></g>
+              <g class="pulse-b" style="animation-delay:-7s"><text class="sounding" x="204" y="262">34</text></g>
+            </svg>
+          </div>
+        </div>
+
+        <nav class="idx-right" aria-label="Site sections">
+          <a class="entry" href="https://1s1e.com/site/lot/">
+            <span class="num" aria-hidden="true">01</span>
+            <p class="eyebrow">THE LAND</p>
+            <h3>Lot Viewer</h3>
+            <p class="desc">The lot in full: its maps, boundaries, flood lines, survey and floor plans, layer upon layer.</p>
+            <p class="status">OPEN · 18 LAYERS</p>
+          </a>
+          <a class="entry" href="https://1s1e.com/site/shadow/">
+            <span class="num" aria-hidden="true">02</span>
+            <p class="eyebrow">THE LIGHT</p>
+            <h3>Shadow Study</h3>
+            <p class="desc">Sun and shadow tracked across the house and the lot, through the day and the year.</p>
+            <p class="status">OPEN · 365 DAYS</p>
+          </a>
+          <a class="entry" href="https://1s1e.com/site/permits/">
+            <span class="num" aria-hidden="true">03</span>
+            <p class="eyebrow">THE RECORD</p>
+            <h3>Permits</h3>
+            <p class="desc">The county permit record for the house: documents, inspections and reviews, kept current.</p>
+            <p class="status">OPEN · 20 DOCUMENTS</p>
+          </a>
+          <div class="entry ghost" aria-disabled="true">
+            <span class="num" aria-hidden="true">04</span>
+            <p class="eyebrow">IN PREPARATION</p>
+            <h3>The Next Work</h3>
+            <p class="desc">A further section of the house record, in preparation.</p>
+          </div>
+          <span class="plate" aria-hidden="true">PLATE I</span>
+        </nav>
+      </div>
+
+      <footer class="foot">
+        <span class="site">1s1e.com</span>
+        <span>THE ISLE · <time class="local-time">--:--</time></span>
+      </footer>
+    </div>
+  </section>
+
+  <!-- RIGHT HALF: /REF -->
+  <section class="half" aria-label="Reference Catalogues">
+    <p class="half-label">REFERENCE CATALOGUES · /REF</p>
+    <div class="ground">
+      <div class="ref-body">
+        <p class="eyebrow-top">THE ISLE · REFERENCE CATALOGUES</p>
+        <h2 class="title">Reference Catalogues</h2>
+        <p class="ref-serif">The complete record of the home, in three volumes and a companion appendix by M &amp; D Silver.</p>
+        <p class="ref-standfirst">Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page.</p>
+
+        <div class="stats" aria-label="Catalogue totals">
+          <span><b>4</b>BOOKS</span>
+          <span><b>188</b>PAGES</span>
+          <span><b>208</b>ENTRIES</span>
+          <span><b>2026</b>FINAL EDITION</span>
+        </div>
+
+        <hr class="rule" />
+
+        <div>
+          <a class="vol" href="https://1s1e.com/ref/#vol-1">
+            <span class="v-name">Volume One · <em>Furniture</em></span>
+            <span class="v-meta">42 PAGES · 37 PIECES</span>
+          </a>
+          <a class="vol" href="https://1s1e.com/ref/#vol-2">
+            <span class="v-name">Volume Two · <em>Decor</em></span>
+            <span class="v-meta">32 PAGES · 27 PIECES</span>
+          </a>
+          <a class="vol" href="https://1s1e.com/ref/#vol-3">
+            <span class="v-name">Volume Three · <em>Build Selections</em></span>
+            <span class="v-meta">24 PAGES · 64 SELECTIONS</span>
+          </a>
+          <a class="vol" href="https://1s1e.com/ref/#appendix">
+            <span class="v-name">Appendix · <em>Inspiration</em></span>
+            <span class="v-meta">90 PAGES · 80 PHOTOGRAPHS</span>
+          </a>
+        </div>
+
+        <hr class="rule soft" />
+
+        <div class="vol-open">
+          <p class="eyebrow">VOLUME ONE</p>
+          <h3>Furniture</h3>
+          <p class="italic">Hard Goods and Upholstered Furniture</p>
+          <p class="facts">42 PAGES · 37 PIECES · 3 SECTIONS · PDF 17.6 MB</p>
+          <div class="ref-links">
+            <a href="https://1s1e.com/ref/#vol-1">READ VOLUME ONE</a>
+            <a href="https://1s1e.com/ref/assets/the-isle-vol-1-furniture.pdf">DOWNLOAD PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <span class="site">1s1e.com</span>
+        <span>THE ISLE · <time class="local-time">--:--</time></span>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<p class="sample-note">Same margins, same hairlines, same label spacing and the same footer on both pages. In light, the ground flattens to warm ivory, the ink turns navy and the gold deepens, on both halves at once.</p>
+
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btnLight = document.getElementById('btnLight');
+    var btnDark = document.getElementById('btnDark');
+    function setTheme(t){
+      root.setAttribute('data-theme', t);
+      var light = (t === 'light');
+      btnLight.classList.toggle('on', light);
+      btnDark.classList.toggle('on', !light);
+      btnLight.setAttribute('aria-pressed', light ? 'true' : 'false');
+      btnDark.setAttribute('aria-pressed', light ? 'false' : 'true');
+    }
+    btnLight.addEventListener('click', function(){ setTheme('light'); });
+    btnDark.addEventListener('click', function(){ setTheme('dark'); });
+
+    var els = document.querySelectorAll('.local-time');
+    function tick(){
+      try{
+        var d = new Date();
+        var s = d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+        for (var i = 0; i < els.length; i++){
+          els[i].textContent = s;
+          els[i].setAttribute('datetime', d.toISOString());
+        }
+      }catch(e){}
+    }
+    tick();
+    setInterval(tick, 20000);
+  })();
+</script>
+</body>
+</html>
