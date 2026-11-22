@@ -86,8 +86,8 @@
     </div>
     <div class="row">
       <label>Ground</label>
-      <button id="groundSat" type="button" class="active">Satellite</button>
-      <button id="groundNat" type="button">Natural</button>
+      <button id="groundSat" type="button">Satellite</button>
+      <button id="groundNat" type="button" class="active">Natural</button>
     </div>
     <div class="row">
       <span id="readout">Loading scene...</span>
@@ -686,6 +686,9 @@ function updateSunExtras(dt, sp, dir) {
     var label = f >= 0.95 ? 'in full sun' : (f <= 0.05 ? 'in shade' : 'partly shaded, ' + Math.round(f * 100) + '% in sun');
     readoutEl.innerHTML += ' &nbsp; Pool <b>' + label + '</b>';
   }
+  if (typeof groundIsNatural !== 'undefined' && !groundIsNatural) {
+    readoutEl.innerHTML += ' &nbsp; Neighbours <b>are the photograph itself, their shadows fixed in it</b>';
+  }
 }
 riseBtn.addEventListener('click', function () { if (lastTimes && lastTimes.rise !== null) { timeEl.value = lastTimes.rise; updateSun(); } });
 noonBtn.addEventListener('click', function () { if (lastTimes) { timeEl.value = lastTimes.noon; updateSun(); } });
@@ -802,16 +805,19 @@ groundNatTex.colorSpace = THREE.SRGBColorSpace;
 groundNatTex.anisotropy = 8;
 var groundSatBtn = document.getElementById('groundSat');
 var groundNatBtn = document.getElementById('groundNat');
+var groundIsNatural = true;
 function setGround(natural) {
+  groundIsNatural = natural;
   ground.material.map = natural ? groundNatTex : groundTex;
   ground.material.needsUpdate = true;
   nbrMeshes.forEach(function (m) { m.visible = natural; });
   groundSatBtn.classList.toggle('active', !natural);
   groundNatBtn.classList.toggle('active', natural);
-  render();
+  updateSun();
 }
 groundSatBtn.addEventListener('click', function () { setGround(false); });
 groundNatBtn.addEventListener('click', function () { setGround(true); });
+setGround(true);
 dateEl.addEventListener('input', updateSun);
 timeEl.addEventListener('input', function () { mode = null; playDayBtn.classList.remove('active'); playYearBtn.classList.remove('active'); updateSun(); });
 
