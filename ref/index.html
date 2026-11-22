@@ -17,7 +17,7 @@
     <meta name="theme-color" id="themeColor" content="#ffffff" />
     <title>The Isle &#183; Reference Catalogues</title>
     <script>window.goatcounter = { no_onload: true };</script>
-    <script>try { var savedTheme = localStorage.getItem("isle-theme"); if (savedTheme === "dark" || savedTheme === "light") document.documentElement.setAttribute("data-theme", savedTheme); var tcMeta = document.getElementById("themeColor"); if (tcMeta) { var startsDark = savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches); tcMeta.setAttribute("content", startsDark ? "#121c28" : "#ffffff"); } } catch (e) {}</script>
+    <script>try { var savedTheme = localStorage.getItem("isle-theme"); if (savedTheme === "dark" || savedTheme === "light") document.documentElement.setAttribute("data-theme", savedTheme); var tcMeta = document.getElementById("themeColor"); if (tcMeta) { var startsDark = savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches); tcMeta.setAttribute("content", startsDark ? "#1d2a3b" : "#faf7ee"); } } catch (e) {}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -27,15 +27,15 @@
         --navy: #1d2a3b;
         --navy-deep: #152130;
         --navy-panel: #22344a;
-        --gold: #b08d57;
-        --gold-text: #85683a;
+        --gold: #c2a15c;
+        --gold-text: #a07f3a;
         --gold-bright: #c9ab72;
         --gold-pale: #e6d9bd;
-        --paper: #ffffff;
-        --paper-tint: #f6f2ea;
+        --paper: #faf7ee;
+        --paper-tint: #f3eee0;
         --img-back: #ffffff;
-        --ink: #232a31;
-        --ink-soft: #5c6672;
+        --ink: #1d2a3b;
+        --ink-soft: #5a6577;
         --line: #ddd5c2;
         --line-soft: #eae5d8;
         --shadow-cover: 0 22px 44px rgba(13, 20, 30, 0.32), 0 4px 12px rgba(13, 20, 30, 0.18);
@@ -46,10 +46,10 @@
       @media (prefers-color-scheme: dark) {
         :root {
           --gold-text: #c9ab72;
-          --paper: #121c28;
-          --paper-tint: #172636;
-          --ink: #eae6da;
-          --ink-soft: #a7b1bd;
+          --paper: #1d2a3b;
+          --paper-tint: #22344a;
+          --ink: #f0e8d5;
+          --ink-soft: #a89f88;
           --line: #3a4a5f;
           --line-soft: #28394e;
           --shadow-cover: 0 22px 44px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -691,10 +691,10 @@
       :root[data-theme="dark"] {
         color-scheme: dark;
         --gold-text: #c9ab72;
-        --paper: #121c28;
-        --paper-tint: #172636;
-        --ink: #eae6da;
-        --ink-soft: #a7b1bd;
+        --paper: #1d2a3b;
+        --paper-tint: #22344a;
+        --ink: #f0e8d5;
+        --ink-soft: #a89f88;
         --line: #3a4a5f;
         --line-soft: #28394e;
         --shadow-cover: 0 22px 44px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -702,11 +702,11 @@
       }
       :root[data-theme="light"] {
         color-scheme: light;
-        --gold-text: #85683a;
-        --paper: #ffffff;
-        --paper-tint: #f6f2ea;
-        --ink: #232a31;
-        --ink-soft: #5c6672;
+        --gold-text: #a07f3a;
+        --paper: #faf7ee;
+        --paper-tint: #f3eee0;
+        --ink: #1d2a3b;
+        --ink-soft: #5a6577;
         --line: #ddd5c2;
         --line-soft: #eae5d8;
         --shadow-cover: 0 22px 44px rgba(13, 20, 30, 0.32), 0 4px 12px rgba(13, 20, 30, 0.18);
