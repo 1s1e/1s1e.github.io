@@ -42,21 +42,22 @@ main{max-width:1060px;margin:0 auto;padding:20px 24px 30px}
 section{padding:38px 0 8px;border-top:1px solid var(--hairline);margin-top:38px}
 section:first-of-type{border-top:none;margin-top:6px}
 h2{font-family:var(--serif);font-weight:500;font-size:30px;margin:0 0 4px}
-.kicker{font-size:10.5px;font-weight:600;letter-spacing:.30em;color:var(--gold-page);margin:0 0 18px}
+.kicker{max-width:none;font-size:10.5px;font-weight:600;letter-spacing:.30em;color:var(--gold-page);margin:0 0 18px}
 p{color:var(--ink-soft);max-width:72ch}
 ul{color:var(--ink-soft);max-width:74ch;padding-left:18px}
 li{margin:7px 0}
 .masters{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:6px 0 20px}
 .chip{height:74px;border:1px solid var(--hairline)}
 .mname{font-weight:600;font-size:13.5px;margin-top:8px;color:var(--ink)}
-.mhex{font-size:12px;color:var(--ink-dim)}
+.mhex{font-size:12px;color:var(--ink-dim);white-space:nowrap}
+.mrgb{font-size:11.5px;color:var(--ink-dim);white-space:nowrap}
 table{border-collapse:collapse;width:100%;margin:10px 0 6px}
 td,th{padding:7px 10px 7px 0;border-bottom:1px solid var(--hairline);text-align:left;font-size:15px;color:var(--ink-soft);vertical-align:middle}
 th{font-size:10.5px;letter-spacing:.24em;color:var(--gold-page);font-weight:600}
 .sw{display:inline-block;width:34px;height:18px;border:1px solid var(--hairline);vertical-align:middle}
 td.hex{color:var(--ink-dim);font-size:13.5px;white-space:nowrap}
-.iconstrip{background:#1d2a3b;padding:26px 10px;text-align:center;margin:14px 0 8px}
-.iconstrip img{vertical-align:middle;margin:0 16px}
+.iconstrip{background:#1d2a3b;border:1px solid var(--hairline);padding:30px 10px 26px;margin:14px 0 8px;display:flex;justify-content:center;align-items:flex-end;gap:36px}
+.iconstrip img{display:block}
 .caption{font-size:13px;color:var(--ink-dim)}
 .way{padding:20px 10px;text-align:center;margin:12px 0 4px}
 .way img{width:min(430px,86%);height:auto}
@@ -83,6 +84,9 @@ td.hex{color:var(--ink-dim);font-size:13.5px;white-space:nowrap}
 .files a{display:block;padding:9px 0;border-bottom:1px solid var(--hairline);text-decoration:none;color:var(--ink)}
 .files a span{display:block;font-size:13px;color:var(--ink-dim)}
 footer{max-width:1060px;margin:0 auto;padding:26px 24px 46px;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;font-size:10.5px;letter-spacing:.26em;color:var(--ink-dim)}
+html[data-theme="dark"] .iconstrip{background:#152130}
+html[data-theme="dark"] .chartbox{background:#152130}
+html[data-theme="dark"] .report{background:#152130}
 footer button{background:none;border:1px solid var(--hairline);color:var(--ink-soft);font-family:var(--sans);font-size:10.5px;letter-spacing:.26em;padding:8px 14px;cursor:pointer}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(9px)}}
 @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
@@ -100,7 +104,7 @@ footer button{background:none;border:1px solid var(--hairline);color:var(--ink-s
   <img id="lockup" src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle">
   <p class="tagline">More than a place you come to, a place you stay.</p>
   <div class="rule"></div>
-  <p class="kicker" style="margin-top:22px">THE STYLE GUIDE · SETTLED NOVEMBER 22, 2026</p>
+  <p class="kicker" style="margin-top:22px;text-align:center">THE STYLE GUIDE · SETTLED NOVEMBER 22, 2026</p>
 </header>
 <main>
 
@@ -120,11 +124,11 @@ footer button{background:none;border:1px solid var(--hairline);color:var(--ink-s
   <h2>2. The colours</h2>
   <p class="kicker">SEVENTEEN IN TOTAL · EVERY COLOUR CARRIES THE HOUSE NAME</p>
   <div class="masters">
-    <div><div class="chip" style="background:#1d2a3b"></div><div class="mname">The Isle Navy</div><div class="mhex">#1D2A3B · RGB 29 42 59</div></div>
-    <div><div class="chip" style="background:#46936a"></div><div class="mname">The Isle Green</div><div class="mhex">#46936A · RGB 70 147 106</div></div>
-    <div><div class="chip" style="background:#c9ab72"></div><div class="mname">The Isle Gold</div><div class="mhex">#C9AB72 · RGB 201 171 114</div></div>
-    <div><div class="chip" style="background:#C0C0C0"></div><div class="mname">The Isle Silver</div><div class="mhex">#C0C0C0 · RGB 192 192 192</div></div>
-    <div><div class="chip" style="background:#f0e8d5"></div><div class="mname">The Isle Ivory</div><div class="mhex">#F0E8D5 · RGB 240 232 213</div></div>
+    <div><div class="chip" style="background:#1d2a3b"></div><div class="mname">The Isle Navy</div><div class="mhex">#1D2A3B</div><div class="mrgb">RGB 29 42 59</div></div>
+    <div><div class="chip" style="background:#46936a"></div><div class="mname">The Isle Green</div><div class="mhex">#46936A</div><div class="mrgb">RGB 70 147 106</div></div>
+    <div><div class="chip" style="background:#c9ab72"></div><div class="mname">The Isle Gold</div><div class="mhex">#C9AB72</div><div class="mrgb">RGB 201 171 114</div></div>
+    <div><div class="chip" style="background:#C0C0C0"></div><div class="mname">The Isle Silver</div><div class="mhex">#C0C0C0</div><div class="mrgb">RGB 192 192 192</div></div>
+    <div><div class="chip" style="background:#f0e8d5"></div><div class="mname">The Isle Ivory</div><div class="mhex">#F0E8D5</div><div class="mrgb">RGB 240 232 213</div></div>
   </div>
   <table>
     <tr><th colspan="3">WORKING STEPS</th></tr>
@@ -203,19 +207,19 @@ footer button{background:none;border:1px solid var(--hairline);color:var(--ink-s
   <div class="chartbox">
     <svg viewBox="0 0 600 380" width="100%" role="img" aria-label="A fragment of an engraved nautical chart" style="display:block">
       <text x="8" y="22" fill="#c9ab72" font-family="Source Sans 3, sans-serif" font-size="9" font-weight="600" letter-spacing="3">SOUNDINGS IN FATHOMS</text>
-      <path d="M-10,288 C160,320 300,318 420,272 C500,242 560,258 610,272" fill="none" stroke="#c9ab72" stroke-width="1.6"/>
-      <path d="M-10,280 C160,312 300,310 420,264 C500,234 560,250 610,264" fill="none" stroke="#c9ab72" stroke-width="0.7"/>
+      <path d="M-10,92 C160,60 300,62 420,108 C500,138 560,122 610,108" fill="none" stroke="#c9ab72" stroke-width="1.6"/>
+      <path d="M-10,100 C160,68 300,70 420,116 C500,146 560,130 610,116" fill="none" stroke="#c9ab72" stroke-width="0.7"/>
       <g fill="none" stroke="#f0e8d5" stroke-width="0.8" stroke-dasharray="5 5" opacity="0.75">
-        <path class="cv1" d="M-10,234 C160,266 300,264 420,218 C500,188 560,204 610,218"/>
-        <path class="cv2" d="M-10,180 C160,212 300,210 420,164 C500,134 560,150 610,164"/>
-        <path class="cv3" d="M-10,126 C160,158 300,156 420,110 C500,80 560,96 610,110"/>
+        <path class="cv1" d="M-10,146 C160,114 300,116 420,162 C500,192 560,176 610,162"/>
+        <path class="cv2" d="M-10,200 C160,168 300,170 420,216 C500,246 560,230 610,216"/>
+        <path class="cv3" d="M-10,254 C160,222 300,224 420,270 C500,300 560,284 610,270"/>
       </g>
       <g class="fg" fill="#f0e8d5" font-family="Playfair Display, serif" font-style="italic" font-size="13" text-anchor="middle">
-        <text x="120" y="218">2</text><text x="300" y="218">3</text><text x="480" y="218">4</text>
-        <text x="120" y="168">5</text><text x="300" y="168">6</text><text x="480" y="168">8</text>
-        <text x="120" y="118">10</text><text x="300" y="118">13</text><text x="480" y="118">16</text>
-        <text x="120" y="72">20</text><text x="300" y="72">24</text><text x="480" y="72">28</text>
-        <text x="300" y="26">34</text>
+        <text x="120" y="162">2</text><text x="300" y="162">3</text><text x="480" y="162">4</text>
+        <text x="120" y="212">5</text><text x="300" y="212">6</text><text x="480" y="212">8</text>
+        <text x="120" y="262">10</text><text x="300" y="262">13</text><text x="480" y="262">16</text>
+        <text x="120" y="308">20</text><text x="300" y="308">24</text><text x="480" y="308">28</text>
+        <text x="300" y="354">34</text>
       </g>
     </svg>
   </div>
