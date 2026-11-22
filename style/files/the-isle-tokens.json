@@ -1,0 +1,65 @@
+{
+  "name": "The Isle \u00b7 Absolute Master Tokens",
+  "settled": "2026-11-22",
+  "color": {
+    "The Isle Navy": "#1d2a3b",
+    "The Isle Green": "#46936a",
+    "The Isle Gold": "#c9ab72",
+    "The Isle Silver": "#C0C0C0",
+    "The Isle Ivory": "#f0e8d5",
+    "Panel": "#22344a",
+    "Deep": "#152130",
+    "Ivory Soft": "#d9d0ba",
+    "Ivory Dim": "#a89f88",
+    "Page Gold, dark": "#c2a15c",
+    "Light Ground": "#faf7ee",
+    "Light Tint": "#f3eee0",
+    "Soft Ink": "#3c4763",
+    "Dim Ink": "#767c8d",
+    "Page Gold, light": "#a07f3a",
+    "Poster Mat": "#dfe2e6",
+    "Terra": "#93a7c9"
+  },
+  "font": {
+    "serif": "\"Playfair Display\", Georgia, \"Times New Roman\", serif",
+    "sans": "\"Source Sans 3\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+    "load": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap",
+    "roles": {
+      "display": {
+        "font": "Playfair Display",
+        "weight": 500,
+        "size": "64px"
+      },
+      "serif-line": {
+        "font": "Playfair Display",
+        "weight": 500,
+        "style": "italic",
+        "size": "19px"
+      },
+      "heading": {
+        "font": "Playfair Display",
+        "weight": 500,
+        "size": "34px"
+      },
+      "body": {
+        "font": "Source Sans 3",
+        "weight": 400,
+        "size": "17px",
+        "lineHeight": 1.65
+      },
+      "label": {
+        "font": "Source Sans 3",
+        "weight": 600,
+        "size": "11px",
+        "letterSpacing": ".34em",
+        "transform": "uppercase"
+      },
+      "small": {
+        "font": "Source Sans 3",
+        "weight": 400,
+        "size": "10.5px",
+        "letterSpacing": ".26em"
+      }
+    }
+  }
+}
