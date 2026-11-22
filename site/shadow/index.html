@@ -59,6 +59,9 @@
       <button id="playYear" type="button">Play year</button>
       <button id="longestDay" type="button">Longest day</button>
       <button id="shortestDay" type="button">Shortest day</button>
+      <button id="sunRise" type="button">Sunrise</button>
+      <button id="sunNoon" type="button">Solar noon</button>
+      <button id="sunSet" type="button">Sunset</button>
     </div>
     <div class="row">
       <label>Ground</label>
@@ -581,7 +584,89 @@ function updateSun() {
     ' &nbsp; Sun altitude <b>' + sp.alt.toFixed(1) + ' deg</b>' +
     ' &nbsp; Sun azimuth <b>' + sp.az.toFixed(1) + ' deg</b>' +
     (sp.alt <= 0 ? ' &nbsp; (sun below the horizon)' : '');
+  updateSunExtras(dt, sp, dir);
 }
+
+/* Sunrise, solar noon and sunset for the chosen date, from the same
+   NOAA sun path the page draws. Sunrise and sunset use the standard
+   -0.583 degree horizon: refraction plus the Sun's disc. */
+function sunTimes(y, mo, d) {
+  var step = 2, prevM = 0, prevA = sunPosition(y, mo, d, 0).alt;
+  var rise = null, set = null, noon = 0, maxA = -90;
+  for (var m = step; m <= 1440; m += step) {
+    var a = sunPosition(y, mo, d, m / 60).alt;
+    if (a > maxA) { maxA = a; noon = m; }
+    if (prevA < -0.583 && a >= -0.583 && rise === null) rise = [prevM, m];
+    if (prevA >= -0.583 && a < -0.583) set = [prevM, m];
+    prevM = m; prevA = a;
+  }
+  function refine(pair, rising) {
+    var lo = pair[0], hi = pair[1];
+    for (var i = 0; i < 24; i++) {
+      var mid = (lo + hi) / 2;
+      var a = sunPosition(y, mo, d, mid / 60).alt;
+      if ((a >= -0.583) === rising) hi = mid; else lo = mid;
+    }
+    return Math.round((lo + hi) / 2);
+  }
+  var best = noon, bestA = maxA;
+  for (var k = noon - 2; k <= noon + 2; k += 0.5) {
+    var ak = sunPosition(y, mo, d, k / 60).alt;
+    if (ak > bestA) { bestA = ak; best = k; }
+  }
+  return { rise: rise ? refine(rise, true) : null,
+           set: set ? refine(set, false) : null,
+           noon: Math.round(best) };
+}
+
+/* Pool sun: sample points across the pool water, raycast toward the
+   Sun against everything in the scene that casts a shadow. */
+var occluders = null;
+var poolRay = new THREE.Raycaster();
+function visibleChain(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
+function poolSunFraction(dir) {
+  if (!occluders) {
+    occluders = [];
+    scene.traverse(function (o) { if (o.isMesh && o.castShadow) occluders.push(o); });
+  }
+  var act = occluders.filter(visibleChain);
+  var lit = 0, tot = 0;
+  poolRay.far = 150;
+  [14, 20, 26, 32, 38, 42].forEach(function (sFt) {
+    [6.5, 10, 13.5].forEach(function (tFt) {
+      var lp = encPoint(sFt, tFt);
+      var w = toWorld(lp);
+      poolRay.set(new THREE.Vector3(w[0], 0.12, w[1]), dir);
+      tot++;
+      if (!poolRay.intersectObjects(act, false).length) lit++;
+    });
+  });
+  return lit / tot;
+}
+
+var riseBtn = document.getElementById('sunRise');
+var noonBtn = document.getElementById('sunNoon');
+var setBtn = document.getElementById('sunSet');
+var lastTimesKey = '';
+var lastTimes = null;
+function updateSunExtras(dt, sp, dir) {
+  var key = dt.y + '-' + dt.mo + '-' + dt.d;
+  if (key !== lastTimesKey) {
+    lastTimesKey = key;
+    lastTimes = sunTimes(dt.y, dt.mo, dt.d);
+    riseBtn.textContent = 'Sunrise ' + (lastTimes.rise === null ? '--:--' : fmtTime(lastTimes.rise));
+    noonBtn.textContent = 'Solar noon ' + fmtTime(lastTimes.noon);
+    setBtn.textContent = 'Sunset ' + (lastTimes.set === null ? '--:--' : fmtTime(lastTimes.set));
+  }
+  if (sp.alt > 0.5) {
+    var f = poolSunFraction(dir);
+    var label = f >= 0.95 ? 'in full sun' : (f <= 0.05 ? 'in shade' : 'partly shaded, ' + Math.round(f * 100) + '% in sun');
+    readoutEl.innerHTML += ' &nbsp; Pool <b>' + label + '</b>';
+  }
+}
+riseBtn.addEventListener('click', function () { if (lastTimes && lastTimes.rise !== null) { timeEl.value = lastTimes.rise; updateSun(); } });
+noonBtn.addEventListener('click', function () { if (lastTimes) { timeEl.value = lastTimes.noon; updateSun(); } });
+setBtn.addEventListener('click', function () { if (lastTimes && lastTimes.set !== null) { timeEl.value = lastTimes.set; updateSun(); } });
 
 var mode = null; // 'day' or 'year'
 var lastStamp = 0;
