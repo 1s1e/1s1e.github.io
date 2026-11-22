@@ -54,11 +54,11 @@
   }
   :root[data-theme="light"]{
     color-scheme:light;
-    --field:#faf7ee;
-    --sea-deep:#faf7ee;
-    --sea:#faf7ee;
-    --sea-far:#faf7ee;
-    --panel:#faf7ee;
+    --field:#f0e8d5;
+    --sea-deep:#f0e8d5;
+    --sea:#f0e8d5;
+    --sea-far:#f0e8d5;
+    --panel:#f0e8d5;
     --ivory:#1d2a3b;
     --ivory-soft:#3c4763;
     --ivory-dim:#767c8d;
@@ -83,7 +83,7 @@
     --ghost-text:rgba(60,71,99,.42);
     --plate-c:rgba(160,127,58,.68);
     --toggle-bg:#1d2a3b;
-    --toggle-ink:#faf7ee;
+    --toggle-ink:#f0e8d5;
   }
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
@@ -503,7 +503,7 @@
     var metaTheme = document.querySelector('meta[name="theme-color"]');
     function setTheme(t){
       root.setAttribute('data-theme', t);
-      if (metaTheme) metaTheme.setAttribute('content', (t === 'light') ? '#faf7ee' : '#1d2a3b');
+      if (metaTheme) metaTheme.setAttribute('content', (t === 'light') ? '#f0e8d5' : '#1d2a3b');
       var light = (t === 'light');
       btnLight.classList.toggle('on', light);
       btnDark.classList.toggle('on', !light);

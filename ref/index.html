@@ -17,7 +17,7 @@
     <meta name="theme-color" id="themeColor" content="#ffffff" />
     <title>The Isle &#183; Reference Catalogues</title>
     <script>window.goatcounter = { no_onload: true };</script>
-    <script>try { var savedTheme = localStorage.getItem("isle-theme"); if (savedTheme === "dark" || savedTheme === "light") document.documentElement.setAttribute("data-theme", savedTheme); var tcMeta = document.getElementById("themeColor"); if (tcMeta) { var startsDark = savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches); tcMeta.setAttribute("content", startsDark ? "#1d2a3b" : "#faf7ee"); } } catch (e) {}</script>
+    <script>try { var savedTheme = localStorage.getItem("isle-theme"); if (savedTheme === "dark" || savedTheme === "light") document.documentElement.setAttribute("data-theme", savedTheme); var tcMeta = document.getElementById("themeColor"); if (tcMeta) { var startsDark = savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches); tcMeta.setAttribute("content", startsDark ? "#1d2a3b" : "#f0e8d5"); } } catch (e) {}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -31,7 +31,7 @@
         --gold-text: #a07f3a;
         --gold-bright: #c9ab72;
         --gold-pale: #e6d9bd;
-        --paper: #faf7ee;
+        --paper: #f0e8d5;
         --paper-tint: #f3eee0;
         --img-back: #ffffff;
         --ink: #1d2a3b;
@@ -703,7 +703,7 @@
       :root[data-theme="light"] {
         color-scheme: light;
         --gold-text: #a07f3a;
-        --paper: #faf7ee;
+        --paper: #f0e8d5;
         --paper-tint: #f3eee0;
         --ink: #1d2a3b;
         --ink-soft: #5a6577;
@@ -2707,7 +2707,7 @@
           btn.setAttribute("data-mode", mode);
           btn.setAttribute("aria-checked", mode === "dark" ? "true" : "false");
           var tc = document.getElementById("themeColor");
-          if (tc) { tc.setAttribute("content", mode === "dark" ? "#1d2a3b" : "#faf7ee"); }
+          if (tc) { tc.setAttribute("content", mode === "dark" ? "#1d2a3b" : "#f0e8d5"); }
         }
         btn.addEventListener("click", function () {
           var nextTheme = effective() === "dark" ? "light" : "dark";
