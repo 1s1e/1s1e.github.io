@@ -13,15 +13,31 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1b2a4a" />
+    <!-- The three splash pages in the iframes below rotate through all
+         ten posters and the silver wordmark; prefetch them here so the
+         full set ships with the page. -->
+    <link rel="prefetch" as="image" href="assets/the-isle-text-silver.svg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-01.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-04.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-05.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-06.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-12.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-23.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-26.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-28.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-35.jpg" />
+    <link rel="prefetch" as="image" href="assets/poster-set-36.jpg" />
     <style>
       :root {
         --page: #e9e7e2;
         --ink: #3c3a36;
+        --hairline: rgba(60, 58, 54, 0.28);
       }
       @media (prefers-color-scheme: dark) {
         :root {
           --page: #17181b;
           --ink: #b9b6ae;
+          --hairline: rgba(185, 182, 174, 0.28);
         }
       }
       * { box-sizing: border-box; }
@@ -55,44 +71,42 @@
         flex: 1 1 0;
         min-width: 0;
       }
+      /* Portrait stage, close to a tablet screen at about 3:4. The
+         iframe fills it, so the real splash page inside lays itself
+         out exactly as it does full-screen, at this size. */
+      .stage {
+        aspect-ratio: 3 / 4;
+        width: 100%;
+        border: 1px solid var(--hairline);
+      }
+      .stage iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .stage--master iframe { background: #1b2a4a; }
+      .stage--night iframe   { background: #101c2c; }
+      .stage--ref iframe     { background: #1d2a3b; }
       figcaption.label {
         font-size: 11px;
         font-weight: 500;
         margin-top: 14px;
       }
-      .panel {
+      .swatch {
+        margin-top: 12px;
+        padding: 20px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: clamp(22px, 3.2vw, 44px) 0 clamp(26px, 3.6vw, 48px);
+        justify-content: center;
       }
-      .panel--master     { background: #1b2a4a; --frame: #14213c; --matte: #22355c; }
-      .panel--nightchart { background: #101c2c; --frame: #0d1622; --matte: #0e1928; }
-      .panel--refnavy    { background: #1d2a3b; --frame: #152130; --matte: #22344a; }
-      .masthead {
+      .swatch--master { background: #1b2a4a; }
+      .swatch--night  { background: #101c2c; }
+      .swatch--ref    { background: #1d2a3b; }
+      .favicon {
         display: block;
-        width: 58%;
-        height: auto;
-      }
-      .silver-line {
-        width: 100%;
-        height: 2px;
-        background: #c0c0c0;
-        margin: clamp(18px, 2.6vw, 34px) 0 clamp(20px, 3vw, 38px);
-      }
-      .frame {
-        background: var(--frame);
-        padding: clamp(5px, 0.7vw, 9px);
-        width: 62%;
-      }
-      .matte {
-        background: var(--matte);
-        padding: clamp(10px, 1.4vw, 18px);
-      }
-      .poster {
-        display: block;
-        width: 100%;
-        height: auto;
+        width: 112px;
+        height: 112px;
+        border: 1px solid rgba(192, 192, 192, 0.55);
       }
       @media (max-width: 720px) {
         .panels { flex-direction: column; }
@@ -105,28 +119,31 @@
       <h1 class="label">The Splash on Three Grounds</h1>
       <div class="panels">
         <figure>
-          <div class="panel panel--master">
-            <img class="masthead" src="assets/the-isle-text-silver.svg" alt="The Isle" />
-            <div class="silver-line"></div>
-            <div class="frame"><div class="matte"><img class="poster" src="assets/poster-set-01.jpg" alt="" /></div></div>
+          <div class="stage stage--master">
+            <iframe src="assets/splash-master.html" title="The Isle splash page on the Master ground"></iframe>
           </div>
           <figcaption class="label">Master · #1B2A4A</figcaption>
+          <div class="swatch swatch--master">
+            <img class="favicon" src="assets/favicon-master.png" alt="The Isle favicon on the Master ground" width="112" height="112" />
+          </div>
         </figure>
         <figure>
-          <div class="panel panel--nightchart">
-            <img class="masthead" src="assets/the-isle-text-silver.svg" alt="The Isle" />
-            <div class="silver-line"></div>
-            <div class="frame"><div class="matte"><img class="poster" src="assets/poster-set-01.jpg" alt="" /></div></div>
+          <div class="stage stage--night">
+            <iframe src="assets/splash-night.html" title="The Isle splash page on the Night Chart ground"></iframe>
           </div>
           <figcaption class="label">Night Chart · #101C2C</figcaption>
+          <div class="swatch swatch--night">
+            <img class="favicon" src="assets/favicon-night.png" alt="The Isle favicon on the Night Chart ground" width="112" height="112" />
+          </div>
         </figure>
         <figure>
-          <div class="panel panel--refnavy">
-            <img class="masthead" src="assets/the-isle-text-silver.svg" alt="The Isle" />
-            <div class="silver-line"></div>
-            <div class="frame"><div class="matte"><img class="poster" src="assets/poster-set-01.jpg" alt="" /></div></div>
+          <div class="stage stage--ref">
+            <iframe src="assets/splash-ref.html" title="The Isle splash page on the Ref Navy ground"></iframe>
           </div>
           <figcaption class="label">Ref Navy · #1D2A3B</figcaption>
+          <div class="swatch swatch--ref">
+            <img class="favicon" src="assets/favicon-ref.png" alt="The Isle favicon on the Ref Navy ground" width="112" height="112" />
+          </div>
         </figure>
       </div>
     </main>
