@@ -177,7 +177,7 @@
   function initialStateRead() {
     if (location.hash && location.hash.indexOf("#v=") === 0) {
       var h = decodeState(location.hash.slice(3));
-      if (h) return h;
+      if (h) { h.fromHash = true; return h; }
     }
     try { return JSON.parse(localStorage.getItem(STORE_KEY) || "null"); } catch (e) { return null; }
   }
@@ -626,7 +626,7 @@
   });
   window.addEventListener("resize", function () { sizeCanvas(); render(); });
   sizeCanvas();
-  if (initialState && initialState.c && initialState.s) centerOn(initialState.c[0], initialState.c[1], initialState.s);
+  if (initialState && initialState.fromHash && initialState.c && initialState.s) centerOn(initialState.c[0], initialState.c[1], initialState.s);
   else lotView();
 })();
 </script>
