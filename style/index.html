@@ -92,6 +92,13 @@ li{margin-bottom:9px}
 .splitfig .big{font-family:var(--serif);font-size:30px;color:var(--ink);display:block;margin-bottom:4px}
 .platebox{background:var(--plate);padding:34px 30px 26px;margin:22px 0 16px}
 .platebox svg{width:100%;height:auto;display:block}
+.platebox .shore{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round}
+.platebox .shore2{fill:none;stroke:var(--gold);stroke-width:1;opacity:.75;stroke-linecap:round}
+.platebox .curve{fill:none;stroke:#f0e8d5;stroke-width:1.1;stroke-dasharray:1 5;stroke-linecap:round;opacity:.5}
+.platebox .fig{font-family:"Playfair Display",serif;font-style:italic;font-weight:500;font-size:15px;fill:#f0e8d5;text-anchor:middle}
+.platebox .platecap{font-family:"Source Sans 3",sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;fill:var(--gold)}
+.platebox .platei{font-family:"Playfair Display",serif;font-weight:600;font-size:13px;letter-spacing:.30em;fill:var(--gold);text-anchor:middle}
+
 @keyframes drift1{from{transform:translateX(0)}to{transform:translateX(9px)}}
 @keyframes drift2{from{transform:translateX(0)}to{transform:translateX(-7px)}}
 .cv1{animation:drift1 13s ease-in-out infinite alternate}
@@ -254,9 +261,9 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
   <div class="platebox">
     <svg viewBox="0 0 640 400" role="img" aria-label="The chart plate: a shore with soundings taken along survey lines">
       <text class="platecap" x="30" y="42">SOUNDINGS IN FATHOMS</text>
-      <path class="curve d1" d="M -10 186 C 60 162 110 138 170 142 C 230 146 260 182 320 188 C 380 194 420 162 480 158 C 540 154 600 172 650 166"/>
-      <path class="curve d2" d="M -10 240 C 60 216 110 192 170 196 C 230 200 260 236 320 242 C 380 248 420 216 480 212 C 540 208 600 226 650 220"/>
-      <path class="curve d3" d="M -10 294 C 60 270 110 246 170 250 C 230 254 260 290 320 296 C 380 302 420 270 480 266 C 540 262 600 280 650 274"/>
+      <path class="curve cv1" d="M -10 186 C 60 162 110 138 170 142 C 230 146 260 182 320 188 C 380 194 420 162 480 158 C 540 154 600 172 650 166"/>
+      <path class="curve cv2" d="M -10 240 C 60 216 110 192 170 196 C 230 200 260 236 320 242 C 380 248 420 216 480 212 C 540 208 600 226 650 220"/>
+      <path class="curve cv3" d="M -10 294 C 60 270 110 246 170 250 C 230 254 260 290 320 296 C 380 302 420 270 480 266 C 540 262 600 280 650 274"/>
       <path class="shore" d="M-10 132 C 60 108, 110 84, 170 88 C 230 92, 260 128, 320 134 C 380 140, 420 108, 480 104 C 540 100, 600 118, 650 112"/>
       <path class="shore2" d="M -10 140 C 60 116 110 92 170 96 C 230 100 260 136 320 142 C 380 148 420 116 480 112 C 540 108 600 126 650 120"/>
       <text class="fig" x="118" y="172">2</text>
@@ -278,9 +285,9 @@ footer .fname{font-size:11px;font-weight:600;letter-spacing:.30em;color:var(--in
     </svg>
   </div>
   <ul>
-    <li>One coastline, a fine double shore line in The Isle Gold, one long gentle curve with a single soft bay, the land above it empty. No anchor, no hachures, no headlands, no names or labels on the water.</li>
+    <li>One coastline, a fine double shore line in The Isle Gold, with a point and a bay, the land above it empty. No anchor, no hachures, no headlands, no names or labels on the water.</li>
     <li>Three depth curves follow the shore as true parallel offsets. The soundings are taken along survey lines run off the shore, deepening along each line in small steps: 2, 5, 11 and 19 down the first line, 4, 9 and 17 down the last, every figure clear of the curves.</li>
-    <li>Motion is gentle and on the water only: the depth curves drift a few units on slow cycles. Under reduced motion the chart is still. The plate closes with PLATE I in its bottom right corner.</li>
+    <li>Motion is gentle and on the water only: the depth curves drift a few units on slow cycles. Under reduced motion the chart is still. PLATE I stands in its bottom right corner, and the plate carries no frame: it sits unboxed, as the chart sits on the site.</li>
   </ul>
 </section>
 
