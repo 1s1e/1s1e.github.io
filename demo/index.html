@@ -8,7 +8,7 @@
 <title>The Isle Unified Sample: Index and Ref</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
   :root, :root[data-theme="dark"]{
     color-scheme:dark;
@@ -36,8 +36,8 @@
     --ghost-text:rgba(217,208,186,.42);
     --toggle-bg:#f0e8d5;
     --toggle-ink:#101c2c;
-    --serif:"Playfair Display", Georgia, serif;
-    --sans:"Jost", sans-serif;
+    --serif:"Playfair Display", serif;
+    --sans:"Source Sans 3", sans-serif;
   }
   :root[data-theme="light"]{
     color-scheme:light;
@@ -86,10 +86,10 @@
     display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;
   }
   .sample-top .kicker{
-    font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.34em; color:var(--dim); margin:0;
+    font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.34em; color:var(--dim); margin:0;
   }
   .sample-top h1{
-    margin:0; font-size:clamp(24px,3vw,34px); font-weight:600; line-height:1.15; color:var(--ink);
+    margin:0; font-size:clamp(24px,3vw,34px); font-weight:500; line-height:1.15; color:var(--ink);
   }
   .sample-top .sub{
     margin:0; font-family:var(--sans); font-size:12.5px; font-weight:400; letter-spacing:.06em; line-height:1.6; color:var(--soft); max-width:62ch;
@@ -97,7 +97,7 @@
   .theme-toggle{ display:inline-flex; gap:2px; border:1px solid var(--hair); padding:3px; }
   .theme-toggle button{
     appearance:none; border:0; background:transparent; cursor:pointer;
-    font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.22em;
+    font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.22em;
     color:var(--dim); padding:8px 16px 8px 18px;
   }
   .theme-toggle button.on{ background:var(--toggle-bg); color:var(--toggle-ink); }
@@ -108,7 +108,7 @@
     display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:center;
     font-family:var(--sans); font-size:10px; letter-spacing:.18em; color:var(--dim); text-align:center;
   }
-  .token-strip b{ color:var(--gold-bright); font-weight:500; }
+  .token-strip b{ color:var(--gold-bright); font-weight:600; }
 
   /* Comparison layout */
   .compare{
@@ -117,7 +117,7 @@
   }
   .half{ display:flex; flex-direction:column; min-width:0; }
   .half-label{
-    font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.32em;
+    font-family:var(--sans); font-size:10.5px; font-weight:600; letter-spacing:.32em;
     color:var(--gold-bright); margin:0 0 12px 2px; display:flex; align-items:center; gap:12px;
   }
   .half-label::after{ content:""; flex:1; height:1px; background:var(--hair-soft); }
@@ -156,15 +156,15 @@
 
   .report{ margin-top:32px; }
   .report h2{
-    margin:0; font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.34em; color:var(--gold-bright);
+    margin:0; font-family:var(--sans); font-size:10.5px; font-weight:600; letter-spacing:.34em; color:var(--gold-bright);
     display:flex; align-items:center; gap:10px;
   }
   .report h2 .dot{ width:5px; height:5px; border-radius:50%; background:var(--gold); flex:none; box-shadow:0 0 0 3px var(--hair-soft); }
-  .report .lead{ margin:11px 0 0; font-size:20px; font-weight:600; line-height:1.25; color:var(--ink); }
+  .report .lead{ margin:11px 0 0; font-size:20px; font-weight:500; line-height:1.25; color:var(--ink); }
   .rows{ margin:14px 0 0; padding:0; display:grid; gap:11px; }
   .row{ display:grid; grid-template-columns:92px 1fr; gap:12px; align-items:baseline; }
-  .row dt{ font-family:var(--sans); font-size:9.5px; font-weight:500; letter-spacing:.22em; color:var(--dim); padding-top:3px; }
-  .row dd{ margin:0; font-size:14.5px; line-height:1.5; font-weight:500; color:var(--soft); }
+  .row dt{ font-family:var(--sans); font-size:9.5px; font-weight:600; letter-spacing:.22em; color:var(--dim); padding-top:3px; }
+  .row dd{ margin:0; font-family:var(--sans); font-size:14.5px; line-height:1.5; font-weight:400; color:var(--soft); }
   .row dd a{ color:var(--ink); text-decoration:underline; text-decoration-color:var(--gold); text-underline-offset:3px; padding:2px 0; }
   .row dd a:hover{ color:var(--gold-bright); }
   .report .divide{ border:0; border-top:1px solid var(--hair-soft); margin:20px 0 18px; }
@@ -199,9 +199,9 @@
   .entry:focus-visible{ outline:1px solid var(--hair); outline-offset:-1px; }
   .num{ grid-row:1 / span 4; font-size:48px; line-height:.95; font-weight:500; color:var(--num); padding-top:2px; transition:color .35s ease; }
   .entry:hover .num{ color:var(--num-h); }
-  .eyebrow{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.32em; color:var(--gold-bright); margin:2px 0 0; }
-  .entry h3{ margin:6px 0 0; font-size:27px; font-weight:600; line-height:1.08; color:var(--ink); }
-  .entry p.desc{ margin:8px 0 0; font-size:15px; line-height:1.55; font-weight:500; color:var(--soft); max-width:42ch; }
+  .eyebrow{ font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.32em; color:var(--gold-bright); margin:2px 0 0; }
+  .entry h3{ margin:6px 0 0; font-size:27px; font-weight:500; line-height:1.08; color:var(--ink); }
+  .entry p.desc{ margin:8px 0 0; font-family:var(--sans); font-size:15px; line-height:1.55; font-weight:400; color:var(--soft); max-width:42ch; }
   .status{ margin:13px 0 0; display:flex; align-items:center; gap:12px; font-family:var(--sans); font-size:10px; letter-spacing:.26em; color:var(--dim); }
   .status::before{ content:""; width:24px; height:1px; background:var(--gold); flex:none; }
   .entry.ghost{ pointer-events:none; }
@@ -211,22 +211,22 @@
   .entry.ghost p.desc{ color:var(--ghost-text); }
   .plate{
     position:absolute; right:20px; bottom:14px; z-index:2;
-    font-family:var(--sans); font-size:9px; letter-spacing:.30em; color:var(--gold-bright); opacity:.7;
+    font-family:var(--serif); font-size:9px; letter-spacing:.30em; color:var(--gold-bright); opacity:.7;
   }
 
   /* RIGHT HALF: /REF */
   .ref-body{ flex:1; padding:38px 36px 8px; display:flex; flex-direction:column; }
-  .ref-body .eyebrow-top{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.32em; color:var(--gold-bright); margin:0; }
-  .ref-body h2.title{ margin:12px 0 0; font-size:clamp(32px,3.4vw,42px); font-weight:600; line-height:1.08; color:var(--ink); }
+  .ref-body .eyebrow-top{ font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.32em; color:var(--gold-bright); margin:0; }
+  .ref-body h2.title{ margin:12px 0 0; font-size:clamp(32px,3.4vw,42px); font-weight:500; line-height:1.08; color:var(--ink); }
   .ref-serif{ margin:14px 0 0; font-size:18.5px; line-height:1.5; font-style:italic; font-weight:500; color:var(--ink); max-width:46ch; }
   .ref-standfirst{ margin:14px 0 0; font-family:var(--sans); font-size:13.5px; font-weight:400; line-height:1.65; letter-spacing:.02em; color:var(--soft); max-width:52ch; }
   .stats{
     margin:22px 0 0; display:flex; flex-wrap:wrap; gap:10px 0; align-items:baseline;
-    font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.22em; color:var(--dim);
+    font-family:var(--sans); font-size:10.5px; font-weight:600; letter-spacing:.22em; color:var(--dim);
   }
   .stats span{ white-space:nowrap; }
   .stats span + span::before{ content:"·"; margin:0 14px; color:var(--gold); }
-  .stats b{ font-family:var(--serif); font-size:19px; font-weight:600; letter-spacing:0; color:var(--ink); margin-right:7px; }
+  .stats b{ font-family:var(--serif); font-size:19px; font-weight:500; letter-spacing:0; color:var(--ink); margin-right:7px; }
   .rule{ border:0; border-top:1px solid var(--hair); margin:24px 0 0; }
   .rule.soft{ border-top-color:var(--hair-soft); }
 
@@ -237,19 +237,19 @@
   .vol + .vol{ border-top:1px solid var(--hair-soft); }
   .vol:hover, .vol:focus-visible{ background:var(--hover); }
   .vol:focus-visible{ outline:1px solid var(--hair); outline-offset:-1px; }
-  .vol .v-name{ font-size:20px; font-weight:600; line-height:1.2; color:var(--ink); }
+  .vol .v-name{ font-size:20px; font-weight:500; line-height:1.2; color:var(--ink); }
   .vol .v-name em{ font-style:italic; font-weight:500; color:var(--soft); }
-  .vol .v-meta{ font-family:var(--sans); font-size:10px; font-weight:500; letter-spacing:.22em; color:var(--dim); white-space:nowrap; text-align:right; }
+  .vol .v-meta{ font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.22em; color:var(--dim); white-space:nowrap; text-align:right; }
   .vol .v-sub{ grid-column:1 / -1; font-family:var(--sans); font-size:11px; letter-spacing:.14em; color:var(--soft); margin:0; }
 
   .vol-open{ margin-top:28px; }
   .vol-open .eyebrow{ margin:0; }
-  .vol-open h3{ margin:9px 0 0; font-size:34px; font-weight:600; line-height:1.05; color:var(--ink); }
+  .vol-open h3{ margin:9px 0 0; font-size:34px; font-weight:500; line-height:1.05; color:var(--ink); }
   .vol-open .italic{ margin:8px 0 0; font-size:18px; font-style:italic; font-weight:500; color:var(--soft); }
-  .facts{ margin:16px 0 0; font-family:var(--sans); font-size:10.5px; font-weight:500; letter-spacing:.22em; color:var(--dim); line-height:1.9; }
+  .facts{ margin:16px 0 0; font-family:var(--sans); font-size:10.5px; font-weight:600; letter-spacing:.22em; color:var(--dim); line-height:1.9; }
   .ref-links{ margin:18px 0 6px; display:flex; flex-wrap:wrap; gap:12px 28px; }
   .ref-links a{
-    font-family:var(--sans); font-size:11px; font-weight:500; letter-spacing:.22em; color:var(--ink);
+    font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:.22em; color:var(--ink);
     text-decoration:underline; text-decoration-color:var(--gold); text-underline-offset:4px; padding:8px 0;
   }
   .ref-links a:hover{ color:var(--gold-bright); }
@@ -259,8 +259,30 @@
     font-family:var(--sans); font-size:11px; letter-spacing:.08em; line-height:1.7; color:var(--dim); text-align:center;
   }
 
+  /* TYPE SPECIMEN */
+  .specimen{ max-width:1560px; margin:0 auto; padding:6px 28px 10px; }
+  .specimen-label{
+    font-family:var(--sans); font-size:10.5px; font-weight:600; letter-spacing:.32em;
+    color:var(--gold-bright); margin:0 0 12px 2px; display:flex; align-items:center; gap:12px;
+  }
+  .specimen-label::after{ content:""; flex:1; height:1px; background:var(--hair-soft); }
+  .specimen-body{ padding:38px 40px 30px; }
+  .specimen-body h2{ margin:0; font-size:clamp(30px,3.4vw,44px); font-weight:500; line-height:1.08; color:var(--ink); }
+  .specimen-line{ margin:12px 0 0; font-size:19px; font-style:italic; font-weight:500; line-height:1.4; color:var(--soft); }
+  .t-rows{ margin:26px 0 0; border-top:1px solid var(--hair); }
+  .t-row{ display:grid; grid-template-columns:250px 1fr; gap:10px 24px; align-items:baseline; padding:22px 6px; border-bottom:1px solid var(--hair-soft); min-width:0; }
+  .t-role{ font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.24em; color:var(--gold-bright); line-height:1.8; margin:0; }
+  .t-sample{ margin:0; min-width:0; overflow-wrap:break-word; color:var(--ink); }
+  .t-display{ font-size:clamp(44px,6vw,64px); font-weight:500; line-height:1.02; }
+  .t-serifline{ font-size:19px; font-weight:500; font-style:italic; line-height:1.45; }
+  .t-heading{ font-size:34px; font-weight:500; line-height:1.05; }
+  .t-body{ font-family:var(--sans); font-size:17px; font-weight:400; line-height:1.6; color:var(--soft); max-width:62ch; }
+  .t-label{ font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:.26em; line-height:1.7; }
+  .t-small{ font-family:var(--sans); font-size:10.5px; font-weight:400; letter-spacing:.26em; color:var(--dim); }
+
   @media (max-width: 980px){
     .compare{ grid-template-columns:1fr; }
+    .t-row{ grid-template-columns:1fr; gap:6px; }
   }
   @media (max-width: 640px){
     .sample-top{ padding:22px 18px 4px; }
@@ -278,6 +300,8 @@
     .foot{ padding:16px 20px 18px; white-space:normal; }
     .vol{ grid-template-columns:1fr; }
     .vol .v-meta{ text-align:left; }
+    .specimen{ padding:4px 14px 8px; }
+    .specimen-body{ padding:28px 22px 20px; }
   }
   @media (prefers-reduced-motion: reduce){
     .drift-a,.drift-b,.drift-c,.pulse-a,.pulse-b,.pulse-c{ animation:none !important; }
@@ -302,7 +326,7 @@
   <span><b>GROUND</b> #101C2C TO #0B141F · IVORY #FAF7EE</span>
   <span><b>INK</b> #F0E8D5 · #1B2A4A</span>
   <span><b>GOLD</b> #C2A15C · #A07F3A</span>
-  <span><b>TYPE</b> PLAYFAIR DISPLAY · JOST</span>
+  <span><b>TYPE</b> PLAYFAIR DISPLAY · SOURCE SANS 3</span>
 </div>
 
 <main class="compare">
@@ -453,6 +477,46 @@
   </section>
 
 </main>
+
+<section class="specimen" aria-label="Type specimen">
+  <p class="specimen-label">TYPE SPECIMEN</p>
+  <div class="ground">
+    <div class="specimen-body">
+      <h2>THE TYPE OF THE ISLE</h2>
+      <p class="specimen-line">Two faces, used everywhere on 1s1e.com.</p>
+      <div class="t-rows">
+        <div class="t-row">
+          <p class="t-role">DISPLAY · PLAYFAIR DISPLAY 500 · 64PX</p>
+          <p class="t-sample t-display">The Isle</p>
+        </div>
+        <div class="t-row">
+          <p class="t-role">SERIF LINE · PLAYFAIR DISPLAY 500 ITALIC · 19PX</p>
+          <p class="t-sample t-serifline">More than a place you come to, a place you stay.</p>
+        </div>
+        <div class="t-row">
+          <p class="t-role">HEADING · PLAYFAIR DISPLAY 500 · 34PX</p>
+          <p class="t-sample t-heading">Furniture</p>
+        </div>
+        <div class="t-row">
+          <p class="t-role">BODY · SOURCE SANS 3 400 · 17PX</p>
+          <p class="t-sample t-body">The complete record of the home, in three volumes and a companion appendix. Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page.</p>
+        </div>
+        <div class="t-row">
+          <p class="t-role">LABEL · SOURCE SANS 3 600 · 11PX</p>
+          <p class="t-sample t-label">THE LAST CHECK · OPEN · 18 LAYERS</p>
+        </div>
+        <div class="t-row">
+          <p class="t-role">SMALL TEXT · SOURCE SANS 3 400 · 10.5PX</p>
+          <p class="t-sample t-small">1s1e.com · THE ISLE</p>
+        </div>
+      </div>
+    </div>
+    <footer class="foot">
+      <span class="site">1s1e.com</span>
+      <span>THE ISLE · <time class="local-time">--:--</time></span>
+    </footer>
+  </div>
+</section>
 
 <p class="sample-note">Same margins, same hairlines, same label spacing and the same footer on both pages. In light, the ground flattens to warm ivory, the ink turns navy and the gold deepens, on both halves at once.</p>
 
