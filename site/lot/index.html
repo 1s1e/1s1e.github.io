@@ -20,16 +20,19 @@
   #viewbtns button, #bulk button { background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; }
   #viewbtns button:hover, #bulk button:hover { background: #27374c; }
   #bulk { display: flex; gap: 6px; padding: 10px 16px 2px; }
-  #layers { flex: 1; overflow-y: auto; padding: 6px 10px 10px; }
+  #layers { flex: 1; overflow-y: auto; padding: 2px 10px 10px; }
   .layer { padding: 9px 6px; border-bottom: 1px solid #22304a; }
   .layer .row1 { display: flex; align-items: center; gap: 8px; }
-  .layer .num { font-size: 11px; color: #14100a; background: #b08d57; border-radius: 4px; min-width: 26px; text-align: center; padding: 2px 0; font-weight: 700; }
-  .layer.off .num { background: #46536a; color: #aeb8c6; }
+  .sec { border-bottom: 1px solid #2a3646; }
+  .sec-head { display: flex; align-items: center; width: 100%; background: none; border: none; cursor: pointer; padding: 11px 6px 8px; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b08d57; text-align: left; }
+  .sec-head .chev { margin-left: auto; color: #9aa0a6; font-size: 11px; transition: transform 0.15s; }
+  .sec.closed .sec-head .chev { transform: rotate(-90deg); }
+  .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
   .layer .eye { background: none; border: 1px solid #33445a; border-radius: 6px; color: #e8eaed; width: 34px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
   .layer.off .name { color: #7d8288; }
   .layer.off .eye { opacity: 0.45; }
-  .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding-left: 34px; }
+  .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
   .layer input[type=range] { flex: 1; accent-color: #b08d57; height: 20px; }
   .layer .pct { font-size: 12px; color: #9aa0a6; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
   #facts { border-top: 1px solid #2a3646; padding: 10px 16px 14px; font-size: 12px; color: #b9bec6; line-height: 1.55; }
@@ -99,21 +102,22 @@
   var W = 7609, H = 7689;
   var OX = 145795208, OY = 224606723, WORLD = 536870912; // Web Mercator world-pixel origin of the frame
   var LOT = { x: 3789, y: 3755 };                        // lot centre in image pixels
+  var SECTIONS = ["Satellite Imagery", "The Isle", "Property Data", "FEMA Data", "Miscellaneous"];
   var LAYERS = [
-    { n: "1",  file: "layers/01-street-map.png",        name: "Street map",                    on: false, op: 100 },
-    { n: "2",  file: "layers/02-satellite.jpg",        name: "Satellite, original",           on: false, op: 100 },
-    { n: "3",  file: "layers/02b-satellite-cleaned.jpg", name: "Satellite, cleaned",           on: true,  op: 100 },
-    { n: "4",  file: "layers/02c-satellite-render.jpg",  name: "Satellite, no houses",         on: false, op: 100 },
-    { n: "5",  file: "layers/03-property-lines.png",    name: "Property lines",                on: true,  op: 100, detail: "layers/03-property-lines-detail.png", drect: [3417, 3312, 720, 1000] },
-    { n: "6",  file: "layers/08-survey-lines.png",      name: "Survey lines",                  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
-    { n: "7",  file: "layers/09-survey-data.png",       name: "Survey data",                   on: false, op: 100, rect: [3417, 3312, 720, 1000] },
-    { n: "8",  file: "layers/04-flood-lines-2026.png",  name: "Flood lines, current",          on: false, op: 100, detail: "layers/04-flood-lines-2026-detail.png", drect: [3417, 3312, 720, 1000] },
-    { n: "9",  file: "layers/05-flood-lines-previous.png", name: "Flood lines, previous",      on: false, op: 100, detail: "layers/05-flood-lines-previous-detail.png", drect: [3417, 3312, 720, 1000] },
-    { n: "10", file: "layers/06-fema-map-2026.png",     name: "FEMA map, current",             on: false, op: 100 },
-    { n: "11", file: "layers/07-fema-map-previous.png", name: "FEMA map, previous",            on: false, op: 100 },
-    { n: "12", file: "layers/10-lot-highlight.png",     name: "The Isle, highlighted",         on: true,  op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
-    { n: "13", file: "layers/11-floor-plan-house.png",  name: "Floor plan, house",             on: true,  op: 100, rect: [3457, 3332, 590, 840] },
-    { n: "14", file: "layers/12-floor-plan-pool.png",   name: "Floor plan, pool and screen",   on: true,  op: 100, rect: [3457, 3332, 590, 840] }
+    { file: "layers/01-street-map.png",        name: "Street Map",       sec: "Miscellaneous",    ord: 13, on: false, op: 100 },
+    { file: "layers/02-satellite.jpg",        name: "Neighborhood",     sec: "Satellite Imagery", ord: 1,  on: false, op: 100 },
+    { file: "layers/02b-satellite-cleaned.jpg", name: "Neighbors",       sec: "Satellite Imagery", ord: 2,  on: true,  op: 100 },
+    { file: "layers/02c-satellite-render.jpg",  name: "Empty",           sec: "Satellite Imagery", ord: 3,  on: false, op: 100 },
+    { file: "layers/03-property-lines.png",    name: "Property Lines",   sec: "Property Data",     ord: 6,  on: true,  op: 100, detail: "layers/03-property-lines-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/08-survey-lines.png",      name: "Survey Lines",     sec: "Property Data",     ord: 7,  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
+    { file: "layers/09-survey-data.png",       name: "Survey Data",      sec: "Property Data",     ord: 8,  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
+    { file: "layers/04-flood-lines-2026.png",  name: "Flood Lines",      sec: "FEMA Data",         ord: 9,  on: false, op: 100, detail: "layers/04-flood-lines-2026-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/05-flood-lines-previous.png", name: "Flood Lines (Old)", sec: "FEMA Data",     ord: 11, on: false, op: 100, detail: "layers/05-flood-lines-previous-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/06-fema-map-2026.png",     name: "Flood Map",        sec: "FEMA Data",         ord: 10, on: false, op: 100 },
+    { file: "layers/07-fema-map-previous.png", name: "Flood Map (Old)",  sec: "FEMA Data",         ord: 12, on: false, op: 100 },
+    { file: "layers/10-lot-highlight.png",     name: "Lot Highlight",    sec: "Miscellaneous",     ord: 14, on: true,  op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/11-floor-plan-house.png",  name: "Interior",         sec: "The Isle",          ord: 4,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
+    { file: "layers/12-floor-plan-pool.png",   name: "Exterior",         sec: "The Isle",          ord: 5,  on: true,  op: 100, rect: [3457, 3332, 590, 840] }
   ];
   var viewer = document.getElementById("viewer");
   var cv = document.getElementById("cv");
@@ -227,6 +231,21 @@
     apply();
   }
 
+  // ---- collapsible sections in the panel ----
+  var secBodies = {};
+  SECTIONS.forEach(function (s) {
+    var sec = document.createElement("div"); sec.className = "sec";
+    var head = document.createElement("button"); head.type = "button"; head.className = "sec-head";
+    var lab = document.createElement("span"); lab.textContent = s;
+    var chev = document.createElement("span"); chev.className = "chev"; chev.textContent = "\u25BE";
+    head.appendChild(lab); head.appendChild(chev);
+    var body = document.createElement("div"); body.className = "sec-body";
+    head.addEventListener("click", function () { sec.classList.toggle("closed"); });
+    sec.appendChild(head); sec.appendChild(body);
+    layersEl.appendChild(sec);
+    secBodies[s] = body;
+  });
+
   // ---- build layer images and controls, preload everything ----
   var loaded = 0, total = LAYERS.reduce(function (a, L) { return a + 1 + (L.detail ? 1 : 0); }, 0);
   var loadfill = document.getElementById("loadfill");
@@ -262,7 +281,6 @@
     var div = document.createElement("div");
     div.className = "layer" + (L.on ? "" : " off");
     var row1 = document.createElement("div"); row1.className = "row1";
-    var num = document.createElement("span"); num.className = "num"; num.textContent = L.n;
     var nm = document.createElement("span"); nm.className = "name"; nm.textContent = L.name;
     var eye = document.createElement("button"); eye.type = "button"; eye.className = "eye"; eye.textContent = L.on ? "On" : "Off";
     eye.setAttribute("aria-label", "Toggle " + L.name);
@@ -288,10 +306,13 @@
       if (L.op > 0 && !L.on) setOn(true); else render();
     });
     L.setOn = setOn; L.rng = rng; L.pct = pct;
-    row1.appendChild(num); row1.appendChild(nm); row1.appendChild(eye);
+    row1.appendChild(nm); row1.appendChild(eye);
     row2.appendChild(rng); row2.appendChild(pct);
     div.appendChild(row1); div.appendChild(row2);
-    layersEl.appendChild(div);
+    L.el = div;
+  });
+  LAYERS.slice().sort(function (a, b) { return a.ord - b.ord; }).forEach(function (L) {
+    secBodies[L.sec].appendChild(L.el);
   });
 
   // ---- view buttons ----
