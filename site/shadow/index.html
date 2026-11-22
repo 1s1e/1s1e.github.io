@@ -17,9 +17,9 @@
     --accent: #c2a15c; --accent-ink: #101c2c; --readout: #d9d0ba; --hint: #a89f88;
   }
   :root[data-theme="light"] {
-    --body-bg: #e9e2cf; --ink: #1b2a4a; --muted: #5f6a7a; --panel: #faf7ee; --hairline: #ddd5bd;
-    --input-bg: #fffdf6; --btn: #fffdf6; --btn-border: #d8cfb2; --btn-hover: #f1ead6;
-    --accent: #a67c3d; --accent-ink: #fffdf6; --readout: #2a3648; --hint: #8a8272;
+    --body-bg: #faf7ee; --ink: #1d2a3b; --muted: #5a6577; --panel: #faf7ee; --hairline: #ddd5c2;
+    --input-bg: #f3eee0; --btn: #f3eee0; --btn-border: #ddd5c2; --btn-hover: #faf7ee;
+    --accent: #a07f3a; --accent-ink: #faf7ee; --readout: #1d2a3b; --hint: #5a6577;
   }
   header { display: flex; align-items: flex-start; gap: 16px; }
   header .hgroup { flex: 1; }
@@ -162,7 +162,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
 var scene = new THREE.Scene();
-function applySceneTheme() { var t = document.documentElement.dataset.theme; scene.background = new THREE.Color(t === 'light' ? 0xe9e2cf : 0x081019); }
+function applySceneTheme() { var t = document.documentElement.dataset.theme; scene.background = new THREE.Color(t === 'light' ? 0xf3eee0 : 0x081019); }
 applySceneTheme();
 new MutationObserver(applySceneTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
