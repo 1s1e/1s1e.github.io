@@ -60,6 +60,17 @@
     --frame:#0c1725;
     --toggle-ink:#101c2c;
   }
+  /* Dark grounds, Ref Navy set (old /ref values) */
+  :root[data-theme="dark"][data-grounds="refnavy"]{
+    --field:#0d141d;
+    --ground-1:#1d2a3b;
+    --ground-2:#152130;
+    --ground-3:#121c28;
+    --panel:#22344a;
+    --raised:#2a405e;
+    --frame:#131e2b;
+    --toggle-ink:#1d2a3b;
+  }
   :root[data-theme="light"]{
     color-scheme:light;
     --field:#faf7ee;
@@ -346,7 +357,7 @@
 <header class="sample-top">
   <p class="kicker">1S1E.COM · ONE HOUSE, ONE SYSTEM</p>
   <h1>The unified sample</h1>
-  <p class="sub">The Index and the Reference Catalogues rebuilt side by side in a single set of tokens, fonts and furniture. One toggle switches both pages together. In dark, the Grounds switch compares the Master grounds against the Night Chart grounds across both pages and the specimen at once.</p>
+  <p class="sub">The Index and the Reference Catalogues rebuilt side by side in a single set of tokens, fonts and furniture. One toggle switches both pages together. In dark, the Grounds switch compares the Master, Night Chart and Ref Navy grounds across both pages and the specimen at once.</p>
   <div class="controls-row">
     <div class="theme-toggle" role="group" aria-label="Colour mode for both pages">
       <button type="button" id="btnLight" aria-pressed="false">LIGHT</button>
@@ -357,6 +368,7 @@
       <div class="theme-toggle" role="group" aria-labelledby="groundsLabel">
         <button type="button" id="btnMaster" class="on" aria-pressed="true">MASTER</button>
         <button type="button" id="btnNight" aria-pressed="false">NIGHT CHART</button>
+        <button type="button" id="btnRefNavy" aria-pressed="false">REF NAVY</button>
       </div>
     </div>
   </div>
@@ -366,6 +378,7 @@
 <div class="token-strip" aria-label="Shared tokens">
   <span><b>MASTER GROUND</b> #1B2A4A TO #131F36</span>
   <span><b>NIGHT CHART GROUND</b> #101C2C TO #0B141F</span>
+  <span><b>REF NAVY GROUND</b> #1D2A3B TO #121C28</span>
   <span><b>LIGHT GROUND</b> IVORY #FAF7EE</span>
   <span><b>INK</b> #F0E8D5 · #1B2A4A</span>
   <span><b>GOLD</b> #C2A15C · #A07F3A</span>
@@ -570,14 +583,21 @@
     var btnDark = document.getElementById('btnDark');
     var btnMaster = document.getElementById('btnMaster');
     var btnNight = document.getElementById('btnNight');
+    var btnRefNavy = document.getElementById('btnRefNavy');
     var groundsStatus = document.getElementById('groundsStatus');
+    function groundsName(){
+      var g = root.getAttribute('data-grounds');
+      if (g === 'night') return 'NIGHT CHART';
+      if (g === 'refnavy') return 'REF NAVY';
+      return 'MASTER';
+    }
     function updateStatus(){
       var light = root.getAttribute('data-theme') === 'light';
-      var master = root.getAttribute('data-grounds') !== 'night';
+      var name = groundsName();
       if (light){
-        groundsStatus.textContent = 'LIGHT · SHARED IVORY GROUND · DARK GROUNDS SET TO ' + (master ? 'MASTER' : 'NIGHT CHART');
+        groundsStatus.textContent = 'LIGHT · SHARED IVORY GROUND · DARK GROUNDS SET TO ' + name;
       } else {
-        groundsStatus.textContent = 'NOW SHOWING · DARK · ' + (master ? 'MASTER GROUNDS' : 'NIGHT CHART GROUNDS');
+        groundsStatus.textContent = 'NOW SHOWING · DARK · ' + name + ' GROUNDS';
       }
     }
     function setTheme(t){
@@ -592,16 +612,21 @@
     function setGrounds(g){
       root.setAttribute('data-grounds', g);
       var master = (g === 'master');
+      var night = (g === 'night');
+      var refnavy = (g === 'refnavy');
       btnMaster.classList.toggle('on', master);
-      btnNight.classList.toggle('on', !master);
+      btnNight.classList.toggle('on', night);
+      btnRefNavy.classList.toggle('on', refnavy);
       btnMaster.setAttribute('aria-pressed', master ? 'true' : 'false');
-      btnNight.setAttribute('aria-pressed', master ? 'false' : 'true');
+      btnNight.setAttribute('aria-pressed', night ? 'true' : 'false');
+      btnRefNavy.setAttribute('aria-pressed', refnavy ? 'true' : 'false');
       updateStatus();
     }
     btnLight.addEventListener('click', function(){ setTheme('light'); });
     btnDark.addEventListener('click', function(){ setTheme('dark'); });
     btnMaster.addEventListener('click', function(){ setGrounds('master'); });
     btnNight.addEventListener('click', function(){ setGrounds('night'); });
+    btnRefNavy.addEventListener('click', function(){ setGrounds('refnavy'); });
     updateStatus();
 
     var els = document.querySelectorAll('.local-time');
