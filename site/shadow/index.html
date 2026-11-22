@@ -642,41 +642,48 @@ function goSolstice(longest) {
 longestBtn.addEventListener('click', function () { goSolstice(true); });
 shortestBtn.addEventListener('click', function () { goSolstice(false); });
 
-/* Neighbouring houses: simple massing models traced from the satellite
-   photo (outlines at the ground frame's 0.0658 m per px; eave and ridge
-   heights estimated from the shadows the houses cast in that photo).
-   Shown only with the natural ground, where they receive and cast
-   shadows like the main house. */
+/* Neighbouring houses: clean hip roof masses fitted to the satellite
+   photo on Nov 22, 2026. Each house sits in a frame aligned with its long
+   walls; every mass is a true hip roof over a rectangle in that frame,
+   with a straight, level ridge and planar faces, heights from one
+   pitch per house. The west house's east wing meets the main slope
+   along true valley lines solved from the two slope planes. Positions
+   are in the ground frame's local metres (photo px x 0.0658); the
+   west house is all light shingle, the east house has dark metal and
+   light shingle sections as in the photo. Shown only with the natural
+   ground, where they receive and cast shadows like the main house. */
 var nbrWallMat = new THREE.MeshStandardMaterial({ color: 0xcfc8bb, roughness: 0.95 });
 var nbrRoofMatW = new THREE.MeshStandardMaterial({ color: 0x9aa0a3, roughness: 1 });
 var nbrRoofMatE = new THREE.MeshStandardMaterial({ color: 0x4a4d4f, roughness: 1 });
-function hipRoof(eavePts, ridgeA, ridgeB, eaveH, ridgeH, mat) {
-  function proj(p) {
-    var dx = ridgeB[0] - ridgeA[0], dz = ridgeB[1] - ridgeA[1];
-    var t = ((p[0] - ridgeA[0]) * dx + (p[1] - ridgeA[1]) * dz) / (dx * dx + dz * dz);
-    t = Math.max(0, Math.min(1, t));
-    return [ridgeA[0] + t * dx, ridgeA[1] + t * dz];
-  }
-  var facets = [];
-  for (var i = 0; i < eavePts.length; i++) {
-    var p = eavePts[i], q = eavePts[(i + 1) % eavePts.length];
-    var pp = proj(p), pq = proj(q);
-    var A = [p[0], p[1], eaveH], B = [q[0], q[1], eaveH];
-    var C = [pq[0], pq[1], ridgeH], D = [pp[0], pp[1], ridgeH];
-    if (Math.abs(C[0] - D[0]) < 0.01 && Math.abs(C[1] - D[1]) < 0.01) facets.push([A, B, C]);
-    else facets.push([A, B, C, D]);
-  }
-  facetMesh(facets, mat);
-}
 var nbrMeshes = [];
-function neighbour(outline, ridgeA, ridgeB, eaveH, ridgeH, roofMat) {
+function shrinkOutline(outline, d) {
+  var cx = 0, cz = 0;
+  outline.forEach(function (p) { cx += p[0]; cz += p[1]; });
+  cx /= outline.length; cz /= outline.length;
+  return outline.map(function (p) {
+    var dx = p[0] - cx, dz = p[1] - cz;
+    var len = Math.hypot(dx, dz) || 1;
+    var s = Math.max(0, (len - d) / len);
+    return [cx + dx * s, cz + dz * s];
+  });
+}
+function nbrAdd(build) {
   var before = scene.children.length;
-  prism(outline, 0, eaveH, nbrWallMat);
-  hipRoof(outline, ridgeA, ridgeB, eaveH, ridgeH, roofMat);
+  build();
   for (var i = before; i < scene.children.length; i++) nbrMeshes.push(scene.children[i]);
 }
-neighbour([[29.08, 29.48], [43.1, 32.9], [46.06, 35.86], [47.05, 40.8], [46.06, 47.38], [43.76, 55.93], [36.85, 54.61], [33.23, 52.31], [30.93, 52.97], [29.61, 59.22], [23.36, 59.55], [23.03, 53.3], [25.33, 42.11], [26.32, 35.53]], [33.23, 32.24], [35.53, 46.06], 5.4, 8.3, nbrRoofMatW);
-neighbour([[73.37, 42.77], [88.5, 43.76], [92.78, 50.67], [91.79, 59.22], [90.15, 66.46], [80.93, 68.76], [71.72, 67.77], [66.79, 66.79], [67.77, 55.93], [69.75, 48.03]], [77.31, 46.06], [79.62, 63.17], 5.6, 8.6, nbrRoofMatE);
+var NBR_OUTLINE_WEST = [[31.78,28.75],[43.23,31.06],[44.28,33.56],[46.59,35.53],[46.06,40.6],[44.74,43.89],[44.55,48.23],[44.09,55.27],[33.76,55.73],[30.93,51.52],[27.5,47.38],[28.16,40.14],[30.6,32.24]];
+var NBR_OUTLINE_WEST_GARAGE = [[24.87,51.46],[32.04,52.18],[32.24,56.92],[24.35,57.57]];
+var NBR_OUTLINE_EAST = [[76.79,42.77],[89.29,45.86],[89.69,47.38],[92.78,52.84],[91.66,55.93],[90.8,58.1],[89.16,67.77],[88.17,68.23],[81.26,68.1],[78.3,67.77],[76.53,69.75],[71.72,67.77],[70.41,64.48],[72.18,59.22],[75.67,48.03],[76.0,45.4]];
+var NBR_FACES_WEST_L = [[[37.51,38.48,8.6],[34.91,50.71,8.6],[25.79,53.14,5.4],[31.12,28.04,5.4]],[[31.12,28.04,5.4],[47.6,31.55,5.4],[37.51,38.48,8.6]],[[42.26,56.64,5.4],[25.79,53.14,5.4],[34.91,50.71,8.6]],[[42.05,52.56,6.84],[38.51,51.81,6.84],[35.15,47.06,5.4],[45.25,49.21,5.4]],[[38.51,51.81,6.84],[42.05,52.56,6.84],[43.68,56.61,5.4],[33.58,54.46,5.4]],[[33.58,54.46,5.4],[35.15,47.06,5.4],[38.51,51.81,6.84]],[[45.25,49.21,5.4],[43.68,56.61,5.4],[42.05,52.56,6.84]],[[29.14,55.06,4.6],[27.66,54.75,4.6],[25.03,50.69,3.3],[33.2,52.43,3.3]],[[27.66,54.75,4.6],[29.14,55.06,4.6],[31.78,59.12,3.3],[23.6,57.38,3.3]],[[23.6,57.38,3.3],[25.03,50.69,3.3],[27.66,54.75,4.6]],[[33.2,52.43,3.3],[31.78,59.12,3.3],[29.14,55.06,4.6]],[[47.6,31.55,5.4],[46.17,38.24,5.4],[39.76,40.57,7.6],[44.22,47.44,5.4],[42.26,56.64,5.4],[34.91,50.71,8.6],[37.51,38.48,8.6]],[[46.17,38.24,5.4],[47.08,38.43,5.4],[44.84,41.65,7.6],[39.76,40.57,7.6]],[[39.76,40.57,7.6],[44.84,41.65,7.6],[45.12,47.63,5.4],[44.22,47.44,5.4]],[[47.08,38.43,5.4],[45.12,47.63,5.4],[44.84,41.65,7.6]]];
+var NBR_FACES_EAST_D = [[[84.91,49.21,6.98],[79.64,47.79,6.98],[76.71,42.71,5.4],[90.0,46.28,5.4]],[[79.64,47.79,6.98],[84.91,49.21,6.98],[87.84,54.29,5.4],[74.56,50.71,5.4]],[[74.56,50.71,5.4],[76.71,42.71,5.4],[79.64,47.79,6.98]],[[90.0,46.28,5.4],[87.84,54.29,5.4],[84.91,49.21,6.98]],[[82.43,49.83,8.15],[78.94,62.8,8.15],[70.26,64.9,5.4],[74.86,47.8,5.4]],[[87.04,69.41,5.4],[70.26,64.9,5.4],[78.94,62.8,8.15]],[[87.57,62.4,7.84],[81.53,60.77,7.84],[76.39,53.25,5.4],[91.97,57.45,5.4]]];
+var NBR_FACES_EAST_L = [[[78.94,62.8,8.15],[82.43,49.83,8.15],[91.64,52.31,5.4],[87.04,69.41,5.4]],[[90.36,47.47,6.35],[88.99,52.55,6.35],[85.26,53.25,5.4],[87.39,45.31,5.4]],[[88.99,52.55,6.35],[90.36,47.47,6.35],[94.39,47.19,5.4],[92.25,55.14,5.4]],[[87.39,45.31,5.4],[94.39,47.19,5.4],[90.36,47.47,6.35]],[[92.25,55.14,5.4],[85.26,53.25,5.4],[88.99,52.55,6.35]],[[81.53,60.77,7.84],[87.57,62.4,7.84],[88.63,69.84,5.4],[73.06,65.65,5.4]],[[73.06,65.65,5.4],[76.39,53.25,5.4],[81.53,60.77,7.84]],[[91.97,57.45,5.4],[88.63,69.84,5.4],[87.57,62.4,7.84]],[[74.89,66.96,6.26],[72.73,66.38,6.26],[71.08,63.62,5.4],[77.69,65.4,5.4]],[[72.73,66.38,6.26],[74.89,66.96,6.26],[76.51,69.78,5.4],[69.9,68.0,5.4]],[[69.9,68.0,5.4],[71.08,63.62,5.4],[72.73,66.38,6.26]],[[77.69,65.4,5.4],[76.51,69.78,5.4],[74.89,66.96,6.26]]];
+nbrAdd(function () { prism(shrinkOutline(NBR_OUTLINE_WEST, 0.04), 0, 5.0, nbrWallMat); });
+nbrAdd(function () { prism(shrinkOutline(NBR_OUTLINE_WEST_GARAGE, 0.04), 0, 3.1, nbrWallMat); });
+nbrAdd(function () { prism(shrinkOutline(NBR_OUTLINE_EAST, 0.04), 0, 5.0, nbrWallMat); });
+nbrAdd(function () { facetMesh(NBR_FACES_WEST_L, nbrRoofMatW); });
+nbrAdd(function () { facetMesh(NBR_FACES_EAST_D, nbrRoofMatE); });
+nbrAdd(function () { facetMesh(NBR_FACES_EAST_L, nbrRoofMatW); });
 nbrMeshes.forEach(function (m) { m.visible = false; });
 
 var groundNatTex = new THREE.TextureLoader().load('ground-natural.jpg');
