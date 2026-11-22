@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>The Isle · Lot viewer</title>
+<style>
+  :root { --panel-w: 308px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #14161a; color: #e8eaed; overflow: hidden; }
+  #app { display: flex; height: 100%; }
+  /* ---------- control panel ---------- */
+  #panel { width: var(--panel-w); flex: 0 0 var(--panel-w); background: #152130; border-right: 1px solid #2a3646; display: flex; flex-direction: column; z-index: 20; }
+  #panel header { padding: 16px 16px 12px; border-bottom: 1px solid #2a3646; }
+  #panel h1 { font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; letter-spacing: 0.04em; line-height: 1.25; }
+  #panel header p { font-size: 12px; color: #9aa0a6; margin-top: 3px; line-height: 1.45; }
+  #viewbtns { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #2a3646; }
+  #viewbtns button, #bulk button { background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; }
+  #viewbtns button:hover, #bulk button:hover { background: #27374c; }
+  #bulk { display: flex; gap: 6px; padding: 10px 16px 2px; }
+  #layers { flex: 1; overflow-y: auto; padding: 6px 10px 10px; }
+  .layer { padding: 9px 6px; border-bottom: 1px solid #22304a; }
+  .layer .row1 { display: flex; align-items: center; gap: 8px; }
+  .layer .num { font-size: 11px; color: #14100a; background: #b08d57; border-radius: 4px; min-width: 26px; text-align: center; padding: 2px 0; font-weight: 700; }
+  .layer.off .num { background: #46536a; color: #aeb8c6; }
+  .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
+  .layer .eye { background: none; border: 1px solid #33445a; border-radius: 6px; color: #e8eaed; width: 34px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .layer.off .name { color: #7d8288; }
+  .layer.off .eye { opacity: 0.45; }
+  .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding-left: 34px; }
+  .layer input[type=range] { flex: 1; accent-color: #b08d57; height: 20px; }
+  .layer .pct { font-size: 12px; color: #9aa0a6; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
+  #facts { border-top: 1px solid #2a3646; padding: 10px 16px 14px; font-size: 12px; color: #b9bec6; line-height: 1.55; }
+  #facts b { color: #e8eaed; font-weight: 600; }
+  /* ---------- viewer ---------- */
+  #viewer { flex: 1; position: relative; overflow: hidden; background: #101215; touch-action: none; cursor: grab; }
+  #viewer.dragging { cursor: grabbing; }
+  #cv { position: absolute; left: 0; top: 0; }
+  #readout { position: absolute; left: 12px; bottom: 12px; background: rgba(16,18,21,0.82); border: 1px solid #3c414b; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #cfd3d9; font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1.5; }
+  #scalebar { position: absolute; right: 12px; bottom: 12px; background: rgba(16,18,21,0.82); border: 1px solid #3c414b; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #cfd3d9; pointer-events: none; text-align: center; }
+  #scalebar .bar { height: 5px; border-left: 2px solid #e8eaed; border-right: 2px solid #e8eaed; border-bottom: 2px solid #e8eaed; margin-top: 3px; }
+  #loading { position: absolute; inset: 0; background: rgba(16,18,21,0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 30; }
+  #loading .t { font-size: 15px; }
+  #loading .track { width: min(420px, 70%); height: 8px; background: #2b2f36; border-radius: 4px; overflow: hidden; }
+  #loading .fill { height: 100%; width: 0%; background: #b08d57; transition: width 0.2s; }
+  #loading .s { font-size: 12px; color: #9aa0a6; }
+  #paneltoggle { display: none; }
+  @media (max-width: 760px) {
+    #panel { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.2s; box-shadow: 4px 0 18px rgba(0,0,0,0.5); }
+    #panel.open { transform: translateX(0); }
+    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <header>
+      <h1>The Isle</h1>
+      <p>Lot viewer. Every layer shares one registration, cropped from the 8455 x 8543 master frame. Drag to pan, scroll or pinch to zoom.</p>
+    </header>
+    <div id="viewbtns">
+      <button id="btn-fit" type="button">Fit view</button>
+      <button id="btn-lot" type="button">Zoom to lot</button>
+      <button id="btn-100" type="button">1:1 full size</button>
+      <button id="btn-zin" type="button">Zoom +</button>
+      <button id="btn-zout" type="button">Zoom -</button>
+    </div>
+    <div id="bulk">
+      <button id="btn-allon" type="button">Show all layers</button>
+      <button id="btn-alloff" type="button">Hide all layers</button>
+    </div>
+    <div id="layers"></div>
+    <div id="facts">
+      <b>Lot facts</b><br>
+      Lot area 11,635 sq ft<br>
+      Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
+      Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
+      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026<br>
+      <a href="/site/">Back to The Isle index</a>
+    </div>
+  </aside>
+  <main id="viewer">
+    <button id="paneltoggle" type="button">Layers</button>
+    <canvas id="cv"></canvas>
+    <div id="readout">Move over the map for coordinates</div>
+    <div id="scalebar"><span id="scaletxt"></span><div class="bar" id="scaleel"></div></div>
+    <div id="loading">
+      <div class="t">Loading full-resolution layers</div>
+      <div class="track"><div class="fill" id="loadfill"></div></div>
+      <div class="s" id="loadtxt">0 of 14 layers</div>
+    </div>
+  </main>
+</div>
+<script>
+(function () {
+  var W = 7609, H = 7689;
+  var OX = 145795208, OY = 224606723, WORLD = 536870912; // Web Mercator world-pixel origin of the frame
+  var LOT = { x: 3789, y: 3755 };                        // lot centre in image pixels
+  var LAYERS = [
+    { n: "1",  file: "layers/01-street-map.png",        name: "Street map",                    on: false, op: 100 },
+    { n: "2",  file: "layers/02-satellite.jpg",        name: "Satellite, original",           on: false, op: 100 },
+    { n: "3",  file: "layers/02b-satellite-cleaned.jpg", name: "Satellite, cleaned",           on: true,  op: 100 },
+    { n: "4",  file: "layers/02c-satellite-render.jpg",  name: "Satellite, no houses",         on: false, op: 100 },
+    { n: "5",  file: "layers/03-property-lines.png",    name: "Property lines",                on: true,  op: 100, detail: "layers/03-property-lines-detail.png", drect: [3417, 3312, 720, 1000] },
+    { n: "6",  file: "layers/08-survey-lines.png",      name: "Survey lines",                  on: false, op: 100, rect: [3417, 3312, 720, 1000] },
+    { n: "7",  file: "layers/09-survey-data.png",       name: "Survey data",                   on: false, op: 100, rect: [3417, 3312, 720, 1000] },
+    { n: "8",  file: "layers/04-flood-lines-2026.png",  name: "Flood lines, current",          on: false, op: 100, detail: "layers/04-flood-lines-2026-detail.png", drect: [3417, 3312, 720, 1000] },
+    { n: "9",  file: "layers/05-flood-lines-previous.png", name: "Flood lines, previous",      on: false, op: 100, detail: "layers/05-flood-lines-previous-detail.png", drect: [3417, 3312, 720, 1000] },
+    { n: "10", file: "layers/06-fema-map-2026.png",     name: "FEMA map, current",             on: false, op: 100 },
+    { n: "11", file: "layers/07-fema-map-previous.png", name: "FEMA map, previous",            on: false, op: 100 },
+    { n: "12", file: "layers/10-lot-highlight.png",     name: "The Isle, highlighted",         on: true,  op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
+    { n: "13", file: "layers/11-floor-plan-house.png",  name: "Floor plan, house",             on: true,  op: 100, rect: [3457, 3332, 590, 840] },
+    { n: "14", file: "layers/12-floor-plan-pool.png",   name: "Floor plan, pool and screen",   on: true,  op: 100, rect: [3457, 3332, 590, 840] }
+  ];
+  var viewer = document.getElementById("viewer");
+  var cv = document.getElementById("cv");
+  var cx = cv.getContext("2d");
+  var dpr = 1;
+  var layersEl = document.getElementById("layers");
+  var readout = document.getElementById("readout");
+  var scaletxt = document.getElementById("scaletxt");
+  var scaleel = document.getElementById("scaleel");
+  var scale = 0.05, tx = 0, ty = 0;
+
+  function sizeCanvas() {
+    var r = viewer.getBoundingClientRect();
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.max(1, Math.round(r.width * dpr));
+    cv.height = Math.max(1, Math.round(r.height * dpr));
+    cv.style.width = r.width + "px";
+    cv.style.height = r.height + "px";
+  }
+  function render() {
+    var r = viewer.getBoundingClientRect();
+    if (cv.width !== Math.max(1, Math.round(r.width * dpr)) || cv.height !== Math.max(1, Math.round(r.height * dpr))) sizeCanvas();
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx.clearRect(0, 0, r.width, r.height);
+    cx.imageSmoothingEnabled = true;
+    cx.imageSmoothingQuality = "high";
+    for (var i = 0; i < LAYERS.length; i++) {
+      var L = LAYERS[i];
+      if (!L.on || L.op <= 0 || !L.img || !L.ready) continue;
+      cx.globalAlpha = L.op / 100;
+      if (L.rect) {
+        cx.drawImage(L.img, 0, 0, L.img.naturalWidth, L.img.naturalHeight,
+          L.rect[0] * scale + tx, L.rect[1] * scale + ty, L.rect[2] * scale, L.rect[3] * scale);
+      } else {
+        var sx0 = Math.max(0, -tx / scale), sy0 = Math.max(0, -ty / scale);
+        var sx1 = Math.min(W, (r.width - tx) / scale), sy1 = Math.min(H, (r.height - ty) / scale);
+        if (sx1 <= sx0 || sy1 <= sy0) continue;
+        cx.drawImage(L.img, sx0, sy0, sx1 - sx0, sy1 - sy0,
+          sx0 * scale + tx, sy0 * scale + ty, (sx1 - sx0) * scale, (sy1 - sy0) * scale);
+      }
+      if (L.detail && L.dimg && L.dready) {
+        cx.drawImage(L.dimg, 0, 0, L.dimg.naturalWidth, L.dimg.naturalHeight,
+          L.drect[0] * scale + tx, L.drect[1] * scale + ty, L.drect[2] * scale, L.drect[3] * scale);
+      }
+    }
+    cx.globalAlpha = 1;
+    updateScaleBar();
+  }
+  var renderQueued = false;
+  function apply() {
+    if (renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(function () { renderQueued = false; render(); });
+  }
+  var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=";
+  function releaseImg(L, key, flag) {
+    var img = L[key];
+    if (!img) return;
+    if (!img.dataset.src) img.dataset.src = img.src;
+    L[flag] = false;
+    img.src = BLANK;
+  }
+  function restoreImg(L, key) {
+    var img = L[key];
+    if (img && img.dataset.src && img.src !== img.dataset.src) img.src = img.dataset.src;
+  }
+  function viewCenterImage() {
+    var r = viewer.getBoundingClientRect();
+    return { x: (r.width / 2 - tx) / scale, y: (r.height / 2 - ty) / scale };
+  }
+  function latOf(y) {
+    var f = (OY + y) / WORLD;
+    return Math.atan(Math.sinh(Math.PI * (1 - 2 * f))) * 180 / Math.PI;
+  }
+  function lonLat(x, y) {
+    var lon = (OX + x) / WORLD * 360 - 180;
+    return { lon: lon, lat: latOf(y) };
+  }
+  function updateScaleBar() {
+    var c = viewCenterImage();
+    var mPerPx = 40075016.686 / WORLD * Math.cos(latOf(c.y) * Math.PI / 180) / scale; // ground metres per screen px
+    var targets = [5, 10, 20, 50, 100, 200, 500, 1000];
+    var best = targets[0];
+    for (var i = 0; i < targets.length; i++) {
+      var px = targets[i] / mPerPx;
+      if (px >= 60 && px <= 180) { best = targets[i]; break; }
+      if (px > 180) break;
+      best = targets[i];
+    }
+    scaleel.style.width = Math.round(best / mPerPx) + "px";
+    scaletxt.textContent = best >= 1000 ? (best / 1000) + " km" : best + " m";
+  }
+  function fit() {
+    var r = viewer.getBoundingClientRect();
+    scale = Math.min(r.width / W, r.height / H);
+    tx = (r.width - W * scale) / 2;
+    ty = (r.height - H * scale) / 2;
+    apply();
+  }
+  function centerOn(ix, iy, s) {
+    var r = viewer.getBoundingClientRect();
+    scale = s;
+    tx = r.width / 2 - ix * scale;
+    ty = r.height / 2 - iy * scale;
+    apply();
+  }
+  function zoomAt(cx, cy, factor) {
+    var ix = (cx - tx) / scale, iy = (cy - ty) / scale;
+    var ns = Math.min(40, Math.max(0.005, scale * factor));
+    tx = cx - ix * ns; ty = cy - iy * ns; scale = ns;
+    apply();
+  }
+
+  // ---- build layer images and controls, preload everything ----
+  var loaded = 0, total = LAYERS.reduce(function (a, L) { return a + 1 + (L.detail ? 1 : 0); }, 0);
+  var loadfill = document.getElementById("loadfill");
+  var loadtxt = document.getElementById("loadtxt");
+  function bump() {
+    loaded++;
+    loadfill.style.width = Math.round(loaded / total * 100) + "%";
+    loadtxt.textContent = loaded + " of " + total + " layers";
+    if (loaded >= total) {
+      var lo = document.getElementById("loading");
+      lo.style.transition = "opacity 0.4s"; lo.style.opacity = "0";
+      setTimeout(function () { lo.style.display = "none"; }, 450);
+    }
+  }
+  LAYERS.forEach(function (L, idx) {
+    var img = document.createElement("img");
+    img.src = L.file;
+    img.alt = L.name;
+    L.ready = false;
+    img.addEventListener("load", function () { L.ready = true; bump(); if (L.on) render(); });
+    img.addEventListener("error", bump);
+    L.img = img;
+    if (L.detail) {
+      var dimg = document.createElement("img");
+      dimg.src = L.detail;
+      dimg.alt = "";
+      L.dready = false;
+      dimg.addEventListener("load", function () { L.dready = true; bump(); if (L.on) render(); });
+      dimg.addEventListener("error", bump);
+      L.dimg = dimg;
+    }
+
+    var div = document.createElement("div");
+    div.className = "layer" + (L.on ? "" : " off");
+    var row1 = document.createElement("div"); row1.className = "row1";
+    var num = document.createElement("span"); num.className = "num"; num.textContent = L.n;
+    var nm = document.createElement("span"); nm.className = "name"; nm.textContent = L.name;
+    var eye = document.createElement("button"); eye.type = "button"; eye.className = "eye"; eye.textContent = L.on ? "On" : "Off";
+    eye.setAttribute("aria-label", "Toggle " + L.name);
+    var row2 = document.createElement("div"); row2.className = "row2";
+    var rng = document.createElement("input"); rng.type = "range"; rng.min = "0"; rng.max = "100"; rng.value = L.op;
+    rng.setAttribute("aria-label", "Transparency of " + L.name);
+    var pct = document.createElement("span"); pct.className = "pct"; pct.textContent = L.op + "%";
+    function setOn(v) {
+      L.on = v;
+      eye.textContent = v ? "On" : "Off";
+      div.className = "layer" + (v ? "" : " off");
+      if (v) {
+        restoreImg(L, "img"); restoreImg(L, "dimg");
+      } else {
+        releaseImg(L, "img", "ready"); releaseImg(L, "dimg", "dready");
+      }
+      render();
+    }
+    eye.addEventListener("click", function () { setOn(!L.on); });
+    rng.addEventListener("input", function () {
+      L.op = +rng.value;
+      pct.textContent = L.op + "%";
+      if (L.op > 0 && !L.on) setOn(true); else render();
+    });
+    L.setOn = setOn; L.rng = rng; L.pct = pct;
+    row1.appendChild(num); row1.appendChild(nm); row1.appendChild(eye);
+    row2.appendChild(rng); row2.appendChild(pct);
+    div.appendChild(row1); div.appendChild(row2);
+    layersEl.appendChild(div);
+  });
+
+  // ---- view buttons ----
+  document.getElementById("btn-fit").addEventListener("click", fit);
+  document.getElementById("btn-100").addEventListener("click", function () {
+    var c = viewCenterImage(); centerOn(c.x, c.y, 1);
+  });
+  function lotView() {
+    var r = viewer.getBoundingClientRect();
+    var s = Math.min(1.1, 0.72 * r.height / 740, 0.72 * r.width / 544);
+    centerOn(LOT.x, LOT.y, s);
+  }
+  document.getElementById("btn-lot").addEventListener("click", lotView);
+  document.getElementById("btn-zin").addEventListener("click", function () {
+    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1.4);
+  });
+  document.getElementById("btn-zout").addEventListener("click", function () {
+    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1 / 1.4);
+  });
+  document.getElementById("btn-allon").addEventListener("click", function () { LAYERS.forEach(function (L) { L.setOn(true); }); });
+  document.getElementById("btn-alloff").addEventListener("click", function () { LAYERS.forEach(function (L) { L.setOn(false); }); });
+  document.getElementById("paneltoggle").addEventListener("click", function () {
+    document.getElementById("panel").classList.toggle("open");
+  });
+
+  // ---- pan and zoom ----
+  var pointers = new Map();
+  var lastPinch = 0;
+  viewer.addEventListener("pointerdown", function (e) {
+    viewer.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    viewer.classList.add("dragging");
+  });
+  viewer.addEventListener("pointermove", function (e) {
+    var r = viewer.getBoundingClientRect();
+    var mx = e.clientX - r.left, my = e.clientY - r.top;
+    var ix = (mx - tx) / scale, iy = (my - ty) / scale;
+    if (ix >= 0 && ix <= W && iy >= 0 && iy <= H) {
+      var ll = lonLat(ix, iy);
+      readout.textContent = "Lat " + ll.lat.toFixed(6) + ", Lon " + ll.lon.toFixed(6) +
+        "  |  image " + Math.round(ix) + ", " + Math.round(iy) + "  |  zoom " + Math.round(scale * 100) + "%";
+    }
+    if (!pointers.has(e.pointerId)) return;
+    var prev = pointers.get(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 1) {
+      tx += e.clientX - prev.x; ty += e.clientY - prev.y; apply();
+    } else if (pointers.size === 2) {
+      var pts = Array.from(pointers.values());
+      var d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      if (lastPinch > 0) {
+        var midx = (pts[0].x + pts[1].x) / 2 - r.left, midy = (pts[0].y + pts[1].y) / 2 - r.top;
+        zoomAt(midx, midy, d / lastPinch);
+      }
+      lastPinch = d;
+    }
+  });
+  function endPointer(e) {
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) lastPinch = 0;
+    if (pointers.size === 0) viewer.classList.remove("dragging");
+  }
+  viewer.addEventListener("pointerup", endPointer);
+  viewer.addEventListener("pointercancel", endPointer);
+  viewer.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    var r = viewer.getBoundingClientRect();
+    zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.12 : 1 / 1.12);
+  }, { passive: false });
+  viewer.addEventListener("dblclick", function (e) {
+    var r = viewer.getBoundingClientRect();
+    zoomAt(e.clientX - r.left, e.clientY - r.top, e.shiftKey ? 0.5 : 2);
+  });
+  window.addEventListener("resize", function () { sizeCanvas(); render(); });
+  sizeCanvas();
+  lotView();
+})();
+</script>
+</body>
+</html>
