@@ -9,6 +9,9 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 
   :root {
@@ -28,25 +31,25 @@
   #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #themesw button[aria-pressed="true"] { color: var(--accent); }
   html, body { margin: 0; padding: 0; height: 100%; background: var(--body-bg); color: var(--ink);
-    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    font-family: "Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif; }
   #app { display: flex; flex-direction: column; height: 100%; }
-  header { padding: 10px 16px 6px 16px; }
-  header h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: 0.04em; }
-  header p { font-size: 12px; color: var(--muted); margin: 3px 0 0 0; }
-  #scene { flex: 1 1 auto; min-height: 240px; position: relative; }
+  header { padding: 14px 20px 10px 20px; }
+  header h1 { font-family: "Playfair Display", Georgia, serif; font-size: 23px; font-weight: 500; margin: 0; letter-spacing: 0.02em; }
+  header p { font-size: 12.5px; color: var(--muted); margin: 3px 0 0 0; }
+  #scene { flex: 1 1 auto; min-height: 240px; position: relative; overflow: hidden; }
   #scene canvas { display: block; }
-  #controls { padding: 10px 16px 14px 16px; background: var(--panel); border-top: 1px solid var(--hairline); }
-  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 8px; }
+  #controls { padding: 12px 20px 16px 20px; background: var(--panel); border-top: 1px solid var(--hairline); }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 10px; }
   .row:last-child { margin-bottom: 0; }
-  label { font-size: 12px; color: var(--muted); }
+  label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   input[type="date"] { background: var(--input-bg); color: var(--ink); border: 1px solid var(--btn-border);
-    border-radius: 4px; padding: 5px 7px; font-size: 14px; }
+    border-radius: 4px; padding: 5px 7px; font-family: inherit; font-size: 13.5px; }
   input[type="range"] { flex: 1 1 220px; accent-color: var(--accent); }
   button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 4px;
-    padding: 6px 12px; font-size: 13px; cursor: pointer; }
+    padding: 6px 11px; font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em; cursor: pointer; }
   button:hover { background: var(--btn-hover); }
   button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  #clock { font-size: 15px; font-weight: 600; min-width: 118px; }
+  #clock { font-size: 15px; font-weight: 600; min-width: 52px; }
   #readout { font-size: 13px; color: var(--readout); }
   #readout b { color: var(--accent); font-weight: 600; }
   .hint { font-size: 11px; color: var(--hint); }
@@ -76,6 +79,8 @@
       <span id="clock">10:00</span>
       <label for="time">Time of day</label>
       <input type="range" id="time" min="300" max="1260" step="1" value="600">
+    </div>
+    <div class="row">
       <button id="playDay" type="button">Play day</button>
       <button id="playYear" type="button">Play year</button>
       <button id="longestDay" type="button">Longest day</button>
@@ -850,6 +855,8 @@ function resize() {
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
+if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(container);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { resize(); });
 resize();
 updateSun();
 
