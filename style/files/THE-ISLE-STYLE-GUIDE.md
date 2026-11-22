@@ -162,22 +162,22 @@ The splash's own tokens sit inside this family: ground The Isle Navy, the name i
 - The chart is a fragment of an engraved nautical chart, behind the left
   panel of the index, at a whisper: never colliding with text, never
   playful. One coastline, a fine double shore line in gold, entering and
-  leaving the edges in the upper third, one gentle curve with a single
-  soft bay, the land above it empty. No anchor, no hachures, no headlands,
-  no names or labels, one small compass rose only where a variant calls
-  for it. Its caption is SOUNDINGS IN FATHOMS.
+  leaving the edges in the upper third, with a point and a bay, the land
+  above it empty. No anchor, no hachures, no headlands, no names or
+  labels. Its caption is SOUNDINGS IN FATHOMS.
 - Three depth curves follow the shore as true parallel offsets, at +54,
-  +108 and +162 units. Soundings sit on a disciplined grid in five bands,
-  deepening in small steps, no duplicates, generous margins, the deepest
-  figure lowest and alone: band one 2, 3, 4; band two 5, 6, 8; band three
-  10, 13, 16; band four 20, 24, 28; band five 34. Sounding figures are
-  Playfair Display, italic, 500, 13px.
+  +108 and +162 units. Soundings are taken along survey lines run off
+  the shore, deepening along each line in small steps: 2, 5, 11 and 19
+  down the first line, 3, 7, 14 and 23 down the second, 2, 6, 13 and 22
+  down the third, 4, 9 and 17 down the last, every figure clear of the
+  curves. Sounding figures are Playfair Display, italic, 500, 13px.
 - Motion is gentle and always on the water only: the depth curves drift
   on staggered cycles of 13, 17 and 21 seconds, the soundings pulse on
   10, 14 and 18 seconds, the coastline never moves. Under reduced motion
   the chart is still.
-- PLATE I stands in the frame's bottom right, Playfair Display 600,
-  10.5px, letterspacing .30em, in plate gold.
+- PLATE I stands at the plate's bottom right, Playfair Display 600,
+  10.5px, letterspacing .30em, in plate gold. The plate carries no
+  frame: it sits unboxed, as the chart sits on the site.
 
 ## 8. The report and the entries
 

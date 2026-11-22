@@ -1,5 +1,13 @@
 # THE ISLE · MASTER CHANGE LOG
 
+## November 22, 2026
+
+- The chart plate was redrawn as Survey Lines, at the user's pick: a
+  shore with a point and a bay, soundings taken along survey lines run
+  off the shore, deepening line by line. The plate is unboxed
+  everywhere. Book page 9, the guide source and the style page carry
+  the one plate; the earlier grid plate and the scattered plate are
+  superseded.
 The history of the master documents, kept separately from them. The masters themselves always read as the present truth; every change they have ever carried is recorded here, newest first.
 
 ## November 22, 2026
