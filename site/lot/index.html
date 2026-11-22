@@ -135,7 +135,7 @@
     <div id="loading">
       <div class="t">Loading full-resolution layers</div>
       <div class="track"><div class="fill" id="loadfill"></div></div>
-      <div class="s" id="loadtxt">0 of 14 layers</div>
+      <div class="s" id="loadtxt">0 of 32 layers</div>
     </div>
   </main>
 </div>
@@ -144,7 +144,7 @@
   var W = 7609, H = 7689;
   var OX = 145795208, OY = 224606723, WORLD = 536870912; // Web Mercator world-pixel origin of the frame
   var LOT = { x: 3789, y: 3755 };                        // lot centre in image pixels
-  var SECTIONS = ["Satellite Imagery", "The Isle", "Property Data", "FEMA Data", "Miscellaneous"];
+  var SECTIONS = ["Satellite Imagery", "The Isle", "Measurements", "Property Data", "FEMA Data", "Miscellaneous"];
   var LAYERS = [
     { file: "layers/01-street-map.png",        name: "Street Map",       sec: "Miscellaneous",    ord: 14, on: false, op: 100 },
     { file: "layers/02-satellite.jpg",        name: "Neighborhood",     sec: "Satellite Imagery", ord: 1,  on: false, op: 100 },
@@ -160,7 +160,13 @@
     { file: "layers/10-lot-highlight.png",     name: "Lot Highlight",    sec: "Miscellaneous",     ord: 15, on: false, op: 100, detail: "layers/10-lot-highlight-detail.png", drect: [3417, 3312, 720, 1000] },
     { file: "layers/11-floor-plan-house.png",  name: "Interior",         sec: "The Isle",          ord: 4,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
     { file: "layers/12-floor-plan-pool.png",   name: "Exterior",         sec: "The Isle",          ord: 5,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
-    { file: "layers/13-measurements.png",     name: "Measurements",     sec: "Property Data",     ord: 9,  on: false, op: 100, detail: "layers/13-measurements-detail.png", drect: [3417, 3312, 720, 1000] }
+    { file: "layers/14-measurements-house-side.png",        name: "House Side",               sec: "Measurements", ord: 20, on: false, op: 100, detail: "layers/14-measurements-house-side-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/15-measurements-house-back.png",        name: "House Back",               sec: "Measurements", ord: 21, on: false, op: 100, detail: "layers/15-measurements-house-back-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/16-measurements-house-front.png",       name: "House Front",              sec: "Measurements", ord: 22, on: false, op: 100, detail: "layers/16-measurements-house-front-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/17-measurements-house-corner.png",      name: "House Corner to Corner",   sec: "Measurements", ord: 23, on: false, op: 100, detail: "layers/17-measurements-house-corner-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/18-measurements-enclosure-side.png",    name: "Enclosure Side",           sec: "Measurements", ord: 24, on: false, op: 100, detail: "layers/18-measurements-enclosure-side-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/19-measurements-enclosure-back.png",    name: "Enclosure Back",           sec: "Measurements", ord: 25, on: false, op: 100, detail: "layers/19-measurements-enclosure-back-detail.png", drect: [3417, 3312, 720, 1000] },
+    { file: "layers/20-measurements-enclosure-corner.png",  name: "Enclosure Corner to Corner", sec: "Measurements", ord: 26, on: false, op: 100, detail: "layers/20-measurements-enclosure-corner-detail.png", drect: [3417, 3312, 720, 1000] }
   ];
   // ---- remembered view and shareable links ----
   var STORE_KEY = "isle-lot-view-v1";
