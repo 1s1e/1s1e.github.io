@@ -5,112 +5,148 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <script>try{var t=localStorage.getItem('isle-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>The Isle · Lot viewer</title>
+<title>The Isle · Lot Viewer</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b">
+<meta name="theme-color" content="#1d2a3b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --panel-w: 308px; }
   :root {
-    --body-bg: #081019; --ink: #f0e8d5; --panel: #0e1928; --hairline: rgba(194,161,92,0.30); --hairline-soft: rgba(194,161,92,0.16);
-    --btn: #132236; --btn-border: rgba(194,161,92,0.30); --btn-hover: #1b2c44; --muted: #a89f88; --off-name: #a89f88;
-    --accent: #c2a15c; --accent-ink: #101c2c; --facts: #d9d0ba; --viewer-bg: #081019;
-    --chip-bg: rgba(8,16,25,0.85); --bar-bg: rgba(8,16,25,0.92); --load-bg: rgba(8,16,25,0.88);
-    --chip-border: rgba(194,161,92,0.30); --chip-ink: #d9d0ba; --track: #132236;
+    --body-bg: #152130; --ink: #f0e8d5; --panel: #1d2a3b; --hairline: rgba(194,161,92,0.30); --hairline-soft: rgba(194,161,92,0.16);
+    --btn: #22344a; --btn-border: rgba(194,161,92,0.30); --btn-hover: #22344a; --gold-bright: #c9ab72; --muted: #a89f88; --off-name: #a89f88;
+    --accent: #c2a15c; --accent-ink: #1d2a3b; --facts: #d9d0ba; --viewer-bg: #152130; --word: #C0C0C0;
+    --chip-bg: rgba(21,33,48,0.88); --bar-bg: rgba(21,33,48,0.94); --load-bg: rgba(21,33,48,0.90);
+    --chip-border: rgba(194,161,92,0.30); --chip-ink: #d9d0ba; --track: #22344a;
   }
   :root[data-theme="light"] {
-    --body-bg: #faf7ee; --ink: #1d2a3b; --panel: #faf7ee; --hairline: #ddd5c2; --hairline-soft: #eae5d8;
-    --btn: #f3eee0; --btn-border: #ddd5c2; --btn-hover: #faf7ee; --muted: #5a6577; --off-name: #5a6577;
-    --accent: #a07f3a; --accent-ink: #faf7ee; --facts: #5a6577; --viewer-bg: #f3eee0;
+    --body-bg: #faf7ee; --ink: #1d2a3b; --panel: #faf7ee; --hairline: rgba(160,127,58,0.38); --hairline-soft: rgba(160,127,58,0.20);
+    --btn: #f3eee0; --btn-border: rgba(160,127,58,0.38); --btn-hover: #f3eee0; --gold-bright: #a07f3a; --muted: #767c8d; --off-name: #767c8d;
+    --accent: #a07f3a; --accent-ink: #faf7ee; --facts: #3c4763; --viewer-bg: #f3eee0; --word: #1d2a3b;
     --chip-bg: rgba(250,247,238,0.92); --bar-bg: rgba(250,247,238,0.96); --load-bg: rgba(250,247,238,0.92);
-    --chip-border: #ddd5c2; --chip-ink: #1d2a3b; --track: #eae5d8;
+    --chip-border: rgba(160,127,58,0.38); --chip-ink: #1d2a3b; --track: rgba(160,127,58,0.20);
   }
-  #themesw { display: flex; align-items: center; gap: 8px; margin-top: 9px; }
+  #topbar { display: flex; align-items: center; gap: 14px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--hairline); flex: 0 0 auto; }
+  #topbar .tb-tree { height: 30px; width: auto; display: block; }
+  #topbar .tb-word { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 15px; letter-spacing: 0.34em; color: var(--word); white-space: nowrap; }
+  #topbar .tb-div { width: 1px; align-self: stretch; background: var(--hairline); }
+  #topbar .tb-title { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; letter-spacing: 0.02em; color: var(--ink); white-space: nowrap; }
+  #topbar .tb-spacer { flex: 1; }
+  #topbar .tb-back { font-size: 12.5px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  #topbar .tb-back:hover { color: var(--gold-bright); }
+  #main { display: flex; flex: 1; min-height: 0; position: relative; }
+  #themesw { display: flex; align-items: center; gap: 8px; }
+  @media (max-width: 760px) {
+    #topbar { flex-wrap: wrap; row-gap: 4px; padding: 8px 14px; }
+    #topbar .tb-spacer { flex-basis: 100%; height: 0; }
+    #topbar .tb-title { font-size: 18px; }
+  }
+
   #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #themesw button[aria-pressed="true"] { color: var(--accent); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body { font-family: "Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--body-bg); color: var(--ink); overflow: hidden; }
-  #app { display: flex; height: 100%; }
+  body { font-family: "Source Sans 3", "Avenir Next", "Segoe UI", sans-serif; background: var(--body-bg); color: var(--ink); overflow: hidden; }
+  #app { display: flex; flex-direction: column; height: 100%; }
   /* ---------- control panel ---------- */
   #panel { width: var(--panel-w); flex: 0 0 var(--panel-w); background: var(--panel); border-right: 1px solid var(--hairline); display: flex; flex-direction: column; z-index: 20; }
-  #panel header { padding: 16px 16px 12px; border-bottom: 1px solid var(--hairline); }
-  #panel h1 { font-family: "Playfair Display", Georgia, serif; font-size: 22px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.25; }
-  #panel header p { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
-  #viewbtns { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-bottom: 1px solid var(--hairline); }
-  #viewbtns button, #bulk button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 6px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; }
-  #viewbtns button:hover, #bulk button:hover { background: var(--btn-hover); }
-  #bulk { display: flex; gap: 6px; padding: 10px 16px 2px; }
+  #panel header { padding: 12px 16px 10px; border-bottom: 1px solid var(--hairline); }
+  #viewbtns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--hairline); }
+  #viewbtns button, #bulk button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 7px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; width: 100%; }
+  #viewbtns button:hover, #bulk button:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
+  #bulk { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px 4px; }
+  #btn-reset { grid-column: 1 / -1; }
   #layers { flex: 1; overflow-y: auto; padding: 2px 10px 10px; }
   .layer { padding: 9px 6px; border-bottom: 1px solid var(--hairline-soft); }
   .layer .row1 { display: flex; align-items: center; gap: 8px; }
   .sec { border-bottom: 1px solid var(--hairline); }
   .sec-head { display: flex; align-items: center; gap: 4px; padding: 11px 6px 8px; }
-  .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); text-align: left; }
+  .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); text-align: left; }
   .sec-toggle .chev { margin-left: auto; color: var(--muted); font-size: 11px; transition: transform 0.15s; }
   .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
-  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 5px; color: var(--muted); font-family: inherit; font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
+  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 0; color: var(--muted); font-family: inherit; font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
   .sec-all:hover { color: var(--ink); background: var(--btn-hover); }
   #viewbtns button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-  #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: var(--bar-bg); border: 1px solid var(--chip-border); border-radius: 8px; padding: 8px 10px 8px 14px; font-size: 13px; color: var(--ink); max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
+  #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: var(--bar-bg); border: 1px solid var(--chip-border); border-radius: 0; padding: 8px 10px 8px 14px; font-size: 13px; color: var(--ink); max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
   #measurebar.show { display: flex; }
   #measurebar .mtext { line-height: 1.35; }
   #measurebar .mtext b { color: var(--accent); font-variant-numeric: tabular-nums; }
   #measurebar #mbtns { display: flex; gap: 6px; }
-  #measurebar button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  #measurebar button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
   #measurebar button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   #viewer.measuring { cursor: crosshair; }
   .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
-  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
+  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 0; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
   .layer.off .name { color: var(--off-name); }
   .layer.off .eye { opacity: 0.45; }
   .layer.off .row2 { opacity: 0.45; }
   .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
   .layer input[type=range] { flex: 1; accent-color: var(--accent); height: 20px; }
   .layer .pct { font-size: 12px; color: var(--muted); width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
-  #facts { border-top: 1px solid var(--hairline); padding: 10px 16px 14px; font-size: 12px; color: var(--facts); line-height: 1.55; }
+  #facts { border-top: 1px solid var(--hairline); border-bottom: none; padding: 0 10px; font-size: 12px; color: var(--facts); line-height: 1.55; }
+  #facts .facts-inner { padding: 0 6px 12px; }
   #facts b { color: var(--ink); font-weight: 600; }
   #facts a { color: var(--accent); }
   /* ---------- viewer ---------- */
   #viewer { flex: 1; position: relative; overflow: hidden; background: var(--viewer-bg); touch-action: none; cursor: grab; }
   #viewer.dragging { cursor: grabbing; }
   #cv { position: absolute; left: 0; top: 0; }
-  #readout { position: absolute; left: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1.5; }
-  #scalebar { position: absolute; right: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); pointer-events: none; text-align: center; }
+  #readout { position: absolute; left: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 0; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1.5; }
+  #scalebar { position: absolute; right: 12px; bottom: 12px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 0; padding: 6px 10px; font-size: 12px; color: var(--chip-ink); pointer-events: none; text-align: center; }
   #scalebar .bar { height: 5px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); margin-top: 3px; }
   #loading { position: absolute; inset: 0; background: var(--load-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 30; }
   #loading .t { font-size: 15px; }
-  #loading .track { width: min(420px, 70%); height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+  #loading .track { width: min(420px, 70%); height: 8px; background: var(--track); border-radius: 0; overflow: hidden; }
   #loading .fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.2s; }
   #loading .s { font-size: 12px; color: var(--muted); }
   #paneltoggle { display: none; }
+  #panel header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #btn-hidemenu { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #btn-hidemenu:hover { color: var(--accent); }
+  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+  #main.panelhidden #panel { display: none; }
+  #main.panelhidden #menubtn { display: block; }
   @media (max-width: 760px) {
     #panel { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.2s; box-shadow: 4px 0 18px rgba(0,0,0,0.5); }
     #panel.open { transform: translateX(0); }
-    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    #main.panelhidden #panel { display: block; }
+    #main.panelhidden #menubtn { display: none; }
   }
 </style>
 </head>
 <body>
 <div id="app">
+  <div id="topbar">
+    <img class="tb-tree" src="../the-isle-tree.png" alt="">
+    <span class="tb-word">THE ISLE</span>
+    <span class="tb-div"></span>
+    <span class="tb-title">Lot Viewer</span>
+    <span class="tb-spacer"></span>
+    <a class="tb-back" href="/site/">Project Home</a>
+  </div>
+  <div id="main">
   <aside id="panel">
     <header>
-      <h1>The Isle</h1>
-      <p>Lot viewer. Every layer aligned to the same survey. Drag to pan, scroll or pinch to zoom.</p>
-        <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <button id="btn-hidemenu" type="button">Hide menu</button>
   </header>
     <div id="viewbtns">
       <button id="btn-fit" type="button">Fit view</button>
       <button id="btn-lot" type="button">Zoom to lot</button>
-      <button id="btn-100" type="button">1:1 full size</button>
       <button id="btn-zin" type="button">Zoom +</button>
       <button id="btn-zout" type="button">Zoom -</button>
+      <button id="btn-100" type="button">1:1 full size</button>
       <button id="btn-measure" type="button">Measure</button>
       <button id="btn-copylink" type="button">Copy view link</button>
       <button id="btn-saveview" type="button">Save view as image</button>
@@ -118,19 +154,26 @@
     <div id="bulk">
       <button id="btn-allon" type="button">Show all layers</button>
       <button id="btn-alloff" type="button">Hide all layers</button>
+      <button id="btn-reset" type="button">Reset to defaults</button>
     </div>
     <div id="layers"></div>
-    <div id="facts">
-      <b>Lot facts</b><br>
-      Lot area 11,635 sq ft<br>
-      Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
-      Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
-      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026<br>
-      <a href="/site/">Back to The Isle index</a>
+    <div id="facts" class="sec closed">
+      <div class="sec-head">
+        <button type="button" class="sec-toggle" id="facts-toggle">Lot Facts<span class="chev">▾</span></button>
+      </div>
+      <div class="sec-body">
+        <div class="facts-inner">
+          Lot area 11,635 sq ft<br>
+          Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
+          Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
+          Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026
+        </div>
+      </div>
     </div>
   </aside>
   <main id="viewer">
     <button id="paneltoggle" type="button">Layers</button>
+    <button id="menubtn" type="button">Menu</button>
     <canvas id="cv"></canvas>
     <div id="readout">Move over the map for coordinates</div>
     <div id="scalebar"><span id="scaletxt"></span><div class="bar" id="scaleel"></div></div>
@@ -141,6 +184,7 @@
       <div class="s" id="loadtxt">0 of 32 layers</div>
     </div>
   </main>
+  </div>
 </div>
 <script>
 (function () {
@@ -171,6 +215,7 @@
     { file: "layers/19-measurements-enclosure-back.png",    name: "Enclosure Back",           sec: "Measurements", ord: 25, on: false, op: 100, detail: "layers/19-measurements-enclosure-back-detail.png", drect: [3417, 3312, 720, 1000] },
     { file: "layers/20-measurements-enclosure-corner.png",  name: "Enclosure Corner to Corner", sec: "Measurements", ord: 26, on: false, op: 100, detail: "layers/20-measurements-enclosure-corner-detail.png", drect: [3417, 3312, 720, 1000] }
   ];
+  var DEFAULTS = LAYERS.map(function (L) { return [L.on, L.op]; });
   // ---- remembered view and shareable links ----
   var STORE_KEY = "isle-lot-view-v1";
   var secClosed = {};
@@ -196,7 +241,8 @@
     var c = viewCenterImage();
     return { s: Math.round(scale * 10000) / 10000, c: [Math.round(c.x), Math.round(c.y)],
       l: LAYERS.map(function (L) { return [L.on ? 1 : 0, L.op]; }),
-      x: SECTIONS.filter(function (s) { return secClosed[s]; }) };
+      x: SECTIONS.filter(function (s) { return secClosed[s]; }),
+      fo: factsClosed ? 0 : 1 };
   }
   function saveState() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(currentState())); } catch (e) {}
@@ -453,7 +499,7 @@
     pts.forEach(function (p) {
       var X = p.x * s + ox, Y = p.y * s + oy;
       g.beginPath(); g.arc(X, Y, 5.5 / s, 0, 7); g.fill();
-      g.fillStyle = "#101c2c";
+      g.fillStyle = "#1d2a3b";
       g.beginPath(); g.arc(X, Y, 2.2 / s, 0, 7); g.fill();
       g.fillStyle = "#c2a15c";
     });
@@ -505,7 +551,40 @@
     updateMeasureBar(); render();
   }
 
+  // ---- lot facts collapsible ----
+  var factsClosed = true;
+  var factsEl = document.getElementById("facts");
+  if (initialState && initialState.fo) { factsEl.classList.remove("closed"); factsClosed = false; }
+  document.getElementById("facts-toggle").addEventListener("click", function () {
+    factsEl.classList.toggle("closed");
+    factsClosed = factsEl.classList.contains("closed");
+    saveState();
+  });
+
   // ---- view buttons ----
+  document.getElementById("btn-hidemenu").addEventListener("click", function () {
+    document.getElementById("main").classList.add("panelhidden");
+    sizeCanvas(); render();
+  });
+  document.getElementById("menubtn").addEventListener("click", function () {
+    document.getElementById("main").classList.remove("panelhidden");
+    sizeCanvas(); render();
+  });
+  document.getElementById("btn-reset").addEventListener("click", function () {
+    if (measure.active) endMeasure();
+    LAYERS.forEach(function (L, i) {
+      var d = DEFAULTS[i];
+      L.op = d[1];
+      if (L.rng) L.rng.value = d[1];
+      if (L.pct) L.pct.textContent = d[1] + "%";
+      if (L.setOn) L.setOn(d[0]);
+    });
+    Object.keys(secClosed).forEach(function (s) { secClosed[s] = false; });
+    layersEl.querySelectorAll(".sec.closed").forEach(function (el) { el.classList.remove("closed"); });
+    factsEl.classList.add("closed"); factsClosed = true;
+    lotView();
+    saveState();
+  });
   document.getElementById("btn-fit").addEventListener("click", function () { fit(); saveState(); });
   document.getElementById("btn-100").addEventListener("click", function () {
     var c = viewCenterImage(); centerOn(c.x, c.y, 1); saveState();

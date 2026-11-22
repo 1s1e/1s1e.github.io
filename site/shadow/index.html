@@ -5,50 +5,100 @@
 <script>try{var t=localStorage.getItem('isle-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>Shadow Study</title>
+<title>The Isle · Shadow Study</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b">
+<meta name="theme-color" content="#1d2a3b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 
   :root {
-    --body-bg: #081019; --ink: #f0e8d5; --muted: #a89f88; --panel: #0e1928; --hairline: rgba(194,161,92,0.30);
-    --input-bg: #081019; --btn: #132236; --btn-border: rgba(194,161,92,0.30); --btn-hover: #1b2c44;
-    --accent: #c2a15c; --accent-ink: #101c2c; --readout: #d9d0ba; --hint: #a89f88;
+    --body-bg: #152130; --ink: #f0e8d5; --muted: #a89f88; --panel: #1d2a3b; --hairline: rgba(194,161,92,0.30);
+    --hairline-soft: rgba(194,161,92,0.16);
+    --input-bg: #152130; --btn: #22344a; --btn-border: rgba(194,161,92,0.30); --btn-hover: #22344a;
+    --accent: #c2a15c; --gold-bright: #c9ab72; --accent-ink: #1d2a3b; --readout: #d9d0ba; --hint: #a89f88; --facts: #d9d0ba;
+    --word: #C0C0C0;
   }
   :root[data-theme="light"] {
-    --body-bg: #faf7ee; --ink: #1d2a3b; --muted: #5a6577; --panel: #faf7ee; --hairline: #ddd5c2;
-    --input-bg: #f3eee0; --btn: #f3eee0; --btn-border: #ddd5c2; --btn-hover: #faf7ee;
-    --accent: #a07f3a; --accent-ink: #faf7ee; --readout: #1d2a3b; --hint: #5a6577;
+    --body-bg: #faf7ee; --ink: #1d2a3b; --muted: #767c8d; --panel: #faf7ee; --hairline: rgba(160,127,58,0.38);
+    --hairline-soft: rgba(160,127,58,0.20);
+    --input-bg: #f3eee0; --btn: #f3eee0; --btn-border: rgba(160,127,58,0.38); --btn-hover: #f3eee0;
+    --accent: #a07f3a; --gold-bright: #a07f3a; --accent-ink: #faf7ee; --readout: #3c4763; --hint: #767c8d; --facts: #3c4763;
+    --word: #1d2a3b;
   }
-  header { display: flex; align-items: flex-start; gap: 16px; }
-  header .hgroup { flex: 1; }
-  #themesw { display: flex; align-items: center; gap: 8px; padding-top: 4px; }
+  #topbar { display: flex; align-items: center; gap: 14px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--hairline); }
+  #topbar .tb-tree { height: 30px; width: auto; display: block; }
+  #topbar .tb-word { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 15px; letter-spacing: 0.34em; color: var(--word); white-space: nowrap; }
+  #topbar .tb-div { width: 1px; align-self: stretch; background: var(--hairline); }
+  #topbar .tb-title { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; letter-spacing: 0.02em; color: var(--ink); white-space: nowrap; }
+  #topbar .tb-spacer { flex: 1; }
+  #topbar .tb-back { font-size: 12.5px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  #topbar .tb-back:hover { color: var(--gold-bright); }
+  #themesw { display: flex; align-items: center; gap: 8px; }
+  @media (max-width: 760px) {
+    #topbar { flex-wrap: wrap; row-gap: 4px; padding: 8px 14px; }
+    #topbar .tb-spacer { flex-basis: 100%; height: 0; }
+    #topbar .tb-title { font-size: 18px; }
+  }
+
   #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #themesw button[aria-pressed="true"] { color: var(--accent); }
   html, body { margin: 0; padding: 0; height: 100%; background: var(--body-bg); color: var(--ink);
-    font-family: "Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif; }
+    font-family: "Source Sans 3", "Avenir Next", "Segoe UI", sans-serif; }
   #app { display: flex; flex-direction: column; height: 100%; }
-  header { padding: 14px 20px 10px 20px; }
-  header h1 { font-family: "Playfair Display", Georgia, serif; font-size: 23px; font-weight: 500; margin: 0; letter-spacing: 0.02em; }
-  header p { font-size: 12.5px; color: var(--muted); margin: 3px 0 0 0; }
+  #main { display: flex; flex: 1; min-height: 0; }
   #scene { flex: 1 1 auto; min-height: 240px; position: relative; overflow: hidden; }
   #scene canvas { display: block; }
-  #controls { padding: 12px 20px 16px 20px; background: var(--panel); border-top: 1px solid var(--hairline); }
-  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 10px; }
-  .row:last-child { margin-bottom: 0; }
-  label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #controls { width: 308px; flex: 0 0 308px; box-sizing: border-box; padding: 12px 16px 16px; background: var(--panel); border-right: 1px solid var(--hairline); overflow-y: auto; }
+  #controls .note { margin: 2px 0 4px 0; font-size: 12px; color: var(--facts); line-height: 1.55; }
+  #controls .grp { margin-bottom: 16px; }
+  #controls .grp:last-child { margin-bottom: 0; }
+  #controls .grp + .grp { border-top: 1px solid var(--hairline); padding-top: 14px; }
+  #controls .grp > label { display: block; margin-bottom: 8px; }
+  .daterow { display: flex; align-items: center; gap: 12px; }
+  .daterow input[type="date"] { flex: 1; min-width: 0; }
+  #controls input[type="range"] { width: 100%; flex: none; display: block; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .grid2 .wide { grid-column: 1 / -1; }
+  .grid2 button { width: 100%; }
+  .stack { display: flex; flex-direction: column; gap: 8px; }
+  .stack button { width: 100%; }
+  .readoutgrp { display: flex; flex-direction: column; gap: 6px; }
+  .paneltop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--hairline); }
+  #btn-hidemenu { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  #btn-hidemenu:hover { color: var(--accent); }
+  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+  #main.panelhidden #controls { display: none; }
+  #main.panelhidden #menubtn { display: block; }
+  #sunfacts { border-top: 1px solid var(--hairline); margin-top: 16px; padding-top: 4px; }
+  #sunfacts .sec-head { display: flex; align-items: center; }
+  #sunfacts .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; padding: 11px 0 8px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); text-align: left; }
+  #sunfacts .sec-toggle .chev { margin-left: auto; font-size: 11px; color: var(--muted); transition: transform 0.15s; }
+  #sunfacts.closed .sec-toggle .chev { transform: rotate(-90deg); }
+  #sunfacts.closed .sec-body { display: none; }
+  #readout { line-height: 1.55; }
+  #readout .rl { display: block; }
+  @media (max-width: 760px) {
+    #main { flex-direction: column; }
+    #scene { flex: 0 0 42vh; min-height: 240px; order: -1; }
+    #controls { width: auto; flex: 1 1 auto; border-right: none; border-top: 1px solid var(--hairline); }
+  }
+  label { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); }
   input[type="date"] { background: var(--input-bg); color: var(--ink); border: 1px solid var(--btn-border);
-    border-radius: 4px; padding: 5px 7px; font-family: inherit; font-size: 13.5px; }
+    border-radius: 0; padding: 5px 7px; font-family: inherit; font-size: 13.5px; }
   input[type="range"] { flex: 1 1 220px; accent-color: var(--accent); }
-  button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 4px;
-    padding: 6px 11px; font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em; cursor: pointer; }
-  button:hover { background: var(--btn-hover); }
-  button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0;
+    padding: 7px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; }
+  button:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
+  button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   #clock { font-size: 15px; font-weight: 600; min-width: 52px; }
   #readout { font-size: 13px; color: var(--readout); }
   #readout b { color: var(--accent); font-weight: 600; }
@@ -63,42 +113,62 @@
 </head>
 <body>
 <div id="app">
-  <header>
-    <div class="hgroup">
-    <h1>Shadow Study</h1>
-    <p>The Isle. Sun position by the NOAA algorithm, America/New_York time.</p>
-    <p><a href="/site/" style="color: var(--accent);">Back to The Isle index</a></p>
-    </div>
-    <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
-  </header>
-  <div id="scene"></div>
+  <div id="topbar">
+    <img class="tb-tree" src="../the-isle-tree.png" alt="">
+    <span class="tb-word">THE ISLE</span>
+    <span class="tb-div"></span>
+    <span class="tb-title">Shadow Study</span>
+    <span class="tb-spacer"></span>
+    <a class="tb-back" href="/site/">Project Home</a>
+  </div>
+  <div id="main">
   <div id="controls">
-    <div class="row">
+    <div class="paneltop">
+      <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <button id="btn-hidemenu" type="button">Hide menu</button>
+    </div>
+    <div class="grp">
       <label for="date">Date</label>
-      <input type="date" id="date" value="2026-11-21" min="2025-01-01" max="2035-12-31">
-      <span id="clock">10:00</span>
+      <div class="daterow">
+        <input type="date" id="date" value="2026-11-21" min="2025-01-01" max="2035-12-31">
+        <span id="clock">10:00</span>
+      </div>
+    </div>
+    <div class="grp">
       <label for="time">Time of day</label>
       <input type="range" id="time" min="300" max="1260" step="1" value="600">
     </div>
-    <div class="row">
+    <div class="grp grid2">
       <button id="playDay" type="button">Play day</button>
       <button id="playYear" type="button">Play year</button>
       <button id="longestDay" type="button">Longest day</button>
       <button id="shortestDay" type="button">Shortest day</button>
       <button id="sunRise" type="button">Sunrise</button>
       <button id="sunNoon" type="button">Solar noon</button>
-      <button id="sunSet" type="button">Sunset</button>
+      <button id="sunSet" type="button" class="wide">Sunset</button>
     </div>
-    <div class="row">
+    <div class="grp">
       <label>Ground</label>
-      <button id="groundSat" type="button">Satellite</button>
-      <button id="groundNat" type="button" class="active">Natural</button>
-      <button id="groundBare" type="button">Ground only</button>
+      <div class="stack">
+        <button id="groundSat" type="button">Satellite</button>
+        <button id="groundNat" type="button" class="active">Natural</button>
+        <button id="groundBare" type="button">Ground only</button>
+      </div>
     </div>
-    <div class="row">
+    <div class="grp readoutgrp">
       <span id="readout">Loading scene...</span>
       <span class="hint">Drag to orbit, scroll or pinch to zoom, right-drag to pan.</span>
     </div>
+    <div id="sunfacts" class="sec closed">
+      <div class="sec-head">
+        <button type="button" class="sec-toggle" id="sunfacts-toggle">Sun Facts<span class="chev">▾</span></button>
+      </div>
+      <div class="sec-body">
+        <p class="note">Sun position by the NOAA algorithm, America/New_York time.</p>
+      </div>
+    </div>
+  </div>
+  <div id="scene"><button id="menubtn" type="button">Menu</button></div>
   </div>
 </div>
 
@@ -168,7 +238,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
 var scene = new THREE.Scene();
-function applySceneTheme() { var t = document.documentElement.dataset.theme; scene.background = new THREE.Color(t === 'light' ? 0xf3eee0 : 0x081019); }
+function applySceneTheme() { var t = document.documentElement.dataset.theme; scene.background = new THREE.Color(t === 'light' ? 0xf3eee0 : 0x152130); }
 applySceneTheme();
 new MutationObserver(applySceneTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
@@ -608,11 +678,11 @@ function updateSun() {
     ambient.intensity = 0.12;
   }
   var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  readoutEl.innerHTML = 'Date <b>' + names[dt.mo - 1] + ' ' + dt.d + ', ' + dt.y + '</b>' +
-    ' &nbsp; Time <b>' + fmtTime(mins) + '</b>' +
-    ' &nbsp; Sun altitude <b>' + sp.alt.toFixed(1) + ' deg</b>' +
-    ' &nbsp; Sun azimuth <b>' + sp.az.toFixed(1) + ' deg</b>' +
-    (sp.alt <= 0 ? ' &nbsp; (sun below the horizon)' : '');
+  readoutEl.innerHTML = '<span class="rl">Date <b>' + names[dt.mo - 1] + ' ' + dt.d + ', ' + dt.y + '</b></span>' +
+    '<span class="rl">Time <b>' + fmtTime(mins) + '</b></span>' +
+    '<span class="rl">Sun altitude <b>' + sp.alt.toFixed(1) + ' deg</b></span>' +
+    '<span class="rl">Sun azimuth <b>' + sp.az.toFixed(1) + ' deg</b></span>' +
+    (sp.alt <= 0 ? '<span class="rl">(sun below the horizon)</span>' : '');
   updateSunExtras(dt, sp, dir);
 }
 
@@ -691,10 +761,10 @@ function updateSunExtras(dt, sp, dir) {
   if (sp.alt > 0.5) {
     var f = poolSunFraction(dir);
     var label = f >= 0.95 ? 'in full sun' : (f <= 0.05 ? 'in shade' : 'partly shaded, ' + Math.round(f * 100) + '% in sun');
-    readoutEl.innerHTML += ' &nbsp; Pool <b>' + label + '</b>';
+    readoutEl.innerHTML += '<span class="rl">Pool <b>' + label + '</b></span>';
   }
   if (typeof groundMode !== 'undefined' && groundMode === 'sat') {
-    readoutEl.innerHTML += ' &nbsp; Neighbours <b>are the photograph itself, their shadows fixed in it</b>';
+    readoutEl.innerHTML += '<span class="rl">Neighbours <b>are the photograph itself, their shadows fixed in it</b></span>';
   }
 }
 riseBtn.addEventListener('click', function () { if (lastTimes && lastTimes.rise !== null) { timeEl.value = lastTimes.rise; updateSun(); } });
@@ -873,6 +943,10 @@ renderer.setAnimationLoop(function (ts) {
   function sync() { var t = root.dataset.theme || 'dark'; btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
   btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
   sync();
+  var sf = document.getElementById('sunfacts');
+  document.getElementById('sunfacts-toggle').addEventListener('click', function () { sf.classList.toggle('closed'); });
+  document.getElementById('btn-hidemenu').addEventListener('click', function () { document.getElementById('main').classList.add('panelhidden'); });
+  document.getElementById('menubtn').addEventListener('click', function () { document.getElementById('main').classList.remove('panelhidden'); });
 })();
 </script>
 </body>
