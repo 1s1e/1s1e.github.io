@@ -5,6 +5,9 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>The Isle · Lot viewer</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <style>
   :root { --panel-w: 308px; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,19 +27,33 @@
   .layer { padding: 9px 6px; border-bottom: 1px solid #22304a; }
   .layer .row1 { display: flex; align-items: center; gap: 8px; }
   .sec { border-bottom: 1px solid #2a3646; }
-  .sec-head { display: flex; align-items: center; width: 100%; background: none; border: none; cursor: pointer; padding: 11px 6px 8px; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b08d57; text-align: left; }
-  .sec-head .chev { margin-left: auto; color: #9aa0a6; font-size: 11px; transition: transform 0.15s; }
-  .sec.closed .sec-head .chev { transform: rotate(-90deg); }
+  .sec-head { display: flex; align-items: center; gap: 4px; padding: 11px 6px 8px; }
+  .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b08d57; text-align: left; }
+  .sec-toggle .chev { margin-left: auto; color: #9aa0a6; font-size: 11px; transition: transform 0.15s; }
+  .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
+  .sec-all { background: none; border: 1px solid #33445a; border-radius: 5px; color: #9aa0a6; font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
+  .sec-all:hover { color: #e8eaed; background: #27374c; }
+  #viewbtns button.on { background: #b08d57; color: #14100a; border-color: #b08d57; font-weight: 600; }
+  #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: rgba(16,18,21,0.92); border: 1px solid #3c414b; border-radius: 8px; padding: 8px 10px 8px 14px; font-size: 13px; color: #e8eaed; max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
+  #measurebar.show { display: flex; }
+  #measurebar .mtext { line-height: 1.35; }
+  #measurebar .mtext b { color: #b08d57; font-variant-numeric: tabular-nums; }
+  #measurebar #mbtns { display: flex; gap: 6px; }
+  #measurebar button { background: #1e2a3a; color: #e8eaed; border: 1px solid #33445a; border-radius: 6px; padding: 8px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  #measurebar button.primary { background: #b08d57; border-color: #b08d57; color: #14100a; font-weight: 600; }
+  #viewer.measuring { cursor: crosshair; }
   .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
   .layer .eye { background: none; border: 1px solid #33445a; border-radius: 6px; color: #e8eaed; width: 34px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
   .layer.off .name { color: #7d8288; }
   .layer.off .eye { opacity: 0.45; }
+  .layer.off .row2 { opacity: 0.45; }
   .layer .row2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
   .layer input[type=range] { flex: 1; accent-color: #b08d57; height: 20px; }
   .layer .pct { font-size: 12px; color: #9aa0a6; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
   #facts { border-top: 1px solid #2a3646; padding: 10px 16px 14px; font-size: 12px; color: #b9bec6; line-height: 1.55; }
   #facts b { color: #e8eaed; font-weight: 600; }
+  #facts a { color: #b08d57; }
   /* ---------- viewer ---------- */
   #viewer { flex: 1; position: relative; overflow: hidden; background: #101215; touch-action: none; cursor: grab; }
   #viewer.dragging { cursor: grabbing; }
@@ -62,7 +79,7 @@
   <aside id="panel">
     <header>
       <h1>The Isle</h1>
-      <p>Lot viewer. Every layer shares one registration, cropped from the 8455 x 8543 master frame. Drag to pan, scroll or pinch to zoom.</p>
+      <p>Lot viewer. Every layer aligned to the same survey. Drag to pan, scroll or pinch to zoom.</p>
     </header>
     <div id="viewbtns">
       <button id="btn-fit" type="button">Fit view</button>
@@ -70,6 +87,9 @@
       <button id="btn-100" type="button">1:1 full size</button>
       <button id="btn-zin" type="button">Zoom +</button>
       <button id="btn-zout" type="button">Zoom -</button>
+      <button id="btn-measure" type="button">Measure</button>
+      <button id="btn-copylink" type="button">Copy view link</button>
+      <button id="btn-saveview" type="button">Save view as image</button>
     </div>
     <div id="bulk">
       <button id="btn-allon" type="button">Show all layers</button>
@@ -90,6 +110,7 @@
     <canvas id="cv"></canvas>
     <div id="readout">Move over the map for coordinates</div>
     <div id="scalebar"><span id="scaletxt"></span><div class="bar" id="scaleel"></div></div>
+    <div id="measurebar"><span class="mtext" id="mtext"></span><span id="mbtns"></span></div>
     <div id="loading">
       <div class="t">Loading full-resolution layers</div>
       <div class="track"><div class="fill" id="loadfill"></div></div>
@@ -119,6 +140,37 @@
     { file: "layers/11-floor-plan-house.png",  name: "Interior",         sec: "The Isle",          ord: 4,  on: true,  op: 100, rect: [3457, 3332, 590, 840] },
     { file: "layers/12-floor-plan-pool.png",   name: "Exterior",         sec: "The Isle",          ord: 5,  on: true,  op: 100, rect: [3457, 3332, 590, 840] }
   ];
+  // ---- remembered view and shareable links ----
+  var STORE_KEY = "isle-lot-view-v1";
+  var secClosed = {};
+  function decodeState(s) {
+    try { return JSON.parse(atob(s.replace(/-/g, "+").replace(/_/g, "/"))); } catch (e) { return null; }
+  }
+  function initialStateRead() {
+    if (location.hash && location.hash.indexOf("#v=") === 0) {
+      var h = decodeState(location.hash.slice(3));
+      if (h) return h;
+    }
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || "null"); } catch (e) { return null; }
+  }
+  var initialState = initialStateRead();
+  if (initialState && initialState.l) {
+    LAYERS.forEach(function (L, i) {
+      var s = initialState.l[i]; if (!s) return;
+      L.on = !!s[0];
+      L.op = Math.max(0, Math.min(100, +s[1] || 0));
+    });
+  }
+  function currentState() {
+    var c = viewCenterImage();
+    return { s: Math.round(scale * 10000) / 10000, c: [Math.round(c.x), Math.round(c.y)],
+      l: LAYERS.map(function (L) { return [L.on ? 1 : 0, L.op]; }),
+      x: SECTIONS.filter(function (s) { return secClosed[s]; }) };
+  }
+  function saveState() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(currentState())); } catch (e) {}
+  }
+
   var viewer = document.getElementById("viewer");
   var cv = document.getElementById("cv");
   var cx = cv.getContext("2d");
@@ -137,33 +189,37 @@
     cv.style.width = r.width + "px";
     cv.style.height = r.height + "px";
   }
+  function paintInto(g, s, ox, oy, vw, vh) {
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    for (var i = 0; i < LAYERS.length; i++) {
+      var L = LAYERS[i];
+      if (!L.on || L.op <= 0 || !L.img || !L.ready) continue;
+      g.globalAlpha = L.op / 100;
+      if (L.rect) {
+        g.drawImage(L.img, 0, 0, L.img.naturalWidth, L.img.naturalHeight,
+          L.rect[0] * s + ox, L.rect[1] * s + oy, L.rect[2] * s, L.rect[3] * s);
+      } else {
+        var sx0 = Math.max(0, -ox / s), sy0 = Math.max(0, -oy / s);
+        var sx1 = Math.min(W, (vw - ox) / s), sy1 = Math.min(H, (vh - oy) / s);
+        if (sx1 <= sx0 || sy1 <= sy0) continue;
+        g.drawImage(L.img, sx0, sy0, sx1 - sx0, sy1 - sy0,
+          sx0 * s + ox, sy0 * s + oy, (sx1 - sx0) * s, (sy1 - sy0) * s);
+      }
+      if (L.detail && L.dimg && L.dready) {
+        g.drawImage(L.dimg, 0, 0, L.dimg.naturalWidth, L.dimg.naturalHeight,
+          L.drect[0] * s + ox, L.drect[1] * s + oy, L.drect[2] * s, L.drect[3] * s);
+      }
+    }
+    g.globalAlpha = 1;
+    drawMeasure(g, s, ox, oy);
+  }
   function render() {
     var r = viewer.getBoundingClientRect();
     if (cv.width !== Math.max(1, Math.round(r.width * dpr)) || cv.height !== Math.max(1, Math.round(r.height * dpr))) sizeCanvas();
     cx.setTransform(dpr, 0, 0, dpr, 0, 0);
     cx.clearRect(0, 0, r.width, r.height);
-    cx.imageSmoothingEnabled = true;
-    cx.imageSmoothingQuality = "high";
-    for (var i = 0; i < LAYERS.length; i++) {
-      var L = LAYERS[i];
-      if (!L.on || L.op <= 0 || !L.img || !L.ready) continue;
-      cx.globalAlpha = L.op / 100;
-      if (L.rect) {
-        cx.drawImage(L.img, 0, 0, L.img.naturalWidth, L.img.naturalHeight,
-          L.rect[0] * scale + tx, L.rect[1] * scale + ty, L.rect[2] * scale, L.rect[3] * scale);
-      } else {
-        var sx0 = Math.max(0, -tx / scale), sy0 = Math.max(0, -ty / scale);
-        var sx1 = Math.min(W, (r.width - tx) / scale), sy1 = Math.min(H, (r.height - ty) / scale);
-        if (sx1 <= sx0 || sy1 <= sy0) continue;
-        cx.drawImage(L.img, sx0, sy0, sx1 - sx0, sy1 - sy0,
-          sx0 * scale + tx, sy0 * scale + ty, (sx1 - sx0) * scale, (sy1 - sy0) * scale);
-      }
-      if (L.detail && L.dimg && L.dready) {
-        cx.drawImage(L.dimg, 0, 0, L.dimg.naturalWidth, L.dimg.naturalHeight,
-          L.drect[0] * scale + tx, L.drect[1] * scale + ty, L.drect[2] * scale, L.drect[3] * scale);
-      }
-    }
-    cx.globalAlpha = 1;
+    paintInto(cx, scale, tx, ty, r.width, r.height);
     updateScaleBar();
   }
   var renderQueued = false;
@@ -235,12 +291,23 @@
   var secBodies = {};
   SECTIONS.forEach(function (s) {
     var sec = document.createElement("div"); sec.className = "sec";
-    var head = document.createElement("button"); head.type = "button"; head.className = "sec-head";
+    if (initialState && initialState.x && initialState.x.indexOf(s) >= 0) { sec.classList.add("closed"); secClosed[s] = true; }
+    var head = document.createElement("div"); head.className = "sec-head";
+    var tog = document.createElement("button"); tog.type = "button"; tog.className = "sec-toggle";
     var lab = document.createElement("span"); lab.textContent = s;
     var chev = document.createElement("span"); chev.className = "chev"; chev.textContent = "\u25BE";
-    head.appendChild(lab); head.appendChild(chev);
+    tog.appendChild(lab); tog.appendChild(chev);
+    var bShow = document.createElement("button"); bShow.type = "button"; bShow.className = "sec-all"; bShow.textContent = "Show";
+    var bHide = document.createElement("button"); bHide.type = "button"; bHide.className = "sec-all"; bHide.textContent = "Hide";
+    tog.addEventListener("click", function () {
+      sec.classList.toggle("closed");
+      secClosed[s] = sec.classList.contains("closed");
+      saveState();
+    });
+    bShow.addEventListener("click", function () { LAYERS.forEach(function (L) { if (L.sec === s && L.setOn) L.setOn(true); }); });
+    bHide.addEventListener("click", function () { LAYERS.forEach(function (L) { if (L.sec === s && L.setOn) L.setOn(false); }); });
+    head.appendChild(tog); head.appendChild(bShow); head.appendChild(bHide);
     var body = document.createElement("div"); body.className = "sec-body";
-    head.addEventListener("click", function () { sec.classList.toggle("closed"); });
     sec.appendChild(head); sec.appendChild(body);
     layersEl.appendChild(sec);
     secBodies[s] = body;
@@ -298,6 +365,7 @@
         releaseImg(L, "img", "ready"); releaseImg(L, "dimg", "dready");
       }
       render();
+      saveState();
     }
     eye.addEventListener("click", function () { setOn(!L.on); });
     rng.addEventListener("input", function () {
@@ -305,6 +373,7 @@
       pct.textContent = L.op + "%";
       if (L.op > 0 && !L.on) setOn(true); else render();
     });
+    rng.addEventListener("change", function () { saveState(); });
     L.setOn = setOn; L.rng = rng; L.pct = pct;
     row1.appendChild(nm); row1.appendChild(eye);
     row2.appendChild(rng); row2.appendChild(pct);
@@ -315,22 +384,145 @@
     secBodies[L.sec].appendChild(L.el);
   });
 
+  // ---- measure: tap to place a point, confirm it, then the next ----
+  var measure = { active: false, pts: [], pending: null };
+  var mbar = document.getElementById("measurebar");
+  var mtext = document.getElementById("mtext");
+  var mbtns = document.getElementById("mbtns");
+  function mPerPxAt(y) { return 40075016.686 / WORLD * Math.cos(latOf(y) * Math.PI / 180); }
+  function segMeters(a, b) { return Math.hypot(b.x - a.x, b.y - a.y) * mPerPxAt((a.y + b.y) / 2); }
+  function fmtDist(m) {
+    var ft = m * 3.28084;
+    return (ft >= 100 ? String(Math.round(ft)) : ft.toFixed(1)) + " ft \u00B7 " +
+      (m >= 100 ? String(Math.round(m)) : m.toFixed(1)) + " m";
+  }
+  function totalMeters() {
+    var t = 0;
+    for (var i = 1; i < measure.pts.length; i++) t += segMeters(measure.pts[i - 1], measure.pts[i]);
+    return t;
+  }
+  function drawMeasure(g, s, ox, oy) {
+    if (!measure.active) return;
+    var pts = measure.pts, pen = measure.pending;
+    if (!pts.length && !pen) return;
+    g.save();
+    g.strokeStyle = "#b08d57"; g.fillStyle = "#b08d57";
+    g.lineWidth = 2 / s; g.lineJoin = "round"; g.lineCap = "round";
+    if (pts.length > 1) {
+      g.beginPath();
+      pts.forEach(function (p, i) { var X = p.x * s + ox, Y = p.y * s + oy; if (i === 0) g.moveTo(X, Y); else g.lineTo(X, Y); });
+      g.stroke();
+    }
+    if (pen && pts.length) {
+      var a = pts[pts.length - 1];
+      g.save(); g.setLineDash([6 / s, 5 / s]);
+      g.beginPath(); g.moveTo(a.x * s + ox, a.y * s + oy); g.lineTo(pen.x * s + ox, pen.y * s + oy); g.stroke();
+      g.restore();
+    }
+    pts.forEach(function (p) {
+      var X = p.x * s + ox, Y = p.y * s + oy;
+      g.beginPath(); g.arc(X, Y, 5.5 / s, 0, 7); g.fill();
+      g.fillStyle = "#152130";
+      g.beginPath(); g.arc(X, Y, 2.2 / s, 0, 7); g.fill();
+      g.fillStyle = "#b08d57";
+    });
+    if (pen) {
+      var X2 = pen.x * s + ox, Y2 = pen.y * s + oy;
+      g.beginPath(); g.arc(X2, Y2, 8 / s, 0, 7); g.stroke();
+      g.beginPath(); g.arc(X2, Y2, 2.2 / s, 0, 7); g.fill();
+    }
+    g.restore();
+  }
+  function mBtn(label, cls, fn) {
+    var b = document.createElement("button"); b.type = "button"; b.textContent = label;
+    if (cls) b.className = cls;
+    b.addEventListener("click", fn);
+    return b;
+  }
+  function updateMeasureBar() {
+    mbtns.innerHTML = "";
+    if (!measure.active) { mbar.className = ""; return; }
+    mbar.className = "show";
+    var n = measure.pts.length;
+    if (measure.pending) {
+      mtext.textContent = "Point " + (n + 1) + " placed. Set it, or tap elsewhere to move it.";
+      mbtns.appendChild(mBtn("Set point", "primary", function () {
+        measure.pts.push(measure.pending); measure.pending = null; updateMeasureBar(); render();
+      }));
+      mbtns.appendChild(mBtn("Cancel", "", function () { measure.pending = null; updateMeasureBar(); render(); }));
+    } else if (n === 0) {
+      mtext.textContent = "Tap the map to place the first point.";
+      mbtns.appendChild(mBtn("Done", "", endMeasure));
+    } else if (n === 1) {
+      mtext.textContent = "First point set. Tap the map for the next point.";
+      mbtns.appendChild(mBtn("Undo", "", undoPoint));
+      mbtns.appendChild(mBtn("Done", "", endMeasure));
+    } else {
+      var t = totalMeters();
+      if (n > 2) mtext.innerHTML = "Last <b>" + fmtDist(segMeters(measure.pts[n - 2], measure.pts[n - 1])) + "</b> \u00B7 Total <b>" + fmtDist(t) + "</b>. Tap to add another point.";
+      else mtext.innerHTML = "<b>" + fmtDist(t) + "</b>. Tap to add another point.";
+      mbtns.appendChild(mBtn("Undo", "", undoPoint));
+      mbtns.appendChild(mBtn("Clear", "", function () { measure.pts = []; measure.pending = null; updateMeasureBar(); render(); }));
+      mbtns.appendChild(mBtn("Done", "", endMeasure));
+    }
+  }
+  function undoPoint() { measure.pts.pop(); updateMeasureBar(); render(); }
+  function endMeasure() {
+    measure.active = false; measure.pts = []; measure.pending = null;
+    document.getElementById("btn-measure").classList.remove("on");
+    viewer.classList.remove("measuring");
+    updateMeasureBar(); render();
+  }
+
   // ---- view buttons ----
-  document.getElementById("btn-fit").addEventListener("click", fit);
+  document.getElementById("btn-fit").addEventListener("click", function () { fit(); saveState(); });
   document.getElementById("btn-100").addEventListener("click", function () {
-    var c = viewCenterImage(); centerOn(c.x, c.y, 1);
+    var c = viewCenterImage(); centerOn(c.x, c.y, 1); saveState();
+  });
+  document.getElementById("btn-measure").addEventListener("click", function () {
+    if (measure.active) { endMeasure(); return; }
+    measure.active = true; measure.pts = []; measure.pending = null;
+    this.classList.add("on"); viewer.classList.add("measuring");
+    updateMeasureBar(); render();
+  });
+  document.getElementById("btn-copylink").addEventListener("click", function () {
+    var btn = this;
+    var url = location.origin + location.pathname + "#v=" +
+      btoa(JSON.stringify(currentState())).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    function done() { btn.textContent = "Link copied"; setTimeout(function () { btn.textContent = "Copy view link"; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+    else {
+      var ta = document.createElement("textarea"); ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      ta.remove(); done();
+    }
+  });
+  document.getElementById("btn-saveview").addEventListener("click", function () {
+    var r = viewer.getBoundingClientRect();
+    var f = 2;
+    var off = document.createElement("canvas");
+    off.width = Math.round(r.width * f); off.height = Math.round(r.height * f);
+    var g = off.getContext("2d");
+    g.setTransform(f, 0, 0, f, 0, 0);
+    g.fillStyle = "#101215"; g.fillRect(0, 0, r.width, r.height);
+    paintInto(g, scale, tx, ty, r.width, r.height);
+    if (off.toBlob) off.toBlob(function (b) {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(b); a.download = "the-isle-lot-view.png"; a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    });
   });
   function lotView() {
     var r = viewer.getBoundingClientRect();
     var s = Math.min(1.1, 0.72 * r.height / 740, 0.72 * r.width / 544);
     centerOn(LOT.x, LOT.y, s);
   }
-  document.getElementById("btn-lot").addEventListener("click", lotView);
+  document.getElementById("btn-lot").addEventListener("click", function () { lotView(); saveState(); });
   document.getElementById("btn-zin").addEventListener("click", function () {
-    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1.4);
+    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1.4); saveState();
   });
   document.getElementById("btn-zout").addEventListener("click", function () {
-    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1 / 1.4);
+    var r = viewer.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1 / 1.4); saveState();
   });
   document.getElementById("btn-allon").addEventListener("click", function () { LAYERS.forEach(function (L) { L.setOn(true); }); });
   document.getElementById("btn-alloff").addEventListener("click", function () { LAYERS.forEach(function (L) { L.setOn(false); }); });
@@ -341,9 +533,12 @@
   // ---- pan and zoom ----
   var pointers = new Map();
   var lastPinch = 0;
+  var downAt = null;
+  var wheelSaveT = 0;
   viewer.addEventListener("pointerdown", function (e) {
-    viewer.setPointerCapture(e.pointerId);
+    if (e.target === cv) viewer.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    downAt = { x: e.clientX, y: e.clientY, onCanvas: e.target === cv };
     viewer.classList.add("dragging");
   });
   viewer.addEventListener("pointermove", function (e) {
@@ -373,22 +568,38 @@
   function endPointer(e) {
     pointers.delete(e.pointerId);
     if (pointers.size < 2) lastPinch = 0;
-    if (pointers.size === 0) viewer.classList.remove("dragging");
+    if (pointers.size === 0) { viewer.classList.remove("dragging"); saveState(); }
   }
-  viewer.addEventListener("pointerup", endPointer);
+  viewer.addEventListener("pointerup", function (e) {
+    if (measure.active && downAt && downAt.onCanvas && pointers.size === 1 &&
+        Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) < 6) {
+      var r = viewer.getBoundingClientRect();
+      var ix = (e.clientX - r.left - tx) / scale, iy = (e.clientY - r.top - ty) / scale;
+      if (ix >= 0 && ix <= W && iy >= 0 && iy <= H) {
+        measure.pending = { x: ix, y: iy };
+        updateMeasureBar(); render();
+      }
+    }
+    downAt = null;
+    endPointer(e);
+  });
   viewer.addEventListener("pointercancel", endPointer);
   viewer.addEventListener("wheel", function (e) {
     e.preventDefault();
     var r = viewer.getBoundingClientRect();
     zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.12 : 1 / 1.12);
+    clearTimeout(wheelSaveT); wheelSaveT = setTimeout(saveState, 350);
   }, { passive: false });
   viewer.addEventListener("dblclick", function (e) {
+    if (measure.active) return;
     var r = viewer.getBoundingClientRect();
     zoomAt(e.clientX - r.left, e.clientY - r.top, e.shiftKey ? 0.5 : 2);
+    saveState();
   });
   window.addEventListener("resize", function () { sizeCanvas(); render(); });
   sizeCanvas();
-  lotView();
+  if (initialState && initialState.c && initialState.s) centerOn(initialState.c[0], initialState.c[1], initialState.s);
+  else lotView();
 })();
 </script>
 </body>
