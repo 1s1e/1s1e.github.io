@@ -4,9 +4,7 @@
    the colour variables, the faces, the base, the gold dot, the
    chart's drift and pulse motion and the switch. What stands here
    is only this page's own layout: the split, the panels, the
-   report block, the chart zone, the entries and the foot, with
-   the switch's knob glyph machinery the master sheet does not
-   carry. */
+   report block, the chart zone, the entries and the foot. */
 
   button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){ min-height:2rem; }
 
@@ -157,14 +155,6 @@
   .foot time{ color:var(--ivory-soft); letter-spacing:.18em; }
 
   .switch{ cursor:pointer; flex:none; }
-  .switch .knob{
-    display:flex; align-items:center; justify-content:center;
-  }
-  .switch .knob-glyph{ display:flex; color:#152130; }
-  .switch .glyph svg, .switch .knob-glyph svg{ display:block; }
-  .switch .k-moon{ display:none; }
-  .switch[data-mode="dark"] .k-sun{ display:none; }
-  .switch[data-mode="dark"] .k-moon{ display:flex; }
 
   .entry{
     display:grid;
