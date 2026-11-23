@@ -162,16 +162,49 @@ a{ color:inherit; }
 }
 .switch[data-mode="dark"] .knob{ transform:translate(51px,-50%); }
 
+/* The knob carries the glyph of the mode in use, in Deep, centred
+   in the knob; the sun and moon swap with the mode. */
+.switch .knob{ display:flex; align-items:center; justify-content:center; }
+.switch .knob-glyph{ display:flex; color:#152130; }
+.switch .glyph svg, .switch .knob-glyph svg{ display:block; }
+.switch .k-moon{ display:none; }
+.switch[data-mode="dark"] .k-sun{ display:none; }
+.switch[data-mode="dark"] .k-moon{ display:flex; }
+
 /* The button: one form everywhere, settled November 22, 2026 from new
    samples shown on /ref, the Lot Viewer and the Shadow Study.
    Off rests; on fills with Page Gold. */
 .btn{
   font-family:var(--sans); font-size:12.5px; font-weight:600; padding:8px 12px; min-height:44px; border-radius:6px;
   background:var(--panel); color:var(--ivory); border:1px solid var(--gold-line); cursor:pointer;
-  display:inline-flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none;
 }
 .btn svg{ width:14px; height:14px; flex:none; }
 .btn:hover{ border-color:var(--gold); }
 .btn.on{ background:var(--gold); color:#1d2a3b; border-color:var(--gold); }
 [data-theme="light"] .btn{ background:#f3eee0; color:#1d2a3b; }
 [data-theme="light"] .btn.on{ background:var(--gold); color:#f0e8d5; border-color:var(--gold); }
+
+/* The field: one form everywhere. At least 44px tall, Source Sans 3
+   at 17px, on Panel in dark and Light Tint in light, with a 1px
+   border of Page Gold at the button's resting percentage (the
+   --gold-line token: 30 percent in dark, 38 percent in light),
+   curved corners of 6px and padding 8px by 12px. On focus the
+   border brightens to Page Gold and the field shows the 2px gold
+   focus outline. A field's label is a label in the house form. */
+.field{
+  font-family:var(--sans); font-size:17px; min-height:44px;
+  padding:8px 12px; color:var(--ivory);
+  background:var(--panel); border:1px solid var(--gold-line); border-radius:6px;
+  outline:none;
+}
+[data-theme="light"] .field{ background:#f3eee0; }
+.field:focus{ border-color:var(--gold); outline:2px solid var(--gold); outline-offset:2px; }
+
+/* A link inside text: Page Gold, dark or light by the mode, and
+   brightening on hover, never a colour outside the sixteen. In
+   light the resting colour is already the deeper gold, so the
+   brightening there is to Page Gold dark. */
+.t-link{ color:var(--gold); }
+.t-link:hover, .t-link:focus-visible{ color:var(--gold-bright); }
+[data-theme="light"] .t-link:hover, [data-theme="light"] .t-link:focus-visible{ color:#c2a15c; }

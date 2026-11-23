@@ -178,14 +178,14 @@
   <p class="kicker">The measures of the settled compositions</p>
   <div class="splitfig">
     <div class="cell"><div class="big">46</div><p>The left panel of the index: the lockup, the tagline, the report. Padding 52, 46, 30.</p></div>
-    <div class="cell"><div class="big">54</div><p>The right panel: the entries. Padding 34, 50, 78. One hairline divides the two, inset 52px at the top and the bottom.</p></div>
+    <div class="cell"><div class="big">54</div><p>The right panel: the entries. Padding 34, 50, 78. One hairline divides the two, inset 52px from top and bottom.</p></div>
   </div>
   <ul>
     <li>The index composition is a split, two columns at 46 and 54 fractions, no outer frame, the page edge to edge. On phones the panels stack in order, and the divider and the chart are hidden.</li>
-    <li>The lockup sits at the top of the left panel, width min(252px, 72%). The tagline stands 26px below it, then the tagline rule, 56px wide, 1px, in gold at .75 opacity. The report begins 40px below. The left panel's foot carries 1s1e.com and the mode toggle.</li>
+    <li>The lockup sits atop the left panel, width min(252px, 72%). The tagline stands 26px below it, then the tagline rule, 56px by 1px, in gold at .75 opacity. The report begins 40px below. The left panel's foot carries 1s1e.com and the mode toggle.</li>
     <li>Entries: a grid of a 96px numeral column and the text, gap 8px by 22px, padding 30px, 14px, 28px. The numeral is Playfair Display 500 at 58px. The status line under each entry is a 10.5px label preceded by a 26px gold rule.</li>
     <li>The splash: a full viewport column, no scrolling. Masthead 112px, 78px on short screens, 100px on narrow, 74px on both. The wordmark is artwork, its set width 7.1652em; below it a short centred silver rule, clamp(140px, 28vw, 240px). The frame's mat is Poster Mat, its padding clamp(10px, 3vmin, 28px); the poster viewport is aspect 2 to 3, crossfading at 1.2 seconds, six seconds each, always starting on the first poster. All ten posters are preloaded after the first.</li>
-    <li>The catalogue manner: a hero band in The Isle Navy with a 3px gold top border, a centred ornament and the title in large serif; a footer on Deep, centred, the palm flanking The Isle on both sides, the imprint M &amp; D Silver in spaced gold capitals, a thin gold line, then small text. The footer palm is the Grand palm artwork, not the windswept palm.</li>
+    <li>The catalogue manner: a hero band in The Isle Navy with a 3px gold top border, a centred ornament and the title in large serif; a footer on Deep, centred, the palm flanking The Isle on both sides, the imprint M &amp; D Silver in spaced gold capitals, a thin gold line, then small text. The footer palm is the Grand palm, not the windswept palm.</li>
     <li>Nothing on any page requires sideways scrolling, at any width.</li>
   </ul>
 </section>
@@ -262,6 +262,7 @@
 <section id="rules">
   <h2><span class="num">9</span>Rules for creating anything</h2>
   <p class="kicker">How things are created, and what is required of them</p>
+  <p class="subhead">How things are created:</p>
   <ul>
     <li>This guide governs everything created for The Isle, without exception. A value, a name or a practice that is not in this guide is not settled, and anything that departs from it is drift, to be corrected.</li>
     <li>No page hard-codes anything: anything created for the site takes its shared layer from the master style sheet, published at /assets/the-isle-master.css, and links it as published. A page carries none of the shared values as its own copy: not the colour variables, not the font stacks or the type roles, not the switch, the button and field forms, and not the link colours. What a page keeps is its layout and what is specific to it.</li>
@@ -272,7 +273,7 @@
     <li>Corrections propagate everywhere the old value appears, and each is verified in place. A file that has been presented is never silently overwritten: a changed version is reissued under a fresh version name.</li>
     <li>Publishing is by git over SSH from the local clones, never by browser upload, and a publish is verified the Bear LP way: the served source fetched directly and hash compared, a nonexistent path fetched for the served 404, and a dashboard hit treated as final proof where a dashboard exists. Deletions are enumerated first and removed in one commit. Nothing is published, sent or deleted without the user's approval of the specific item.</li>
   </ul>
-  <p class="subhead">What is required of anything created</p>
+  <p class="subhead">What is required of anything created:</p>
   <ul>
     <li>Every page carries the full favicon set, the master colours and the master type only. A page does not keep private colours or a private typography.</li>
     <li>Both modes are always built and always checked. Nothing requires sideways scrolling, at any width.</li>
@@ -289,7 +290,7 @@
   <p>Sources of truth, in order: this guide; the master file set and its MANIFEST.md; the live pages at 1s1e.com; the local publishing clone. The master documents are kept to endure, at fixed names, one canonical copy in each master file set, updated in place as things change; their history is kept separately, in CHANGELOG.md, never inside the documents themselves. This guide changes only on the user's word.</p>
   <p class="subhead">Documents and print</p>
   <ul>
-    <li>A document follows the book's own format: A4, margins of 56pt, a running head in the form "THE ISLE · &lt;TITLE&gt;", and the folio at the foot. Covers stand on The Isle Navy, with the mark in its silver colourway.</li>
+    <li>A document follows the book's own format: US Letter, margins of 56pt at the sides and the foot and 44pt at the top, no running head, and a running foot of one line in the label form naming the document "THE ISLE · &lt;TITLE&gt;" at the left of the column, the folio at the right. Covers stand on The Isle Navy, with the mark in its silver with colour tree colourway.</li>
     <li>A PDF carries MDS as its author of record, with producer and creator blank. In print, the sixteen are built as CMYK from the tabulated builds in section 2 and proofed against the master values on the stock in use. The Isle Gold and The Isle Silver print as flat colour, never as metallic foil.</li>
     <li>The catalogue PDFs are finished print documents with their own settled interior design. The site presents them; the site palette does not govern their contents.</li>
   </ul>
@@ -330,11 +331,11 @@
     <input class="field" type="text" placeholder="A form field" aria-label="A form field, shown as a specimen">
   </div>
   <ul>
-    <li>Touch: every control stands at least 44px tall, the Apple standard. The switch stands 44px tall, and the button carries a minimum height of 44px with its padding unchanged.</li>
+    <li>Touch: every control stands at least 44px tall, the Apple standard. The switch stands 44px tall, and the button carries a 44px minimum height, its padding unchanged.</li>
     <li>The button is one form everywhere: curved corners at 6px, Source Sans 3 at 12.5px, weight 600, in Title Case, padding 8px by 12px, a 1px border. Off, it rests on Panel in dark with a border of Page Gold dark at 30 percent, and on Light Tint in light with a border of Page Gold light at 38 percent; on hover the border brightens to Page Gold. On, it fills with Page Gold and its text turns to The Isle Navy in dark and The Isle Ivory in light.</li>
     <li>Form fields are one form everywhere: at least 44px tall, Source Sans 3 at 17px, on Panel in dark and Light Tint in light, a 1px border of Page Gold at the button's resting percentage, corners of 6px, padding 8px by 12px, and on focus the border brightens with the 2px gold focus outline.</li>
     <li>A button carries an icon only where the action has a true symbol of its own: the open book for reading, the tray arrow for a download, at 14px before the words with an 8px gap. Symbols are drawn to one specification: on a 24 by 24 grid, with a stroke of 2, round caps and round joins, in the currentColor of their setting, and no fill, save where an established symbol is solid by nature. The switch's sun and moon are the one exception: drawn small inside the pill, their stroke is 1.8.</li>
-    <li>Four symbols stand alone, replacing the words: Menu, Close, Search and Settings, each keeping its name for assistive technology. Project Home, the way back to The Build index, is a control carrying the home glyph alone, at 20px, with no words. A control that changes state carries the symbol of the state it is in: Menu and Close, Play and Pause, and the switch's sun and moon are pairs of that kind.</li>
+    <li>Four symbols stand alone, replacing the words: Menu, Close, Search and Settings, each keeping its name for assistive technology. Project Home, the way back to The Build index, is a control with the home glyph alone, at 20px, with no words. A control that changes state carries the symbol of the state it is in: Menu and Close, Play and Pause, and the switch's sun and moon are pairs of that kind.</li>
     <li>The assignment rule: the primary action on a page takes the on form, secondary actions take the off form, and utility actions stay text links, not buttons. Read is a button in the on form; Download is a button in the off form; Full Size, Link to This Page, Copy Link and Hide are text links, and stay text. A link inside text stands in Page Gold, dark or light by the mode, and brightens on hover.</li>
   </ul>
 </section>
@@ -343,15 +344,15 @@
   <h2><span class="num">13</span>The documents</h2>
   <p class="kicker">The guide and its files, to open in the browser</p>
   <p>Everything in the master, as files. Each name opens the file itself.</p>
-  <div class="docrow"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a><span class="kind">PDF · 30 pages</span><span class="size">588 KB</span></div>
-  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">38.0 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">6.8 KB</span></div>
+  <div class="docrow"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a><span class="kind">PDF · 27 pages</span><span class="size">584 KB</span></div>
+  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">38.1 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">8.4 KB</span></div>
   <div class="docrow"><a href="files/the-isle-tokens.json">Design tokens</a><span class="kind">JSON</span><span class="size">7.0 KB</span></div>
   <div class="docrow"><a href="files/The-Isle-Colour-Swatches.pdf">The swatch sheet</a><span class="kind">PDF</span><span class="size">146 KB</span></div>
   <div class="docrow"><a href="files/the-isle-colour-swatches.png">The swatch sheet</a><span class="kind">PNG</span><span class="size">158 KB</span></div>
   <div class="docrow"><a href="files/the-isle-palette.ase">The palette</a><span class="kind">Adobe Swatch Exchange</span><span class="size">796 B</span></div>
   <div class="docrow"><a href="files/the-isle-palette.gpl">The palette</a><span class="kind">GIMP palette</span><span class="size">402 B</span></div>
-  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">23.1 KB</span></div>
+  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">28.2 KB</span></div>
 </section>
 
 <footer>

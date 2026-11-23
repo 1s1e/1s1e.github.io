@@ -308,13 +308,13 @@ whole length, at the foot as well as the top.
 
 - The index composition is a split: two columns at 46 and 54 fractions,
   no outer frame, the page edge to edge. A single hairline divides the
-  panels, inset 52px from the top and 52px from the bottom, never running
+  panels, inset 52px from top and bottom, never running
   off the screen. On phones the panels stack in order, and the divider
   and the chart are hidden.
 - Panel measures: left panel padding 52px, 46px, 30px; right panel 34px,
-  50px, 78px. The lockup sits at the top of the left panel, width
-  min(252px, 72%). The tagline stands 26px below it, then the tagline
-  rule, 56px wide, 1px, in gold at .75 opacity. The report begins 40px
+  50px, 78px. The lockup sits atop the left panel, width
+  min(252px, 72%). The tagline stands 26px below; the tagline
+  rule, 56px by 1px, in gold at .75 opacity. The report begins 40px
   below.
 - The left panel's foot carries 1s1e.com and the mode toggle.
 - The chart sits in its own block in the open ground of the left panel,
@@ -341,8 +341,8 @@ whole length, at the foot as well as the top.
   top border, a centred ornament and the title in large serif; a footer
   on Deep, centred, the palm flanking The Isle on both sides, the
   imprint M & D Silver in spaced gold capitals, a thin gold line, then
-  small text. The footer palm is the Grand palm artwork, not the
-  windswept palm.
+  small text. The footer palm is the Grand palm, not the windswept
+  palm.
 - Nothing on any page requires sideways scrolling, at any width.
 
 ## 7. Chart
@@ -529,9 +529,11 @@ What is required of anything created:
 
 ### Documents and print
 
-- A document follows the book's own format: A4, margins of 56pt, a
-  running head naming the document in the form "THE ISLE · <TITLE>",
-  and the folio at the foot.
+- A document follows the book's own format: US Letter, margins of 56pt at
+  the sides and the foot and 44pt at the top, no running head, and a
+  running foot of one line in the label form naming the document
+  "THE ISLE · <TITLE>" at the left of the column, the folio at the
+  right.
 - Covers stand on The Isle Navy, with the mark in its silver with colour tree colourway.
 - A PDF carries MDS as its author of record, with producer and creator
   blank. Documents are issued at fixed names from the master file set.
@@ -624,8 +626,8 @@ What is required of anything created:
   localStorage under the key isle-theme. A remembered choice stands
   over the system preference, and nothing is sent anywhere.
 - Touch: every control stands at least 44px tall, the Apple standard.
-  The button carries a minimum height of 44px with its padding
-  unchanged, and the switch stands 44px tall, grown in proportion
+  The button carries a 44px minimum height, its padding unchanged,
+  and the switch stands 44px tall, grown in proportion
   from its first form. No control on any page is smaller to touch
   than 44px.
 - Form fields are one form everywhere: a field stands at least 44px
@@ -665,8 +667,8 @@ What is required of anything created:
   and Settings. A button carrying a symbol alone always keeps its
   name for assistive technology. Every other symbol stands beside
   its words.
-- Project Home, the way back to The Build index, is a control
-  carrying the home glyph alone, the house of the master symbol
+- Project Home, the way back to The Build index, is a control with
+  the home glyph alone, the house of the master symbol
   list, with no words. The glyph stands at 20px. Like every symbol
   standing alone, it keeps its name for assistive technology:
   Project Home.
