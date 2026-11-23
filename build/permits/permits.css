@@ -63,21 +63,10 @@
   .chip.open { color: var(--gold); border-color: var(--gold); }
   table.conds .chip { margin-left: 0; }
   .unlinked { padding: 22px 0 4px 0; font-size: 13.5px; line-height: 1.55; color: var(--ivory-soft); }
-  /* In-text links (guide section 12): Page Gold by the mode, brightening
-     on hover, the underline kept. The master sheet carries no text-link
-     rule, so the assignment lives here, scoped to the pages' prose so it
-     cannot touch the Project Home control, the navigation or the cards. */
-  .note a, .unlinked a { color: var(--gold); }
-  .note a:hover, .note a:focus-visible, .unlinked a:hover, .unlinked a:focus-visible { color: var(--gold-bright); }
-  :root[data-theme="light"] .note a:hover, :root[data-theme="light"] .note a:focus-visible, :root[data-theme="light"] .unlinked a:hover, :root[data-theme="light"] .unlinked a:focus-visible { color: #c2a15c; }
+  /* In-text links (guide section 12) take the master sheet's .t-link,
+     carried on the element itself; the underline is the browser's own. */
   footer { text-align: center; padding: 26px 0 34px 0; }
   footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
   footer .src { font-size: 12px; color: var(--ivory-soft); margin-top: 10px; }
   .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
-  .switch .knob { display: flex; align-items: center; justify-content: center; }
-  .switch .knob-glyph { display: flex; color: #152130; }
-  .switch .glyph svg, .switch .knob-glyph svg { display: block; }
-  .switch .k-moon { display: none; }
-  .switch[data-mode="dark"] .k-sun { display: none; }
-  .switch[data-mode="dark"] .k-moon { display: flex; }
 
