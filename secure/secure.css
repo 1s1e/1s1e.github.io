@@ -1,0 +1,20 @@
+/* THE ISLE · SECURE
+   The secure zone's own sheet, layered on the master style sheet
+   (/assets/the-isle-master.css), which carries the shared layer:
+   the colours, the faces, the base, the label form and the button.
+   What stands here is only the lock screen's own shell: its silver
+   ink, its centred box and the password field, whose form the
+   master sheet does not carry as a rule. */
+
+:root { --silver:#C0C0C0; }
+
+* { margin:0; padding:0; }
+body { color:var(--silver); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+.box { width:100%; max-width:340px; text-align:center; }
+h1 { font-family:var(--serif); font-weight:500; letter-spacing:.35em; font-size:26px; text-transform:uppercase; }
+.rule { height:1px; background:var(--silver); margin:20px 0 26px; }
+label { display:block; color:var(--ivory-dim); margin-bottom:12px; }
+input { width:100%; min-height:44px; padding:8px 12px; font-family:var(--sans); font-size:17px; text-align:center; color:var(--ivory); background:var(--panel); border:1px solid var(--gold-line); border-radius:6px; outline:none; }
+input:focus { border-color:var(--gold); outline:2px solid var(--gold); outline-offset:2px; }
+.box .btn { width:100%; margin-top:14px; justify-content:center; }
+.err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }

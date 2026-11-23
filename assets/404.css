@@ -1,0 +1,72 @@
+/* THE ISLE · PAGE NOT FOUND
+   The 404 page's own sheet, layered on the master style sheet
+   (/assets/the-isle-master.css), which carries the shared layer:
+   the colours, the faces and the base. What stands here is only
+   what this page alone needs: its silver ink, its mat and accent,
+   and its centred layout. The page's own system font stack is
+   kept, as it stands; the master sheet's stacks are not forced
+   on it here. */
+
+:root {
+  --ink: #C0C0C0;
+  --mat: #dfe2e6;
+  --accent: #93a7c9;
+}
+
+* { margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  color: var(--mat);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.logo img {
+  width: min(720px, 86vw);
+  height: auto;
+  display: block;
+}
+
+h2 {
+  margin-top: 46px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  padding-left: 0.42em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+p {
+  margin-top: 16px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--mat);
+}
+
+a.home {
+  margin-top: 28px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  padding-left: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 5px;
+}
+
+a.home:hover { color: var(--ivory); }

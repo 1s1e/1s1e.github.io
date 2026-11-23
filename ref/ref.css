@@ -1,0 +1,661 @@
+/* THE ISLE · REFERENCE CATALOGUES
+   The /ref section's own sheet, layered on the master style sheet
+   (/assets/the-isle-master.css), which carries the shared layer:
+   the colour variables, the faces and their stacks, the base, the
+   buttons in both forms and the switch. What stands here is the
+   catalogue manner itself: the hero, the volume sections, the
+   contents and the Reader, with the few values the master sheet
+   does not carry, named below. */
+
+      /* The section's own values, keyed as the master sheet keys
+         its modes: dark at :root, light under [data-theme="light"].
+         The navy grounds are constant, because the hero, the stage,
+         the bars and the footer stand on navy in both modes; the
+         constant golds serve those same dark grounds and the
+         ornaments. The soft ink pairs Soft Ink on light with Ivory
+         Dim on dark, as this page has always set its secondary
+         text; the shadows are the covers' and pages' own. */
+      :root {
+        --navy: #1d2a3b;
+        --navy-deep: #152130;
+        --gold-const: #c2a15c;
+        --gold-const-bright: #c9ab72;
+        --img-back: #f0e8d5;
+        --ink-soft: #a89f88;
+        --shadow-cover: 0 22px 44px rgba(29, 42, 59, 0.55), 0 4px 12px rgba(29, 42, 59, 0.4);
+        --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.45), 0 2px 6px rgba(29, 42, 59, 0.3);
+      }
+      :root[data-theme="light"] {
+        --ink-soft: #3c4763;
+        --shadow-cover: 0 22px 44px rgba(29, 42, 59, 0.32), 0 4px 12px rgba(29, 42, 59, 0.18);
+        --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.16), 0 2px 6px rgba(29, 42, 59, 0.1);
+      }
+
+      html { scroll-behavior: smooth; touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+      body {
+        line-height: 1.55;
+        touch-action: manipulation;
+      }
+      img { display: block; max-width: 100%; }
+
+      /* ---------- shared ornaments ---------- */
+      .ornament {
+        display: flex; align-items: center; justify-content: center; gap: 14px;
+      }
+      .ornament::before, .ornament::after {
+        content: ""; height: 1px; width: 72px; background: var(--gold-const);
+      }
+      .ornament i {
+        width: 7px; height: 7px; background: var(--gold-const-bright);
+        transform: rotate(45deg); flex: none;
+      }
+      .vol-label {
+        font-family: var(--sans); font-weight: 600;
+        font-size: 13px; letter-spacing: 0.34em; text-transform: uppercase;
+        color: var(--gold-bright); text-align: center; margin: 0;
+      }
+      .vol-label .rule { display: inline-block; vertical-align: middle; width: 44px; height: 1px; background: var(--gold-const); margin: 0 14px 3px; }
+
+      /* ---------- hero ---------- */
+      .hero {
+        background: var(--navy);
+        background-image: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+        color: #f0e8d5;
+        padding: 54px 20px 64px;
+        text-align: center;
+        border-top: 3px solid var(--gold-const);
+      }
+      .hero-inner { max-width: 1120px; margin: 0 auto; }
+      .hero h1 {
+        font-family: var(--serif); font-weight: 500;
+        font-size: clamp(54px, 9vw, 88px);
+        line-height: 1.05; margin: 22px 0 0; letter-spacing: 0.01em; display: flow-root;
+      }
+      .hero-series {
+        font-family: var(--serif); font-weight: 500;
+        font-size: clamp(17px, 3vw, 23px);
+        letter-spacing: 0.52em; text-transform: uppercase;
+        color: var(--gold-const-bright); margin: 20px 0 0; padding-left: 0.52em;
+      }
+      .hero-rule { width: 64px; height: 1px; background: var(--gold-const); margin: 22px auto 0; }
+      .hero-intro {
+        max-width: 900px; margin: 22px auto 0;
+        font-size: 17px; line-height: 1.65; color: #d9d0ba;
+      }
+      /* The intro is composed as two blocks, one per sentence. The first
+         sentence sits on a single line at desktop width, with "M & D
+         Silver" kept unbreakable at every width. Below desktop width its
+         line breaks are structural, not left to the wrapping algorithm
+         or to text-wrap: balance (unsupported in older Safari/WebKit):
+         the sentence is marked up in four phrase spans and set as a
+         wrapping flex row, so the phrases pack deterministically in
+         every engine: three near-even lines on phones ("The complete
+         record of the home," / "in three volumes and a companion" /
+         "appendix by M & D Silver."), two near-even lines at tablet
+         widths, the break before "and a companion" forced there by the
+         .brk-t spacer. The second sentence is set on a measure close
+         to the first line's width and balanced where balance exists;
+         without it, it wraps as an ordinary paragraph. */
+      .hero-intro p { margin: 0; }
+      .hero-intro .hi-s1 { white-space: nowrap; }
+      .hero-intro .hi-s1 .brk-t { display: none; }
+      .hero-intro .hi-name { white-space: nowrap; }
+      .hero-intro .hi-s2 { max-width: 860px; margin: 0 auto; text-wrap: balance; }
+      @media (max-width: 940px) {
+        .hero-intro .hi-s1 {
+          white-space: normal;
+          display: flex; flex-wrap: wrap; justify-content: center;
+        }
+        .hero-intro .hi-s1 > span { margin-right: 0.28em; }
+        .hero-intro .hi-s1 > span:last-child { margin-right: 0; }
+      }
+      /* Tablet widths: force the break between "in three volumes" and
+         "and a companion" so the two lines stay near even instead of
+         packing three phrases onto the first line. */
+      @media (min-width: 561px) and (max-width: 940px) {
+        .hero-intro .hi-s1 .brk-t { display: block; flex: 0 0 100%; height: 0; margin-right: 0; }
+      }
+      .hero-intro em { font-family: var(--serif); }
+      .stats {
+        display: flex; flex-wrap: wrap; justify-content: center;
+        margin: 40px auto 0; max-width: 760px;
+        border-top: 1px solid rgba(201, 171, 114, 0.35);
+        border-bottom: 1px solid rgba(201, 171, 114, 0.35);
+      }
+      .stat { padding: 16px 30px 14px; }
+      .stat + .stat { border-left: 1px solid rgba(201, 171, 114, 0.22); }
+      .stat b {
+        display: block; font-family: var(--serif); font-weight: 500;
+        font-size: 30px; line-height: 1.1; color: #f0e8d5;
+      }
+      .stat span {
+        display: block; margin-top: 4px;
+        font-size: 11.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+        color: var(--gold-const-bright);
+      }
+      .trio {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: clamp(18px, 3.4vw, 40px);
+        max-width: 1120px; margin: 52px auto 0;
+        text-align: center;
+      }
+      @media (max-width: 900px) {
+        .trio { grid-template-columns: repeat(2, 1fr); max-width: 620px; }
+      }
+      .trio a { text-decoration: none; display: block; }
+      .trio figure { margin: 0; }
+      .trio img {
+        width: 100%; height: auto;
+        background: var(--img-back);
+        box-shadow: var(--shadow-cover);
+        outline: 1px solid rgba(201, 171, 114, 0.4);
+        outline-offset: -1px;
+        transition: transform 0.35s ease;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .trio a:hover img, .trio a:focus-visible img { transform: translateY(-6px); }
+      }
+      .trio figcaption { margin-top: 18px; }
+      .trio .t-vol {
+        display: block; font-size: 12px; font-weight: 700;
+        letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-const-bright);
+      }
+      .trio .t-name {
+        display: block; font-family: var(--serif); font-size: 24px; font-weight: 500;
+        color: #f0e8d5; margin-top: 5px;
+      }
+      .trio .t-pages { display: block; font-size: 13.5px; color: #a89f88; margin-top: 3px; }
+      .hero-note { margin: 46px auto 0; font-size: 13.5px; color: #a89f88; letter-spacing: 0.04em; }
+      .hero-dl { margin: 24px auto 0; display: flex; justify-content: center; }
+      /* The hero download is the master sheet's .btn in its off form. */
+
+      /* ---------- volume sections ---------- */
+      .vol { padding: 76px 20px 84px; }
+      .vol.tint { background: var(--raise); }
+      .vol-inner { max-width: 1120px; margin: 0 auto; }
+      .vol-grid {
+        display: grid; grid-template-columns: 340px 1fr;
+        gap: clamp(30px, 5vw, 64px);
+        margin-top: 40px; align-items: start;
+      }
+      .cover-fig { margin: 0; }
+      .cover-fig img {
+        width: 100%; height: auto;
+        background: var(--img-back);
+        box-shadow: var(--shadow-cover);
+        outline: 1px solid var(--gold-line);
+        outline-offset: -1px;
+      }
+      .cover-fig figcaption {
+        margin-top: 14px; font-size: 13.5px; line-height: 1.5; color: var(--ink-soft);
+        font-style: italic; font-family: var(--serif); font-size: 15px;
+      }
+      .vol-info h2 {
+        font-family: var(--serif); font-weight: 500;
+        font-size: clamp(36px, 5vw, 50px); line-height: 1.08; margin: 2px 0 0;
+      }
+      .vol-subtitle {
+        font-family: var(--serif); font-style: italic; font-weight: 500;
+        font-size: clamp(19px, 2.6vw, 23px); color: var(--ink-soft); margin: 10px 0 0;
+      }
+      .vol-meta {
+        display: flex; flex-wrap: wrap; gap: 8px 0; margin: 20px 0 0;
+        font-size: 12.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--gold-bright);
+      }
+      .vol-meta span + span::before { content: "·"; margin: 0 12px; color: var(--ink-soft); }
+      .vol-desc { font-size: 16.5px; line-height: 1.7; margin: 18px 0 0; max-width: 56ch; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+      /* The buttons are the master sheet's .btn, in its off form, and
+         .btn.on for Read. Kept here: only what the sheet's form does
+         not carry, centring and the colour ease, for anchor use. */
+      .btn {
+        justify-content: center;
+        text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      }
+      .inside { margin-top: 36px; }
+      .inside h3 {
+        font-size: 12px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase;
+        color: var(--ink-soft); margin: 0 0 14px;
+        display: flex; align-items: center; gap: 14px;
+      }
+      .inside h3::after { content: ""; flex: 1; height: 1px; background: var(--gold-line); }
+      .inside-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .inside-row figure { margin: 0; }
+      .inside-row a { display: block; }
+      .inside-row a:focus-visible { outline: 2px solid var(--gold-const); outline-offset: 3px; }
+      .dl-fail { flex: 1 1 100%; margin: 12px 0 0; font-size: 14.5px; line-height: 1.55; }
+      .dl-fail a { color: var(--gold-bright); font-weight: 600; }
+      .hero .dl-fail { color: #d9d0ba; }
+      .hero .dl-fail a { color: var(--gold-const-bright); }
+      .page-fail {
+        margin: 14px 0 0; padding: 12px 16px; text-align: center;
+        color: #f0e8d5; font-size: 14.5px; line-height: 1.55;
+        border: 1px solid rgba(201, 171, 114, 0.55);
+      }
+      .page-fail button {
+        margin-left: 8px; font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+        letter-spacing: normal; text-transform: none; cursor: pointer;
+        color: #f0e8d5; background: #22344a; min-height: 44px;
+        border: 1px solid rgba(194, 161, 92, 0.30); border-radius: 6px; padding: 8px 12px;
+      }
+      .page-fail button:hover, .page-fail button:focus-visible { border-color: #c2a15c; }
+      .inside-row img {
+        width: 100%; height: 190px; object-fit: cover; object-position: top center;
+        box-shadow: var(--shadow-page);
+        outline: 1px solid var(--gold-line-soft); outline-offset: -1px;
+        background: var(--img-back);
+      }
+      .inside-row img.contain { object-fit: contain; }
+      .inside-row figcaption { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+      /* ---------- contents at a Glance ---------- */
+      .glance { margin-top: 64px; }
+      .glance-head { text-align: center; margin-bottom: 34px; }
+      .glance-head h3 {
+        font-family: var(--serif); font-weight: 500; font-size: 30px; margin: 12px 0 0;
+      }
+      .glance-grid { display: grid; gap: 0 44px; }
+      .glance-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .glance-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+      .sec { padding: 20px 0 22px; border-top: 1px solid var(--gold-line); }
+      .sec-top {
+        display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+        font-size: 11.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+      }
+      .sec-top .sec-no { color: var(--gold-bright); }
+      .sec-top .sec-count { color: var(--ink-soft); text-align: right; }
+      .sec h4 { font-family: var(--serif); font-weight: 500; font-size: 23px; margin: 9px 0 0; }
+      .sec p { margin: 7px 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); }
+      .glance a.sec { display: block; color: inherit; text-decoration: none; cursor: pointer; }
+      .glance a.sec:hover { background: var(--raise); }
+      .glance a.sec:focus-visible {
+        background: var(--raise);
+        outline: 2px solid var(--gold-const); outline-offset: -2px;
+      }
+
+      /* ---------- full contents ---------- */
+      details.full {
+        margin-top: 44px; border: 1px solid var(--gold-line);
+        background: var(--field);
+      }
+      .tint details.full { background: var(--field); }
+      details.full summary {
+        cursor: pointer; list-style: none;
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        padding: 18px 22px;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ivory);
+      }
+      details.full summary::-webkit-details-marker { display: none; }
+      details.full summary .chev {
+        width: 10px; height: 10px; flex: none;
+        border-right: 2px solid var(--gold-const); border-bottom: 2px solid var(--gold-const);
+        transform: rotate(45deg); transition: transform 0.25s ease; margin-right: 4px;
+      }
+      details.full[open ] summary .chev { transform: rotate(225deg); }
+      details.full summary .when-open { display: none; }
+      details.full[open ] summary .when-open { display: inline; }
+      details.full[open ] summary .when-closed { display: none; }
+      .full-body { padding: 6px 22px 26px; border-top: 1px solid var(--gold-line-soft); }
+      .full-body .toc-note { font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); margin: 16px 0 0; max-width: 62ch; }
+      .full-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 40px; }
+      .full-grid.many { grid-template-columns: repeat(3, 1fr); }
+      .toc-group h5 {
+        font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 20px 0 4px;
+      }
+      .toc-group h5 small {
+        font-family: var(--sans); font-size: 11px; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-bright); margin-left: 8px; white-space: nowrap;
+      }
+      .toc-list { list-style: none; margin: 0; padding: 0; }
+      .toc-list li {
+        border-bottom: 1px solid var(--gold-line-soft);
+        font-size: 14.5px;
+      }
+      .toc-list li:last-child { border-bottom: none; }
+      .toc-list a.toc-line {
+        display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+        padding: 7px 8px; margin: 0 -8px;
+        color: inherit; text-decoration: none; cursor: pointer;
+      }
+      .toc-list a.toc-line:hover { background: var(--raise); }
+      .toc-list a.toc-line:focus-visible {
+        background: var(--raise);
+        outline: 2px solid var(--gold-const); outline-offset: -2px;
+      }
+      .toc-list .pg { font-family: var(--serif); color: var(--gold-bright); font-size: 15px; flex: none; }
+      .toc-list .note { color: var(--ink-soft); font-size: 13px; }
+
+      /* ---------- footer ---------- */
+      footer {
+        background: var(--navy-deep); color: #d9d0ba;
+        padding: 56px 20px 48px; text-align: center;
+      }
+      footer .f-title {
+        font-family: var(--serif); font-size: 30px; font-weight: 500; color: #f0e8d5; margin: 18px auto 0;
+      }
+      footer .f-title-row {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        margin: 18px auto 0;
+      }
+      footer .f-title-row .f-title { margin: 0; }
+      footer .f-palm { width: 44px; height: 44px; flex: none; }
+      footer .f-imprint {
+        margin: 5px auto 0; font-size: 13px; font-weight: 600;
+        letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase; color: var(--gold-const-bright);
+      }
+      .hero h1 .hero-wordmark {
+        display: block; max-width: none; width: 4.7449em; height: auto;
+        margin: -0.3004em auto -0.2513em; position: relative; left: -0.008em;
+      }
+      .reader-brand .brand-wordmark {
+        display: inline-block; max-width: none; width: 85.10px; height: auto;
+        margin: -1.77px -3.28px -8.76px -2.38px; vertical-align: baseline;
+      }
+      footer .f-title-row .f-one {
+        max-width: none; width: 222.5px; height: auto;
+        margin: 10.1px 0 5.14px;
+      }
+      footer .f-title .f-wordmark {
+        display: block; max-width: none; width: 121.51px; height: auto;
+        margin: -0.77px -3.68px -0.11px -4.51px;
+      }
+      footer .f-line { width: min(880px, 90%); height: 1px; background: rgba(201, 171, 114, 0.35); margin: 30px auto 0; }
+      footer p { margin: 18px auto 0; max-width: 560px; font-size: 14px; line-height: 1.65; color: #a89f88; }
+
+      /* ---------- full reader ---------- */
+      .reader-section { padding: 76px 20px 84px; background: var(--raise); }
+      .reader-head { text-align: center; max-width: 1120px; margin: 0 auto; }
+      .reader-head h2 {
+        font-family: var(--serif); font-weight: 500;
+        font-size: clamp(32px, 4.6vw, 44px); line-height: 1.1; margin: 14px 0 0;
+      }
+      .reader {
+        max-width: 1120px; margin: 38px auto 0;
+        background: var(--field); border: 1px solid var(--gold-line);
+        box-shadow: var(--shadow-page);
+      }
+      .reader-toolbar {
+        position: relative;
+        display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+        padding: 14px 18px; border-bottom: 1px solid var(--gold-line); background: var(--raise);
+      }
+      .reader-vol {
+        margin: 0; font-size: 12.5px; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase; color: var(--ivory);
+      }
+      .reader-vol span { color: var(--gold-bright); margin: 0 4px; }
+      .toolbar-spacer { flex: 1; }
+      .tool-link {
+        font-size: 12.5px; font-weight: 600;
+        color: var(--gold); text-decoration: none;
+        background: none; border: none; padding: 8px 12px;
+        display: inline-flex; align-items: center; justify-content: center;
+        min-height: 44px;
+      }
+      .tool-link:hover, .tool-link:focus-visible { color: var(--gold-bright); }
+      :root[data-theme="light"] .tool-link:hover, :root[data-theme="light"] .tool-link:focus-visible { color: #c2a15c; }
+      button.tool-link { font-family: var(--sans); cursor: pointer; }
+      /* The link bar hangs over the reader body from the toolbar, so
+         opening it never pushes the page down. */
+      .link-bar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+        padding: 12px 18px; border-bottom: 1px solid var(--gold-line); background: var(--field);
+        position: absolute; top: 100%; left: 0; right: 0; z-index: 25;
+        box-shadow: 0 12px 24px rgba(29, 42, 59, 0.20);
+      }
+      .link-bar label {
+        font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ivory);
+      }
+      .link-bar input {
+        flex: 1 1 260px; min-width: 0; padding: 9px 12px; font: inherit; font-size: 16px;
+        color: var(--ivory); background: var(--raise); border: 1px solid var(--gold-line); border-radius: 0;
+      }
+      .link-bar .link-status { font-size: 13.5px; color: var(--gold-bright); font-weight: 600; }
+
+      /* ---------- full size view (in-page, replaces new-tab link) ---------- */
+      .fullsize-overlay {
+        position: fixed; inset: 0; z-index: 100;
+        display: flex; flex-direction: column;
+        background: var(--navy-deep);
+      }
+      .fullsize-bar {
+        flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+        background: var(--navy-deep); color: #f0e8d5;
+        padding: 14px 20px; border-bottom: 2px solid var(--gold-const);
+      }
+      .fullsize-title {
+        margin: 0; font-size: 13px; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase; color: #f0e8d5;
+      }
+      .fullsize-title span { color: var(--gold-const-bright); font-weight: 600; letter-spacing: 0.08em; text-transform: none; }
+      .fullsize-close {
+        margin-left: auto;
+        font-family: var(--sans); cursor: pointer;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--gold-const-bright); background: transparent;
+        border: 1px solid rgba(201, 171, 114, 0.6); padding: 9px 16px; min-height: 44px;
+      }
+      .fullsize-close:hover, .fullsize-close:focus-visible { background: var(--gold-const); color: #1d2a3b; }
+      .fullsize-scroll {
+        flex: 1; overflow: auto; -webkit-overflow-scrolling: touch;
+        display: flex; align-items: flex-start; justify-content: center;
+        padding: 22px 18px 30px;
+      }
+      .fullsize-scroll img {
+        display: block; width: auto; height: auto;
+        max-width: 100%; max-height: 100%;
+        background: #f0e8d5; box-shadow: 0 14px 40px rgba(29, 42, 59, 0.55);
+      }
+      @media (max-width: 680px) {
+        .fullsize-scroll { padding: 14px 10px 20px; }
+      }
+      .reader-body { display: grid; grid-template-columns: 300px 1fr; min-height: 400px; }
+
+      /* Contents sidebar */
+      .toc {
+        border-right: 1px solid var(--gold-line); padding: 18px 0; overflow-y: auto; max-height: 1060px;
+        background: var(--field);
+      }
+      .toc h3 { font-family: var(--serif); font-weight: 500; margin: 0 20px 4px; font-size: 21px; }
+      .toc .toc-sub { margin: 0 20px 14px; font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+      .toc-sec { margin: 18px 0 6px; padding: 0 20px; }
+      .toc-sec .sec-no { font-size: 11px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold-bright); margin: 0; }
+      .toc-sec .sec-name { font-family: var(--serif); font-size: 17px; margin: 3px 0 0; }
+      .toc-sec .sec-meta { font-size: 12px; color: var(--ink-soft); margin: 2px 0 0; white-space: nowrap; }
+      .toc-entry {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px;
+        width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+        font-family: var(--sans);
+        padding: 7px 20px; color: var(--ivory); font-size: 14.5px; line-height: 1.35;
+      }
+      .toc-entry:hover { background: var(--raise); }
+      .toc-entry .pg { font-family: var(--serif); color: var(--gold-bright); font-size: 14px; flex: none; }
+      .toc-entry.current { background: rgba(201, 171, 114, 0.22); box-shadow: inset 3px 0 0 var(--gold-const-bright); }
+      :root[data-theme="light"] .toc-entry.current { background: rgba(160, 127, 58, 0.16); box-shadow: none; }
+
+      /* Stage */
+      .stage {
+        background: var(--navy-deep); padding: 26px 18px 22px;
+        display: flex; flex-direction: column; align-items: center;
+      }
+      .stage figure {
+        margin: 0; width: 100%; max-width: 780px;
+        max-width: min(780px, calc((100vh - var(--fit-overhead, 0px)) * var(--page-ar, 0.772727)));
+        max-width: min(780px, calc((100dvh - var(--fit-overhead, 0px)) * var(--page-ar, 0.772727)));
+      }
+      .stage img.page {
+        display: block; width: 100%; height: auto; background: #f0e8d5;
+        aspect-ratio: var(--page-ar-css, 1275 / 1650);
+        box-shadow: 0 14px 40px rgba(29, 42, 59, 0.55);
+        cursor: pointer;
+      }
+      .stage img.page:focus-visible { outline: 2px solid var(--gold-const-bright); outline-offset: 3px; }
+      .stage figcaption {
+        display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 18px;
+        padding-top: 14px; color: #d9d0ba; font-size: 14px;
+      }
+      .stage figcaption .cap-title { font-family: var(--serif); font-size: 17px; color: #f0e8d5; }
+      .stage figcaption .cap-page {
+        letter-spacing: 0.14em; text-transform: uppercase; font-size: 12px; font-weight: 600;
+        color: var(--gold-const-bright); padding-top: 5px;
+      }
+      .page-nav {
+        display: flex; align-items: center; gap: 14px; margin-top: 18px;
+        flex-wrap: wrap; justify-content: center;
+      }
+      /* The pager buttons are the master sheet's .btn in its off
+         form; kept here, only their disabled state. */
+      .nav-btn:disabled { opacity: 0.35; cursor: default; }
+      .page-jump { display: flex; align-items: center; gap: 8px; color: #d9d0ba; font-size: 14px; }
+      .page-jump input {
+        width: 62px; padding: 8px; min-height: 44px; font: inherit; font-size: 16px; text-align: center;
+        background: #152130; color: #f0e8d5; border: 1px solid #22344a; border-radius: 0;
+      }
+      .progress { width: 100%; max-width: 780px; height: 3px; background: #22344a; margin-top: 18px; }
+      .progress i { display: block; height: 100%; background: var(--gold-const-bright); width: 0; transition: width 0.25s ease; }
+      /* Phone widths: the toolbar and the pager lay out deliberately
+         instead of wrapping where they fall. The toolbar's buttons
+         fill the rows they land on, so no row ends short or strands
+         a button short of the card's edge. The pager puts Previous
+         and Next side by side as equals, with the page box centred
+         beneath them. */
+      @media (max-width: 680px) {
+        .reader-toolbar .tool-link { flex: 1 1 auto; }
+        .page-nav { gap: 12px; }
+        .page-nav #prevBtn { order: 1; flex: 1 1 0; }
+        .page-nav #nextBtn { order: 2; flex: 1 1 0; }
+        .page-nav .page-jump { order: 3; flex: 1 1 100%; justify-content: center; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .progress i { transition: none; }
+      }
+
+      /* Thumbnail grid */
+      .thumb-band { border-top: 1px solid var(--gold-line); padding: 22px 22px 26px; }
+      .thumb-band h3 { font-family: var(--serif); font-weight: 500; margin: 0 0 4px; font-size: 21px; }
+      .thumb-band p { margin: 0 0 16px; font-size: 13.5px; color: var(--ink-soft); }
+      .thumb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 10px; }
+      .thumb {
+        border: 2px solid transparent; padding: 0; background: #f0e8d5;
+        position: relative; display: block; cursor: pointer;
+      }
+      .thumb img {
+        display: block; width: 100%; aspect-ratio: 612 / 792; object-fit: contain;
+        border: 1px solid var(--gold-line-soft); background: #f0e8d5;
+      }
+      .thumb .t-no {
+        position: absolute; left: 0; right: 0; bottom: 0; text-align: center;
+        font-size: 11px; letter-spacing: 0.1em; padding: 2px 0;
+        background: rgba(21, 33, 48, 0.85); color: #f0e8d5;
+      }
+      .thumb:hover { border-color: var(--gold-line); }
+      .thumb.current { border-color: var(--gold-const); box-shadow: 0 0 0 1px var(--gold-bright); }
+      :root[data-theme="light"] .thumb.current { box-shadow: none; }
+      @media (max-width: 900px) {
+        .reader-body { grid-template-columns: 1fr; }
+        .toc { border-right: none; border-bottom: 1px solid var(--gold-line); max-height: 340px; }
+      }
+      @media (max-width: 680px) {
+        .reader-section { padding: 56px 16px 64px; }
+        .stage { padding: 18px 10px 16px; }
+        .thumb-band { padding: 18px 14px 20px; }
+      }
+
+
+      /* ---------- page views: home and reader are separate pages ---------- */
+      [hidden] { display: none !important; }
+      #view-reader { background: var(--raise); min-height: 100vh; }
+      #view-reader .reader-section { padding-top: 44px; }
+      .reader-topbar {
+        position: sticky; top: 0; z-index: 30;
+        display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px;
+        background: var(--navy-deep); color: #f0e8d5;
+        padding: 14px 20px; border-bottom: 2px solid var(--gold-const);
+      }
+      .back-link {
+        font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--gold-const-bright); text-decoration: none;
+        border: 1px solid rgba(201, 171, 114, 0.6); padding: 9px 15px;
+      }
+      .back-link:hover, .back-link:focus-visible { background: var(--gold-const); color: #1d2a3b; }
+      .reader-brand {
+        margin: 0 0 0 auto; font-family: var(--serif); font-size: 21px; font-weight: 500; color: #f0e8d5; text-decoration: none;
+      }
+      .reader-brand span {
+        font-family: var(--sans); font-size: 11px; font-weight: 600;
+        letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-const-bright); margin-left: 10px; vertical-align: middle;
+      }
+      .reader-topbar-vol {
+        margin: 0; width: 100%;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #a89f88;
+      }
+      .reader-topbar-vol span { color: var(--gold-const); margin: 0 4px; }
+      .reader-foot {
+        display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px 22px; align-items: center;
+        max-width: 1120px; margin: 0 auto; padding: 6px 20px 44px;
+        font-size: 13px; color: var(--ink-soft);
+      }
+      .reader-foot a {
+        justify-self: start; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-size: 12.5px;
+        color: var(--ivory); text-decoration: none; border-bottom: 1px solid var(--gold-const); padding-bottom: 2px;
+      }
+      .reader-foot span { justify-self: center; }
+      .reader-foot a:hover, .reader-foot a:focus-visible { color: var(--gold-bright); }
+      @media (max-width: 680px) {
+        .reader-brand span { display: none; }
+        #view-reader .reader-section { padding-top: 30px; }
+      }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 900px) {
+        .vol-grid { grid-template-columns: 280px 1fr; }
+        .glance-grid.cols-3, .full-grid, .full-grid.many { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 680px) {
+        .hero { padding: 42px 16px 52px; }
+        .trio { grid-template-columns: 1fr; max-width: 330px; gap: 40px; }
+        .stat { padding: 14px 16px 12px; }
+        .stat b { font-size: 24px; }
+        .vol { padding: 56px 16px 64px; }
+        .vol-grid { grid-template-columns: 1fr; }
+        .cover-fig { max-width: 330px; margin: 0 auto; width: 100%; }
+        .glance-grid.cols-3, .glance-grid.cols-2, .full-grid, .full-grid.many { grid-template-columns: 1fr; }
+        .inside-row { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .inside-row img { height: 150px; }
+        .actions .btn { flex: 1 1 auto; justify-content: center; }
+        details.full summary { padding: 16px 16px; }
+        .full-body { padding: 4px 16px 20px; }
+      }
+    
+
+      /* The switch is the master sheet's .switch. Kept here: its
+         placement on this page, fixed at the lower right and docked
+         in the Reader, its shadow, and the knob's mode glyphs, which
+         the master sheet's knob does not carry. The Reader's brand
+         line keeps clear of it, as it always has. */
+      .reader-brand { margin-right: 140px; }
+      .switch {
+        position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: 14px; z-index: 40;
+        cursor: pointer; box-shadow: 0 4px 14px rgba(29, 42, 59, 0.25);
+      }
+      .switch .knob {
+        display: flex; align-items: center; justify-content: center;
+      }
+      .switch .knob-glyph { display: flex; color: #152130; }
+      .switch .glyph svg, .switch .knob-glyph svg { display: block; }
+      .switch .k-moon { display: none; }
+      .switch[data-mode="dark"] .k-sun { display: none; }
+      .switch[data-mode="dark"] .k-moon { display: flex; }
+
+      /* While the Reader is open, the switch docks at the top right,
+         in the space the brand line already keeps clear for it, so in
+         the Reader it never floats over the page, the pager or the
+         progress bar, and never past the Reader card's edge. On the
+         home page it keeps its bottom corner, as it always has. */
+      body:has(#view-reader:not([hidden])) .switch {
+        top: calc(16px + env(safe-area-inset-top, 0px)); bottom: auto;
+      }

@@ -1,0 +1,177 @@
+/* THE ISLE · MASTER STYLE SHEET
+   The single source for every colour, face, size and space on 1s1e.com.
+   Anything created for The Isle starts from this sheet. Values here are
+   copied from the live pages they govern; a value that is not in this
+   sheet is not a master value. The companion document is THE-ISLE-STYLE-GUIDE.md. */
+
+/* Type, loaded once, exactly this line:
+   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" /> */
+
+:root{
+  color-scheme:dark;
+  /* The Isle Navy family, dark grounds */
+  --field:#1d2a3b;
+  --sea-deep:#152130;
+  --sea:#1d2a3b;
+  --sea-far:#1d2a3b;
+  --panel:#22344a;
+  --raise:#22344a;
+  --frame:#152130;
+  /* The Isle Ivory family, dark text */
+  --ivory:#f0e8d5;
+  --ivory-soft:#d9d0ba;
+  --ivory-dim:#a89f88;
+  /* Golds on dark */
+  --gold:#c2a15c;
+  --gold-bright:#c9ab72;
+  --gold-line:rgba(194,161,92,.30);
+  --gold-line-soft:rgba(194,161,92,.16);
+  --dot-glow:rgba(194,161,92,.14);
+  --link-line:rgba(194,161,92,.65);
+  /* The chart on dark */
+  --chart-border:rgba(194,161,92,.14);
+  --chart-cap:rgba(201,171,114,.50);
+  --coast:#c9ab72;
+  --curve:#f0e8d5;
+  --figure:#f0e8d5;
+  /* Entries on dark */
+  --entry-hover:rgba(240,232,213,.035);
+  --num-c:rgba(240,232,213,.13);
+  --num-h:rgba(201,171,114,.30);
+  --ghost-num:rgba(240,232,213,.07);
+  --ghost-eyebrow:rgba(194,161,92,.45);
+  --ghost-title:rgba(240,232,213,.42);
+  --ghost-text:rgba(217,208,186,.42);
+  --plate-c:rgba(194,161,92,.62);
+  /* Toggle on dark */
+  --toggle-bg:#f0e8d5;
+  --toggle-ink:#1d2a3b;
+  /* Faces */
+  --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+  --sans:"Source Sans 3", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+:root[data-theme="light"]{
+  color-scheme:light;
+  /* Light grounds are one flat ivory */
+  --field:#f0e8d5;
+  --sea-deep:#f0e8d5;
+  --sea:#f0e8d5;
+  --sea-far:#f0e8d5;
+  --panel:#f0e8d5;
+  --raise:#f3eee0;
+  --frame:#f0e8d5;
+  /* Light text is The Isle Navy and its steps */
+  --ivory:#1d2a3b;
+  --ivory-soft:#3c4763;
+  --ivory-dim:#767c8d;
+  /* Golds on light */
+  --gold:#a07f3a;
+  --gold-bright:#a07f3a;
+  --gold-line:rgba(160,127,58,.38);
+  --gold-line-soft:rgba(160,127,58,.20);
+  --dot-glow:rgba(160,127,58,.16);
+  --link-line:rgba(160,127,58,.7);
+  /* The chart on light */
+  --chart-border:rgba(160,127,58,.22);
+  --chart-cap:rgba(160,127,58,.72);
+  --coast:#a07f3a;
+  --curve:#3c4763;
+  --figure:#1d2a3b;
+  /* Entries on light */
+  --entry-hover:rgba(29,42,59,.045);
+  --num-c:rgba(29,42,59,.12);
+  --num-h:rgba(29,42,59,.24);
+  --ghost-num:rgba(29,42,59,.06);
+  --ghost-eyebrow:rgba(160,127,58,.5);
+  --ghost-title:rgba(29,42,59,.36);
+  --ghost-text:rgba(60,71,99,.42);
+  --plate-c:rgba(160,127,58,.68);
+  /* Toggle on light */
+  --toggle-bg:#1d2a3b;
+  --toggle-ink:#f0e8d5;
+}
+
+/* Base */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--field);
+  color:var(--ivory);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{ color:inherit; }
+
+/* The six type roles, at their master sizes */
+.t-display{ font-family:var(--serif); font-weight:500; font-size:64px; line-height:1.05; }
+.t-serif-line{ font-family:var(--serif); font-weight:500; font-style:italic; font-size:19px; line-height:1.4; }
+.t-heading{ font-family:var(--serif); font-weight:500; font-size:34px; line-height:1.15; }
+.t-body{ font-family:var(--sans); font-weight:400; font-size:17px; line-height:1.65; }
+.t-label{ font-family:var(--sans); font-weight:600; font-size:11px; letter-spacing:.34em; text-transform:uppercase; }
+.t-small{ font-family:var(--sans); font-weight:400; font-size:10.5px; letter-spacing:.26em; }
+
+/* The gold dot that heads a status group */
+.dot{
+  width:5px; height:5px; border-radius:50%;
+  background:var(--gold); flex:none;
+  box-shadow:0 0 0 3px var(--dot-glow);
+}
+
+/* Hairlines */
+.rule-gold{ border:0; border-top:1px solid var(--gold-line); }
+.rule-soft{ border:0; border-top:1px solid var(--gold-line-soft); }
+
+/* Motion: the chart drifts and pulses; the coastline never moves.
+   Static under reduced motion, always. */
+.drift-a{ animation:driftA 13s ease-in-out infinite; }
+.drift-b{ animation:driftB 17s ease-in-out infinite; animation-delay:-6s; }
+.drift-c{ animation:driftC 21s ease-in-out infinite; animation-delay:-11s; }
+.pulse-a{ animation:pulseA 10s ease-in-out infinite; }
+.pulse-b{ animation:pulseB 14s ease-in-out infinite; animation-delay:-5s; }
+.pulse-c{ animation:pulseC 18s ease-in-out infinite; animation-delay:-9s; }
+@keyframes driftA{ 0%,100%{ transform:translateX(0); opacity:.45; } 50%{ transform:translateX(7px); opacity:.8; } }
+@keyframes driftB{ 0%,100%{ transform:translateX(0); opacity:.55; } 50%{ transform:translateX(-6px); opacity:.28; } }
+@keyframes driftC{ 0%,100%{ transform:translateX(0); opacity:.32; } 50%{ transform:translateX(5px); opacity:.62; } }
+@keyframes pulseA{ 0%,100%{ opacity:.38; } 50%{ opacity:.85; } }
+@keyframes pulseB{ 0%,100%{ opacity:.7; } 50%{ opacity:.3; } }
+@keyframes pulseC{ 0%,100%{ opacity:.45; } 50%{ opacity:.78; } }
+@media (prefers-reduced-motion: reduce){
+  .drift-a,.drift-b,.drift-c,.pulse-a,.pulse-b,.pulse-c{ animation:none !important; }
+}
+
+/* The switch: one form everywhere, the slider from /ref.
+   A pill on Deep, a gold knob resting on the side of the mode in use. */
+.switch{
+  width:117px; height:44px; border-radius:999px; padding:0; position:relative;
+  background:rgba(21,33,48,.94); border:1px solid rgba(201,171,114,.55);
+  color:#152130;
+}
+.switch:hover{ border-color:#c9ab72; }
+.switch:focus-visible{ outline:2px solid #c9ab72; outline-offset:2px; }
+.switch .glyph{
+  position:absolute; top:50%; transform:translateY(-50%);
+  font-size:11px; line-height:1; color:rgba(201,171,114,.85);
+}
+.switch .sun{ left:11px; }
+.switch .moon{ right:11px; }
+.switch .knob{
+  position:absolute; top:50%; left:5px; width:54px; height:32px; border-radius:999px;
+  background:#c9ab72; transform:translate(0,-50%); transition:transform .25s ease;
+}
+.switch[data-mode="dark"] .knob{ transform:translate(51px,-50%); }
+
+/* The button: one form everywhere, settled November 22, 2026 from new
+   samples shown on /ref, the Lot Viewer and the Shadow Study.
+   Off rests; on fills with Page Gold. */
+.btn{
+  font-family:var(--sans); font-size:12.5px; font-weight:600; padding:8px 12px; min-height:44px; border-radius:6px;
+  background:var(--panel); color:var(--ivory); border:1px solid var(--gold-line); cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn svg{ width:14px; height:14px; flex:none; }
+.btn:hover{ border-color:var(--gold); }
+.btn.on{ background:var(--gold); color:#1d2a3b; border-color:var(--gold); }
+[data-theme="light"] .btn{ background:#f3eee0; color:#1d2a3b; }
+[data-theme="light"] .btn.on{ background:var(--gold); color:#f0e8d5; border-color:var(--gold); }

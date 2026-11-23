@@ -16,28 +16,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
-<style>
-  :root { --ground:#1d2a3b; --panel:#22344a; --silver:#C0C0C0; --ivory:#f0e8d5; --ivory-soft:#d9d0ba; --ivory-dim:#a89f88; --gold:#c2a15c; --gold-line:rgba(194,161,92,.30); --serif:"Playfair Display", Georgia, "Times New Roman", serif; --sans:"Source Sans 3", "Avenir Next", "Segoe UI", sans-serif; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--ground); color:var(--silver); font-family:var(--sans); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-  .box { width:100%; max-width:340px; text-align:center; }
-  h1 { font-family:var(--serif); font-weight:500; letter-spacing:.35em; font-size:26px; text-transform:uppercase; }
-  .rule { height:1px; background:var(--silver); margin:20px 0 26px; }
-  label { display:block; font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:.34em; text-transform:uppercase; color:var(--ivory-dim); margin-bottom:12px; }
-  input { width:100%; min-height:44px; padding:8px 12px; font-family:var(--sans); font-size:17px; text-align:center; color:var(--ivory); background:var(--panel); border:1px solid var(--gold-line); border-radius:6px; outline:none; }
-  input:focus { border-color:var(--gold); outline:2px solid var(--gold); outline-offset:2px; }
-  button { margin-top:14px; width:100%; min-height:44px; padding:8px 12px; font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--ivory); background:var(--panel); border:1px solid var(--gold-line); border-radius:6px; cursor:pointer; }
-  button:hover { border-color:var(--gold); }
-  .err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }
-</style>
+<link rel="stylesheet" href="/assets/the-isle-master.css" />
+<link rel="stylesheet" href="/secure/secure.css" />
+
 </head>
 <body>
   <form class="box" id="f">
     <h1>The Isle</h1>
     <div class="rule"></div>
-    <label for="p">Password</label>
+    <label for="p" class="t-label">Password</label>
     <input id="p" type="password" autocomplete="current-password" />
-    <button type="submit">Open</button>
+    <button type="submit" class="btn">Open</button>
     <div class="err" id="e"></div>
   </form>
 <script>
