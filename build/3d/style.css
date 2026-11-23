@@ -126,6 +126,11 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: var(--text-x
   .controls { width: min(46rem, calc(100vw - 1.5rem)); }
   .hint { display: none; }
 }
+.satctl { display: grid; gap: 6px; margin-top: 10px; }
+.satrow { display: flex; align-items: center; gap: 8px; }
+.satlab { font-size: 12px; color: var(--mut); width: 44px; flex: none; }
+.satrow .seg { flex: 1; }
+.satrow .seg button { flex: 1; padding: 7px 2px; font-size: 12px; }
 @media (max-width: 640px) {
   .title-card { top: var(--space-2); left: var(--space-2); right: var(--space-2); max-width: none; padding: var(--space-2) var(--space-4) var(--space-3); }
   .controls { bottom: var(--space-2); padding: var(--space-3); width: calc(100vw - 1rem); gap: var(--space-2); }

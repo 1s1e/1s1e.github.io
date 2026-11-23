@@ -54,10 +54,25 @@
     </div>
     <div class="group toggles">
       <label class="switch"><input type="checkbox" id="t-pool" checked><span class="track" aria-hidden="true"></span><span>Pool &amp; cage</span></label>
+      <label class="switch"><input type="checkbox" id="t-lawn" checked><span class="track" aria-hidden="true"></span><span>Lawn</span></label>
       <label class="switch"><input type="checkbox" id="t-labels" checked><span class="track" aria-hidden="true"></span><span>Room labels</span></label>
+      <label class="switch"><input type="checkbox" id="t-survey"><span class="track" aria-hidden="true"></span><span>Survey</span></label>
+      <label class="switch"><input type="checkbox" id="t-sat"><span class="track" aria-hidden="true"></span><span>Satellite</span></label>
       <label class="switch"><input type="checkbox" id="t-dims"><span class="track" aria-hidden="true"></span><span>Dimensions</span></label>
       <label class="switch"><input type="checkbox" id="t-elev"><span class="track" aria-hidden="true"></span><span>True elevations</span></label>
       <label class="switch"><input type="checkbox" id="t-spin"><span class="track" aria-hidden="true"></span><span>Turntable</span></label>
+    </div>
+    <div class="satctl">
+      <div class="satrow"><span class="satlab">Image</span>
+        <div class="seg" id="seg-variant" role="group" aria-label="Satellite image">
+          <button type="button" data-v="master" class="on">Master</button><button type="button" data-v="cleaned">Cleaned</button><button type="button" data-v="render">Render</button>
+        </div>
+      </div>
+      <div class="satrow"><span class="satlab">Extent</span>
+        <div class="seg" id="seg-extent" role="group" aria-label="Satellite extent">
+          <button type="button" data-v="tight" class="on">Lot</button><button type="button" data-v="full">Full frame</button>
+        </div>
+      </div>
     </div>
     <div class="group actions">
       <button class="ghost" id="photo" type="button">Photo</button>

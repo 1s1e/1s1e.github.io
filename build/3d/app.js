@@ -60,7 +60,12 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.5;
 
-const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true };
+const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, survey: false, sat: false, satVariant: 'master', satExtent: 'tight' };
+let lawnMesh = null, lawnPatch = null;
+function applyLawn() {
+  if (lawnMesh) lawnMesh.visible = state.lawn;
+  if (lawnPatch) lawnPatch.visible = state.lawn && !state.pool;
+}
 
 // ---------------------------------------------------------------- cameras
 const persp = new THREE.PerspectiveCamera(32, 1, 0.5, 600);
@@ -160,6 +165,7 @@ function loadModel() {
     scene.add(gltf.scene);
     // lawn patch that closes the pool cut-out while the pool is switched off
     const lawn = gltf.scene.getObjectByName('site__lawn');
+    lawnMesh = lawn;
     if (lawn && LAWN_PATCH) {
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.Float32BufferAttribute(LAWN_PATCH.p, 3));
@@ -167,6 +173,7 @@ function loadModel() {
       geo.setAttribute('uv', new THREE.Float32BufferAttribute(LAWN_PATCH.uv, 2));
       const patch = new THREE.Mesh(geo, lawn.material);
       patch.receiveShadow = true; patch.visible = false;
+      lawnPatch = patch;
       gltf.scene.add(patch); groups.nopool.push(patch);
     }
     // --- Viewer-side corrections (source model untouched) -----------------
@@ -336,7 +343,7 @@ function setView(name, instant) {
   lastView = name;
   swapCamera(state.elev && ELEV_VIEWS.includes(name));
   if (v.box === 'pool' && !state.pool) { state.pool = true; document.getElementById('t-pool').checked = true; setMode(state.mode, false); }
-  const pts = v.box === 'pool' ? POOL_VIEW_PTS : [...HULL[state.mode], ...(state.dims ? DIM_PTS : []), ...(state.pool ? POOL_PTS : [])];
+  const pts = v.box === 'pool' ? POOL_VIEW_PTS : [...HULL[state.mode], ...(state.dims ? DIM_PTS : []), ...(state.pool ? POOL_PTS : []), ...layerFitPts()];
   const { pos, target, H } = fit(v.dir, pts);
   if (instant || reduceMotion) {
     camera.position.copy(pos); controls.target.copy(target);
@@ -364,6 +371,8 @@ function setMode(mode, moveCamera = true) {
   state.mode = mode;
   const show = { site: true, f1: true, f2: mode !== 'main', roof_lower: mode !== 'main', roof_upper: mode === 'exterior', pool: state.pool, nopool: !state.pool };
   for (const [g, arr] of Object.entries(groups)) for (const o of arr) o.visible = show[g];
+  applyLawn();
+  syncLayerHoles();
   invalidate(3, true);
   document.querySelectorAll('.segmented button').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.mode === mode)));
   if (moveCamera) setView(mode === 'exterior' ? 'hero' : 'plan');
@@ -380,6 +389,121 @@ document.querySelector('.segmented').addEventListener('keydown', (e) => {
   }
 });
 document.querySelectorAll('.chips button').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
+
+// ---- ground layers: the lot survey and satellite images, registered to the
+// lot master frame (8455 x 8543 px, Web Mercator). The transform was solved
+// against the lot work's own floor plan pool layer: 17.0 degrees, 4.628 px
+// per foot, house origin (u 0, v 0) at frame px (4340.8, 4243.2). The pool
+// outline matched the model to about a foot.
+const TIGHT_WIN = [3700, 3750, 4780, 4960];
+const FULL_WIN = [0, 0, 8455, 8543];
+function pxToPlanUV(x, y) {
+  const rx = x - 4340.8, ry = y - 4243.2;
+  return {
+    u: (-1.353 * rx + 4.426 * ry) / 21.42,
+    v: (-1.353 * ry - 4.426 * rx) / 21.42
+  };
+}
+const layerGroup = new THREE.Group();
+layerGroup.name = 'viewer__ground_layers';
+scene.add(layerGroup);
+const layerMeshes = {};
+function planToPx(u, v) {
+  return [4340.8 + u * -1.353 + v * -4.426, 4243.2 + u * 4.426 + v * -1.353];
+}
+function syncLayerHoles() {
+  for (const m of Object.values(layerMeshes)) if (m.userData.fullGeo) m.geometry = state.pool ? m.userData.holedGeo : m.userData.fullGeo;
+}
+function layerQuad(win, url, transparent) {
+  const [x0, y0, x1, y1] = win;
+  // Build the sheet in plan coordinates. While the pool is shown, the sheet
+  // carries a hole over the pool basin, so the layers never cut through the
+  // pool: through the water you see the pool's own finish, as modelled. The
+  // basin floor drops about 1.4 m, below the sheet's -0.50 m level, in the
+  // deep centre. With the pool off, the whole sheet is used.
+  const buildGeo = (withHole) => {
+    const outer = [[x0, y0], [x1, y0], [x1, y1], [x0, y1]].map(([px, py]) => pxToPlanUV(px, py));
+    const shape = new THREE.Shape();
+    outer.forEach(({ u, v }, i) => { if (i === 0) shape.moveTo(u, v); else shape.lineTo(u, v); });
+    shape.closePath();
+    if (withHole) {
+      const hole = new THREE.Path();
+      const HC = [[-24.5, 8.5], [-1.5, 8.5], [-1.5, 43.5], [-24.5, 43.5]];
+      HC.forEach(([u, v], i) => { if (i === 0) hole.moveTo(u, v); else hole.lineTo(u, v); });
+      hole.closePath();
+      shape.holes.push(hole);
+    }
+    const g = new THREE.ShapeGeometry(shape, 2);
+    const p = g.getAttribute('position');
+    const pos = [], uv = [];
+    for (let i = 0; i < p.count; i++) {
+      const u = p.getX(i), v = p.getY(i);
+      pos.push((54 - v) * FT, -0.50, (u - 83) * FT);
+      const [px, py] = planToPx(u, v);
+      uv.push((px - x0) / (x1 - x0), 1 - (py - y0) / (y1 - y0));
+    }
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    return g;
+  };
+  const g = buildGeo(true);
+  const tex = new THREE.TextureLoader().load(url, () => invalidate());
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({
+    map: tex, side: THREE.DoubleSide, toneMapped: false,
+    transparent: !!transparent, depthWrite: !transparent
+  }));
+  m.renderOrder = transparent ? -1 : 0;
+  m.visible = false;
+  m.userData.holedGeo = g;
+  m.userData.fullGeo = buildGeo(false);
+  layerGroup.add(m);
+  return m;
+}
+function ensureLayer(key) {
+  if (layerMeshes[key]) return layerMeshes[key];
+  let m;
+  if (key === 'survey') m = layerQuad(TIGHT_WIN, './layers/survey-tight.png', true);
+  else {
+    const [variant, extent] = key.split('-');
+    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/sat-' + variant + '-' + extent + '.jpg', false);
+  }
+  layerMeshes[key] = m;
+  return m;
+}
+function applyLayers() {
+  for (const k of Object.keys(layerMeshes)) layerMeshes[k].visible = false;
+  if (state.survey) ensureLayer('survey').visible = true;
+  if (state.sat) ensureLayer(state.satVariant + '-' + state.satExtent).visible = true;
+}
+function layerFitPts() {
+  const pts = [];
+  const wins = [];
+  if (state.survey) wins.push(TIGHT_WIN);
+  if (state.sat) wins.push(state.satExtent === 'full' ? FULL_WIN : TIGHT_WIN);
+  for (const [x0, y0, x1, y1] of wins)
+    for (const [px, py] of [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]) {
+      const { u, v } = pxToPlanUV(px, py);
+      pts.push(new THREE.Vector3((54 - v) * FT, 0, (u - 83) * FT));
+    }
+  return pts;
+}
+document.getElementById('t-lawn').addEventListener('change', (e) => { state.lawn = e.target.checked; applyLawn(); invalidate(); });
+document.getElementById('t-survey').addEventListener('change', (e) => { state.survey = e.target.checked; applyLayers(); invalidate(); });
+document.getElementById('t-sat').addEventListener('change', (e) => { state.sat = e.target.checked; applyLayers(); invalidate(); });
+function segWire(id, fn) {
+  const seg = document.getElementById(id);
+  seg.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    seg.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+    fn(b.dataset.v);
+    applyLayers();
+    invalidate();
+  }));
+}
+segWire('seg-variant', (v) => { state.satVariant = v; if (!state.sat) { state.sat = true; document.getElementById('t-sat').checked = true; } });
+segWire('seg-extent', (v) => { state.satExtent = v; if (!state.sat) { state.sat = true; document.getElementById('t-sat').checked = true; } });
+
 document.getElementById('t-labels').addEventListener('change', (e) => { state.labels = e.target.checked; invalidate(); });
 document.getElementById('t-dims').addEventListener('change', (e) => { state.dims = e.target.checked; dimGroup.visible = state.dims; invalidate(); if (state.dims) setView(lastView); });
 document.getElementById('t-elev').addEventListener('change', (e) => {
