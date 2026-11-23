@@ -12,7 +12,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
     <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
     <meta name="theme-color" content="#1d2a3b" />
-<title>The Isle · Site Index</title>
+    <script>try{var savedTheme=localStorage.getItem("isle-theme");if(savedTheme==="light"||savedTheme==="dark"){document.documentElement.setAttribute("data-theme",savedTheme);if(savedTheme==="light"){document.querySelector('meta[name="theme-color"]').setAttribute("content","#f0e8d5");}}}catch(e){}</script>
+<title>The Isle · The Build</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -269,31 +270,30 @@
   .foot .site{ color:var(--ivory-soft); }
   .foot time{ color:var(--ivory-soft); letter-spacing:.18em; }
 
-  .theme-toggle{
-    display:inline-flex;
-    gap:2px;
-    flex:none;
+  .switch{
+    width:117px; height:44px; border-radius:999px; padding:0; position:relative;
+    background:rgba(21,33,48,.94); border:1px solid rgba(201,171,114,.55);
+    color:#152130; cursor:pointer; flex:none;
   }
-  .theme-toggle button{
-    appearance:none;
-    border:0;
-    background:transparent;
-    cursor:pointer;
-    font-family:var(--sans);
-    font-size:10px; font-weight:600;
-    letter-spacing:.22em;
-    color:var(--ivory-dim);
-    padding:7px 12px 7px 14px;
-    min-height:2rem;
+  .switch:hover{ border-color:#c9ab72; }
+  .switch:focus-visible{ outline:2px solid #c9ab72; outline-offset:2px; }
+  .switch .glyph{
+    position:absolute; top:50%; transform:translateY(-50%);
+    font-size:11px; line-height:1; color:rgba(201,171,114,.85);
   }
-  .theme-toggle button.on{
-    background:var(--toggle-bg);
-    color:var(--toggle-ink);
+  .switch .sun{ left:11px; }
+  .switch .moon{ right:11px; }
+  .switch .knob{
+    position:absolute; top:50%; left:5px; width:54px; height:32px; border-radius:999px;
+    background:#c9ab72; transform:translate(0,-50%); transition:transform .25s ease;
+    display:flex; align-items:center; justify-content:center;
   }
-  .theme-toggle button:focus-visible{
-    outline:1px solid var(--gold);
-    outline-offset:2px;
-  }
+  .switch[data-mode="dark"] .knob{ transform:translate(51px,-50%); }
+  .switch .knob-glyph{ display:flex; color:#152130; }
+  .switch .glyph svg, .switch .knob-glyph svg{ display:block; }
+  .switch .k-moon{ display:none; }
+  .switch[data-mode="dark"] .k-sun{ display:none; }
+  .switch[data-mode="dark"] .k-moon{ display:flex; }
 
   .entry{
     display:grid;
@@ -384,8 +384,8 @@
 
   <section class="panel panel-left" aria-label="The Isle and the county check">
     <div class="lockup">
-      <img class="mark-dark" src="mark-dark.png" alt="The Isle" />
-      <img class="mark-colour" src="mark-colour.png" alt="The Isle" />
+      <img class="mark-dark" src="/site/mark-dark.png" alt="The Isle" />
+      <img class="mark-colour" src="/site/mark-colour.png" alt="The Isle" />
       <p class="tagline">More than a place you come to, a place you stay.</p>
       <div class="tagline-rule" aria-hidden="true"></div>
     </div>
@@ -412,7 +412,7 @@
         </div>
         <div class="row">
           <dt>NEXT CHECK</dt>
-          <dd>A full check of the <a href="https://1s1e.com/site/permits/">county site</a> runs first when the watch resumes.</dd>
+          <dd>A full check of the <a href="https://1s1e.com/build/permits/">county site</a> runs first when the watch resumes.</dd>
         </div>
       </dl>
     </div>
@@ -455,33 +455,30 @@
 
     <footer class="foot">
       <span class="site">1s1e.com</span>
-      <div class="theme-toggle" role="group" aria-label="Colour mode">
-        <button type="button" id="btnLight" aria-pressed="false">LIGHT</button>
-        <button type="button" id="btnDark" class="on" aria-pressed="true">DARK</button>
-      </div>
+      <button type="button" class="switch" id="themeSwitch" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
       <span>THE ISLE · <time id="localTime">--:--</time></span>
     </footer>
   </section>
 
   <nav class="panel panel-right" aria-label="Site sections">
-    <a class="entry" href="https://1s1e.com/site/lot/">
+    <a class="entry" href="https://1s1e.com/build/lot/">
       <span class="num" aria-hidden="true">01</span>
       <p class="eyebrow">THE LAND</p>
       <h3>Lot Viewer</h3>
       <p>The lot in full: its maps, boundaries, flood lines, survey and floor plans, layer upon layer.</p>
       <p class="status">OPEN · 18 LAYERS</p>
     </a>
-    <a class="entry" href="https://1s1e.com/site/shadow/">
+    <a class="entry" href="https://1s1e.com/build/shadow/">
       <span class="num" aria-hidden="true">02</span>
       <p class="eyebrow">THE LIGHT</p>
       <h3>Shadow Study</h3>
       <p>Sun and shadow tracked across the house and the lot, through the day and the year.</p>
       <p class="status">OPEN · 365 DAYS</p>
     </a>
-    <a class="entry" href="https://1s1e.com/site/permits/">
+    <a class="entry" href="https://1s1e.com/build/permits/">
       <span class="num" aria-hidden="true">03</span>
       <p class="eyebrow">THE RECORD</p>
-      <h3>Permits</h3>
+      <h3>Permits &amp; Documents</h3>
       <p>The county permit record for the house: documents, inspections and reviews, kept current.</p>
       <p class="status">OPEN · 20 DOCUMENTS</p>
     </a>
@@ -498,20 +495,22 @@
 <script>
   (function(){
     var root = document.documentElement;
-    var btnLight = document.getElementById('btnLight');
-    var btnDark = document.getElementById('btnDark');
+    var themeSwitch = document.getElementById('themeSwitch');
     var metaTheme = document.querySelector('meta[name="theme-color"]');
     function setTheme(t){
       root.setAttribute('data-theme', t);
       if (metaTheme) metaTheme.setAttribute('content', (t === 'light') ? '#f0e8d5' : '#1d2a3b');
-      var light = (t === 'light');
-      btnLight.classList.toggle('on', light);
-      btnDark.classList.toggle('on', !light);
-      btnLight.setAttribute('aria-pressed', light ? 'true' : 'false');
-      btnDark.setAttribute('aria-pressed', light ? 'false' : 'true');
+      if (themeSwitch){
+        themeSwitch.setAttribute('data-mode', t);
+        themeSwitch.setAttribute('aria-checked', (t === 'dark') ? 'true' : 'false');
+      }
     }
-    btnLight.addEventListener('click', function(){ setTheme('light'); });
-    btnDark.addEventListener('click', function(){ setTheme('dark'); });
+    setTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    if (themeSwitch) themeSwitch.addEventListener('click', function(){
+      var next = (root.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      setTheme(next);
+      try{ localStorage.setItem('isle-theme', next); }catch(e){}
+    });
 
     var el = document.getElementById('localTime');
     function tick(){
