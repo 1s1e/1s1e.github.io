@@ -35,7 +35,7 @@
         --paper-tint: #f3eee0;
         --img-back: #ffffff;
         --ink: #1d2a3b;
-        --ink-soft: #5a6577;
+        --ink-soft: #3c4763;
         --line: #ddd5c2;
         --line-soft: #eae5d8;
         --shadow-cover: 0 22px 44px rgba(13, 20, 30, 0.32), 0 4px 12px rgba(13, 20, 30, 0.18);
@@ -202,8 +202,7 @@
       .trio .t-pages { display: block; font-size: 13.5px; color: #b9c1ca; margin-top: 3px; }
       .hero-note { margin: 46px auto 0; font-size: 13.5px; color: #98a3ae; letter-spacing: 0.04em; }
       .hero-dl { margin: 24px auto 0; display: flex; justify-content: center; }
-      .hero-dl a.btn-dl { color: var(--gold-bright); }
-      .hero-dl a.btn-dl:hover, .hero-dl a.btn-dl:focus-visible { background: var(--gold); color: #16222f; }
+      /* The hero download follows the settled .btn-dl standard below. */
 
       /* ---------- volume sections ---------- */
       .vol { padding: 76px 20px 84px; }
@@ -243,21 +242,23 @@
       .vol-desc { font-size: 16.5px; line-height: 1.7; margin: 18px 0 0; max-width: 56ch; }
       .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
       .btn {
-        display: inline-flex; align-items: center; gap: 10px;
-        font-family: var(--sans); font-size: 14.5px; font-weight: 700;
-        letter-spacing: 0.1em; text-transform: uppercase;
-        text-decoration: none; padding: 14px 22px;
-        border: 1px solid var(--navy);
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+        letter-spacing: normal; text-transform: none;
+        text-decoration: none; padding: 8px 12px; min-height: 44px;
+        border: 1px solid #a07f3a; border-radius: 6px;
         transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
       }
-      .btn svg { width: 17px; height: 17px; flex: none; }
-      .btn-read { background: var(--navy); color: #f4efe2; }
-      .btn-read:hover, .btn-read:focus-visible { background: var(--navy-panel); border-color: var(--navy-panel); }
-      .btn-dl { background: transparent; color: var(--ink); border-color: var(--gold); }
-      .btn-dl:hover, .btn-dl:focus-visible { background: var(--gold); color: #ffffff; border-color: var(--gold); }
+      .btn svg { width: 14px; height: 14px; flex: none; }
+      .btn-read { background: #a07f3a; border-color: #a07f3a; color: #f0e8d5; }
+      .btn-read:hover, .btn-read:focus-visible { background: #a07f3a; border-color: #a07f3a; color: #f0e8d5; }
+      .btn-dl { background: #f3eee0; border-color: rgba(160, 127, 58, 0.38); color: #1d2a3b; }
+      .btn-dl:hover, .btn-dl:focus-visible { border-color: #a07f3a; }
       @media (prefers-color-scheme: dark) {
-        .btn-dl { color: var(--gold-bright); }
-        .btn-dl:hover, .btn-dl:focus-visible { color: #16222f; }
+        .btn-read { background: #c2a15c; border-color: #c2a15c; color: #1d2a3b; }
+        .btn-read:hover, .btn-read:focus-visible { background: #c2a15c; border-color: #c2a15c; color: #1d2a3b; }
+        .btn-dl { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+        .btn-dl:hover, .btn-dl:focus-visible { border-color: #c2a15c; }
       }
       .inside { margin-top: 36px; }
       .inside h3 {
@@ -439,6 +440,15 @@
       .tool-link:hover { border-color: var(--gold); color: var(--gold-text); }
       button.tool-link { font-family: var(--sans); cursor: pointer; }
       button.tool-link:hover, button.tool-link:focus-visible { border-color: var(--gold); color: var(--gold-text); }
+      /* The Reader's Download PDF carries the settled button form
+         (off state), unlike the toolbar's text links. */
+      #pdfLink {
+        gap: 8px; letter-spacing: normal; text-transform: none;
+        padding: 8px 12px; border-radius: 6px;
+        background: #f3eee0; border: 1px solid rgba(160, 127, 58, 0.38); color: #1d2a3b;
+      }
+      #pdfLink svg { width: 14px; height: 14px; flex: none; }
+      #pdfLink:hover, #pdfLink:focus-visible { border-color: #a07f3a; color: #1d2a3b; }
       /* The link bar hangs over the reader body from the toolbar, so
          opening it never pushes the page down. */
       .link-bar {
@@ -496,7 +506,7 @@
       /* Dark scheme refinements: keep gold text and the current-page
          markers clearly readable on the dark grounds. */
       @media (prefers-color-scheme: dark) {
-        .btn-read { border-color: var(--gold); }
+        .btn-read { background: #c2a15c; border-color: #c2a15c; color: #1d2a3b; }
         .toc-entry.current { box-shadow: inset 3px 0 0 var(--gold-bright); }
         .thumb.current { box-shadow: 0 0 0 1px var(--gold-bright); }
         .reader-toolbar { background: var(--paper-tint); }
@@ -560,11 +570,13 @@
       }
       .nav-btn {
         cursor: pointer; font-family: var(--sans);
-        border: 1px solid var(--gold); background: transparent; color: var(--gold-bright);
-        padding: 10px 22px; font-size: 13px; font-weight: 700; min-height: 44px;
-        letter-spacing: 0.16em; text-transform: uppercase;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border: 1px solid rgba(160, 127, 58, 0.38); border-radius: 6px; background: #f3eee0; color: #1d2a3b;
+        padding: 8px 12px; font-size: 12.5px; font-weight: 600; min-height: 44px;
+        letter-spacing: normal; text-transform: none;
       }
-      .nav-btn:hover:not(:disabled) { background: var(--gold); color: #16222f; }
+      .nav-btn svg { width: 14px; height: 14px; flex: none; }
+      .nav-btn:hover:not(:disabled) { border-color: #a07f3a; }
       .nav-btn:disabled { opacity: 0.35; cursor: default; }
       .page-jump { display: flex; align-items: center; gap: 8px; color: #c9cfd4; font-size: 14px; }
       .page-jump input {
@@ -706,24 +718,41 @@
         --paper: #f0e8d5;
         --paper-tint: #f3eee0;
         --ink: #1d2a3b;
-        --ink-soft: #5a6577;
+        --ink-soft: #3c4763;
         --line: #ddd5c2;
         --line-soft: #eae5d8;
         --shadow-cover: 0 22px 44px rgba(13, 20, 30, 0.32), 0 4px 12px rgba(13, 20, 30, 0.18);
         --shadow-page: 0 10px 26px rgba(13, 20, 30, 0.16), 0 2px 6px rgba(13, 20, 30, 0.1);
       }
-      [data-theme="dark"] .btn-dl { color: var(--gold-bright); }
-      [data-theme="dark"] .btn-dl:hover, [data-theme="dark"] .btn-dl:focus-visible { color: #16222f; }
-      [data-theme="dark"] .btn-read { border-color: var(--gold); }
+      [data-theme="dark"] .btn-dl { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+      [data-theme="dark"] .btn-dl:hover, [data-theme="dark"] .btn-dl:focus-visible { border-color: #c2a15c; }
+      [data-theme="dark"] .btn-read { background: #c2a15c; border-color: #c2a15c; color: #1d2a3b; }
+      [data-theme="dark"] .btn-read:hover, [data-theme="dark"] .btn-read:focus-visible { background: #c2a15c; border-color: #c2a15c; color: #1d2a3b; }
       [data-theme="dark"] .toc-entry.current { background: rgba(201, 171, 114, 0.22); box-shadow: inset 3px 0 0 var(--gold-bright); }
       [data-theme="dark"] .thumb.current { box-shadow: 0 0 0 1px var(--gold-bright); }
       [data-theme="dark"] .hero-note { color: #aeb9c4; }
-      [data-theme="light"] .btn-dl { color: var(--ink); }
-      [data-theme="light"] .btn-dl:hover, [data-theme="light"] .btn-dl:focus-visible { color: #ffffff; }
-      [data-theme="light"] .btn-read { border-color: var(--navy); }
+      [data-theme="light"] .btn-dl { background: #f3eee0; border-color: rgba(160, 127, 58, 0.38); color: #1d2a3b; }
+      [data-theme="light"] .btn-dl:hover, [data-theme="light"] .btn-dl:focus-visible { border-color: #a07f3a; }
+      [data-theme="light"] .btn-read { background: #a07f3a; border-color: #a07f3a; color: #f0e8d5; }
+      [data-theme="light"] .btn-read:hover, [data-theme="light"] .btn-read:focus-visible { background: #a07f3a; border-color: #a07f3a; color: #f0e8d5; }
       [data-theme="light"] .toc-entry.current { background: rgba(176, 141, 87, 0.16); box-shadow: none; }
       [data-theme="light"] .thumb.current { box-shadow: none; }
       [data-theme="light"] .hero-note { color: #98a3ae; }
+      /* Settled off-state buttons (pager, Reader Download PDF) in dark. */
+      @media (prefers-color-scheme: dark) {
+        .nav-btn { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+        .nav-btn:hover:not(:disabled) { border-color: #c2a15c; }
+        #pdfLink { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+        #pdfLink:hover, #pdfLink:focus-visible { border-color: #c2a15c; color: #f0e8d5; }
+      }
+      [data-theme="dark"] .nav-btn { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+      [data-theme="dark"] .nav-btn:hover:not(:disabled) { border-color: #c2a15c; }
+      [data-theme="dark"] #pdfLink { background: #22344a; border-color: rgba(194, 161, 92, 0.30); color: #f0e8d5; }
+      [data-theme="dark"] #pdfLink:hover, [data-theme="dark"] #pdfLink:focus-visible { border-color: #c2a15c; color: #f0e8d5; }
+      [data-theme="light"] .nav-btn { background: #f3eee0; border-color: rgba(160, 127, 58, 0.38); color: #1d2a3b; }
+      [data-theme="light"] .nav-btn:hover:not(:disabled) { border-color: #a07f3a; }
+      [data-theme="light"] #pdfLink { background: #f3eee0; border-color: rgba(160, 127, 58, 0.38); color: #1d2a3b; }
+      [data-theme="light"] #pdfLink:hover, [data-theme="light"] #pdfLink:focus-visible { border-color: #a07f3a; color: #1d2a3b; }
 
       /* Keep the Reader's brand line clear of the switch. */
       .reader-brand { margin-right: 118px; }
@@ -749,7 +778,7 @@
         transition: transform 0.25s ease;
         display: flex; align-items: center; justify-content: center;
       }
-      .theme-slider .ts-knob-glyph { display: flex; color: #16222f; }
+      .theme-slider .ts-knob-glyph { display: flex; color: #152130; }
       .theme-slider .ts-glyph svg, .theme-slider .ts-knob-glyph svg { display: block; }
       .theme-slider .ts-k-moon { display: none; }
       .theme-slider[data-mode="dark"] .ts-k-sun { display: none; }
@@ -1649,7 +1678,7 @@
           <div class="toolbar-spacer"></div>
           <button class="tool-link" type="button" id="fullSizeBtn">Full size</button>
           <button class="tool-link" type="button" id="linkBtn">Link to this page</button>
-          <a class="tool-link" id="pdfLink" href="assets/the-isle-vol-1-furniture.pdf" download="The Isle Vol. 1 - Furniture.pdf">Download PDF</a>
+          <a class="tool-link" id="pdfLink" href="assets/the-isle-vol-1-furniture.pdf" download="The Isle Vol. 1 - Furniture.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a>
           <div class="link-bar" id="linkBar" hidden>
             <label for="linkInput">Link to this page</label>
             <input id="linkInput" type="text" readonly value="" aria-label="Link to this page" />
@@ -1670,12 +1699,12 @@
               </figcaption>
             </figure>
             <div class="page-nav">
-              <button class="nav-btn" type="button" id="prevBtn">&larr; Previous</button>
+              <button class="nav-btn" type="button" id="prevBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Previous</button>
               <label class="page-jump">Page
                 <input type="number" id="pageInput" min="1" max="42" value="1" aria-label="Go to page" />
                 <span id="pageTotal">of 42</span>
               </label>
-              <button class="nav-btn" type="button" id="nextBtn">Next &rarr;</button>
+              <button class="nav-btn" type="button" id="nextBtn">Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
             </div>
             <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
           </div>
