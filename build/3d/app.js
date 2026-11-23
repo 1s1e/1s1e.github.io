@@ -125,7 +125,7 @@ const HULL = {
   main: boxPts(-1, -1, 0, 84, 55, 11.4),
 };
 // the pool and cage as measured from the model itself: cage u -25..5, v 0..54, top 10.5 ft
-const POOL_PTS = boxPts(-26, -1, 0, 5, 55, 11.7);
+const POOL_PTS = boxPts(-26, -1, 0, 5, 55, 11.4);
 const POOL_VIEW_PTS = boxPts(-26, -1, 0, 14, 55, 11.5);
 const DIM_PTS = [P(88, 58.5, 0), P(88, 58.5, 28.5)];
 
@@ -190,10 +190,10 @@ function loadModel() {
       gltf.scene.add(wallPatch);
     }
     // 2) Pool enclosure raised so its top beam sits right under the roof,
-    //    about 11'-4" (the model's plate height). The source cage tops out
+    //    11'-0", just clear under the roof. The source cage tops out
     //    at 10.48 ft; cage and screen scale together about the ground, so
     //    posts, mid rails and doors keep their proportions.
-    const CAGE_RAISE = 11.333 / 10.48;
+    const CAGE_RAISE = 11.0 / 10.48;
     for (const n of ['pool__cage', 'pool__screen']) {
       const o = gltf.scene.getObjectByName(n);
       if (o) o.scale.y = CAGE_RAISE;
