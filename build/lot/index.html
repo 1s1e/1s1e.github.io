@@ -95,7 +95,7 @@
   .sec-toggle .chev { margin-left: 8px; color: var(--muted); font-size: 11px; transition: transform 0.15s; }
   .sec-head .sec-all:first-of-type { margin-left: auto; }
   .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
-  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--muted); font-family: inherit; font-size: 10px; font-weight: 600; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
+  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--muted); font-family: inherit; font-size: 10px; font-weight: 600; padding: 3px 7px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; letter-spacing: 0.05em; }
   .sec-all:hover { color: var(--ink); background: var(--btn-hover); }
   #viewbtns button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
   #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: var(--bar-bg); border: 1px solid var(--chip-border); border-radius: 6px; padding: 8px 10px 8px 14px; font-size: 13px; color: var(--ink); max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
@@ -108,7 +108,7 @@
   #viewer.measuring { cursor: crosshair; }
   .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
-  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
+  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--ink); width: 44px; height: 44px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
   .layer.off .name { color: var(--off-name); }
   .layer.off .eye { opacity: 0.45; }
   .layer.off .row2 { opacity: 0.45; }
