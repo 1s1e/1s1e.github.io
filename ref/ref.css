@@ -210,11 +210,9 @@
       .vol-desc { font-size: 16.5px; line-height: 1.7; margin: 18px 0 0; max-width: 56ch; }
       .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
       /* The buttons are the master sheet's .btn, in its off form, and
-         .btn.on for Read. Kept here: only what the sheet's form does
-         not carry, centring and the colour ease, for anchor use. */
+         .btn.on for Read; the sheet's rule now carries the anchor
+         reset itself. Kept here: only the colour ease. */
       .btn {
-        justify-content: center;
-        text-decoration: none;
         transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
       }
       .inside { margin-top: 36px; }
@@ -389,15 +387,16 @@
       }
       .reader-vol span { color: var(--gold-bright); margin: 0 4px; }
       .toolbar-spacer { flex: 1; }
+      /* The tool links are text links: their colour is the master
+         sheet's .t-link, carried on the element beside this class.
+         Kept here: the link's own box, size and touch height. */
       .tool-link {
         font-size: 12.5px; font-weight: 600;
-        color: var(--gold); text-decoration: none;
+        text-decoration: none;
         background: none; border: none; padding: 8px 12px;
         display: inline-flex; align-items: center; justify-content: center;
         min-height: 44px;
       }
-      .tool-link:hover, .tool-link:focus-visible { color: var(--gold-bright); }
-      :root[data-theme="light"] .tool-link:hover, :root[data-theme="light"] .tool-link:focus-visible { color: #c2a15c; }
       button.tool-link { font-family: var(--sans); cursor: pointer; }
       /* The link bar hangs over the reader body from the toolbar, so
          opening it never pushes the page down. */
@@ -632,24 +631,15 @@
       }
     
 
-      /* The switch is the master sheet's .switch. Kept here: its
-         placement on this page, fixed at the lower right and docked
-         in the Reader, its shadow, and the knob's mode glyphs, which
-         the master sheet's knob does not carry. The Reader's brand
-         line keeps clear of it, as it always has. */
+      /* The switch is the master sheet's .switch, knob glyphs and
+         all. Kept here: its placement on this page, fixed at the
+         lower right and docked in the Reader, and its shadow. The
+         Reader's brand line keeps clear of it, as it always has. */
       .reader-brand { margin-right: 140px; }
       .switch {
         position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: 14px; z-index: 40;
         cursor: pointer; box-shadow: 0 4px 14px rgba(29, 42, 59, 0.25);
       }
-      .switch .knob {
-        display: flex; align-items: center; justify-content: center;
-      }
-      .switch .knob-glyph { display: flex; color: #152130; }
-      .switch .glyph svg, .switch .knob-glyph svg { display: block; }
-      .switch .k-moon { display: none; }
-      .switch[data-mode="dark"] .k-sun { display: none; }
-      .switch[data-mode="dark"] .k-moon { display: flex; }
 
       /* While the Reader is open, the switch docks at the top right,
          in the space the brand line already keeps clear for it, so in
