@@ -1,65 +1,264 @@
 {
-  "name": "The Isle \u00b7 Absolute Master Tokens",
-  "settled": "2026-11-22",
-  "color": {
-    "The Isle Navy": "#1d2a3b",
-    "The Isle Green": "#46936a",
-    "The Isle Gold": "#c9ab72",
-    "The Isle Silver": "#C0C0C0",
-    "The Isle Ivory": "#f0e8d5",
-    "Panel": "#22344a",
-    "Deep": "#152130",
-    "Ivory Soft": "#d9d0ba",
-    "Ivory Dim": "#a89f88",
-    "Page Gold, dark": "#c2a15c",
-    "Light Ground": "#faf7ee",
-    "Light Tint": "#f3eee0",
-    "Soft Ink": "#3c4763",
-    "Dim Ink": "#767c8d",
-    "Page Gold, light": "#a07f3a",
-    "Poster Mat": "#dfe2e6",
-    "Terra": "#93a7c9"
+ "name": "The Isle \u00b7 Style Guide Tokens",
+ "settled": "2026-11-22",
+ "color": {
+  "The Isle Navy": {
+   "hex": "#1d2a3b",
+   "rgb": "29 42 59",
+   "cmyk": "51 29 0 77"
   },
-  "font": {
-    "serif": "\"Playfair Display\", Georgia, \"Times New Roman\", serif",
-    "sans": "\"Source Sans 3\", \"Avenir Next\", \"Segoe UI\", sans-serif",
-    "load": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap",
-    "roles": {
-      "display": {
-        "font": "Playfair Display",
-        "weight": 500,
-        "size": "64px"
-      },
-      "serif-line": {
-        "font": "Playfair Display",
-        "weight": 500,
-        "style": "italic",
-        "size": "19px"
-      },
-      "heading": {
-        "font": "Playfair Display",
-        "weight": 500,
-        "size": "34px"
-      },
-      "body": {
-        "font": "Source Sans 3",
-        "weight": 400,
-        "size": "17px",
-        "lineHeight": 1.65
-      },
-      "label": {
-        "font": "Source Sans 3",
-        "weight": 600,
-        "size": "11px",
-        "letterSpacing": ".34em",
-        "transform": "uppercase"
-      },
-      "small": {
-        "font": "Source Sans 3",
-        "weight": 400,
-        "size": "10.5px",
-        "letterSpacing": ".26em"
-      }
-    }
+  "The Isle Green": {
+   "hex": "#46936a",
+   "rgb": "70 147 106",
+   "cmyk": "52 0 28 42"
+  },
+  "The Isle Gold": {
+   "hex": "#c9ab72",
+   "rgb": "201 171 114",
+   "cmyk": "0 15 43 21"
+  },
+  "The Isle Silver": {
+   "hex": "#C0C0C0",
+   "rgb": "192 192 192",
+   "cmyk": "0 0 0 25"
+  },
+  "The Isle Ivory": {
+   "hex": "#f0e8d5",
+   "rgb": "240 232 213",
+   "cmyk": "0 3 11 6"
+  },
+  "Panel": {
+   "hex": "#22344a",
+   "rgb": "34 52 74",
+   "cmyk": "54 30 0 71"
+  },
+  "Deep": {
+   "hex": "#152130",
+   "rgb": "21 33 48",
+   "cmyk": "56 31 0 81"
+  },
+  "Ivory Soft": {
+   "hex": "#d9d0ba",
+   "rgb": "217 208 186",
+   "cmyk": "0 4 14 15"
+  },
+  "Ivory Dim": {
+   "hex": "#a89f88",
+   "rgb": "168 159 136",
+   "cmyk": "0 5 19 34"
+  },
+  "Page Gold, dark": {
+   "hex": "#c2a15c",
+   "rgb": "194 161 92",
+   "cmyk": "0 17 53 24"
+  },
+  "Light Tint": {
+   "hex": "#f3eee0",
+   "rgb": "243 238 224",
+   "cmyk": "0 2 8 5"
+  },
+  "Soft Ink": {
+   "hex": "#3c4763",
+   "rgb": "60 71 99",
+   "cmyk": "39 28 0 61"
+  },
+  "Dim Ink": {
+   "hex": "#767c8d",
+   "rgb": "118 124 141",
+   "cmyk": "16 12 0 45"
+  },
+  "Page Gold, light": {
+   "hex": "#a07f3a",
+   "rgb": "160 127 58",
+   "cmyk": "0 21 64 37"
+  },
+  "Poster Mat": {
+   "hex": "#dfe2e6",
+   "rgb": "223 226 230",
+   "cmyk": "3 2 0 10"
+  },
+  "Terra": {
+   "hex": "#93a7c9",
+   "rgb": "147 167 201",
+   "cmyk": "27 17 0 21"
   }
+ },
+ "font": {
+  "serif": "\"Playfair Display\", Georgia, \"Times New Roman\", serif",
+  "sans": "\"Source Sans 3\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+  "load": "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap",
+  "roles": {
+   "display": {
+    "font": "Playfair Display",
+    "weight": 500,
+    "size": "64px"
+   },
+   "serif-line": {
+    "font": "Playfair Display",
+    "weight": 500,
+    "style": "italic",
+    "size": "19px"
+   },
+   "heading": {
+    "font": "Playfair Display",
+    "weight": 500,
+    "size": "34px"
+   },
+   "body": {
+    "font": "Source Sans 3",
+    "weight": 400,
+    "size": "17px",
+    "lineHeight": 1.65
+   },
+   "label": {
+    "font": "Source Sans 3",
+    "weight": 600,
+    "size": "11px",
+    "letterSpacing": ".34em",
+    "transform": "uppercase"
+   },
+   "small": {
+    "font": "Source Sans 3",
+    "weight": 400,
+    "size": "10.5px",
+    "letterSpacing": ".26em"
+   }
+  }
+ },
+ "variables": {
+  "dark": {
+   "--field": "#1d2a3b",
+   "--sea-deep": "#152130",
+   "--sea": "#1d2a3b",
+   "--sea-far": "#1d2a3b",
+   "--panel": "#22344a",
+   "--raise": "#22344a",
+   "--frame": "#152130",
+   "--ivory": "#f0e8d5",
+   "--ivory-soft": "#d9d0ba",
+   "--ivory-dim": "#a89f88",
+   "--gold": "#c2a15c",
+   "--gold-bright": "#c9ab72",
+   "--gold-line": "rgba(194,161,92,.30)",
+   "--gold-line-soft": "rgba(194,161,92,.16)",
+   "--dot-glow": "rgba(194,161,92,.14)",
+   "--link-line": "rgba(194,161,92,.65)",
+   "--chart-border": "rgba(194,161,92,.14)",
+   "--chart-cap": "rgba(201,171,114,.50)",
+   "--coast": "#c9ab72",
+   "--curve": "#f0e8d5",
+   "--figure": "#f0e8d5",
+   "--entry-hover": "rgba(240,232,213,.035)",
+   "--num-c": "rgba(240,232,213,.13)",
+   "--num-h": "rgba(201,171,114,.30)",
+   "--ghost-num": "rgba(240,232,213,.07)",
+   "--ghost-eyebrow": "rgba(194,161,92,.45)",
+   "--ghost-title": "rgba(240,232,213,.42)",
+   "--ghost-text": "rgba(217,208,186,.42)",
+   "--plate-c": "rgba(194,161,92,.62)",
+   "--toggle-bg": "#f0e8d5",
+   "--toggle-ink": "#1d2a3b"
+  },
+  "light": {
+   "--field": "#f0e8d5",
+   "--sea-deep": "#f0e8d5",
+   "--sea": "#f0e8d5",
+   "--sea-far": "#f0e8d5",
+   "--panel": "#f0e8d5",
+   "--raise": "#f3eee0",
+   "--frame": "#f0e8d5",
+   "--ivory": "#1d2a3b",
+   "--ivory-soft": "#3c4763",
+   "--ivory-dim": "#767c8d",
+   "--gold": "#a07f3a",
+   "--gold-bright": "#a07f3a",
+   "--gold-line": "rgba(160,127,58,.38)",
+   "--gold-line-soft": "rgba(160,127,58,.20)",
+   "--dot-glow": "rgba(160,127,58,.16)",
+   "--link-line": "rgba(160,127,58,.7)",
+   "--chart-border": "rgba(160,127,58,.22)",
+   "--chart-cap": "rgba(160,127,58,.72)",
+   "--coast": "#a07f3a",
+   "--curve": "#3c4763",
+   "--figure": "#1d2a3b",
+   "--entry-hover": "rgba(29,42,59,.045)",
+   "--num-c": "rgba(29,42,59,.12)",
+   "--num-h": "rgba(29,42,59,.24)",
+   "--ghost-num": "rgba(29,42,59,.06)",
+   "--ghost-eyebrow": "rgba(160,127,58,.5)",
+   "--ghost-title": "rgba(29,42,59,.36)",
+   "--ghost-text": "rgba(60,71,99,.42)",
+   "--plate-c": "rgba(160,127,58,.68)",
+   "--toggle-bg": "#1d2a3b",
+   "--toggle-ink": "#f0e8d5"
+  }
+ },
+ "layout": {
+  "indexSplit": "46% / 54%",
+  "dividerInset": "52px top and bottom",
+  "leftPanelPadding": "52px 46px 30px",
+  "rightPanelPadding": "34px 50px 78px",
+  "lockupWidth": "min(252px, 72%)",
+  "taglineGap": "26px",
+  "taglineRule": "56px x 1px, Page Gold at .75 opacity",
+  "reportGap": "40px",
+  "entriesGrid": "96px 1fr, gap 8px 22px",
+  "entryPadding": "30px 14px 28px",
+  "entryNumeral": "Playfair Display 500, 58px",
+  "statusRule": "26px",
+  "reportLabelColumn": "104px",
+  "reportLead": "Playfair Display 600, 22px",
+  "dot": "5px, Page Gold, glow ring 3px",
+  "clearSpaceLockup": "three quarters of the height of the mark in the lockup",
+  "clearSpaceMark": "half the mark's own height",
+  "minimumSizes": {
+   "horizontalLockup": "160px wide (40mm print)",
+   "verticalLockup": "90px tall (22mm print)",
+   "mark": "24px tall (6mm print)"
+  }
+ },
+ "contrast": {
+  "bodyText": "4.5 to 1 minimum",
+  "largeText": "3 to 1 minimum"
+ },
+ "components": {
+  "switch": {
+   "form": "pill slider, the knob resting on the side of the mode in use",
+   "size": "117px x 44px",
+   "radius": "999px",
+   "background": "rgba(21,33,48,.94)",
+   "border": "1px solid rgba(201,171,114,.55)",
+   "borderHover": "#c9ab72",
+   "glyphs": "sun left 11px, moon right 11px, rgba(201,171,114,.85)",
+   "knob": "54px x 32px, #c9ab72, glyph of the mode in use in #152130",
+   "knobTravel": "51px",
+   "transition": "transform .25s ease",
+   "focus": "outline 2px solid #c9ab72, offset 2px",
+   "persistence": "localStorage key isle-theme; a remembered choice stands over the system preference"
+  },
+  "button": {
+   "font": "Source Sans 3, 12.5px, weight 600, Title Case",
+   "padding": "8px 12px",
+   "radius": "6px",
+   "border": "1px solid",
+   "icon": "14px, before the words, 8px gap, only where the action has a true symbol of its own",
+   "dark": {
+    "off": "background #22344a, text #f0e8d5, border rgba(194,161,92,.30)",
+    "hover": "border #c2a15c",
+    "on": "background #c2a15c, text #1d2a3b, border #c2a15c"
+   },
+   "light": {
+    "off": "background #f3eee0, text #1d2a3b, border rgba(160,127,58,.38)",
+    "hover": "border #a07f3a",
+    "on": "background #a07f3a, text #f0e8d5, border #a07f3a"
+   },
+   "minHeight": "44px"
+  },
+  "touchMinimum": "44px on every control, the Apple standard"
+ },
+ "motion": {
+  "driftCycles": "13s, 17s, 21s ease-in-out infinite",
+  "pulseCycles": "10s, 14s, 18s ease-in-out infinite",
+  "reducedMotion": "static, always"
+ }
 }

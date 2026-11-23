@@ -2,7 +2,7 @@
    The single source for every colour, face, size and space on 1s1e.com.
    Anything created for The Isle starts from this sheet. Values here are
    copied from the live pages they govern; a value that is not in this
-   sheet is not a master value. The companion document is THE-ISLE-MASTER.md. */
+   sheet is not a master value. The companion document is THE-ISLE-STYLE-GUIDE.md. */
 
 /* Type, loaded once, exactly this line:
    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" /> */
@@ -10,10 +10,10 @@
 :root{
   color-scheme:dark;
   /* The Isle Navy family, dark grounds */
-  --field:#152130;
+  --field:#1d2a3b;
   --sea-deep:#152130;
   --sea:#1d2a3b;
-  --sea-far:#152130;
+  --sea-far:#1d2a3b;
   --panel:#22344a;
   --raise:#22344a;
   --frame:#152130;
@@ -26,7 +26,6 @@
   --gold-bright:#c9ab72;
   --gold-line:rgba(194,161,92,.30);
   --gold-line-soft:rgba(194,161,92,.16);
-  --lamp:rgba(255,220,160,.055);
   --dot-glow:rgba(194,161,92,.14);
   --link-line:rgba(194,161,92,.65);
   /* The chart on dark */
@@ -55,13 +54,13 @@
 :root[data-theme="light"]{
   color-scheme:light;
   /* Light grounds are one flat ivory */
-  --field:#faf7ee;
-  --sea-deep:#faf7ee;
-  --sea:#faf7ee;
-  --sea-far:#faf7ee;
-  --panel:#faf7ee;
+  --field:#f0e8d5;
+  --sea-deep:#f0e8d5;
+  --sea:#f0e8d5;
+  --sea-far:#f0e8d5;
+  --panel:#f0e8d5;
   --raise:#f3eee0;
-  --frame:#faf7ee;
+  --frame:#f0e8d5;
   /* Light text is The Isle Navy and its steps */
   --ivory:#1d2a3b;
   --ivory-soft:#3c4763;
@@ -71,7 +70,6 @@
   --gold-bright:#a07f3a;
   --gold-line:rgba(160,127,58,.38);
   --gold-line-soft:rgba(160,127,58,.20);
-  --lamp:rgba(216,188,125,.10);
   --dot-glow:rgba(160,127,58,.16);
   --link-line:rgba(160,127,58,.7);
   /* The chart on light */
@@ -91,7 +89,7 @@
   --plate-c:rgba(160,127,58,.68);
   /* Toggle on light */
   --toggle-bg:#1d2a3b;
-  --toggle-ink:#faf7ee;
+  --toggle-ink:#f0e8d5;
 }
 
 /* Base */
@@ -146,13 +144,34 @@ a{ color:inherit; }
 /* The switch: one form everywhere, the slider from /ref.
    A pill on Deep, a gold knob resting on the side of the mode in use. */
 .switch{
-  width:96px; height:36px; border-radius:999px; padding:0; position:relative;
-  background:rgba(21,33,48,.94); border:1px solid var(--gold-line);
+  width:117px; height:44px; border-radius:999px; padding:0; position:relative;
+  background:rgba(21,33,48,.94); border:1px solid rgba(201,171,114,.55);
+  color:#152130;
 }
-.switch:hover{ border-color:var(--gold); }
-.switch:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.switch:hover{ border-color:#c9ab72; }
+.switch:focus-visible{ outline:2px solid #c9ab72; outline-offset:2px; }
+.switch .glyph{
+  position:absolute; top:50%; transform:translateY(-50%);
+  font-size:11px; line-height:1; color:rgba(201,171,114,.85);
+}
+.switch .sun{ left:11px; }
+.switch .moon{ right:11px; }
 .switch .knob{
-  position:absolute; top:50%; left:4px; width:44px; height:26px; border-radius:999px;
-  background:var(--gold); transform:translate(0,-50%); transition:transform .25s ease;
+  position:absolute; top:50%; left:5px; width:54px; height:32px; border-radius:999px;
+  background:#c9ab72; transform:translate(0,-50%); transition:transform .25s ease;
 }
-.switch[data-mode="dark"] .knob{ transform:translate(42px,-50%); }
+.switch[data-mode="dark"] .knob{ transform:translate(51px,-50%); }
+
+/* The button: one form everywhere, settled November 22, 2026 from new
+   samples shown on /ref, the Lot Viewer and the Shadow Study.
+   Off rests; on fills with Page Gold. */
+.btn{
+  font-family:var(--sans); font-size:12.5px; font-weight:600; padding:8px 12px; min-height:44px; border-radius:6px;
+  background:var(--panel); color:var(--ivory); border:1px solid var(--gold-line); cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn svg{ width:14px; height:14px; flex:none; }
+.btn:hover{ border-color:var(--gold); }
+.btn.on{ background:var(--gold); color:#1d2a3b; border-color:var(--gold); }
+[data-theme="light"] .btn{ background:#f3eee0; color:#1d2a3b; }
+[data-theme="light"] .btn.on{ background:var(--gold); color:#f0e8d5; border-color:var(--gold); }
