@@ -32,7 +32,6 @@
     --gold-bright:#c9ab72;
     --gold-line:rgba(194,161,92,.30);
     --gold-line-soft:rgba(194,161,92,.16);
-    --lamp:rgba(255,220,160,.055);
     --dot-glow:rgba(194,161,92,.14);
     --link-line:rgba(194,161,92,.65);
     --chart-border:rgba(194,161,92,.14);
@@ -67,7 +66,6 @@
     --gold-bright:#a07f3a;
     --gold-line:rgba(160,127,58,.38);
     --gold-line-soft:rgba(160,127,58,.20);
-    --lamp:rgba(216,188,125,.10);
     --dot-glow:rgba(160,127,58,.16);
     --link-line:rgba(160,127,58,.7);
     --chart-border:rgba(160,127,58,.22);
@@ -108,15 +106,6 @@
     overflow:hidden;
   }
   :root[data-theme="light"] .page{ background:var(--sea); }
-  .lamplight{
-    position:absolute; inset:0;
-    -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,1) 180px);
-    mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,1) 180px);
-    pointer-events:none;
-    background:radial-gradient(52% 34% at 24% 0%, var(--lamp), rgba(255,220,160,0) 70%);
-    z-index:0;
-  }
-
   .panel{ position:relative; z-index:1; }
   .panel-left{
     padding:52px 46px 30px;
@@ -380,8 +369,6 @@
 </head>
 <body>
 <div class="page">
-  <div class="lamplight" aria-hidden="true"></div>
-
   <section class="panel panel-left" aria-label="The Isle and the county check">
     <div class="lockup">
       <img class="mark-dark" src="/site/mark-dark.png" alt="The Isle" />
