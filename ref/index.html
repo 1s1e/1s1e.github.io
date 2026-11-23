@@ -859,7 +859,7 @@
         <div class="hero-dl">
           <a class="btn btn-dl" href="https://github.com/bearlp/bearlp.github.io/releases/download/catalogue/the-isle-catalogue.zip" download="the-isle-catalogue.zip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download the full catalogue
+            Download the Full Catalogue
           </a>
         </div>
       </div>
@@ -1676,13 +1676,13 @@
         <div class="reader-toolbar">
           <p class="reader-vol" id="readerVol">Volume One <span>&middot;</span> Furniture</p>
           <div class="toolbar-spacer"></div>
-          <button class="tool-link" type="button" id="fullSizeBtn">Full size</button>
-          <button class="tool-link" type="button" id="linkBtn">Link to this page</button>
+          <button class="tool-link" type="button" id="fullSizeBtn">Full Size</button>
+          <button class="tool-link" type="button" id="linkBtn">Link to This Page</button>
           <a class="tool-link" id="pdfLink" href="assets/the-isle-vol-1-furniture.pdf" download="The Isle Vol. 1 - Furniture.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a>
           <div class="link-bar" id="linkBar" hidden>
             <label for="linkInput">Link to this page</label>
             <input id="linkInput" type="text" readonly value="" aria-label="Link to this page" />
-            <button class="tool-link" type="button" id="linkCopyBtn">Copy link</button>
+            <button class="tool-link" type="button" id="linkCopyBtn">Copy Link</button>
             <button class="tool-link" type="button" id="linkHideBtn">Hide</button>
             <span class="link-status" id="linkStatus" role="status" aria-live="polite"></span>
           </div>
@@ -1692,7 +1692,7 @@
           <div class="stage">
             <figure>
               <img class="page" id="pageImg" src="assets/pages/vol-1/page-01.jpg" alt="Volume One, Furniture, page 1: Cover" tabindex="0" role="button" />
-              <p class="page-fail" id="pageFail" hidden role="alert">This page could not be loaded. Check your connection, then <button type="button" id="pageRetry">try again</button>.</p>
+              <p class="page-fail" id="pageFail" hidden role="alert">This page could not be loaded. Check your connection, then <button type="button" id="pageRetry">Try Again</button>.</p>
               <figcaption>
                 <span class="cap-title" id="capTitle">Cover</span>
                 <span class="cap-page" id="capPage">Volume One &middot; Page 1 of 42</span>
@@ -1848,7 +1848,7 @@
         Object.keys(VOLUMES).forEach(function (k) {
           var V = VOLUMES[k];
           PAGE_LABELS[k][1] = "Cover";
-          PAGE_LABELS[k][V.pages] = "Back page";
+          PAGE_LABELS[k][V.pages] = "Back Page";
           V.sections.forEach(function (s) {
             s.entries.forEach(function (e) { PAGE_LABELS[k][e[1]] = e[0]; });
           });
@@ -1901,7 +1901,7 @@
               html += "<button class=\"toc-entry\" type=\"button\" data-page=\"" + e[1] + "\"><span>" + e[0] + "</span><span class=\"pg\">" + e[1] + "</span></button>";
             });
           });
-          html += "<button class=\"toc-entry\" type=\"button\" data-page=\"" + V.pages + "\"><span>Back page</span><span class=\"pg\">" + V.pages + "</span></button>";
+          html += "<button class=\"toc-entry\" type=\"button\" data-page=\"" + V.pages + "\"><span>Back Page</span><span class=\"pg\">" + V.pages + "</span></button>";
           toc.innerHTML = html;
           var btns = toc.querySelectorAll(".toc-entry");
           for (var i = 0; i < btns.length; i++) {
