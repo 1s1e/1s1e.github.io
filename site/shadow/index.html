@@ -31,7 +31,7 @@
     --body-bg: #faf7ee; --ink: #1d2a3b; --muted: #767c8d; --panel: #faf7ee; --hairline: rgba(160,127,58,0.38);
     --hairline-soft: rgba(160,127,58,0.20);
     --input-bg: #f3eee0; --btn: #f3eee0; --btn-border: rgba(160,127,58,0.38); --btn-hover: #f3eee0;
-    --accent: #a07f3a; --gold-bright: #a07f3a; --accent-ink: #faf7ee; --readout: #3c4763; --hint: #767c8d; --facts: #3c4763;
+    --accent: #a07f3a; --gold-bright: #a07f3a; --accent-ink: #f0e8d5; --readout: #3c4763; --hint: #767c8d; --facts: #3c4763;
     --word: #1d2a3b;
     color-scheme: light;
   }
@@ -41,7 +41,7 @@
   #topbar .tb-div { width: 1px; align-self: stretch; background: var(--hairline); }
   #topbar .tb-title { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; letter-spacing: 0.02em; color: var(--ink); white-space: nowrap; }
   #topbar .tb-spacer { flex: 1; }
-  #topbar .tb-back { font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 7px 12px; text-decoration: none; white-space: nowrap; }
+  #topbar .tb-back { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 7px 12px; text-decoration: none; white-space: nowrap; }
   #topbar .tb-back:hover { color: var(--ink); border-color: var(--gold-bright); }
   #themesw { display: flex; align-items: center; gap: 8px; }
   @media (max-width: 760px) {
@@ -51,8 +51,19 @@
   }
 
   #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  #themesw button[aria-pressed="true"] { color: var(--accent); }
+  .theme-slider { position: relative; width: 96px; height: 36px; flex: none; border-radius: 999px; padding: 0; background: rgba(21,33,48,0.94); border: 1px solid rgba(201,171,114,0.55); cursor: pointer; }
+  .theme-slider .ts-glyph { position: absolute; top: 50%; transform: translateY(-50%); font-size: 11px; line-height: 1; color: rgba(201,171,114,0.85); }
+  .theme-slider .ts-sun { left: 11px; }
+  .theme-slider .ts-moon { right: 11px; }
+  .theme-slider .ts-knob { position: absolute; top: 50%; left: 4px; width: 44px; height: 26px; border-radius: 999px; background: var(--gold-bright); transform: translate(0,-50%); transition: transform 0.25s ease; display: flex; align-items: center; justify-content: center; }
+  .theme-slider .ts-knob-glyph { display: flex; color: #152130; }
+  .theme-slider .ts-glyph svg, .theme-slider .ts-knob-glyph svg { display: block; }
+  .theme-slider .ts-k-moon { display: none; }
+  .theme-slider[data-mode="dark"] .ts-k-sun { display: none; }
+  .theme-slider[data-mode="dark"] .ts-k-moon { display: flex; }
+  .theme-slider[data-mode="dark"] .ts-knob { transform: translate(42px,-50%); }
+  .theme-slider:hover { border-color: var(--gold-bright); }
+  .theme-slider:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
   html, body { margin: 0; padding: 0; height: 100%; background: var(--body-bg); color: var(--ink);
     font-family: "Source Sans 3", "Avenir Next", "Segoe UI", sans-serif; }
   #app { display: flex; flex-direction: column; height: 100%; }
@@ -77,7 +88,7 @@
   .paneltop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--hairline); }
   #btn-hidemenu { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #btn-hidemenu:hover { color: var(--accent); }
-  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   #main.panelhidden #controls { display: none; }
   #main.panelhidden #menubtn { display: block; }
   #sunfacts { border-top: 1px solid var(--hairline); margin-top: 16px; padding-top: 4px; }
@@ -101,8 +112,8 @@
   input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; margin-top: -6px; background: var(--accent); border: none; border-radius: 0; }
   input[type="range"]::-moz-range-track { height: 4px; background: var(--hairline); }
   input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--accent); border: none; border-radius: 0; }
-  button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0;
-    padding: 7px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; }
+  button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px;
+    padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   button:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
   button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   #clock { font-size: 15px; font-weight: 600; min-width: 52px; }
@@ -127,12 +138,12 @@
     <span class="tb-div"></span>
     <span class="tb-title">Shadow Study</span>
     <span class="tb-spacer"></span>
-    <a class="tb-back" href="/site/">Project Home</a>
+    <a class="tb-back" href="/site/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg>Project Home</a>
   </div>
   <div id="main">
   <div id="controls">
     <div class="paneltop">
-      <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <div id="themesw"><span class="tw-label">Mode</span><button id="themeToggle" class="theme-slider" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-mode="light"><span class="ts-glyph ts-sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="ts-glyph ts-moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="ts-knob" aria-hidden="true"><span class="ts-knob-glyph ts-k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="ts-knob-glyph ts-k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div>
       <button id="btn-hidemenu" type="button">Hide menu</button>
     </div>
     <div class="grp">
@@ -147,12 +158,12 @@
       <input type="range" id="time" min="300" max="1260" step="1" value="600">
     </div>
     <div class="grp grid2">
-      <button id="playDay" type="button">Play day</button>
-      <button id="playYear" type="button">Play year</button>
-      <button id="longestDay" type="button">Longest day</button>
-      <button id="shortestDay" type="button">Shortest day</button>
+      <button id="playDay" type="button">Play Day</button>
+      <button id="playYear" type="button">Play Year</button>
+      <button id="longestDay" type="button">Longest Day</button>
+      <button id="shortestDay" type="button">Shortest Day</button>
       <button id="sunRise" type="button">Sunrise</button>
-      <button id="sunNoon" type="button">Solar noon</button>
+      <button id="sunNoon" type="button">Solar Noon</button>
       <button id="sunSet" type="button" class="wide">Sunset</button>
     </div>
     <div class="grp">
@@ -160,7 +171,7 @@
       <div class="stack">
         <button id="groundSat" type="button">Satellite</button>
         <button id="groundNat" type="button" class="active">Natural</button>
-        <button id="groundBare" type="button">Ground only</button>
+        <button id="groundBare" type="button">Ground Only</button>
       </div>
     </div>
     <div class="grp readoutgrp">
@@ -763,7 +774,7 @@ function updateSunExtras(dt, sp, dir) {
     lastTimesKey = key;
     lastTimes = sunTimes(dt.y, dt.mo, dt.d);
     riseBtn.textContent = 'Sunrise ' + (lastTimes.rise === null ? '--:--' : fmtTime(lastTimes.rise));
-    noonBtn.textContent = 'Solar noon ' + fmtTime(lastTimes.noon);
+    noonBtn.textContent = 'Solar Noon ' + fmtTime(lastTimes.noon);
     setBtn.textContent = 'Sunset ' + (lastTimes.set === null ? '--:--' : fmtTime(lastTimes.set));
   }
   if (sp.alt > 0.5) {
@@ -947,9 +958,9 @@ renderer.setAnimationLoop(function (ts) {
 <script>
 (function () {
   var root = document.documentElement;
-  var btns = document.querySelectorAll('#themesw button');
-  function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#faf7ee' : '#1d2a3b'); btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
-  btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
+  var btn = document.getElementById('themeToggle');
+  function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#f0e8d5' : '#1d2a3b'); if (btn) { btn.setAttribute('data-mode', t); btn.setAttribute('aria-checked', t === 'dark' ? 'true' : 'false'); } }
+  if (btn) btn.addEventListener('click', function () { root.dataset.theme = (root.dataset.theme === 'dark') ? 'light' : 'dark'; try { localStorage.setItem('isle-theme', root.dataset.theme); } catch (e) {} sync(); });
   sync();
   var sf = document.getElementById('sunfacts');
   document.getElementById('sunfacts-toggle').addEventListener('click', function () { sf.classList.toggle('closed'); });

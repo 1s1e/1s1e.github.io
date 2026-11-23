@@ -31,7 +31,7 @@
   :root[data-theme="light"] {
     --body-bg: #faf7ee; --ink: #1d2a3b; --panel: #faf7ee; --hairline: rgba(160,127,58,0.38); --hairline-soft: rgba(160,127,58,0.20);
     --btn: #f3eee0; --btn-border: rgba(160,127,58,0.38); --btn-hover: #f3eee0; --gold-bright: #a07f3a; --muted: #767c8d; --off-name: #767c8d;
-    --accent: #a07f3a; --accent-ink: #faf7ee; --facts: #3c4763; --viewer-bg: #f3eee0; --word: #1d2a3b;
+    --accent: #a07f3a; --accent-ink: #f0e8d5; --facts: #3c4763; --viewer-bg: #f3eee0; --word: #1d2a3b;
     --chip-bg: rgba(250,247,238,0.92); --bar-bg: rgba(250,247,238,0.96); --load-bg: rgba(250,247,238,0.92);
     --chip-border: rgba(160,127,58,0.38); --chip-ink: #1d2a3b; --track: rgba(160,127,58,0.20);
     color-scheme: light;
@@ -43,7 +43,7 @@
   #topbar .tb-div { width: 1px; align-self: stretch; background: var(--hairline); }
   #topbar .tb-title { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; letter-spacing: 0.02em; color: var(--ink); white-space: nowrap; }
   #topbar .tb-spacer { flex: 1; }
-  #topbar .tb-back { font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 7px 12px; text-decoration: none; white-space: nowrap; }
+  #topbar .tb-back { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 7px 12px; text-decoration: none; white-space: nowrap; }
   #topbar .tb-back:hover { color: var(--ink); border-color: var(--gold-bright); }
   #main { display: flex; flex: 1; min-height: 0; position: relative; }
   #themesw { display: flex; align-items: center; gap: 8px; }
@@ -54,8 +54,19 @@
   }
 
   #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  #themesw button { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  #themesw button[aria-pressed="true"] { color: var(--accent); }
+  .theme-slider { position: relative; width: 96px; height: 36px; flex: none; border-radius: 999px; padding: 0; background: rgba(21,33,48,0.94); border: 1px solid rgba(201,171,114,0.55); cursor: pointer; }
+  .theme-slider .ts-glyph { position: absolute; top: 50%; transform: translateY(-50%); font-size: 11px; line-height: 1; color: rgba(201,171,114,0.85); }
+  .theme-slider .ts-sun { left: 11px; }
+  .theme-slider .ts-moon { right: 11px; }
+  .theme-slider .ts-knob { position: absolute; top: 50%; left: 4px; width: 44px; height: 26px; border-radius: 999px; background: var(--gold-bright); transform: translate(0,-50%); transition: transform 0.25s ease; display: flex; align-items: center; justify-content: center; }
+  .theme-slider .ts-knob-glyph { display: flex; color: #152130; }
+  .theme-slider .ts-glyph svg, .theme-slider .ts-knob-glyph svg { display: block; }
+  .theme-slider .ts-k-moon { display: none; }
+  .theme-slider[data-mode="dark"] .ts-k-sun { display: none; }
+  .theme-slider[data-mode="dark"] .ts-k-moon { display: flex; }
+  .theme-slider[data-mode="dark"] .ts-knob { transform: translate(42px,-50%); }
+  .theme-slider:hover { border-color: var(--gold-bright); }
+  .theme-slider:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -65,7 +76,7 @@
   #panel { width: var(--panel-w); flex: 0 0 var(--panel-w); background: var(--panel); border-right: 1px solid var(--hairline); display: flex; flex-direction: column; z-index: 20; }
   #panel header { padding: 12px 16px 10px; border-bottom: 1px solid var(--hairline); }
   #viewbtns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--hairline); }
-  #viewbtns button, #bulk button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 7px 10px; font-family: inherit; font-size: 12.5px; cursor: pointer; width: 100%; }
+  #viewbtns button, #bulk button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; width: 100%; }
   #viewbtns button:hover, #bulk button:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
   #bulk { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px 4px; }
   #btn-reset { grid-column: 1 / -1; }
@@ -78,7 +89,7 @@
   .sec-toggle .chev { margin-left: 8px; color: var(--muted); font-size: 11px; transition: transform 0.15s; }
   .sec-head .sec-all:first-of-type { margin-left: auto; }
   .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
-  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 0; color: var(--muted); font-family: inherit; font-size: 10px; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
+  .sec-all { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--muted); font-family: inherit; font-size: 10px; font-weight: 600; padding: 3px 7px; cursor: pointer; letter-spacing: 0.05em; }
   .sec-all:hover { color: var(--ink); background: var(--btn-hover); }
   #viewbtns button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
   #measurebar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 15; display: none; align-items: center; gap: 10px; background: var(--bar-bg); border: 1px solid var(--chip-border); border-radius: 0; padding: 8px 10px 8px 14px; font-size: 13px; color: var(--ink); max-width: 94%; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
@@ -86,12 +97,12 @@
   #measurebar .mtext { line-height: 1.35; }
   #measurebar .mtext b { color: var(--accent); font-variant-numeric: tabular-nums; }
   #measurebar #mbtns { display: flex; gap: 6px; }
-  #measurebar button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  #measurebar button { background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
   #measurebar button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   #viewer.measuring { cursor: crosshair; }
   .sec.closed .sec-body { display: none; }
   .layer .name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.25; }
-  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 0; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
+  .layer .eye { background: none; border: 1px solid var(--btn-border); border-radius: 6px; color: var(--ink); width: 34px; height: 26px; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; }
   .layer.off .name { color: var(--off-name); }
   .layer.off .eye { opacity: 0.45; }
   .layer.off .row2 { opacity: 0.45; }
@@ -125,13 +136,13 @@
   #panel header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   #btn-hidemenu { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   #btn-hidemenu:hover { color: var(--accent); }
-  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+  #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   #main.panelhidden #panel { display: none; }
   #main.panelhidden #menubtn { display: block; }
   @media (max-width: 760px) {
     #panel { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.2s; }
     #panel.open { transform: translateX(0); box-shadow: 4px 0 18px rgba(0,0,0,0.5); }
-    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 0; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
     #main:has(#panel.open) #paneltoggle { left: auto; right: 12px; }
     #main:has(#panel.open) #readout, #main:has(#panel.open) #scalebar { display: none; }
     #main.panelhidden #panel { display: block; }
@@ -147,28 +158,28 @@
     <span class="tb-div"></span>
     <span class="tb-title">Lot Viewer</span>
     <span class="tb-spacer"></span>
-    <a class="tb-back" href="/site/">Project Home</a>
+    <a class="tb-back" href="/site/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg>Project Home</a>
   </div>
   <div id="main">
   <aside id="panel">
     <header>
-      <div id="themesw"><span class="tw-label">Mode</span><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <div id="themesw"><span class="tw-label">Mode</span><button id="themeToggle" class="theme-slider" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-mode="light"><span class="ts-glyph ts-sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="ts-glyph ts-moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="ts-knob" aria-hidden="true"><span class="ts-knob-glyph ts-k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="ts-knob-glyph ts-k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div>
       <button id="btn-hidemenu" type="button">Hide menu</button>
   </header>
     <div id="viewbtns">
-      <button id="btn-fit" type="button">Fit view</button>
-      <button id="btn-lot" type="button">Zoom to lot</button>
+      <button id="btn-fit" type="button">Fit View</button>
+      <button id="btn-lot" type="button">Zoom to Lot</button>
       <button id="btn-zin" type="button">Zoom +</button>
       <button id="btn-zout" type="button">Zoom -</button>
-      <button id="btn-100" type="button">1:1 full size</button>
+      <button id="btn-100" type="button">1:1 Full Size</button>
       <button id="btn-measure" type="button">Measure</button>
-      <button id="btn-copylink" type="button">Copy view link</button>
-      <button id="btn-saveview" type="button">Save view as image</button>
+      <button id="btn-copylink" type="button">Copy View Link</button>
+      <button id="btn-saveview" type="button">Save View as Image</button>
     </div>
     <div id="bulk">
-      <button id="btn-allon" type="button">Show all layers</button>
-      <button id="btn-alloff" type="button">Hide all layers</button>
-      <button id="btn-reset" type="button">Reset to defaults</button>
+      <button id="btn-allon" type="button">Show All Layers</button>
+      <button id="btn-alloff" type="button">Hide All Layers</button>
+      <button id="btn-reset" type="button">Reset to Defaults</button>
     </div>
     <div id="layers"></div>
     <div id="facts" class="sec closed">
@@ -538,7 +549,7 @@
     var n = measure.pts.length;
     if (measure.pending) {
       mtext.textContent = "Point " + (n + 1) + " placed. Set it, or tap elsewhere to move it.";
-      mbtns.appendChild(mBtn("Set point", "primary", function () {
+      mbtns.appendChild(mBtn("Set Point", "primary", function () {
         measure.pts.push(measure.pending); measure.pending = null; updateMeasureBar(); render();
       }));
       mbtns.appendChild(mBtn("Cancel", "", function () { measure.pending = null; updateMeasureBar(); render(); }));
@@ -615,7 +626,7 @@
     var btn = this;
     var url = location.origin + location.pathname + "#v=" +
       btoa(JSON.stringify(currentState())).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    function done() { btn.textContent = "Link copied"; setTimeout(function () { btn.textContent = "Copy view link"; }, 1600); }
+    function done() { btn.textContent = "Link Copied"; setTimeout(function () { btn.textContent = "Copy View Link"; }, 1600); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
     else {
       var ta = document.createElement("textarea"); ta.value = url; document.body.appendChild(ta); ta.select();
@@ -731,9 +742,9 @@
 <script>
 (function () {
   var root = document.documentElement;
-  var btns = document.querySelectorAll('#themesw button');
-  function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#faf7ee' : '#1d2a3b'); btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === t ? 'true' : 'false'); }); }
-  btns.forEach(function (b) { b.addEventListener('click', function () { root.dataset.theme = b.dataset.t; try { localStorage.setItem('isle-theme', b.dataset.t); } catch (e) {} sync(); }); });
+  var btn = document.getElementById('themeToggle');
+  function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#f0e8d5' : '#1d2a3b'); if (btn) { btn.setAttribute('data-mode', t); btn.setAttribute('aria-checked', t === 'dark' ? 'true' : 'false'); } }
+  if (btn) btn.addEventListener('click', function () { root.dataset.theme = (root.dataset.theme === 'dark') ? 'light' : 'dark'; try { localStorage.setItem('isle-theme', root.dataset.theme); } catch (e) {} sync(); });
   sync();
 })();
 </script>
