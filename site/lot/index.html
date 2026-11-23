@@ -140,8 +140,8 @@
   #loading .s { font-size: 12px; color: var(--muted); }
   #paneltoggle { display: none; }
   #panel header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  #btn-hidemenu { background: none; border: none; padding: 2px 1px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  #btn-hidemenu:hover { color: var(--accent); }
+  #btn-hidemenu { background: var(--btn); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  #btn-hidemenu:hover { background: var(--btn-hover); border-color: var(--gold-bright); }
   #menubtn { display: none; position: absolute; top: 12px; left: 12px; z-index: 6; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   #main.panelhidden #panel { display: none; }
   #main.panelhidden #menubtn { display: block; }
@@ -149,7 +149,7 @@
     #panel { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.2s; }
     #panel.open { transform: translateX(0); box-shadow: 4px 0 18px rgba(0,0,0,0.5); }
     #paneltoggle { display: block; position: absolute; left: 12px; top: 12px; z-index: 25; background: var(--btn); color: var(--ink); border: 1px solid var(--btn-border); border-radius: 6px; padding: 8px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
-    #main:has(#panel.open) #paneltoggle { left: auto; right: 12px; }
+    #main:has(#panel.open) #paneltoggle { display: none; }
     #main:has(#panel.open) #readout, #main:has(#panel.open) #scalebar { display: none; }
     #main.panelhidden #panel { display: block; }
     #main.panelhidden #menubtn { display: none; }
@@ -203,7 +203,7 @@
     </div>
   </aside>
   <main id="viewer">
-    <button id="paneltoggle" type="button">Layers</button>
+    <button id="paneltoggle" type="button">Menu</button>
     <button id="menubtn" type="button">Menu</button>
     <canvas id="cv"></canvas>
     <div id="readout">Move over the map for coordinates</div>
