@@ -20,7 +20,7 @@
 <style>
 
   :root {
-    --body-bg: #152130; --ink: #f0e8d5; --muted: #a89f88; --panel: #1d2a3b; --hairline: rgba(194,161,92,0.30);
+    --body-bg: #1d2a3b; --ink: #f0e8d5; --muted: #a89f88; --panel: #1d2a3b; --hairline: rgba(194,161,92,0.30);
     --hairline-soft: rgba(194,161,92,0.16);
     --input-bg: #152130; --btn: #22344a; --btn-border: rgba(194,161,92,0.30); --btn-hover: #22344a;
     --accent: #c2a15c; --gold-bright: #c9ab72; --accent-ink: #1d2a3b; --readout: #d9d0ba; --hint: #a89f88; --facts: #d9d0ba;
@@ -45,9 +45,15 @@
   #topbar .tb-back:hover { color: var(--ink); border-color: var(--gold-bright); }
   #themesw { display: flex; align-items: center; gap: 8px; }
   @media (max-width: 760px) {
-    #topbar { flex-wrap: wrap; row-gap: 4px; padding: 8px 14px; }
-    #topbar .tb-spacer { flex-basis: 100%; height: 0; }
-    #topbar .tb-title { font-size: 18px; }
+    #topbar { flex-wrap: nowrap; gap: 10px; padding: 8px 14px; }
+    #topbar .tb-tree { height: 24px; }
+    #topbar .tb-word { font-size: 13px; letter-spacing: 0.22em; }
+    #topbar .tb-title { font-size: 17px; white-space: nowrap; }
+    #topbar .tb-back { padding: 6px 10px; font-size: 12px; }
+  }
+  @media (max-width: 560px) {
+    #topbar .tb-word { display: none; }
+    #topbar .tb-div { display: none; }
   }
 
   #themesw .tw-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
