@@ -125,7 +125,7 @@ const HULL = {
   main: boxPts(-1, -1, 0, 84, 55, 11.4),
 };
 // the pool and cage as measured from the model itself: cage u -25..5, v 0..54, top 10.5 ft
-const POOL_PTS = boxPts(-26, -1, 0, 5, 55, 10.6);
+const POOL_PTS = boxPts(-26, -1, 0, 5, 55, 11.7);
 const POOL_VIEW_PTS = boxPts(-26, -1, 0, 14, 55, 11.5);
 const DIM_PTS = [P(88, 58.5, 0), P(88, 58.5, 28.5)];
 
@@ -168,6 +168,35 @@ function loadModel() {
       const patch = new THREE.Mesh(geo, lawn.material);
       patch.receiveShadow = true; patch.visible = false;
       gltf.scene.add(patch); groups.nopool.push(patch);
+    }
+    // --- Viewer-side corrections (source model untouched) -----------------
+    // 1) Solid wall where the source model leaves the Cafe's east wall open
+    //    (measured gap u 5.5 to 13.5 ft, full height; the floor plan shows a
+    //    solid wall). Panel uses the model's own stucco material.
+    const stuccoObj = gltf.scene.getObjectByName('f1__stucco');
+    let stuccoMat = null;
+    if (stuccoObj) stuccoObj.traverse((o) => { if (!stuccoMat && o.isMesh) stuccoMat = o.material; });
+    if (stuccoMat) {
+      const FTm = 0.3048;
+      const wallPatch = new THREE.Mesh(
+        new THREE.BoxGeometry(0.85 * FTm, 11.333 * FTm, 8.2 * FTm),
+        stuccoMat
+      );
+      // Centre: v 0.375 ft (the wall assembly), mid height, u 9.5 ft
+      wallPatch.position.set((54 - 0.375) * FTm, (11.333 * FTm) / 2, (9.5 - 83) * FTm);
+      wallPatch.castShadow = true;
+      wallPatch.receiveShadow = true;
+      wallPatch.name = 'viewer__east_wall_patch';
+      gltf.scene.add(wallPatch);
+    }
+    // 2) Pool enclosure raised so its top beam sits right under the roof,
+    //    about 11'-4" (the model's plate height). The source cage tops out
+    //    at 10.48 ft; cage and screen scale together about the ground, so
+    //    posts, mid rails and doors keep their proportions.
+    const CAGE_RAISE = 11.333 / 10.48;
+    for (const n of ['pool__cage', 'pool__screen']) {
+      const o = gltf.scene.getObjectByName(n);
+      if (o) o.scale.y = CAGE_RAISE;
     }
     setMode(state.mode, false);
     document.getElementById('loading').classList.add('done');
