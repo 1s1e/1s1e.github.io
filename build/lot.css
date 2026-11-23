@@ -117,7 +117,7 @@ body{ overflow:hidden; }
 .layer input[type=range]::-moz-range-track{ height:4px; background:var(--rng-track); }
 .layer input[type=range]::-moz-range-thumb{ width:16px; height:16px; background:var(--rng-thumb); border:none; border-radius:0; }
 .layer .pct{ font-size:12px; color:var(--ivory-dim); width:36px; text-align:right; font-variant-numeric:tabular-nums; }
-#facts{ border-top:1px solid var(--gold-line); border-bottom:none; padding:0 10px; font-size:12px; color:var(--ivory-soft); line-height:1.55; }
+#facts{ border-top:1px solid var(--gold-line); border-bottom:none; padding:0; font-size:12px; color:var(--ivory-soft); line-height:1.55; }
 #facts .facts-inner{ padding:0 6px 12px; }
 #facts b{ color:var(--ivory); font-weight:600; }
 #facts a{ color:var(--gold); }

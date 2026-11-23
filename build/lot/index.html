@@ -51,7 +51,7 @@
       <button id="btn-alloff" type="button" class="btn">Hide All Layers</button>
       <button id="btn-reset" type="button" class="btn">Reset to Defaults</button>
     </div>
-    <div id="layers"></div>
+    <div id="layers">
     <div id="facts" class="sec closed">
       <div class="sec-head">
         <button type="button" class="sec-toggle" id="facts-toggle">Lot Facts<span class="chev">▾</span></button>
@@ -64,6 +64,7 @@
           Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026
         </div>
       </div>
+    </div>
     </div>
   </aside>
   <main id="viewer">
@@ -450,6 +451,7 @@
   // ---- lot facts collapsible ----
   var factsClosed = true;
   var factsEl = document.getElementById("facts");
+  layersEl.appendChild(factsEl); // Lot Facts lives at the foot of the scrolling layers list, like Sun Facts
   if (initialState && initialState.fo) { factsEl.classList.remove("closed"); factsClosed = false; }
   document.getElementById("facts-toggle").addEventListener("click", function () {
     factsEl.classList.toggle("closed");
