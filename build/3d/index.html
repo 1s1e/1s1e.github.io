@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Isle - 3D Model</title>
+<meta name="description" content="Interactive 3D model of The Isle, built to the dimensions in the construction drawings for the Regalia Grand plan, Coastal CO3 elevation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 16 16 5l13 11' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 15v12h18V15' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./base.css">
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{ "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/addons/"
+} }
+</script>
+</head>
+<body>
+<a class="sr-only" href="#controls">Skip to view controls</a>
+<main id="stage" aria-label="3D model viewport">
+  <canvas id="view" aria-label="Interactive 3D model of The Isle. Drag to orbit, scroll to zoom."></canvas>
+  <div id="labels" aria-hidden="true"></div>
+
+  <header class="card title-card">
+    <p class="eyebrow">The Isle · Regalia Grand plan · CO3 elevation</p>
+    <h1>The Isle</h1>
+    <p class="meta">83′-0″ × 54′-0″ footprint · two floors · 3-car garage</p>
+  </header>
+
+  <div class="loading" id="loading" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span><span id="loading-text">Building model…</span>
+  </div>
+
+  <section class="card controls" id="controls" aria-label="View controls">
+    <div class="group">
+      <span class="group-label" id="lvl-label">Show</span>
+      <div class="segmented" role="radiogroup" aria-labelledby="lvl-label">
+        <button role="radio" aria-checked="true" data-mode="exterior">Exterior</button>
+        <button role="radio" aria-checked="false" data-mode="upper">Upper floor</button>
+        <button role="radio" aria-checked="false" data-mode="main">Main floor</button>
+      </div>
+    </div>
+    <div class="group">
+      <span class="group-label" id="cam-label">Camera</span>
+      <div class="chips" role="group" aria-labelledby="cam-label">
+        <button data-view="hero">3/4</button>
+        <button data-view="front">Front</button>
+        <button data-view="left">Left</button>
+        <button data-view="rear">Rear</button>
+        <button data-view="right">Right</button>
+        <button data-view="top">Top</button>
+        <button data-view="pool">Pool</button>
+      </div>
+    </div>
+    <div class="group toggles">
+      <label class="switch"><input type="checkbox" id="t-pool" checked><span class="track" aria-hidden="true"></span><span>Pool &amp; cage</span></label>
+      <label class="switch"><input type="checkbox" id="t-labels" checked><span class="track" aria-hidden="true"></span><span>Room labels</span></label>
+      <label class="switch"><input type="checkbox" id="t-dims"><span class="track" aria-hidden="true"></span><span>Dimensions</span></label>
+      <label class="switch"><input type="checkbox" id="t-elev"><span class="track" aria-hidden="true"></span><span>True elevations</span></label>
+      <label class="switch"><input type="checkbox" id="t-spin"><span class="track" aria-hidden="true"></span><span>Turntable</span></label>
+    </div>
+    <div class="group actions">
+      <button class="ghost" id="photo" type="button">Photo</button>
+      <button class="ghost" id="full" type="button">Full screen</button>
+      <button class="ghost" id="download" type="button">Download<span class="ext"> .glb</span></button>
+    </div>
+  </section>
+
+  <p class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
