@@ -168,3 +168,45 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: var(--text-x
 .sunbtns { display: flex; flex-wrap: wrap; gap: 6px; }
 .sunfacts { font-size: 12px; color: var(--mut); font-variant-numeric: tabular-nums; }
 #menu-show { position: absolute; right: var(--space-4); bottom: var(--space-4); z-index: 30; font: inherit; font-size: var(--text-sm); font-weight: 700; padding: 0 var(--space-4); min-height: 44px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-card); cursor: pointer; }
+
+/* ---- v12 sample: /lot-style side panel ---- */
+body { display: flex; }
+#stage { position: relative; inset: auto; flex: 1 1 auto; min-width: 0; }
+#panel { width: 308px; flex: 0 0 308px; height: 100%; background: var(--color-surface); border-right: 1px solid var(--color-border); display: flex; flex-direction: column; z-index: 20; }
+.panel-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--color-border); display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.panel-head h1 { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--color-primary); line-height: 1.1; margin: 2px 0 3px; }
+.btn-head { font: inherit; font-size: var(--text-sm); font-weight: 600; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); cursor: pointer; white-space: nowrap; }
+.btn-head:hover { background: var(--color-fill); }
+.controls { position: static; transform: none; left: auto; bottom: auto; width: auto; max-width: none; max-height: none; overflow-y: auto; overscroll-behavior: contain; flex: 1; display: block; padding: 0 16px 16px; background: transparent; border: none; box-shadow: none; }
+.sec { border-bottom: 1px solid var(--color-border); padding-bottom: 10px; }
+.sec-head { display: flex; align-items: center; padding: 13px 0 4px; }
+.sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.30em; text-transform: uppercase; color: #7a6234; text-align: left; min-height: 32px; }
+.sec-toggle .chev { margin-left: 8px; color: var(--color-text-muted); font-size: 11px; transition: transform 0.15s; }
+.sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
+.sec.closed .sec-body { display: none; }
+.sec-body .group { margin: 6px 0; }
+.sec-body .laygrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin: 4px 0; }
+.bulkrow { padding: 12px 0 2px; }
+.bulkrow .satrow { display: flex; flex-wrap: wrap; gap: 6px; }
+#menu-show { display: none; position: absolute; top: var(--space-3); left: var(--space-3); right: auto; bottom: auto; z-index: 30; font: inherit; font-size: var(--text-sm); font-weight: 700; padding: 0 var(--space-4); min-height: 44px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-card); cursor: pointer; }
+body.panelhidden #panel { display: none; }
+body.panelhidden #menu-show { display: block; }
+@media (max-width: 760px) {
+  #panel { position: fixed; left: 0; top: 0; bottom: 0; height: auto; transform: translateX(-105%); transition: transform 0.2s; box-shadow: 4px 0 18px rgb(29 42 59 / 0.35); z-index: 60; }
+  #panel.open { transform: none; }
+  body.panelhidden #panel { display: flex; }
+  #menu-show { display: block; }
+  body:has(#panel.open) #menu-show { display: none; }
+}
+/* panel fit fixes: rows wrap inside the 308px panel instead of clipping */
+.panel-head { flex-wrap: wrap; }
+.sec-body .group { flex-wrap: wrap; }
+.sec-body .segmented, .sec-body .chips, .sec-body .seg { flex-wrap: wrap; }
+.sec-body .group.toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.sec-body .sunrow { flex-wrap: wrap; }
+/* panel opacity + grid shrink fixes */
+#panel { background: #fcfaf4; }
+.sec-body .laygrid, .sec-body .group.toggles { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.sec-body .switch { white-space: normal; min-width: 0; }
+/* v12: /lot slim panel header, no title box, maximum screen for the model */
+.panel-head { padding: 10px 16px; justify-content: flex-end; }

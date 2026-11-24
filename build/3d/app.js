@@ -60,7 +60,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.5;
 
-const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: false, satVariant: 'render', satExtent: 'tight', ov: {} };
+const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: true, satVariant: 'render', satExtent: 'tight', ov: { interior: true, exterior: true, property: true } };
 let lawnMesh = null, lawnPatch = null;
 function applyLawn() {
   if (lawnMesh) lawnMesh.visible = state.lawn;
@@ -308,8 +308,7 @@ function fit(dirArr, pts) {
   const right = new THREE.Vector3().crossVectors(up, dir).normalize();
   const cu = new THREE.Vector3().crossVectors(dir, right).normalize();
   const w = stage.clientWidth, h = stage.clientHeight;
-  const ctl = document.getElementById('controls').getBoundingClientRect(), ttl = document.querySelector('.title-card').getBoundingClientRect();
-  const padTop = (w < 640 ? ttl.bottom + 10 : 24) / h, padBot = (ctl.height > 0 ? Math.max(40, h - ctl.top + 12) : 24) / h;
+  const padTop = 24 / h, padBot = 24 / h;
   const usableV = Math.max(0.3, 1 - padTop - padBot), usableH = 0.94;
   let a0 = Infinity, a1 = -Infinity, b0 = Infinity, b1 = -Infinity, c0 = Infinity, c1 = -Infinity;
   for (const p of pts) {
@@ -701,7 +700,31 @@ document.getElementById('sun-playyear').addEventListener('click', (e) => {
 applySun();
 
 // ---------------------------------------------------------------- hide-away menu (as on /lot and /shadow)
-const controlsCard = document.getElementById('controls');
+const panelEl = document.getElementById('panel');
 const menuShowBtn = document.getElementById('menu-show');
-document.getElementById('menu-hide').addEventListener('click', () => { controlsCard.style.display = 'none'; menuShowBtn.hidden = false; invalidate(); });
-menuShowBtn.addEventListener('click', () => { controlsCard.style.display = ''; menuShowBtn.hidden = true; invalidate(); });
+const mobilePanel = () => window.matchMedia('(max-width: 760px)').matches;
+document.getElementById('menu-hide').addEventListener('click', () => {
+  if (mobilePanel()) panelEl.classList.remove('open'); else document.body.classList.add('panelhidden');
+  resize();
+});
+menuShowBtn.addEventListener('click', () => {
+  if (mobilePanel()) panelEl.classList.add('open'); else document.body.classList.remove('panelhidden');
+  resize();
+});
+document.querySelectorAll('.sec-toggle').forEach((b) => b.addEventListener('click', () => b.closest('.sec').classList.toggle('closed')));
+document.getElementById('layers-reset').addEventListener('click', () => {
+  document.querySelector('[data-mode="exterior"]').click();
+  document.querySelector('[data-view="hero"]').click();
+  const setT = (id, on) => { const el = document.getElementById(id); el.checked = on; el.dispatchEvent(new Event('change')); };
+  setT('t-pool', true); setT('t-lawn', true); setT('t-labels', true);
+  setT('t-dims', false); setT('t-elev', false); setT('t-spin', false);
+  setT('t-sat', true);
+  document.querySelector('#seg-variant [data-v="render"]').click();
+  document.querySelector('#seg-extent [data-v="tight"]').click();
+  ['interior', 'exterior', 'property', 'surveylines', 'surveydata', 'highlight', 'flood', 'floodmap', 'floodold', 'floodmapold', 'mhside', 'mhback', 'mhfront', 'mhcorner', 'meside', 'meback', 'mecorner']
+    .forEach((k) => setT('t-ov-' + k, ['interior', 'exterior', 'property'].includes(k)));
+  const sd = document.getElementById('sun-date'), st = document.getElementById('sun-time');
+  sd.value = '2026-11-23'; st.value = '690';
+  sd.dispatchEvent(new Event('change')); st.dispatchEvent(new Event('input'));
+  invalidate();
+});
