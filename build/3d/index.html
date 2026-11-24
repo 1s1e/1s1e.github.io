@@ -6,11 +6,11 @@
 <title>The Isle - 3D Model</title>
 <meta name="description" content="Interactive 3D model of The Isle, built to the dimensions in the construction drawings for the Regalia Grand plan, Coastal CO3 elevation.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 16 16 5l13 11' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 15v12h18V15' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./base.css?v=16">
-<link rel="stylesheet" href="./style.css?v=16">
+<link rel="stylesheet" href="./base.css?v=21">
+<link rel="stylesheet" href="./style.css?v=21">
 <script type="importmap">
 { "imports": {
-    "three": "./vendor/three.module.js?v=16",
+    "three": "./vendor/three.module.js?v=21",
     "three/addons/": "./vendor/addons/"
 } }
 </script>
@@ -84,14 +84,10 @@
       </div>
       <div class="satrow"><span class="satlab">Image</span>
         <div class="seg" id="seg-variant" role="group" aria-label="Ground image">
-          <button type="button" data-v="master">Neighborhood</button><button type="button" data-v="cleaned">Neighbors</button><button type="button" data-v="render" class="on">Empty</button><button type="button" data-v="street">Street map</button>
+          <button type="button" data-v="master">Neighborhood</button><button type="button" data-v="cleaned">Neighbors</button><button type="button" data-v="render" class="on">Empty</button><button type="button" data-v="shadow">Shadow study</button><button type="button" data-v="shadownat">Shadow natural</button>
         </div>
       </div>
-      <div class="satrow"><span class="satlab">Extent</span>
-        <div class="seg" id="seg-extent" role="group" aria-label="Layer extent">
-          <button type="button" data-v="tight" class="on">Lot</button><button type="button" data-v="full">Full frame</button>
-        </div>
-      </div></div></div>
+</div></div>
     <div class="bulkrow"><div class="satrow laybtns">
         <button type="button" class="ghost" id="layers-all">Show all layers</button>
         <button type="button" class="ghost" id="layers-none">Hide all layers</button>
@@ -104,7 +100,6 @@
         <label class="switch"><input type="checkbox" id="t-ov-property" checked><span class="track" aria-hidden="true"></span><span>Property lines</span></label>
         <label class="switch"><input type="checkbox" id="t-ov-surveylines"><span class="track" aria-hidden="true"></span><span>Survey lines</span></label>
         <label class="switch"><input type="checkbox" id="t-ov-surveydata"><span class="track" aria-hidden="true"></span><span>Survey data</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
       </div></div></div>
     <div class="sec" id="sec-fema"><div class="sec-head"><button type="button" class="sec-toggle">FEMA Data<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
         <label class="switch"><input type="checkbox" id="t-ov-flood"><span class="track" aria-hidden="true"></span><span>Flood lines</span></label>
@@ -121,6 +116,10 @@
         <label class="switch"><input type="checkbox" id="t-ov-meback"><span class="track" aria-hidden="true"></span><span>Enclosure back</span></label>
         <label class="switch"><input type="checkbox" id="t-ov-mecorner"><span class="track" aria-hidden="true"></span><span>Enclosure corner to corner</span></label>
       </div></div></div>
+    <div class="sec" id="sec-misc"><div class="sec-head"><button type="button" class="sec-toggle">Miscellaneous<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+        <label class="switch"><input type="checkbox" id="t-ov-street"><span class="track" aria-hidden="true"></span><span>Street map</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
+      </div></div></div>
     <div class="sec closed" id="sec-facts"><div class="sec-head"><button type="button" class="sec-toggle">Lot Facts<span class="chev">▾</span></button></div><div class="sec-body"><div class="lotfacts">Lot area 11,635 sq ft<br>
       Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
       Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
@@ -136,6 +135,6 @@
   </div>
   <p class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
 </main>
-<script type="module" src="./app.js?v=16"></script>
+<script type="module" src="./app.js?v=21"></script>
 </body>
 </html>
