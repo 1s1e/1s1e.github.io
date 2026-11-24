@@ -155,7 +155,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: var(--text-x
 .controls { max-height: 52vh; overflow-y: auto; overscroll-behavior: contain; }
 
 .seg { display: flex; background: var(--color-fill); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
-.seg button { font-size: var(--text-sm); font-weight: 500; padding: 0 var(--space-3); min-height: 38px; border-radius: calc(var(--radius-md) - 3px); color: var(--color-text); white-space: nowrap; background: transparent; border: 0; cursor: pointer; }
+.seg button { font-size: var(--text-sm); font-weight: 500; padding: 0 var(--space-3); min-height: 44px; border-radius: calc(var(--radius-md) - 3px); color: var(--color-text); white-space: nowrap; background: transparent; border: 0; cursor: pointer; }
 .seg button:hover { background: rgb(29 42 59 / 0.07); }
 .seg button.on { background: var(--color-primary); color: var(--color-on-primary); font-weight: 700; box-shadow: 0 1px 3px rgb(29 42 59 / 0.35); }
 .laysec { border-top: 1px solid rgb(201 171 114 / 0.5); padding-top: 8px; color: #7a6234; font-weight: 700; }
@@ -163,8 +163,8 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: var(--text-x
 .sunrow { display: flex; align-items: center; gap: 8px; }
 .sunlab { font-size: 12px; color: var(--mut); width: 64px; flex: none; }
 .sunclock { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
-#sun-date { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); min-height: 38px; }
-#sun-time { flex: 1; accent-color: var(--color-primary); min-height: 38px; }
+#sun-date { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); min-height: 44px; }
+#sun-time { flex: 1; accent-color: var(--color-primary); min-height: 44px; }
 .sunbtns { display: flex; flex-wrap: wrap; gap: 6px; }
 .sunfacts { font-size: 12px; color: var(--mut); font-variant-numeric: tabular-nums; }
 #menu-show { position: absolute; right: var(--space-4); bottom: var(--space-4); z-index: 30; font: inherit; font-size: var(--text-sm); font-weight: 700; padding: 0 var(--space-4); min-height: 44px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-card); cursor: pointer; }
@@ -180,7 +180,9 @@ body { display: flex; }
 .controls { position: static; transform: none; left: auto; bottom: auto; width: auto; max-width: none; max-height: none; overflow-y: auto; overscroll-behavior: contain; flex: 1; display: block; padding: 0 16px 16px; background: transparent; border: none; box-shadow: none; }
 .sec { border-bottom: 1px solid var(--color-border); padding-bottom: 10px; }
 .sec-head { display: flex; align-items: center; padding: 13px 0 4px; }
-.sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.30em; text-transform: uppercase; color: #7a6234; text-align: left; min-height: 32px; }
+.sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.30em; text-transform: uppercase; color: #7a6234; text-align: left; min-height: 44px; }
+.sec-all { background: none; border: none; cursor: pointer; font: inherit; font-size: 12px; font-weight: 600; color: var(--color-primary); min-height: 44px; padding: 0 6px; flex: none; }
+.sec-all:hover { text-decoration: underline; }
 .sec-toggle .chev { margin-left: 8px; color: var(--color-text-muted); font-size: 11px; transition: transform 0.15s; }
 .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
 .sec.closed .sec-body { display: none; }

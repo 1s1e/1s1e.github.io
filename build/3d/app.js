@@ -60,8 +60,8 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.5;
 
-const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: true, satVariant: 'render', satExtent: 'tight', ov: { interior: true, exterior: true, property: true } };
-let lawnMesh = null, lawnPatch = null;
+const state = { mode: 'exterior', house: true, labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: true, satVariant: 'render', satExtent: 'tight', ov: { interior: true, exterior: true, property: true } };
+let lawnMesh = null, lawnPatch = null, wallPatchMesh = null;
 function applyLawn() {
   if (lawnMesh) lawnMesh.visible = state.lawn;
   if (lawnPatch) lawnPatch.visible = state.lawn && !state.pool;
@@ -195,6 +195,7 @@ function loadModel() {
       wallPatch.castShadow = true;
       wallPatch.receiveShadow = true;
       wallPatch.name = 'viewer__east_wall_patch';
+      wallPatchMesh = wallPatch;
       gltf.scene.add(wallPatch);
     }
     // 2) Pool enclosure raised so its top beam sits right under the roof,
@@ -373,8 +374,9 @@ function stepTween(now) {
 
 function setMode(mode, moveCamera = true) {
   state.mode = mode;
-  const show = { site: true, f1: true, f2: mode !== 'main', roof_lower: mode !== 'main', roof_upper: mode === 'exterior', pool: state.pool, nopool: !state.pool };
+  const show = { site: true, f1: state.house, f2: state.house && mode !== 'main', roof_lower: state.house && mode !== 'main', roof_upper: state.house && mode === 'exterior', pool: state.pool, nopool: !state.pool };
   for (const [g, arr] of Object.entries(groups)) for (const o of arr) o.visible = show[g];
+  if (wallPatchMesh) wallPatchMesh.visible = state.house;
   applyLawn();
   syncLayerHoles();
   invalidate(3, true);
@@ -418,7 +420,7 @@ function planToPx(u, v) {
 function syncLayerHoles() {
   for (const m of Object.values(layerMeshes)) if (m.userData.fullGeo) m.geometry = state.pool ? m.userData.holedGeo : m.userData.fullGeo;
 }
-function layerQuad(win, url, transparent, ro) {
+function layerQuad(win, url, transparent, ro, y = -0.50) {
   const [x0, y0, x1, y1] = win;
   // Build the sheet in plan coordinates. While the pool is shown, the sheet
   // carries a hole over the pool basin, so the layers never cut through the
@@ -442,7 +444,7 @@ function layerQuad(win, url, transparent, ro) {
     const pos = [], uv = [];
     for (let i = 0; i < p.count; i++) {
       const u = p.getX(i), v = p.getY(i);
-      pos.push((54 - v) * FT, -0.50, (u - 83) * FT);
+      pos.push((54 - v) * FT, y, (u - 83) * FT);
       const [px, py] = planToPx(u, v);
       uv.push((px - x0) / (x1 - x0), 1 - (py - y0) / (y1 - y0));
     }
@@ -473,7 +475,7 @@ function ensureLayer(key) {
   if (key.startsWith('ov-')) {
     const cut = key.lastIndexOf('-');
     const name = key.slice(3, cut), extent = key.slice(cut + 1);
-    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/ov-' + name + '-' + extent + '.png', true, 10 + (OV_ORD[name] || 0));
+    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/ov-' + name + '-' + extent + '.png', true, 10 + (OV_ORD[name] || 0), (name === 'interior' || name === 'exterior') ? 0.02 : -0.50);
   } else {
     const [variant, extent] = key.split('-');
     m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/sat-' + variant + '-' + extent + '.jpg', false);
@@ -498,6 +500,7 @@ function layerFitPts() {
   return pts;
 }
 document.getElementById('t-lawn').addEventListener('change', (e) => { state.lawn = e.target.checked; applyLawn(); invalidate(); });
+document.getElementById('t-house').addEventListener('change', (e) => { state.house = e.target.checked; setMode(state.mode, false); });
 for (const [name] of OV_DEFS) {
   const el = document.getElementById('t-ov-' + name);
   if (el) el.addEventListener('change', (e) => { state.ov[name] = e.target.checked; applyLayers(); invalidate(); });
@@ -507,6 +510,13 @@ function setAllLayers(on) {
   for (const [name] of OV_DEFS) { state.ov[name] = on; const el = document.getElementById('t-ov-' + name); if (el) el.checked = on; }
   applyLayers(); invalidate();
 }
+document.querySelectorAll('.sec').forEach((sec) => {
+  const switches = [...sec.querySelectorAll('input[id^="t-ov-"]')];
+  if (!switches.length) return;
+  const head = sec.querySelector('.sec-head');
+  const mk = (label, on) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sec-all'; b.textContent = label; b.addEventListener('click', () => { switches.forEach((el) => { if (el.checked !== on) el.click(); }); }); head.appendChild(b); };
+  mk('Show', true); mk('Hide', false);
+});
 document.getElementById('layers-all').addEventListener('click', () => setAllLayers(true));
 document.getElementById('layers-none').addEventListener('click', () => setAllLayers(false));
 document.getElementById('t-sat').addEventListener('change', (e) => { state.sat = e.target.checked; applyLayers(); invalidate(); });
@@ -718,7 +728,7 @@ document.getElementById('layers-reset').addEventListener('click', () => {
   document.querySelector('[data-mode="exterior"]').click();
   document.querySelector('[data-view="hero"]').click();
   const setT = (id, on) => { const el = document.getElementById(id); el.checked = on; el.dispatchEvent(new Event('change')); };
-  setT('t-pool', true); setT('t-lawn', true); setT('t-labels', true);
+  setT('t-house', true); setT('t-pool', true); setT('t-lawn', true); setT('t-labels', true);
   setT('t-dims', false); setT('t-elev', false); setT('t-spin', false);
   setT('t-sat', true);
   document.querySelector('#seg-variant [data-v="render"]').click();
