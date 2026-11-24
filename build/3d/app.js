@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { LAWN_PATCH } from './lawn-patch.js';
+import { LAWN_PATCH } from './lawn-patch.js?v=15';
 
 const FT = 0.3048;
 // plan coordinates (u from rear bay tip toward street, v across, z up; feet) -> scene metres
@@ -136,7 +136,7 @@ const POOL_VIEW_PTS = boxPts(-26, -1, 0, 14, 55, 11.5);
 const DIM_PTS = [P(88, 58.5, 0), P(88, 58.5, 28.5)];
 
 function loadModel() {
-  new GLTFLoader().load('./model.glb', (gltf) => {
+  new GLTFLoader().load('./model.glb?v=15', (gltf) => {
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
     gltf.scene.traverse((o) => {
       if (!o.isMesh) return;
@@ -475,10 +475,10 @@ function ensureLayer(key) {
   if (key.startsWith('ov-')) {
     const cut = key.lastIndexOf('-');
     const name = key.slice(3, cut), extent = key.slice(cut + 1);
-    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/ov-' + name + '-' + extent + '.png', true, 10 + (OV_ORD[name] || 0), (name === 'interior' || name === 'exterior') ? 0.02 : -0.50);
+    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/ov-' + name + '-' + extent + '.png?v=15', true, 10 + (OV_ORD[name] || 0), (name === 'interior' || name === 'exterior') ? 0.02 : -0.50);
   } else {
     const [variant, extent] = key.split('-');
-    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/sat-' + variant + '-' + extent + '.jpg', false);
+    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/sat-' + variant + '-' + extent + '.jpg?v=15', false);
   }
   layerMeshes[key] = m;
   return m;
@@ -551,7 +551,7 @@ document.getElementById('t-spin').addEventListener('change', (e) => {
 });
 document.getElementById('download').addEventListener('click', () => {
   const a = document.createElement('a');
-  a.href = './model.glb'; a.download = 'the-isle-3d-model.glb';
+  a.href = './model.glb?v=15'; a.download = 'the-isle-3d-model.glb';
   document.body.appendChild(a); a.click(); a.remove();
 });
 document.getElementById('photo').addEventListener('click', () => {
