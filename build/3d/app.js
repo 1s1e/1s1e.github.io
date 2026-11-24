@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { LAWN_PATCH } from './lawn-patch.js?v=22';
+import { LAWN_PATCH } from './lawn-patch.js?v=23';
 
 const FT = 0.3048;
 // ---- shared master frame (Web Mercator image stack, 8455 x 8543 px) ------
@@ -350,6 +350,39 @@ function applyLawn() {
   if (lawnSlab) lawnSlab.visible = state.lawn;
   if (lawnPatch) lawnPatch.visible = state.lawn && !state.pool;
 }
+function lawnPatchOutline() {
+  // Boundary loop of the lawn patch's top face, in model coords (x, z): the
+  // outline of the cut-out the model's own lawn leaves over the pool water.
+  const p = LAWN_PATCH.p, TOP = -0.1006, edges = new Map();
+  const key = (x, z) => x.toFixed(4) + ',' + z.toFixed(4);
+  for (let i = 0; i < p.length; i += 9) {
+    const t = [p[i], p[i + 1], p[i + 2], p[i + 3], p[i + 4], p[i + 5], p[i + 6], p[i + 7], p[i + 8]];
+    if (Math.abs(t[1] - TOP) > 1e-4 || Math.abs(t[4] - TOP) > 1e-4 || Math.abs(t[7] - TOP) > 1e-4) continue;
+    const pts = [[t[0], t[2]], [t[3], t[5]], [t[6], t[8]]];
+    for (let e = 0; e < 3; e++) {
+      const a = pts[e], b = pts[(e + 1) % 3];
+      const k = [key(a[0], a[1]), key(b[0], b[1])].sort().join('|');
+      edges.set(k, (edges.get(k) || 0) + 1);
+    }
+  }
+  const adj = new Map();
+  for (const [k, c] of edges) {
+    if (c !== 1) continue;
+    const [a, b] = k.split('|');
+    if (!adj.has(a)) adj.set(a, []);
+    if (!adj.has(b)) adj.set(b, []);
+    adj.get(a).push(b); adj.get(b).push(a);
+  }
+  if (!adj.size) return [];
+  const start = adj.keys().next().value, loop = [start];
+  let prev = null, cur = start;
+  for (let guard = 0; guard < 1000; guard++) {
+    const nxt = (adj.get(cur) || []).find(n => n !== prev);
+    if (!nxt || nxt === start) break;
+    loop.push(nxt); prev = cur; cur = nxt;
+  }
+  return loop.map(s => s.split(',').map(Number));
+}
 function buildLawnSlab(lawnMesh) {
   // The model's grass, re-laid to the surveyed lot lines exactly: a slab with
   // the lot polygon as its outline, the lawn's own top height and thickness,
@@ -378,6 +411,21 @@ function buildLawnSlab(lawnMesh) {
   const shape = new THREE.Shape();
   LOT_WORLD.forEach(([x, z], i) => { if (i === 0) shape.moveTo(x, -z); else shape.lineTo(x, -z); });
   shape.closePath();
+  // The pool opening: the model's own lawn is cut away over the pool water
+  // (the lawn patch fills that cut-out while the pool is off), and the slab
+  // keeps the same opening. Without it the slab's top, which sits above the
+  // water surface, covers the pool with grass.
+  modelGroup.updateMatrixWorld(true);
+  const holePts = lawnPatchOutline();
+  if (holePts.length > 2) {
+    const hole = new THREE.Path();
+    holePts.forEach(([mx, mz], i) => {
+      const w = new THREE.Vector3(mx, 0, mz).applyMatrix4(modelGroup.matrixWorld);
+      if (i === 0) hole.moveTo(w.x, -w.z); else hole.lineTo(w.x, -w.z);
+    });
+    hole.closePath();
+    shape.holes.push(hole);
+  }
   const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.3048, bevelEnabled: false });
   geo.rotateX(-Math.PI / 2);
   const mesh = new THREE.Mesh(geo, lawnMesh.material);
@@ -398,7 +446,7 @@ function buildLawnSlab(lawnMesh) {
   return mesh;
 }
 function loadModel() {
-  new GLTFLoader().load('./model.glb?v=22', (gltf) => {
+  new GLTFLoader().load('./model.glb?v=23', (gltf) => {
     modelGroup = new THREE.Group();
     modelGroup.rotation.y = THREE.MathUtils.degToRad(-15.8323);
     modelGroup.position.set(-16.706, 0, 2.648);
