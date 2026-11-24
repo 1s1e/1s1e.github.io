@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>The Isle - 3D Model</title>
 <meta name="description" content="Interactive 3D model of The Isle, built to the dimensions in the construction drawings for the Regalia Grand plan, Coastal CO3 elevation.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 16 16 5l13 11' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 15v12h18V15' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -49,6 +49,7 @@
         <button data-view="rear">Rear</button>
         <button data-view="right">Right</button>
         <button data-view="top">Top</button>
+        <button data-view="bird">Bird</button>
         <button data-view="pool">Pool</button>
       </div>
     </div>
@@ -56,30 +57,92 @@
       <label class="switch"><input type="checkbox" id="t-pool" checked><span class="track" aria-hidden="true"></span><span>Pool &amp; cage</span></label>
       <label class="switch"><input type="checkbox" id="t-lawn" checked><span class="track" aria-hidden="true"></span><span>Lawn</span></label>
       <label class="switch"><input type="checkbox" id="t-labels" checked><span class="track" aria-hidden="true"></span><span>Room labels</span></label>
-      <label class="switch"><input type="checkbox" id="t-survey"><span class="track" aria-hidden="true"></span><span>Survey</span></label>
-      <label class="switch"><input type="checkbox" id="t-sat"><span class="track" aria-hidden="true"></span><span>Satellite</span></label>
       <label class="switch"><input type="checkbox" id="t-dims"><span class="track" aria-hidden="true"></span><span>Dimensions</span></label>
       <label class="switch"><input type="checkbox" id="t-elev"><span class="track" aria-hidden="true"></span><span>True elevations</span></label>
       <label class="switch"><input type="checkbox" id="t-spin"><span class="track" aria-hidden="true"></span><span>Turntable</span></label>
     </div>
+    <div class="sunctl">
+      <div class="laysec">Sun</div>
+      <div class="sunrow">
+        <label class="sunlab" for="sun-date">Date</label>
+        <input type="date" id="sun-date" value="2026-11-23" min="2025-01-01" max="2035-12-31">
+        <span class="sunclock" id="sun-clock">11:30</span>
+      </div>
+      <div class="sunrow">
+        <label class="sunlab" for="sun-time">Time of day</label>
+        <input type="range" id="sun-time" min="300" max="1260" step="1" value="690">
+      </div>
+      <div class="sunbtns">
+        <button type="button" class="ghost" id="sun-rise">Sunrise</button>
+        <button type="button" class="ghost" id="sun-noon">Solar noon</button>
+        <button type="button" class="ghost" id="sun-set">Sunset</button>
+        <button type="button" class="ghost" id="sun-longest">Longest day</button>
+        <button type="button" class="ghost" id="sun-shortest">Shortest day</button>
+        <button type="button" class="ghost" id="sun-playday">Play day</button>
+        <button type="button" class="ghost" id="sun-playyear">Play year</button>
+      </div>
+      <div class="sunfacts" id="sun-facts"></div>
+    </div>
     <div class="satctl">
+      <div class="satrow"><span class="satlab">Ground</span>
+        <label class="switch"><input type="checkbox" id="t-sat"><span class="track" aria-hidden="true"></span><span>Image</span></label>
+      </div>
       <div class="satrow"><span class="satlab">Image</span>
-        <div class="seg" id="seg-variant" role="group" aria-label="Satellite image">
-          <button type="button" data-v="master" class="on">Master</button><button type="button" data-v="cleaned">Cleaned</button><button type="button" data-v="render">Render</button>
+        <div class="seg" id="seg-variant" role="group" aria-label="Ground image">
+          <button type="button" data-v="master">Neighborhood</button><button type="button" data-v="cleaned">Neighbors</button><button type="button" data-v="render" class="on">Empty</button><button type="button" data-v="street">Street map</button>
         </div>
       </div>
       <div class="satrow"><span class="satlab">Extent</span>
-        <div class="seg" id="seg-extent" role="group" aria-label="Satellite extent">
+        <div class="seg" id="seg-extent" role="group" aria-label="Layer extent">
           <button type="button" data-v="tight" class="on">Lot</button><button type="button" data-v="full">Full frame</button>
         </div>
       </div>
+      <div class="laysec">The Isle</div>
+      <div class="laygrid">
+        <label class="switch"><input type="checkbox" id="t-ov-interior"><span class="track" aria-hidden="true"></span><span>Interior</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-exterior"><span class="track" aria-hidden="true"></span><span>Exterior</span></label>
+      </div>
+      <div class="laysec">Property data</div>
+      <div class="laygrid">
+        <label class="switch"><input type="checkbox" id="t-ov-property"><span class="track" aria-hidden="true"></span><span>Property lines</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-surveylines"><span class="track" aria-hidden="true"></span><span>Survey lines</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-surveydata"><span class="track" aria-hidden="true"></span><span>Survey data</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
+      </div>
+      <div class="laysec">FEMA data</div>
+      <div class="laygrid">
+        <label class="switch"><input type="checkbox" id="t-ov-flood"><span class="track" aria-hidden="true"></span><span>Flood lines</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-floodmap"><span class="track" aria-hidden="true"></span><span>Flood map</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-floodold"><span class="track" aria-hidden="true"></span><span>Flood lines (old)</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-floodmapold"><span class="track" aria-hidden="true"></span><span>Flood map (old)</span></label>
+      </div>
+      <div class="laysec">Measurements</div>
+      <div class="laygrid">
+        <label class="switch"><input type="checkbox" id="t-ov-mhside"><span class="track" aria-hidden="true"></span><span>House side</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-mhback"><span class="track" aria-hidden="true"></span><span>House back</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-mhfront"><span class="track" aria-hidden="true"></span><span>House front</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-mhcorner"><span class="track" aria-hidden="true"></span><span>House corner to corner</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-meside"><span class="track" aria-hidden="true"></span><span>Enclosure side</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-meback"><span class="track" aria-hidden="true"></span><span>Enclosure back</span></label>
+        <label class="switch"><input type="checkbox" id="t-ov-mecorner"><span class="track" aria-hidden="true"></span><span>Enclosure corner to corner</span></label>
+      </div>
+      <div class="satrow laybtns">
+        <button type="button" class="ghost" id="layers-all">Show all layers</button>
+        <button type="button" class="ghost" id="layers-none">Hide all layers</button>
+      </div>
+      <div class="lotfacts">Lot area 11,635 sq ft<br>
+      Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
+      Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
+      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</div>
     </div>
     <div class="group actions">
       <button class="ghost" id="photo" type="button">Photo</button>
       <button class="ghost" id="full" type="button">Full screen</button>
       <button class="ghost" id="download" type="button">Download<span class="ext"> .glb</span></button>
+      <button class="ghost" id="menu-hide" type="button">Hide menu</button>
     </div>
   </section>
+  <button id="menu-show" type="button" hidden>Menu</button>
 
   <p class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
 </main>

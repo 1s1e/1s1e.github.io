@@ -147,3 +147,24 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: var(--text-x
   .room small { display: none; }
   .room { padding: 2px 6px; }
 }
+
+.laysec { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted, #8a8378); margin: 10px 0 2px; }
+.laygrid { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.laybtns { gap: 8px; margin-top: 10px; }
+.lotfacts { font-size: 12px; line-height: 1.5; color: var(--muted, #8a8378); margin-top: 10px; }
+.controls { max-height: 52vh; overflow-y: auto; overscroll-behavior: contain; }
+
+.seg { display: flex; background: var(--color-fill); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
+.seg button { font-size: var(--text-sm); font-weight: 500; padding: 0 var(--space-3); min-height: 38px; border-radius: calc(var(--radius-md) - 3px); color: var(--color-text); white-space: nowrap; background: transparent; border: 0; cursor: pointer; }
+.seg button:hover { background: rgb(29 42 59 / 0.07); }
+.seg button.on { background: var(--color-primary); color: var(--color-on-primary); font-weight: 700; box-shadow: 0 1px 3px rgb(29 42 59 / 0.35); }
+.laysec { border-top: 1px solid rgb(201 171 114 / 0.5); padding-top: 8px; color: #7a6234; font-weight: 700; }
+.sunctl { display: grid; gap: 6px; margin-top: 10px; width: 100%; }
+.sunrow { display: flex; align-items: center; gap: 8px; }
+.sunlab { font-size: 12px; color: var(--mut); width: 64px; flex: none; }
+.sunclock { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
+#sun-date { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); min-height: 38px; }
+#sun-time { flex: 1; accent-color: var(--color-primary); min-height: 38px; }
+.sunbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+.sunfacts { font-size: 12px; color: var(--mut); font-variant-numeric: tabular-nums; }
+#menu-show { position: absolute; right: var(--space-4); bottom: var(--space-4); z-index: 30; font: inherit; font-size: var(--text-sm); font-weight: 700; padding: 0 var(--space-4); min-height: 44px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-card); cursor: pointer; }

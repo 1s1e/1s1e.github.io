@@ -60,7 +60,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.5;
 
-const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, survey: false, sat: false, satVariant: 'master', satExtent: 'tight' };
+const state = { mode: 'exterior', labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: false, satVariant: 'render', satExtent: 'tight', ov: {} };
 let lawnMesh = null, lawnPatch = null;
 function applyLawn() {
   if (lawnMesh) lawnMesh.visible = state.lawn;
@@ -68,8 +68,8 @@ function applyLawn() {
 }
 
 // ---------------------------------------------------------------- cameras
-const persp = new THREE.PerspectiveCamera(32, 1, 0.5, 600);
-const ortho = new THREE.OrthographicCamera(-20, 20, 15, -15, 0.5, 600);
+const persp = new THREE.PerspectiveCamera(32, 1, 0.5, 5000);
+const ortho = new THREE.OrthographicCamera(-20, 20, 15, -15, 0.5, 5000);
 let camera = persp;
 let controls = null;
 const hint = document.getElementById('hint');
@@ -77,7 +77,7 @@ const hint = document.getElementById('hint');
 function makeControls(cam) {
   const c = new OrbitControls(cam, canvas);
   c.enableDamping = true; c.dampingFactor = 0.08;
-  c.maxPolarAngle = 1.53; c.minDistance = 5; c.maxDistance = 400;
+  c.maxPolarAngle = 1.53; c.minDistance = 5; c.maxDistance = 2000;
   c.zoomSpeed = 0.9; c.rotateSpeed = 0.75;
   c.autoRotate = state.spin; c.autoRotateSpeed = 0.9;
   c.addEventListener('change', () => invalidate());
@@ -111,7 +111,8 @@ const lowQ = new URLSearchParams(location.search).has('lowq');
 const POF = +(new URLSearchParams(location.search).get('pof') ?? 1);
 const sm = lowQ ? 1024 : coarse ? 2048 : 4096;
 sun.shadow.mapSize.set(sm, sm);
-Object.assign(sun.shadow.camera, { left: -27, right: 27, top: 27, bottom: -27, near: 1, far: 120 });
+Object.assign(sun.shadow.camera, { left: -48, right: 48, top: 48, bottom: -48, near: 1, far: 320 });
+sun.shadow.camera.updateProjectionMatrix();
 sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.035;
 scene.add(sun, sun.target);
 
@@ -292,10 +293,13 @@ const VIEWS = {
   rear: { dir: [0.0, 0.1, -1], box: 'full' },
   right: { dir: [1, 0.1, 0], box: 'full' },
   top: { dir: [0, 1, 0.0015], box: 'full' },
+  bird: { dir: [0, 1, 0.0015], box: 'bird' },
   plan: { dir: [-0.22, 0.86, 0.46], box: 'mode' },
   pool: { dir: [0.5, 0.62, -0.6], box: 'pool' },
 };
 const ELEV_VIEWS = ['front', 'left', 'rear', 'right'];
+const BIRD_C = [(54 - 27) * 0.3048, 0, (41.5 - 83) * 0.3048];
+const BIRD_PTS = [[-95, -95], [95, -95], [95, 95], [-95, 95]].map(([dx, dz]) => new THREE.Vector3(BIRD_C[0] + dx, 0, BIRD_C[2] + dz));
 let tween = null;
 
 function fit(dirArr, pts) {
@@ -305,7 +309,7 @@ function fit(dirArr, pts) {
   const cu = new THREE.Vector3().crossVectors(dir, right).normalize();
   const w = stage.clientWidth, h = stage.clientHeight;
   const ctl = document.getElementById('controls').getBoundingClientRect(), ttl = document.querySelector('.title-card').getBoundingClientRect();
-  const padTop = (w < 640 ? ttl.bottom + 10 : 24) / h, padBot = Math.max(40, h - ctl.top + 12) / h;
+  const padTop = (w < 640 ? ttl.bottom + 10 : 24) / h, padBot = (ctl.height > 0 ? Math.max(40, h - ctl.top + 12) : 24) / h;
   const usableV = Math.max(0.3, 1 - padTop - padBot), usableH = 0.94;
   let a0 = Infinity, a1 = -Infinity, b0 = Infinity, b1 = -Infinity, c0 = Infinity, c1 = -Infinity;
   for (const p of pts) {
@@ -341,9 +345,9 @@ let lastView = 'hero';
 function setView(name, instant) {
   const v = VIEWS[name]; if (!v) return;
   lastView = name;
-  swapCamera(state.elev && ELEV_VIEWS.includes(name));
+  swapCamera((state.elev && ELEV_VIEWS.includes(name)) || name === 'bird');
   if (v.box === 'pool' && !state.pool) { state.pool = true; document.getElementById('t-pool').checked = true; setMode(state.mode, false); }
-  const pts = v.box === 'pool' ? POOL_VIEW_PTS : [...HULL[state.mode], ...(state.dims ? DIM_PTS : []), ...(state.pool ? POOL_PTS : []), ...layerFitPts()];
+  const pts = v.box === 'pool' ? POOL_VIEW_PTS : v.box === 'bird' ? [...BIRD_PTS, ...HULL[state.mode], ...layerFitPts()] : [...HULL[state.mode], ...(state.dims ? DIM_PTS : []), ...(state.pool ? POOL_PTS : []), ...layerFitPts()];
   const { pos, target, H } = fit(v.dir, pts);
   if (instant || reduceMotion) {
     camera.position.copy(pos); controls.target.copy(target);
@@ -414,7 +418,7 @@ function planToPx(u, v) {
 function syncLayerHoles() {
   for (const m of Object.values(layerMeshes)) if (m.userData.fullGeo) m.geometry = state.pool ? m.userData.holedGeo : m.userData.fullGeo;
 }
-function layerQuad(win, url, transparent) {
+function layerQuad(win, url, transparent, ro) {
   const [x0, y0, x1, y1] = win;
   // Build the sheet in plan coordinates. While the pool is shown, the sheet
   // carries a hole over the pool basin, so the layers never cut through the
@@ -454,18 +458,23 @@ function layerQuad(win, url, transparent) {
     map: tex, side: THREE.DoubleSide, toneMapped: false,
     transparent: !!transparent, depthWrite: !transparent
   }));
-  m.renderOrder = transparent ? -1 : 0;
+  m.renderOrder = ro !== undefined ? ro : (transparent ? -1 : 0);
   m.visible = false;
   m.userData.holedGeo = g;
   m.userData.fullGeo = buildGeo(false);
   layerGroup.add(m);
   return m;
 }
+const OV_DEFS = [['interior', 4], ['exterior', 5], ['property', 6], ['surveylines', 7], ['surveydata', 8], ['flood', 10], ['floodmap', 11], ['floodold', 12], ['floodmapold', 13], ['highlight', 15], ['mhside', 20], ['mhback', 21], ['mhfront', 22], ['mhcorner', 23], ['meside', 24], ['meback', 25], ['mecorner', 26]];
+const OV_ORD = Object.fromEntries(OV_DEFS);
 function ensureLayer(key) {
   if (layerMeshes[key]) return layerMeshes[key];
   let m;
-  if (key === 'survey') m = layerQuad(TIGHT_WIN, './layers/survey-tight.png', true);
-  else {
+  if (key.startsWith('ov-')) {
+    const cut = key.lastIndexOf('-');
+    const name = key.slice(3, cut), extent = key.slice(cut + 1);
+    m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/ov-' + name + '-' + extent + '.png', true, 10 + (OV_ORD[name] || 0));
+  } else {
     const [variant, extent] = key.split('-');
     m = layerQuad(extent === 'full' ? FULL_WIN : TIGHT_WIN, './layers/sat-' + variant + '-' + extent + '.jpg', false);
   }
@@ -474,14 +483,13 @@ function ensureLayer(key) {
 }
 function applyLayers() {
   for (const k of Object.keys(layerMeshes)) layerMeshes[k].visible = false;
-  if (state.survey) ensureLayer('survey').visible = true;
   if (state.sat) ensureLayer(state.satVariant + '-' + state.satExtent).visible = true;
+  for (const [name] of OV_DEFS) if (state.ov[name]) ensureLayer('ov-' + name + '-' + state.satExtent).visible = true;
 }
 function layerFitPts() {
   const pts = [];
   const wins = [];
-  if (state.survey) wins.push(TIGHT_WIN);
-  if (state.sat) wins.push(state.satExtent === 'full' ? FULL_WIN : TIGHT_WIN);
+  if (state.sat || OV_DEFS.some(([n]) => state.ov[n])) wins.push(state.satExtent === 'full' ? FULL_WIN : TIGHT_WIN);
   for (const [x0, y0, x1, y1] of wins)
     for (const [px, py] of [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]) {
       const { u, v } = pxToPlanUV(px, py);
@@ -490,7 +498,17 @@ function layerFitPts() {
   return pts;
 }
 document.getElementById('t-lawn').addEventListener('change', (e) => { state.lawn = e.target.checked; applyLawn(); invalidate(); });
-document.getElementById('t-survey').addEventListener('change', (e) => { state.survey = e.target.checked; applyLayers(); invalidate(); });
+for (const [name] of OV_DEFS) {
+  const el = document.getElementById('t-ov-' + name);
+  if (el) el.addEventListener('change', (e) => { state.ov[name] = e.target.checked; applyLayers(); invalidate(); });
+}
+function setAllLayers(on) {
+  state.sat = on; document.getElementById('t-sat').checked = on;
+  for (const [name] of OV_DEFS) { state.ov[name] = on; const el = document.getElementById('t-ov-' + name); if (el) el.checked = on; }
+  applyLayers(); invalidate();
+}
+document.getElementById('layers-all').addEventListener('click', () => setAllLayers(true));
+document.getElementById('layers-none').addEventListener('click', () => setAllLayers(false));
 document.getElementById('t-sat').addEventListener('change', (e) => { state.sat = e.target.checked; applyLayers(); invalidate(); });
 function segWire(id, fn) {
   const seg = document.getElementById(id);
@@ -572,3 +590,118 @@ function frame(now) {
 window.__viewer = { ready: false, setMode, setView, state, get camera() { return camera; }, get controls() { return controls; }, invalidate };
 requestAnimationFrame(frame);
 loadModel();
+
+// ---------------------------------------------------------------- sun (from the shadow study: NOAA solar position for the lot)
+const SUN_LAT = 28.1773, SUN_LON = -82.2341;
+function sunIsLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+function sunDoy(y, mo, d) { return Math.round((Date.UTC(y, mo - 1, d) - Date.UTC(y, 0, 1)) / 864e5) + 1; }
+function sunNthSunday(y, month, n) { const dow = new Date(Date.UTC(y, month, 1)).getUTCDay(); return 1 + ((7 - dow) % 7) + (n - 1) * 7; }
+function sunTz(y, mo, d) {
+  const startDay = sunNthSunday(y, 2, 2), endDay = sunNthSunday(y, 10, 1);
+  if (mo < 3 || mo > 11) return -5;
+  if (mo > 3 && mo < 11) return -4;
+  if (mo === 3) return d >= startDay ? -4 : -5;
+  return d < endDay ? -4 : -5;
+}
+function sunPosition(y, mo, d, hourLocal) {
+  const doy = sunDoy(y, mo, d), daysInYear = sunIsLeap(y) ? 366 : 365;
+  const gamma = 2 * Math.PI / daysInYear * (doy - 1 + (hourLocal - 12) / 24);
+  const eqtime = 229.18 * (0.000075 + 0.001868 * Math.cos(gamma) - 0.032077 * Math.sin(gamma) - 0.014615 * Math.cos(2 * gamma) - 0.040849 * Math.sin(2 * gamma));
+  const decl = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2 * gamma) + 0.000907 * Math.sin(2 * gamma) - 0.002697 * Math.cos(3 * gamma) + 0.00148 * Math.sin(3 * gamma);
+  const timeOffset = eqtime + 4 * SUN_LON - 60 * sunTz(y, mo, d);
+  const tst = hourLocal * 60 + timeOffset;
+  let haDeg = tst / 4 - 180;
+  if (haDeg < -180) haDeg += 360;
+  if (haDeg > 180) haDeg -= 360;
+  const ha = haDeg * Math.PI / 180, lat = SUN_LAT * Math.PI / 180;
+  let cosZen = Math.sin(lat) * Math.sin(decl) + Math.cos(lat) * Math.cos(decl) * Math.cos(ha);
+  cosZen = Math.max(-1, Math.min(1, cosZen));
+  const alt = 90 - Math.acos(cosZen) * 180 / Math.PI;
+  const az = Math.atan2(Math.sin(ha), Math.cos(ha) * Math.sin(lat) - Math.tan(decl) * Math.cos(lat)) * 180 / Math.PI + 180;
+  return { alt, az: (az + 360) % 360 };
+}
+function sunTimes(y, mo, d) {
+  let rise = null, set = null, noon = 0, maxA = -90, prevA = sunPosition(y, mo, d, 0).alt, prevM = 0;
+  for (let m = 2; m <= 1440; m += 2) {
+    const a = sunPosition(y, mo, d, m / 60).alt;
+    if (prevA < -0.583 && a >= -0.583 && rise === null) rise = prevM + (m - prevM) * (-0.583 - prevA) / (a - prevA);
+    if (prevA >= -0.583 && a < -0.583) set = prevM + (m - prevM) * (-0.583 - prevA) / (a - prevA);
+    if (a > maxA) { maxA = a; noon = m; }
+    prevA = a; prevM = m;
+  }
+  return { rise, noon, set };
+}
+function sunFmt(mins) {
+  if (mins === null || mins === undefined) return '--:--';
+  const hh = Math.floor(mins / 60), mm = Math.floor(mins % 60);
+  return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+}
+const sunDateEl = document.getElementById('sun-date');
+const sunTimeEl = document.getElementById('sun-time');
+const sunClockEl = document.getElementById('sun-clock');
+const sunFactsEl = document.getElementById('sun-facts');
+const hemi = scene.children.find((o) => o.isHemisphereLight);
+function applySun() {
+  const parts = sunDateEl.value.split('-');
+  const y = +parts[0], mo = +parts[1], d = +parts[2];
+  const mins = +sunTimeEl.value;
+  sunClockEl.textContent = sunFmt(mins);
+  const sp = sunPosition(y, mo, d, mins / 60);
+  const altR = sp.alt * Math.PI / 180, azR = sp.az * Math.PI / 180;
+  const E = Math.cos(altR) * Math.sin(azR), N = Math.cos(altR) * Math.cos(azR);
+  // scene axes against true compass: +Z bears S16W, +X bears WNW (the shadow study's site rotation)
+  const dir = new THREE.Vector3(-0.9613 * E + 0.2756 * N, Math.sin(altR), -0.2756 * E - 0.9613 * N);
+  const dayF = Math.max(0, Math.min(1, sp.alt / 30));
+  if (sp.alt > -1) {
+    sun.visible = true;
+    sun.position.copy(CENTER).addScaledVector(dir, 110);
+    sun.intensity = 3.0 * Math.max(0.1, Math.min(1, sp.alt / 25));
+  } else sun.visible = false;
+  if (hemi) hemi.intensity = 0.25 + 0.7 * dayF;
+  scene.environmentIntensity = 0.15 + 0.35 * dayF;
+  const t = sunTimes(y, mo, d);
+  sunFactsEl.textContent = sp.alt <= 0
+    ? 'Sun below the horizon · Sunrise ' + sunFmt(t.rise) + ' · Sunset ' + sunFmt(t.set)
+    : 'Sunrise ' + sunFmt(t.rise) + ' · Solar noon ' + sunFmt(t.noon) + ' · Sunset ' + sunFmt(t.set) + ' · Altitude ' + sp.alt.toFixed(1) + '° · Azimuth ' + sp.az.toFixed(1) + '°';
+  invalidate(2, true);
+}
+let sunPlayTimer = null;
+function sunStopPlay() {
+  if (sunPlayTimer) { clearInterval(sunPlayTimer); sunPlayTimer = null; }
+  document.getElementById('sun-playday').textContent = 'Play day';
+  document.getElementById('sun-playyear').textContent = 'Play year';
+}
+function sunSetTime(mins) { sunTimeEl.value = Math.max(300, Math.min(1260, Math.round(mins))); applySun(); }
+sunDateEl.addEventListener('change', () => { sunStopPlay(); applySun(); });
+sunTimeEl.addEventListener('input', () => { sunStopPlay(); applySun(); });
+document.getElementById('sun-rise').addEventListener('click', () => { const p = sunDateEl.value.split('-'); const t = sunTimes(+p[0], +p[1], +p[2]); if (t.rise !== null) sunSetTime(t.rise); });
+document.getElementById('sun-noon').addEventListener('click', () => { const p = sunDateEl.value.split('-'); const t = sunTimes(+p[0], +p[1], +p[2]); sunSetTime(t.noon); });
+document.getElementById('sun-set').addEventListener('click', () => { const p = sunDateEl.value.split('-'); const t = sunTimes(+p[0], +p[1], +p[2]); if (t.set !== null) sunSetTime(t.set); });
+document.getElementById('sun-longest').addEventListener('click', () => { const p = sunDateEl.value.split('-'); sunDateEl.value = p[0] + '-06-21'; applySun(); });
+document.getElementById('sun-shortest').addEventListener('click', () => { const p = sunDateEl.value.split('-'); sunDateEl.value = p[0] + '-12-21'; applySun(); });
+document.getElementById('sun-playday').addEventListener('click', (e) => {
+  if (sunPlayTimer) { sunStopPlay(); return; }
+  e.target.textContent = 'Stop';
+  sunPlayTimer = setInterval(() => {
+    let v = +sunTimeEl.value + 6;
+    if (v > 1260) { sunStopPlay(); return; }
+    sunTimeEl.value = v; applySun();
+  }, 60);
+});
+document.getElementById('sun-playyear').addEventListener('click', (e) => {
+  if (sunPlayTimer) { sunStopPlay(); return; }
+  e.target.textContent = 'Stop';
+  sunPlayTimer = setInterval(() => {
+    const p = sunDateEl.value.split('-');
+    const dt = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]) + 3 * 864e5);
+    if (dt.getUTCFullYear() !== +p[0]) { sunStopPlay(); return; }
+    sunDateEl.value = dt.toISOString().slice(0, 10); applySun();
+  }, 60);
+});
+applySun();
+
+// ---------------------------------------------------------------- hide-away menu (as on /lot and /shadow)
+const controlsCard = document.getElementById('controls');
+const menuShowBtn = document.getElementById('menu-show');
+document.getElementById('menu-hide').addEventListener('click', () => { controlsCard.style.display = 'none'; menuShowBtn.hidden = false; invalidate(); });
+menuShowBtn.addEventListener('click', () => { controlsCard.style.display = ''; menuShowBtn.hidden = true; invalidate(); });
