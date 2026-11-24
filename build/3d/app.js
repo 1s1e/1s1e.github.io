@@ -393,15 +393,15 @@ document.querySelectorAll('.chips button').forEach((b) => b.addEventListener('cl
 // ---- ground layers: the lot survey and satellite images, registered to the
 // lot master frame (8455 x 8543 px, Web Mercator). The transform was solved
 // against the lot work's own floor plan pool layer: 17.0 degrees, 4.628 px
-// per foot, house origin (u 0, v 0) at frame px (4340.8, 4243.2). The pool
+// per foot, house origin (u 0, v 0) at frame px (4341.43, 4239.67). The pool
 // outline matched the model to about a foot.
 const TIGHT_WIN = [3700, 3750, 4780, 4960];
 const FULL_WIN = [0, 0, 8455, 8543];
 function pxToPlanUV(x, y) {
-  const rx = x - 4340.8, ry = y - 4243.2;
+  const rx = x - 4341.43, ry = y - 4239.67;
   return {
-    u: (-1.353 * rx + 4.426 * ry) / 21.42,
-    v: (-1.353 * ry - 4.426 * rx) / 21.42
+    u: (-1.260 * rx + 4.453 * ry) / 21.42,
+    v: (-1.260 * ry - 4.453 * rx) / 21.42
   };
 }
 const layerGroup = new THREE.Group();
@@ -409,7 +409,7 @@ layerGroup.name = 'viewer__ground_layers';
 scene.add(layerGroup);
 const layerMeshes = {};
 function planToPx(u, v) {
-  return [4340.8 + u * -1.353 + v * -4.426, 4243.2 + u * 4.426 + v * -1.353];
+  return [4341.43 + u * -1.260 + v * -4.453, 4239.67 + u * 4.453 + v * -1.260];
 }
 function syncLayerHoles() {
   for (const m of Object.values(layerMeshes)) if (m.userData.fullGeo) m.geometry = state.pool ? m.userData.holedGeo : m.userData.fullGeo;
