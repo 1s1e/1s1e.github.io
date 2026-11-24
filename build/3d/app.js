@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { LAWN_PATCH } from './lawn-patch.js?v=21';
+import { LAWN_PATCH } from './lawn-patch.js?v=22';
 
 const FT = 0.3048;
 // ---- shared master frame (Web Mercator image stack, 8455 x 8543 px) ------
@@ -207,7 +207,7 @@ scene.add(sun, sun.target);
 // maximum texture size is smaller gets a halved copy, so the picture the
 // device can show stays the file's own pixels.
 const maxTex = renderer.capabilities.maxTextureSize;
-function loadTex(url, srgb = true) {
+function loadTex(url, srgb = true, onReady) {
   const tex = new THREE.TextureLoader().load(url, () => {
     const img = tex.image;
     if (img && (img.width > maxTex || img.height > maxTex)) {
@@ -218,10 +218,16 @@ function loadTex(url, srgb = true) {
       tex.image = cv; tex.needsUpdate = true;
     }
     invalidate();
+    if (onReady) onReady(tex);
   });
   if (srgb) tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   return tex;
+}
+const texCache = {};
+function getTex(url) {
+  if (!texCache[url]) texCache[url] = loadTex(url);
+  return texCache[url];
 }
 function rectPlane(rect, scale, y, mat) {
   const [fx, fy, w, h] = rect;
@@ -273,17 +279,35 @@ const OV_DEFS = [
   { key: 'mecorner', file: '20-measurements-enclosure-corner.png', detail: '20-measurements-enclosure-corner-detail.png', rect: LOT_FRAME, ord: 26, on: false }
 ];
 for (const d of OV_DEFS) state.ov[d.key] = d.on;
+// The two survey sheets are 8640x12000 each; decoding and uploading one on
+// the first click stalls the view for seconds. Load and upload them in the
+// background once the viewer is up, one at a time, so the first click on
+// Survey lines or Survey data is instant like every other layer.
+function preloadSurvey() {
+  const keys = ['surveylines', 'surveydata'];
+  const step = (i) => {
+    if (i >= keys.length) return;
+    const d = OV_DEFS.find(x => x.key === keys[i]); if (!d) return;
+    const url = './layers/' + d.file;
+    if (texCache[url]) { step(i + 1); return; }
+    texCache[url] = loadTex(url, true, (tex) => {
+      try { renderer.initTexture(tex); } catch (e) { /* first render uploads it instead */ }
+      setTimeout(() => step(i + 1), 1200);
+    });
+  };
+  step(0);
+}
 const ovMeshes = {};
 function layerY(d) { return (d.key === 'interior' || d.key === 'exterior') ? 0.02 : 0.012 + d.ord * 0.0012; }
 function ensureOverlay(d) {
   if (ovMeshes[d.key]) return ovMeshes[d.key];
   const g = new THREE.Group();
-  const mat = new THREE.MeshBasicMaterial({ map: loadTex('./layers/' + d.file), transparent: true, depthWrite: false, toneMapped: false, side: THREE.DoubleSide });
+  const mat = new THREE.MeshBasicMaterial({ map: getTex('./layers/' + d.file), transparent: true, depthWrite: false, toneMapped: false, side: THREE.DoubleSide });
   const m = rectPlane(d.rect, MPP_LOT, layerY(d), mat);
   m.renderOrder = 10 + d.ord;
   g.add(m);
   if (d.detail) {
-    const dm = rectPlane(DETAIL_RECT, MPP_LOT, layerY(d) + 0.0006, new THREE.MeshBasicMaterial({ map: loadTex('./layers/' + d.detail), transparent: true, depthWrite: false, toneMapped: false, side: THREE.DoubleSide }));
+    const dm = rectPlane(DETAIL_RECT, MPP_LOT, layerY(d) + 0.0006, new THREE.MeshBasicMaterial({ map: getTex('./layers/' + d.detail), transparent: true, depthWrite: false, toneMapped: false, side: THREE.DoubleSide }));
     dm.renderOrder = 10 + d.ord + 0.5;
     g.add(dm);
   }
@@ -374,7 +398,7 @@ function buildLawnSlab(lawnMesh) {
   return mesh;
 }
 function loadModel() {
-  new GLTFLoader().load('./model.glb?v=21', (gltf) => {
+  new GLTFLoader().load('./model.glb?v=22', (gltf) => {
     modelGroup = new THREE.Group();
     modelGroup.rotation.y = THREE.MathUtils.degToRad(-15.8323);
     modelGroup.position.set(-16.706, 0, 2.648);
@@ -450,6 +474,7 @@ function loadModel() {
     setView('hero', true);
     invalidate(4, true);
     window.__viewer.ready = true;
+    setTimeout(preloadSurvey, 2500);
   }, undefined, (err) => {
     document.getElementById('loading-text').textContent = 'The model could not be loaded.';
     document.querySelector('.spinner').style.display = 'none';
