@@ -1,141 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>The Isle - 3D Model</title>
-<meta name="description" content="Interactive 3D model of The Isle, built to the dimensions in the construction drawings for the Regalia Grand plan, Coastal CO3 elevation.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 16 16 5l13 11' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 15v12h18V15' fill='none' stroke='%231d2a3b' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./base.css?v=s1">
-<link rel="stylesheet" href="./style.css?v=s1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>The Isle · 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #dfe7ea;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  #scene { position: fixed; inset: 0; }
+  #scene canvas { display: block; }
+  #bar { position: fixed; top: 10px; left: 10px; z-index: 5; display: flex; gap: 8px; }
+  #bar button { min-height: 44px; padding: 0 18px; border: 1px solid #b9c2c6; border-radius: 999px;
+    background: #ffffff; color: #22303a; font-size: 15px; font-weight: 600; cursor: pointer; }
+  #bar button.on { background: #22303a; color: #ffffff; border-color: #22303a; }
+  #note { position: fixed; left: 10px; bottom: 10px; z-index: 5; background: rgba(255,255,255,.88);
+    color: #43545f; font-size: 12.5px; padding: 7px 11px; border-radius: 8px; }
+</style>
 <script type="importmap">
 { "imports": {
-    "three": "./vendor/three.module.js?v=s1",
-    "three/addons/": "./vendor/addons/"
+  "three": "./vendor/three.module.js",
+  "three/addons/": "./vendor/addons/"
 } }
 </script>
 </head>
 <body>
-<a class="sr-only" href="#controls">Skip to view controls</a>
-<aside id="panel">
-  <div class="panel-head">
-    <button id="menu-hide" type="button" class="btn-head">Hide Menu</button>
-  </div>
-  <section class="controls" id="controls" aria-label="View controls">
-    <div class="sec" id="sec-house"><div class="sec-head"><button type="button" class="sec-toggle">House<span class="chev">▾</span></button></div><div class="sec-body"><div class="group">
-      <span class="group-label" id="lvl-label">Show</span>
-      <div class="segmented" role="radiogroup" aria-labelledby="lvl-label">
-        <button role="radio" aria-checked="true" data-mode="exterior">Exterior</button>
-        <button role="radio" aria-checked="false" data-mode="upper">Upper floor</button>
-        <button role="radio" aria-checked="false" data-mode="main">Main floor</button>
-      </div>
-    </div>
-<div class="group">
-      <span class="group-label" id="cam-label">Camera</span>
-      <div class="chips" role="group" aria-labelledby="cam-label">
-        <button data-view="hero">3/4</button>
-        <button data-view="front">Front</button>
-        <button data-view="left">Left</button>
-        <button data-view="rear">Rear</button>
-        <button data-view="right">Right</button>
-        <button data-view="top">Top</button>
-        <button data-view="bird">Bird</button>
-        <button data-view="pool">Pool</button>
-      </div>
-    </div>
-<div class="group toggles">
-      <label class="switch"><input type="checkbox" id="t-house" checked><span class="track" aria-hidden="true"></span><span>House</span></label>
-      <label class="switch"><input type="checkbox" id="t-pool" checked><span class="track" aria-hidden="true"></span><span>Pool &amp; cage</span></label>
-      <label class="switch"><input type="checkbox" id="t-lawn" checked><span class="track" aria-hidden="true"></span><span>Lawn</span></label>
-      <label class="switch"><input type="checkbox" id="t-labels" checked><span class="track" aria-hidden="true"></span><span>Room labels</span></label>
-      <label class="switch"><input type="checkbox" id="t-dims"><span class="track" aria-hidden="true"></span><span>Dimensions</span></label>
-      <label class="switch"><input type="checkbox" id="t-elev"><span class="track" aria-hidden="true"></span><span>True elevations</span></label>
-      <label class="switch"><input type="checkbox" id="t-spin"><span class="track" aria-hidden="true"></span><span>Turntable</span></label>
-    </div>
-<div class="group actions">
-      <button class="ghost" id="photo" type="button">Photo</button>
-      <button class="ghost" id="full" type="button">Full screen</button>
-      <button class="ghost" id="download" type="button">Download<span class="ext"> .glb</span></button>
-    </div></div></div>
-    <div class="sec" id="sec-sun"><div class="sec-head"><button type="button" class="sec-toggle">Sun &amp; Shadow<span class="chev">▾</span></button></div><div class="sec-body"><div class="sunctl">
-      
-      <div class="sunrow">
-        <label class="sunlab" for="sun-date">Date</label>
-        <input type="date" id="sun-date" value="2026-11-23" min="2025-01-01" max="2035-12-31">
-        <span class="sunclock" id="sun-clock">11:30</span>
-      </div>
-      <div class="sunrow">
-        <label class="sunlab" for="sun-time">Time of day</label>
-        <input type="range" id="sun-time" min="300" max="1260" step="1" value="690">
-      </div>
-      <div class="sunbtns">
-        <button type="button" class="ghost" id="sun-rise">Sunrise</button>
-        <button type="button" class="ghost" id="sun-noon">Solar noon</button>
-        <button type="button" class="ghost" id="sun-set">Sunset</button>
-        <button type="button" class="ghost" id="sun-longest">Longest day</button>
-        <button type="button" class="ghost" id="sun-shortest">Shortest day</button>
-        <button type="button" class="ghost" id="sun-playday">Play day</button>
-        <button type="button" class="ghost" id="sun-playyear">Play year</button>
-      </div>
-      <div class="sunfacts" id="sun-facts"></div>
-    </div></div></div>
-    <div class="sec" id="sec-ground"><div class="sec-head"><button type="button" class="sec-toggle">Ground<span class="chev">▾</span></button></div><div class="sec-body"><div class="satrow"><span class="satlab">Ground</span>
-        <label class="switch"><input type="checkbox" id="t-sat" checked><span class="track" aria-hidden="true"></span><span>Image</span></label>
-      </div>
-      <div class="satrow"><span class="satlab">Image</span>
-        <div class="seg" id="seg-variant" role="group" aria-label="Ground image">
-          <button type="button" data-v="master">Neighborhood</button><button type="button" data-v="cleaned">Neighbors</button><button type="button" data-v="render" class="on">Empty</button><button type="button" data-v="street">Street map</button>
-        </div>
-      </div>
-      <div class="satrow"><span class="satlab">Extent</span>
-        <div class="seg" id="seg-extent" role="group" aria-label="Layer extent">
-          <button type="button" data-v="tight" class="on">Lot</button><button type="button" data-v="full">Full frame</button>
-        </div>
-      </div></div></div>
-    <div class="bulkrow"><div class="satrow laybtns">
-        <button type="button" class="ghost" id="layers-all">Show all layers</button>
-        <button type="button" class="ghost" id="layers-none">Hide all layers</button>
-       <button type="button" class="ghost" id="layers-reset">Reset to defaults</button></div></div>
-    <div class="sec" id="sec-isle"><div class="sec-head"><button type="button" class="sec-toggle">The Isle<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
-        <label class="switch"><input type="checkbox" id="t-ov-interior" checked><span class="track" aria-hidden="true"></span><span>Interior</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-exterior" checked><span class="track" aria-hidden="true"></span><span>Exterior</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-prop"><div class="sec-head"><button type="button" class="sec-toggle">Property Data<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
-        <label class="switch"><input type="checkbox" id="t-ov-property" checked><span class="track" aria-hidden="true"></span><span>Property lines</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-surveylines"><span class="track" aria-hidden="true"></span><span>Survey lines</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-surveydata"><span class="track" aria-hidden="true"></span><span>Survey data</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-fema"><div class="sec-head"><button type="button" class="sec-toggle">FEMA Data<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
-        <label class="switch"><input type="checkbox" id="t-ov-flood"><span class="track" aria-hidden="true"></span><span>Flood lines</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-floodmap"><span class="track" aria-hidden="true"></span><span>Flood map</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-floodold"><span class="track" aria-hidden="true"></span><span>Flood lines (old)</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-floodmapold"><span class="track" aria-hidden="true"></span><span>Flood map (old)</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-meas"><div class="sec-head"><button type="button" class="sec-toggle">Measurements<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
-        <label class="switch"><input type="checkbox" id="t-ov-mhside"><span class="track" aria-hidden="true"></span><span>House side</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-mhback"><span class="track" aria-hidden="true"></span><span>House back</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-mhfront"><span class="track" aria-hidden="true"></span><span>House front</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-mhcorner"><span class="track" aria-hidden="true"></span><span>House corner to corner</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-meside"><span class="track" aria-hidden="true"></span><span>Enclosure side</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-meback"><span class="track" aria-hidden="true"></span><span>Enclosure back</span></label>
-        <label class="switch"><input type="checkbox" id="t-ov-mecorner"><span class="track" aria-hidden="true"></span><span>Enclosure corner to corner</span></label>
-      </div></div></div>
-    <div class="sec closed" id="sec-facts"><div class="sec-head"><button type="button" class="sec-toggle">Lot Facts<span class="chev">▾</span></button></div><div class="sec-body"><div class="lotfacts">Lot area 11,635 sq ft<br>
-      Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
-      Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
-      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</div></div></div>
-  </section>
-</aside>
-<main id="stage" aria-label="3D model viewport">
-  <canvas id="view" aria-label="Interactive 3D model of The Isle. Drag to orbit, scroll to zoom."></canvas>
-  <div id="labels" aria-hidden="true"></div>
-  <button id="menu-show" type="button">Menu</button>
-  <div class="loading" id="loading" role="status" aria-live="polite">
-    <span class="spinner" aria-hidden="true"></span><span id="loading-text">Building model…</span>
-  </div>
-  <p class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
-</main>
-<script type="module" src="./app.js?v=s1"></script>
+<div id="scene"></div>
+<div id="bar">
+  <button id="v-top" class="on" type="button">Top</button>
+  <button id="v-hero" type="button">3/4</button>
+</div>
+<div id="note">Rebuild sample: the model layered into the lot and shadow system.</div>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
