@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { LAWN_PATCH } from './lawn-patch.js?v=23';
+import { LAWN_PATCH } from './lawn-patch.js?v=24';
 
 const FT = 0.3048;
 // ---- shared master frame (Web Mercator image stack, 8455 x 8543 px) ------
@@ -207,14 +207,22 @@ scene.add(sun, sun.target);
 // maximum texture size is smaller gets a halved copy, so the picture the
 // device can show stays the file's own pixels.
 const maxTex = renderer.capabilities.maxTextureSize;
+// Phones and tablets kill pages that take too much memory, and this page's
+// sheets run to 60-100 megapixels each at native size. On a memory-
+// constrained device the textures are uploaded at a reduced size that
+// still exceeds the screen's own pixel count; the files themselves are
+// unchanged, and placement is geometry, so nothing moves. Desktops keep
+// the native upload wherever the GPU allows it.
+const constrained = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+const texCap = constrained ? 4096 : maxTex;
 function loadTex(url, srgb = true, onReady) {
   const tex = new THREE.TextureLoader().load(url, () => {
     const img = tex.image;
-    if (img && (img.width > maxTex || img.height > maxTex)) {
-      let w = img.width, h = img.height;
-      while (w > maxTex || h > maxTex) { w = Math.ceil(w / 2); h = Math.ceil(h / 2); }
-      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    if (img && (img.width > texCap || img.height > texCap)) {
+      const s = texCap / Math.max(img.width, img.height);
+      const cv = document.createElement('canvas');
+      cv.width = Math.max(1, Math.round(img.width * s)); cv.height = Math.max(1, Math.round(img.height * s));
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
       tex.image = cv; tex.needsUpdate = true;
     }
     invalidate();
@@ -446,7 +454,7 @@ function buildLawnSlab(lawnMesh) {
   return mesh;
 }
 function loadModel() {
-  new GLTFLoader().load('./model.glb?v=23', (gltf) => {
+  new GLTFLoader().load('./model.glb?v=24', (gltf) => {
     modelGroup = new THREE.Group();
     modelGroup.rotation.y = THREE.MathUtils.degToRad(-15.8323);
     modelGroup.position.set(-16.706, 0, 2.648);
@@ -522,7 +530,7 @@ function loadModel() {
     setView('hero', true);
     invalidate(4, true);
     window.__viewer.ready = true;
-    setTimeout(preloadSurvey, 2500);
+    if (!constrained) setTimeout(preloadSurvey, 2500);
   }, undefined, (err) => {
     document.getElementById('loading-text').textContent = 'The model could not be loaded.';
     document.querySelector('.spinner').style.display = 'none';
