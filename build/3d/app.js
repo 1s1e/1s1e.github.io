@@ -207,6 +207,7 @@ function loadModel() {
       if (o) o.scale.y = CAGE_RAISE;
     }
     setMode(state.mode, false);
+    applyLayers();
     document.getElementById('loading').classList.add('done');
     setView('hero', true);
     invalidate(4, true);
@@ -587,6 +588,7 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 window.__viewer = { ready: false, setMode, setView, state, get camera() { return camera; }, get controls() { return controls; }, invalidate };
+applyLayers();
 requestAnimationFrame(frame);
 loadModel();
 
