@@ -406,3 +406,33 @@ body.panelhidden #menu-show { display: block; }
 #pane-house .laysec { margin: 4px 0 2px; }
 #pane-house .grp { padding: 8px 0 6px; }
 #pane-house .grp .group { margin-bottom: 4px; }
+
+/* Facts moved down: the foot row carries a Facts link opposite the theme
+   switch, opening a small text card above the foot. */
+.panel-foot { justify-content: space-between; }
+.factslink { background: none; border: none; cursor: pointer; min-height: 44px; padding: 0 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-muted); }
+.factslink[aria-expanded="true"] { color: var(--gold); }
+.factspop { position: absolute; left: 12px; right: 12px; bottom: 70px; z-index: 40; background: var(--color-surface, #22344a); border: 1px solid var(--color-border); padding: 12px 16px 14px; }
+.factspop-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.factspop-head span { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.factspop-x { background: none; border: none; cursor: pointer; color: var(--color-text-muted); font-size: 18px; line-height: 1; min-width: 32px; min-height: 32px; padding: 0; }
+.factspop p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.55; color: var(--color-text); }
+.factspop p:last-child { margin-bottom: 0; }
+
+/* Shadow data cleaned up: the sun figures as five ruled rows under the
+   buttons, label left, value right, instead of one run-on line. */
+.sunfacts { margin-top: 8px; }
+.sfrow { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid var(--color-border); }
+.sfrow:last-child { border-bottom: none; }
+.sfrow .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
+.sfrow .v { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--color-text); }
+/* The pop-up anchors to the panel, not the page: the panel becomes the
+   positioned parent so the card sits inside the panel width. */
+#panel { position: relative; }
+
+/* Sun pane width fault: the sun controls grid lets its rows size to their
+   contents, pushing the whole column 15px past the panel inset so the
+   clock, the right hand buttons and the fact values run to the panel
+   edge. The rows now stay inside the same measure as every other pane. */
+.sunctl > * { min-width: 0; }
+.sunbtns .btn { min-width: 0; }

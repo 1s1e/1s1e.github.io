@@ -34,7 +34,7 @@
     <a class="btn home-btn" href="/build/" aria-label="Project Home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg></a>
     <button id="menu-hide" type="button" class="glyphctl" aria-label="Hide Menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
-  <nav id="menutabs" aria-label="Menu groups"><button type="button" data-pane="house" class="on" aria-current="true">House</button><button type="button" data-pane="sun">Sun</button><button type="button" data-pane="ground">Ground</button><button type="button" data-pane="layers">Layers</button><button type="button" data-pane="facts">Facts</button></nav>
+  <nav id="menutabs" aria-label="Menu groups"><button type="button" data-pane="house" class="on" aria-current="true">House</button><button type="button" data-pane="sun">Sun</button><button type="button" data-pane="ground">Ground</button><button type="button" data-pane="layers">Layers</button></nav>
   <section class="controls" id="controls" aria-label="View controls">
     <div class="pane" id="pane-house"><div class="grp "><div class="group">
       
@@ -92,7 +92,7 @@
         <button type="button" class="btn" id="sun-playday">Play day</button>
         <button type="button" class="btn" id="sun-playyear">Play year</button>
       </div>
-      <div class="sunfacts" id="sun-facts"></div>
+      <div class="sunfacts" id="sun-facts"><div class="sfrow"><span class="k">Sunrise</span><span class="v" id="sf-rise"></span></div><div class="sfrow"><span class="k">Solar noon</span><span class="v" id="sf-noon"></span></div><div class="sfrow"><span class="k">Sunset</span><span class="v" id="sf-set"></span></div><div class="sfrow"><span class="k">Altitude</span><span class="v" id="sf-alt"></span></div><div class="sfrow"><span class="k">Azimuth</span><span class="v" id="sf-az"></span></div></div>
     </div></div></div><div class="pane" id="pane-ground" hidden><div class="grp "><div class="satrow">
         <label class="toggle"><input type="checkbox" id="t-sat" checked><span class="track" aria-hidden="true"></span><span>Image</span></label>
       </div>
@@ -128,11 +128,9 @@
       </div><div class="laysec">Miscellaneous</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-street"><span class="track" aria-hidden="true"></span><span>Street map</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
-      </div></div></div><div class="pane" id="pane-facts" hidden><div class="grp "><div class="lotfacts">Lot area 11,635 sq ft<br>
-      Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
-      Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
-      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</div></div></div></section>
-  <div class="panel-foot"><div id="themesw"><button type="button" class="switch" id="themeToggle" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div></div>
+      </div></div></div></section>
+  <div class="panel-foot"><div id="themesw"><button type="button" class="switch" id="themeToggle" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div><button type="button" class="factslink" id="facts-link" aria-expanded="false" aria-controls="facts-pop">Facts</button></div>
+<div class="factspop" id="facts-pop" hidden><div class="factspop-head"><span>Lot Facts</span><button type="button" class="factspop-x" id="facts-x" aria-label="Close facts">×</button></div><p>Lot area 11,635 sq ft</p><p>Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.</p><p>Finished floor 72.60 ft, base flood elevation 67.8 ft</p><p>Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</p></div>
 </aside>
 <main id="stage" aria-label="3D model viewport">
   <canvas id="view" aria-label="Interactive 3D model of The Isle. Drag to orbit, scroll to zoom."></canvas>
@@ -152,6 +150,25 @@ document.addEventListener('gesturestart', function (e) { e.preventDefault(); }, 
 document.addEventListener('gesturechange', function (e) { e.preventDefault(); }, { passive: false });
 document.addEventListener('gestureend', function (e) { e.preventDefault(); }, { passive: false });
 document.addEventListener('dblclick', function (e) { e.preventDefault(); }, { passive: false });
+</script>
+<script>
+/* Lot Facts pop-up: the foot row link toggles a small text card above the
+   foot. Closes on its own button, on a tap outside it, or on Escape. */
+(function () {
+  var link = document.getElementById('facts-link');
+  var pop = document.getElementById('facts-pop');
+  var x = document.getElementById('facts-x');
+  function setOpen(open) {
+    pop.hidden = !open;
+    link.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  link.addEventListener('click', function () { setOpen(pop.hidden); });
+  x.addEventListener('click', function () { setOpen(false); });
+  document.addEventListener('click', function (e) {
+    if (!pop.hidden && !pop.contains(e.target) && e.target !== link) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+})();
 </script>
 <script type="module" src="./app.js"></script>
 <script>

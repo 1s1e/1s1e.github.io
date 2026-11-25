@@ -774,9 +774,11 @@ function applySun() {
   hemi.intensity = 0.35 + 0.6 * Math.min(1, day * 1.6 + 0.15);
   const t = sunTimes(y, mo, d);
   document.getElementById('sun-clock').textContent = fmtClock(sunState.mins);
-  document.getElementById('sun-facts').textContent =
-    'Sunrise ' + fmtClock(t.rise) + ' · Solar noon ' + fmtClock(t.noon) + ' · Sunset ' + fmtClock(t.set) +
-    ' · Altitude ' + alt.toFixed(1) + '° · Azimuth ' + az.toFixed(1) + '°';
+  document.getElementById('sf-rise').textContent = fmtClock(t.rise);
+  document.getElementById('sf-noon').textContent = fmtClock(t.noon);
+  document.getElementById('sf-set').textContent = fmtClock(t.set);
+  document.getElementById('sf-alt').textContent = alt.toFixed(1) + '°';
+  document.getElementById('sf-az').textContent = az.toFixed(1) + '°';
   invalidate(2, true);
 }
 const sunDateEl = document.getElementById('sun-date');
