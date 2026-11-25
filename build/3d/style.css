@@ -427,8 +427,14 @@ body.panelhidden #menu-show { display: block; }
 .sfrow .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
 .sfrow .v { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--color-text); }
 /* The pop-up anchors to the panel, not the page: the panel becomes the
-   positioned parent so the card sits inside the panel width. */
-#panel { position: relative; }
+   positioned parent so the card sits inside the panel width. Scoped to
+   desktop widths: on small screens the panel is already fixed, which
+   anchors the card there too, and an unscoped relative here would
+   override that fixed positioning and leave the panel in the layout,
+   crushing the stage into the width remaining beside it. */
+@media (min-width: 761px) {
+  #panel { position: relative; }
+}
 
 /* Sun pane width fault: the sun controls grid lets its rows size to their
    contents, pushing the whole column 15px past the panel inset so the
