@@ -143,6 +143,16 @@
   </div>
   <p class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</p>
 </main>
+<script>
+/* Safari zoom lock: iOS Safari ignores user-scalable=no, so the page zoom
+   gesture is stopped at its own gesture events. Single finger scrolling
+   in the panel never fires these, and the canvas keeps its own pinch
+   through touch events with touch-action: none. */
+document.addEventListener('gesturestart', function (e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('gesturechange', function (e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('gestureend', function (e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('dblclick', function (e) { e.preventDefault(); }, { passive: false });
+</script>
 <script type="module" src="./app.js"></script>
 <script>
 (function () {
