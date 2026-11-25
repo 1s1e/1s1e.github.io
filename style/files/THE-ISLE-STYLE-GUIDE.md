@@ -684,9 +684,10 @@ What is required of anything created:
   its words.
 - Project Home, the way back to The Build index, is a control with
   the home glyph alone, the house of the master symbol
-  list, with no words. The glyph stands at 20px. Like every symbol
-  standing alone, it keeps its name for assistive technology:
-  Project Home.
+  list, with no words. The control carries no border, no box and
+  no background: the house glyph alone is the button. The glyph
+  stands at 20px. Like every symbol standing alone, it keeps its
+  name for assistive technology: Project Home.
 - State pairs: a control that changes state carries the symbol of
   the state it is in. Menu and Close are one pair, the lines while
   the menu is closed and the × while it is open. Play and Pause are
