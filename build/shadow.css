@@ -77,6 +77,15 @@ html, body{ height:100%; }
    on one line. Every other part of the button form is the
    master's, unchanged. The exception lives in this sheet only. */
 .grid2 .btn{ font-size:13px; letter-spacing:0.05em; padding:14px 12px; }
+/* The sun buttons' two-line form (guide section 12): Sunrise,
+   Solar Noon and Sunset carry their name on the first line and
+   their time on the second, by design, at the grid's 13px, so
+   the three stand at one uniform height. The time takes the
+   quieter tone through opacity, so it follows the button's own
+   colour in both modes, on hover and in the on state. */
+.grid2 .sunbtn{ flex-direction:column; gap:3px; }
+.grid2 .sunbtn .sun-name{ display:block; line-height:1.3; }
+.grid2 .sunbtn .sun-time{ display:block; line-height:1.3; font-weight:600; opacity:0.72; }
 .stack{ display:flex; flex-direction:column; gap:8px; }
 .stack .btn{ width:100%; }
 .readoutgrp{ display:flex; flex-direction:column; gap:6px; }

@@ -58,9 +58,9 @@
       <button id="playYear" type="button" class="btn">Play Year</button>
       <button id="longestDay" type="button" class="btn">Longest Day</button>
       <button id="shortestDay" type="button" class="btn">Shortest Day</button>
-      <button id="sunRise" type="button" class="btn">Sunrise</button>
-      <button id="sunNoon" type="button" class="btn">Solar Noon</button>
-      <button id="sunSet" type="button" class="wide btn">Sunset</button>
+      <button id="sunRise" type="button" class="btn sunbtn"><span class="sun-name">Sunrise</span><span class="sun-time" id="sunRiseTime">--:--</span></button>
+      <button id="sunNoon" type="button" class="btn sunbtn"><span class="sun-name">Solar Noon</span><span class="sun-time" id="sunNoonTime">--:--</span></button>
+      <button id="sunSet" type="button" class="wide btn sunbtn"><span class="sun-name">Sunset</span><span class="sun-time" id="sunSetTime">--:--</span></button>
     </div>
     <div class="grp">
       <label>Ground</label>
@@ -662,6 +662,9 @@ function poolSunFraction(dir) {
 var riseBtn = document.getElementById('sunRise');
 var noonBtn = document.getElementById('sunNoon');
 var setBtn = document.getElementById('sunSet');
+var riseTimeEl = document.getElementById('sunRiseTime');
+var noonTimeEl = document.getElementById('sunNoonTime');
+var setTimeEl = document.getElementById('sunSetTime');
 var lastTimesKey = '';
 var lastTimes = null;
 function updateSunExtras(dt, sp, dir) {
@@ -669,9 +672,9 @@ function updateSunExtras(dt, sp, dir) {
   if (key !== lastTimesKey) {
     lastTimesKey = key;
     lastTimes = sunTimes(dt.y, dt.mo, dt.d);
-    riseBtn.textContent = 'Sunrise ' + (lastTimes.rise === null ? '--:--' : fmtTime(lastTimes.rise));
-    noonBtn.textContent = 'Solar Noon ' + fmtTime(lastTimes.noon);
-    setBtn.textContent = 'Sunset ' + (lastTimes.set === null ? '--:--' : fmtTime(lastTimes.set));
+    riseTimeEl.textContent = lastTimes.rise === null ? '--:--' : fmtTime(lastTimes.rise);
+    noonTimeEl.textContent = fmtTime(lastTimes.noon);
+    setTimeEl.textContent = lastTimes.set === null ? '--:--' : fmtTime(lastTimes.set);
   }
   if (sp.alt > 0.5) {
     var f = poolSunFraction(dir);
