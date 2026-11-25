@@ -22,7 +22,7 @@ html {
 body {
   min-height: 100dvh;
   line-height: 1.6;
-  font-family: var(--font-body, sans-serif);
+  font-family: var(--sans);
   font-size: var(--text-base);
   color: var(--color-text);
   background-color: var(--color-bg);
