@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
+    <meta name="theme-color" content="#060607" />
+    <title>The Isle · Flight Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#060607;
+        --panel:#0d0d0f;
+        --tile:#17181a;
+        --tile-top:#1d1e21;
+        --tile-bot:#121316;
+        --seam:#000;
+        --ink:#f2ede1;
+        --amber:#f5b942;
+        --green:#4ade80;
+        --red:#f87171;
+        --blue:#7dd3fc;
+        --dim:#8a877e;
+        --line:#26262a;
+        --gold:#c9a86a;
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+        font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+        -webkit-font-smoothing:antialiased}
+      button,[role="button"],select,input:not([type="checkbox"]){min-height:2.25rem}
+      button{cursor:pointer}
+
+      .wrap{max-width:1560px;margin:0 auto;padding:clamp(10px,2vw,28px)}
+
+      /* ---------- Top bar ---------- */
+      .topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+      .title-block h1{
+        margin:0;font-weight:800;letter-spacing:.34em;font-size:clamp(20px,3.4vw,40px);
+        text-transform:uppercase;line-height:1;color:var(--ink);
+      }
+      .title-block h1 .dot{color:var(--amber)}
+      .title-sub{margin-top:7px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:600}
+      .clock-block{text-align:right}
+      .clock{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:700;
+        font-size:clamp(22px,3vw,36px);letter-spacing:.08em;line-height:1;color:var(--ink)}
+      .clock-date{margin-top:6px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);font-weight:600}
+
+      .controls{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px}
+      .btn{
+        appearance:none;border:1px solid #3a3a3f;background:#141416;color:var(--ink);
+        font-family:"Archivo",sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+        padding:10px 16px;border-radius:4px;display:inline-flex;align-items:center;gap:9px;min-height:44px;
+      }
+      .btn:hover{background:#1e1e21;border-color:#4c4c52}
+      .btn:active{transform:translateY(1px)}
+      .btn.primary{background:var(--amber);border-color:var(--amber);color:#171106}
+      .btn.primary:hover{background:#ffc95e}
+      .btn[aria-pressed="true"]{border-color:var(--amber);color:var(--amber)}
+      .btn svg{width:16px;height:16px;flex:none}
+      .controls .spacer{flex:1}
+      .hint{font-size:12px;color:var(--dim);align-self:center;letter-spacing:.04em}
+
+      /* ---------- The board ---------- */
+      .board{
+        background:linear-gradient(180deg,#101012,#0a0a0b);
+        border:1px solid #2a2a2e;border-radius:10px;
+        padding:clamp(10px,1.8vw,24px);
+        box-shadow:0 30px 80px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.05);
+      }
+      .board-head,.brow{
+        display:grid;
+        grid-template-columns: 5fr 6fr 16fr 3fr 11fr;
+        gap:clamp(5px,1.1vw,16px);
+        align-items:center;
+      }
+      .board-head{padding:2px 2px 12px;border-bottom:2px solid var(--line);margin-bottom:12px}
+      .board-head span{
+        font-size:clamp(9px,1.3vw,13px);font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);
+      }
+      .brow{padding:5px 2px}
+      .brow + .brow{border-top:1px solid #17181a}
+
+      .cellset{display:flex;gap:2px;min-width:0}
+      .tile{
+        flex:1 1 0;min-width:0;
+        font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+        font-weight:600;text-align:center;
+        font-size:clamp(8px,2.25vw,30px);
+        line-height:1.5;
+        color:var(--ink);
+        background:linear-gradient(180deg,var(--tile-top) 0 49%,var(--seam) 49% 51%,var(--tile-bot) 51% 100%);
+        border-radius:3px;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.06), inset 0 -1px 0 rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.5);
+        position:relative;overflow:hidden;user-select:none;
+        padding:0 1px;
+      }
+      .tile.blank{color:transparent}
+      .tile.flipping{animation:flap .09s linear infinite}
+      @keyframes flap{
+        0%{transform:rotateX(0deg);filter:brightness(1)}
+        50%{transform:rotateX(-38deg);filter:brightness(1.5)}
+        100%{transform:rotateX(0deg);filter:brightness(.92)}
+      }
+      .st-ontime .tile{color:var(--ink)}
+      .st-boarding .tile{color:var(--green)}
+      .st-delayed .tile{color:var(--red)}
+      .st-final .tile{color:var(--amber)}
+      .st-departed .tile{color:var(--dim)}
+      .st-cancelled .tile{color:var(--red)}
+
+      /* message line */
+      .msg-row{
+        margin-top:14px;border-top:2px solid var(--line);padding-top:14px;
+        display:flex;align-items:center;gap:14px;
+      }
+      .msg-label{font-size:clamp(9px,1.2vw,12px);font-weight:700;letter-spacing:.26em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+      .msg-row .cellset{flex:1}
+      .msg-row .tile{color:var(--amber)}
+
+      /* ---------- Editor ---------- */
+      .editor{
+        margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:clamp(14px,2vw,22px);display:none;
+      }
+      .editor.open{display:block}
+      .editor h2{margin:0 0 4px;font-size:15px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}
+      .editor p{margin:0 0 16px;color:var(--dim);font-size:13.5px;line-height:1.5;max-width:70ch}
+      .erow{
+        display:grid;grid-template-columns:86px 96px 1fr 70px 150px 44px;gap:8px;margin-bottom:8px;align-items:center;
+      }
+      .erow.head{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700;margin-bottom:6px}
+      .erow input,.erow select{
+        width:100%;background:#060607;border:1px solid #333338;color:var(--ink);border-radius:4px;
+        font-family:"IBM Plex Mono",monospace;font-size:14px;padding:9px 10px;min-height:44px;text-transform:uppercase;
+      }
+      .erow input:focus,.erow select:focus{outline:2px solid var(--amber);outline-offset:0;border-color:var(--amber)}
+      .del{
+        appearance:none;background:transparent;border:1px solid #333338;color:var(--dim);border-radius:4px;
+        width:44px;height:44px;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;
+      }
+      .del:hover{color:var(--red);border-color:var(--red)}
+      .msg-edit{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+      .msg-edit label{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700}
+      .msg-edit input{
+        width:100%;background:#060607;border:1px solid #333338;color:var(--amber);border-radius:4px;
+        font-family:"IBM Plex Mono",monospace;font-size:15px;padding:10px;min-height:44px;text-transform:uppercase;letter-spacing:.1em;
+      }
+      .msg-edit input:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+      .editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+
+      .foot{margin-top:16px;color:#5b594f;font-size:12px;letter-spacing:.05em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+      /* ---------- TV / fullscreen mode ---------- */
+      body.tv .controls, body.tv .editor, body.tv .foot, body.tv .title-sub{display:none}
+      body.tv .wrap{max-width:none;padding:2.2vh 2.4vw}
+      body.tv .tile{font-size:clamp(14px,2.6vw,44px)}
+      body.tv .board{border-radius:6px}
+
+      @media (max-width:720px){
+        .board-head,.brow{grid-template-columns:5fr 6fr 15fr 3fr 11fr;gap:4px}
+        .tile{font-size:clamp(7px,2.15vw,13px);border-radius:2px}
+        .cellset{gap:1px}
+        .erow{grid-template-columns:74px 84px 1fr 60px 44px}
+        .erow .gate-in{display:none}
+        .erow.head{display:none}
+        .erow select{grid-column:1 / -2}
+        .clock-block{text-align:left}
+      }
+      @media (prefers-reduced-motion: reduce){
+        .tile.flipping{animation:none}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <div class="topbar">
+        <div class="title-block">
+          <h1>Departures<span class="dot">.</span></h1>
+          <div class="title-sub">Split-Flap Information Board &mdash; Sample</div>
+        </div>
+        <div class="clock-block">
+          <div class="clock" id="clock">--:--:--</div>
+          <div class="clock-date" id="clockDate">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn primary" id="btnFlip" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          Flip the board
+        </button>
+        <button class="btn" id="btnSound" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.6 5.4a9 9 0 0 1 0 13.2"/></svg>
+          <span id="soundLabel">Tap for sound</span>
+        </button>
+        <button class="btn" id="btnEdit" type="button" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+          Edit flights
+        </button>
+        <button class="btn" id="btnDemo" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3" fill="currentColor" stroke="none"/></svg>
+          Demo change
+        </button>
+        <span class="spacer"></span>
+        <button class="btn" id="btnTV" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 22h8"/></svg>
+          TV display
+        </button>
+        <span class="hint">Preview only: mirror this page to the TV to judge the look and the clatter. The settled route is the server stream opened in VLC on the Apple TV.</span>
+      </div>
+
+      <section class="board" aria-label="Departure board">
+        <div class="board-head" aria-hidden="true">
+          <span>Time</span><span>Flight</span><span>Destination</span><span>Gate</span><span>Remarks</span>
+        </div>
+        <div id="rows"></div>
+        <div class="msg-row">
+          <span class="msg-label">Notice</span>
+          <div class="cellset" id="msgCells"></div>
+        </div>
+      </section>
+
+      <section class="editor" id="editor" aria-label="Edit the board">
+        <h2>Edit the board</h2>
+        <p>Change any flight below, then press <strong>Update board</strong> &mdash; the tiles cascade to the new information with the full split-flap clatter. Changes live in this page only, for as long as it stays open.</p>
+        <div class="erow head" aria-hidden="true">
+          <span>Time</span><span>Flight</span><span>Destination</span><span class="gate-h">Gate</span><span>Remarks</span><span></span>
+        </div>
+        <div id="editRows"></div>
+        <div class="msg-edit">
+          <label for="msgInput">Notice line (bottom of the board)</label>
+          <input id="msgInput" maxlength="34" value="WELCOME TO THE ISLE" autocomplete="off" />
+        </div>
+        <div class="editor-actions">
+          <button class="btn primary" id="btnApply" type="button">Update board</button>
+          <button class="btn" id="btnAdd" type="button">+ Add flight</button>
+          <button class="btn" id="btnReset" type="button">Restore sample flights</button>
+        </div>
+      </section>
+
+      <div class="foot">
+        <span>Sample board &mdash; the flights shown are examples to flip, edit and judge the sound by.</span>
+        <span>The clatter is synthesized in the page &mdash; no audio files.</span>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        "use strict";
+        var CHARSET = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-";
+        var COLS = [
+          { key:"time",   len:5  },
+          { key:"flight", len:6  },
+          { key:"dest",   len:16 },
+          { key:"gate",   len:3  },
+          { key:"status", len:11 }
+        ];
+        var STATUS_CLASS = {
+          "ON TIME":"st-ontime", "BOARDING":"st-boarding", "FINAL CALL":"st-final",
+          "DELAYED":"st-delayed", "DEPARTED":"st-departed", "CANCELLED":"st-cancelled"
+        };
+        var SAMPLE = [
+          { time:"07:40", flight:"BA 117", dest:"NEW YORK JFK",  gate:"A4",  status:"BOARDING"   },
+          { time:"08:05", flight:"VS 3",   dest:"LOS ANGELES",   gate:"B2",  status:"ON TIME"    },
+          { time:"08:30", flight:"AF 342", dest:"PARIS CDG",     gate:"A7",  status:"ON TIME"    },
+          { time:"09:15", flight:"EK 202", dest:"DUBAI",         gate:"C1",  status:"DELAYED"    },
+          { time:"09:50", flight:"LH 902", dest:"FRANKFURT",     gate:"B5",  status:"ON TIME"    },
+          { time:"10:20", flight:"UA 940", dest:"CHICAGO O'HARE",gate:"A2",  status:"FINAL CALL" },
+          { time:"11:00", flight:"SQ 317", dest:"SINGAPORE",     gate:"C6",  status:"ON TIME"    },
+          { time:"11:45", flight:"DL 1",   dest:"ATLANTA",       gate:"B9",  status:"DEPARTED"   }
+        ];
+        var flights = SAMPLE.map(function(f){ return Object.assign({}, f); });
+        var message = "WELCOME TO THE ISLE";
+        var MSG_LEN = 34;
+
+        /* ---------------- Sound: synthesized split-flap clatter ---------------- */
+        var audioCtx = null, soundOn = false, masterGain = null;
+        var soundLabel = document.getElementById("soundLabel");
+        var btnSoundEl = document.getElementById("btnSound");
+        function reflectSound(){
+          btnSoundEl.setAttribute("aria-pressed", soundOn ? "true" : "false");
+          soundLabel.textContent = soundOn ? "Sound on" : (audioCtx ? "Sound off" : "Tap for sound");
+        }
+        function ensureAudio(){
+          if (audioCtx) { if (audioCtx.state === "suspended") audioCtx.resume(); return !!audioCtx; }
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return false;
+          audioCtx = new AC();
+          masterGain = audioCtx.createGain();
+          masterGain.gain.value = 0.9;
+          masterGain.connect(audioCtx.destination);
+          return true;
+        }
+        // One flap tick: a short burst of filtered noise + a woody click.
+        function tick(strength){
+          if (!audioCtx || !soundOn) return;
+          var t = audioCtx.currentTime;
+          var dur = 0.028;
+          var buf = audioCtx.createBuffer(1, Math.ceil(audioCtx.sampleRate * dur), audioCtx.sampleRate);
+          var d = buf.getChannelData(0);
+          for (var i = 0; i < d.length; i++){ d[i] = (Math.random() * 2 - 1) * (1 - i / d.length); }
+          var src = audioCtx.createBufferSource(); src.buffer = buf;
+          var bp = audioCtx.createBiquadFilter(); bp.type = "bandpass";
+          bp.frequency.value = 1600 + Math.random() * 1400; bp.Q.value = 1.1;
+          var g = audioCtx.createGain(); g.gain.value = 0.16 * strength;
+          src.connect(bp); bp.connect(g); g.connect(masterGain);
+          src.start(t);
+          // low click underneath
+          var osc = audioCtx.createOscillator(); osc.type = "square";
+          osc.frequency.setValueAtTime(190 + Math.random() * 60, t);
+          osc.frequency.exponentialRampToValueAtTime(70, t + 0.02);
+          var og = audioCtx.createGain();
+          og.gain.setValueAtTime(0.05 * strength, t);
+          og.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+          osc.connect(og); og.connect(masterGain);
+          osc.start(t); osc.stop(t + 0.03);
+        }
+        // Final settle clack when a row lands.
+        function clack(){
+          if (!audioCtx || !soundOn) return;
+          var t = audioCtx.currentTime;
+          var dur = 0.07;
+          var buf = audioCtx.createBuffer(1, Math.ceil(audioCtx.sampleRate * dur), audioCtx.sampleRate);
+          var d = buf.getChannelData(0);
+          for (var i = 0; i < d.length; i++){ d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2); }
+          var src = audioCtx.createBufferSource(); src.buffer = buf;
+          var lp = audioCtx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900;
+          var g = audioCtx.createGain(); g.gain.value = 0.5;
+          src.connect(lp); lp.connect(g); g.connect(masterGain);
+          src.start(t);
+        }
+        // A rolling clatter: many ticks spread over the cascade.
+        function clatter(durationMs, density){
+          if (!audioCtx || !soundOn) return;
+          var start = performance.now();
+          (function burst(){
+            var elapsed = performance.now() - start;
+            if (elapsed > durationMs) return;
+            var n = 2 + Math.floor(Math.random() * density);
+            for (var i = 0; i < n; i++){
+              (function(delay){ setTimeout(function(){ tick(0.5 + Math.random() * 0.7); }, delay); })(Math.random() * 40);
+            }
+            setTimeout(burst, 46 + Math.random() * 40);
+          })();
+        }
+
+        /* ---------------- Board rendering ---------------- */
+        var rowsEl = document.getElementById("rows");
+        var msgEl  = document.getElementById("msgCells");
+
+        function pad(str, len){
+          str = String(str == null ? "" : str).toUpperCase().slice(0, len);
+          while (str.length < len) str += " ";
+          return str;
+        }
+        function makeTiles(text){
+          var frag = document.createDocumentFragment();
+          for (var i = 0; i < text.length; i++){
+            var s = document.createElement("span");
+            s.className = "tile" + (text[i] === " " ? " blank" : "");
+            s.textContent = text[i] === " " ? "\u00A0" : text[i];
+            frag.appendChild(s);
+          }
+          return frag;
+        }
+        function buildBoard(){
+          rowsEl.innerHTML = "";
+          flights.forEach(function(f){
+            var row = document.createElement("div");
+            row.className = "brow " + (STATUS_CLASS[f.status] || "st-ontime");
+            COLS.forEach(function(c){
+              var set = document.createElement("div");
+              set.className = "cellset";
+              set.setAttribute("data-key", c.key);
+              set.appendChild(makeTiles(pad(f[c.key], c.len)));
+              row.appendChild(set);
+            });
+            rowsEl.appendChild(row);
+          });
+          msgEl.innerHTML = "";
+          msgEl.appendChild(makeTiles(pad(message, MSG_LEN)));
+        }
+
+        /* Flip one tile from its current char to target, cycling the charset. */
+        function flipTile(tile, target, delay, dur){
+          setTimeout(function(){
+            tile.classList.add("flipping");
+            var start = performance.now();
+            var iv = setInterval(function(){
+              var el = performance.now() - start;
+              if (el >= dur){
+                clearInterval(iv);
+                tile.classList.remove("flipping");
+                tile.textContent = target === " " ? "\u00A0" : target;
+                tile.classList.toggle("blank", target === " ");
+              } else {
+                var ch = CHARSET[Math.floor(Math.random() * CHARSET.length)];
+                tile.textContent = ch === " " ? "\u00A0" : ch;
+                tile.classList.toggle("blank", ch === " ");
+              }
+            }, 55);
+          }, delay);
+        }
+
+        /* Animate the whole board to current state. stagger = cascade left-to-right, top-to-bottom. */
+        function animateBoard(){
+          ensureAudio();
+          var maxDur = 0;
+          var rowEls = rowsEl.children;
+          for (var r = 0; r < rowEls.length; r++){
+            var sets = rowEls[r].children;
+            for (var c = 0; c < COLS.length; c++){
+              var target = pad(flights[r][COLS[c].key], COLS[c].len);
+              var tiles = sets[c].children;
+              for (var i = 0; i < tiles.length; i++){
+                var delay = r * 45 + c * 70 + i * 16;
+                var dur = 260 + Math.random() * 240;
+                if (delay + dur > maxDur) maxDur = delay + dur;
+                flipTile(tiles[i], target[i], delay, dur);
+              }
+            }
+            rowEls[r].className = "brow " + (STATUS_CLASS[flights[r].status] || "st-ontime");
+          }
+          var mTiles = msgEl.children;
+          var mTarget = pad(message, MSG_LEN);
+          for (var m = 0; m < mTiles.length; m++){
+            var mDelay = 260 + m * 14, mDur = 260 + Math.random() * 220;
+            if (mDelay + mDur > maxDur) maxDur = mDelay + mDur;
+            flipTile(mTiles[m], mTarget[m], mDelay, mDur);
+          }
+          clatter(maxDur, 4);
+          setTimeout(clack, maxDur + 30);
+          setTimeout(clack, maxDur + 160);
+        }
+
+        /* ---------------- Clock ---------------- */
+        var clockEl = document.getElementById("clock");
+        var dateEl = document.getElementById("clockDate");
+        function tickClock(){
+          var now = new Date();
+          function p(n){ return (n < 10 ? "0" : "") + n; }
+          clockEl.textContent = p(now.getHours()) + ":" + p(now.getMinutes()) + ":" + p(now.getSeconds());
+          dateEl.textContent = now.toLocaleDateString(undefined, { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+        }
+        tickClock(); setInterval(tickClock, 1000);
+
+        /* ---------------- Editor ---------------- */
+        var editor = document.getElementById("editor");
+        var editRows = document.getElementById("editRows");
+        var STATUSES = ["ON TIME","BOARDING","FINAL CALL","DELAYED","DEPARTED","CANCELLED"];
+        function buildEditor(){
+          editRows.innerHTML = "";
+          flights.forEach(function(f, idx){
+            var row = document.createElement("div");
+            row.className = "erow";
+            row.innerHTML =
+              '<input data-f="time" maxlength="5" value="' + f.time + '" aria-label="Time" />' +
+              '<input data-f="flight" maxlength="6" value="' + f.flight + '" aria-label="Flight" />' +
+              '<input data-f="dest" maxlength="16" value="' + f.dest.replace(/"/g, "&quot;") + '" aria-label="Destination" />' +
+              '<input data-f="gate" class="gate-in" maxlength="3" value="' + f.gate + '" aria-label="Gate" />' +
+              '<select data-f="status" aria-label="Remarks">' +
+                STATUSES.map(function(s){ return '<option' + (s === f.status ? " selected" : "") + '>' + s + '</option>'; }).join("") +
+              '</select>' +
+              '<button class="del" type="button" data-del="' + idx + '" aria-label="Remove flight">&times;</button>';
+            editRows.appendChild(row);
+          });
+          document.getElementById("msgInput").value = message;
+          var dels = editRows.querySelectorAll("[data-del]");
+          for (var i = 0; i < dels.length; i++){
+            dels[i].addEventListener("click", function(){
+              readEditor();
+              flights.splice(parseInt(this.getAttribute("data-del"), 10), 1);
+              buildBoard(); buildEditor();
+            });
+          }
+        }
+        function readEditor(){
+          var rows = editRows.children;
+          var out = [];
+          for (var i = 0; i < rows.length; i++){
+            var q = function(sel){ var el = rows[i].querySelector(sel); return el ? el.value.trim().toUpperCase() : ""; };
+            out.push({
+              time: q('[data-f="time"]') || "--:--",
+              flight: q('[data-f="flight"]'),
+              dest: q('[data-f="dest"]'),
+              gate: q('[data-f="gate"]'),
+              status: q('[data-f="status"]') || "ON TIME"
+            });
+          }
+          flights = out;
+          message = document.getElementById("msgInput").value.trim().toUpperCase() || " ";
+        }
+
+        /* ---------------- Controls ---------------- */
+        document.getElementById("btnFlip").addEventListener("click", function(){ buildBoard(); animateBoard(); });
+        document.getElementById("btnApply").addEventListener("click", function(){
+          readEditor(); buildBoard(); animateBoard();
+        });
+        document.getElementById("btnAdd").addEventListener("click", function(){
+          readEditor();
+          flights.push({ time:"--:--", flight:"", dest:"", gate:"", status:"ON TIME" });
+          buildBoard(); buildEditor();
+        });
+        document.getElementById("btnReset").addEventListener("click", function(){
+          flights = SAMPLE.map(function(f){ return Object.assign({}, f); });
+          message = "WELCOME TO THE ISLE";
+          buildBoard(); buildEditor(); animateBoard();
+        });
+        var btnEdit = document.getElementById("btnEdit");
+        btnEdit.addEventListener("click", function(){
+          var open = editor.classList.toggle("open");
+          btnEdit.setAttribute("aria-expanded", open ? "true" : "false");
+          if (open) buildEditor();
+        });
+        btnSoundEl.addEventListener("click", function(){
+          if (ensureAudio()) soundOn = !soundOn;
+          reflectSound();
+          if (soundOn) { tick(1); setTimeout(function(){ tick(1); }, 70); setTimeout(clack, 150); }
+        });
+        document.getElementById("btnTV").addEventListener("click", function(){
+          document.body.classList.toggle("tv");
+          if (document.body.classList.contains("tv")){
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function(){});
+          } else if (document.fullscreenElement){
+            document.exitFullscreen().catch(function(){});
+          }
+        });
+        document.addEventListener("fullscreenchange", function(){
+          if (!document.fullscreenElement) document.body.classList.remove("tv");
+        });
+        /* Demo: change one flight's status, the way a real update lands. */
+        var demoStep = 0;
+        document.getElementById("btnDemo").addEventListener("click", function(){
+          var changes = [
+            function(){ flights[1].status = "BOARDING"; },
+            function(){ flights[3].status = "ON TIME"; flights[3].time = "09:40"; },
+            function(){ flights[5].status = "DEPARTED"; },
+            function(){ flights[0].status = "DEPARTED"; flights[6].status = "BOARDING"; message = "CALL ME WHEN YOU CAN"; },
+            function(){ flights = SAMPLE.map(function(f){ return Object.assign({}, f); }); message = "WELCOME TO THE ISLE"; }
+          ];
+          changes[demoStep % changes.length]();
+          demoStep++;
+          buildBoard(); buildEditor(); animateBoard();
+        });
+        /* First tap anywhere unlocks audio (browser rule) and turns sound on. */
+        var welcomed = false;
+        document.addEventListener("pointerdown", function(){
+          if (!welcomed && ensureAudio()){ welcomed = true; soundOn = true; reflectSound(); }
+          else ensureAudio();
+        }, { passive:true });
+
+        buildBoard();
+        /* Opening cascade shortly after load (sound joins after the first tap). */
+        setTimeout(animateBoard, 250);
+      })();
+    </script>
+  </body>
+</html>
