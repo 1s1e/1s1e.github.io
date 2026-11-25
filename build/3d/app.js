@@ -758,6 +758,7 @@ function setMode(mode, moveCamera = true) {
 
 // ---------------------------------------------------------------- sun controls
 const sunState = { date: '2026-11-23', mins: 690 };
+let shadowDim = 1;   // Shadow slider on the Sun pane: 1 is the standard look
 const fmtClock = (mins) => {
   if (mins === null || mins === undefined || isNaN(mins)) return '--:--';
   const m = Math.round(mins);
@@ -771,7 +772,7 @@ function applySun() {
   sun.position.copy(CENTRE).addScaledVector(dir, 170);
   const day = Math.max(0, Math.sin(altr));
   sun.intensity = 3.0 * Math.min(1, day * 3.2);
-  hemi.intensity = 0.35 + 0.6 * Math.min(1, day * 1.6 + 0.15);
+  hemi.intensity = (0.35 + 0.6 * Math.min(1, day * 1.6 + 0.15)) * shadowDim;
   const t = sunTimes(y, mo, d);
   document.getElementById('sun-clock').textContent = fmtClock(sunState.mins);
   document.getElementById('sf-rise').textContent = fmtClock(t.rise);
@@ -786,6 +787,10 @@ const sunTimeEl = document.getElementById('sun-time');
 function syncSunInputs() { sunDateEl.value = sunState.date; sunTimeEl.value = sunState.mins; }
 sunDateEl.addEventListener('change', () => { sunState.date = sunDateEl.value || sunState.date; stopPlay(); applySun(); });
 sunTimeEl.addEventListener('input', () => { sunState.mins = +sunTimeEl.value; stopPlay(); applySun(); });
+const shadowRangeEl = document.getElementById('shadow-range');
+const shadowValEl = document.getElementById('shadow-val');
+function syncShadow() { const v = +shadowRangeEl.value; shadowValEl.textContent = v + '%'; shadowDim = v <= 50 ? 1 + (50 - v) * 0.012 : 1 - (v - 50) * 0.017; }
+shadowRangeEl.addEventListener('input', () => { syncShadow(); applySun(); });
 function setSunMins(m) { sunState.mins = Math.round(m); syncSunInputs(); applySun(); }
 document.getElementById('sun-rise').addEventListener('click', () => { const [y, mo, d] = sunState.date.split('-').map(Number); const t = sunTimes(y, mo, d); if (t.rise !== null) setSunMins(t.rise); });
 document.getElementById('sun-noon').addEventListener('click', () => { const [y, mo, d] = sunState.date.split('-').map(Number); const t = sunTimes(y, mo, d); if (t.noon !== null) setSunMins(t.noon); });
@@ -874,7 +879,7 @@ document.getElementById('layers-reset').addEventListener('click', () => {
   state.base = 'render';
   document.querySelectorAll('#seg-variant button').forEach((x) => x.classList.toggle('on', x.dataset.v === 'render'));
   for (const d of OV_DEFS) { state.ov[d.key] = d.on; const el = document.getElementById('t-ov-' + d.key); if (el) el.checked = d.on; }
-  sunState.date = '2026-11-23'; sunState.mins = 690; syncSunInputs(); applySun();
+  sunState.date = '2026-11-23'; sunState.mins = 690; syncSunInputs(); shadowRangeEl.value = 50; syncShadow(); applySun();
   applyLayers();
   setMode('exterior', false);
   setView('hero');

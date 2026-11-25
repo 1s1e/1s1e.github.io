@@ -442,3 +442,6 @@ body.panelhidden #menu-show { display: block; }
    edge. The rows now stay inside the same measure as every other pane. */
 .sunctl > * { min-width: 0; }
 .sunbtns .btn { min-width: 0; }
+
+/* Shadow depth slider on the Sun pane: same form as the time slider. */
+#shadow-range { flex: 1; min-width: 0; accent-color: var(--color-primary); min-height: 44px; }
