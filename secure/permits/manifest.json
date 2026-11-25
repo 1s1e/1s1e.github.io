@@ -1,20 +1,20 @@
 {
  "kdf": {
-  "salt": "UHgfu9z/AyQVt2KhsZk2CA==",
+  "salt": "SDbzggweuWl+6+fTYgBkJg==",
   "iter": 600000,
   "hash": "SHA-256",
   "cipher": "AES-256-GCM"
  },
  "check": {
-  "iv": "y4uAS36LTcV/dbWP",
-  "b64": "5AcNLZsIsGkfnmfw/6nBCcOv7xKBRAU4HoPd7B7P7Q=="
+  "iv": "LzhnvPpnY9qrHeQ9",
+  "b64": "cZu/JGbIG7DeLVtX192rNdhLqXFAIEuAavufZpvytA=="
  },
  "records": {
   "RESNEW-2026-005776": [
    {
     "name": "250447 LOT 12 BLOCK 47 TWO RIVERS PARCEL D6 PP.pdf",
     "id": "f01-7de468d8",
-    "iv": "4Mg/ZqKhfVI/I96p",
+    "iv": "SV9pBEXTVsoqSRzn",
     "sha256": "7de468d8adcd04e13a452cb02cbb62db0630737264640df9133736293ccbf694",
     "bytes": 458280,
     "parts": [
@@ -24,7 +24,7 @@
    {
     "name": "Certified Recorded Copy -Community Declaration.pdf",
     "id": "f02-4bb87145",
-    "iv": "HQ6FUxpIPHEfzGUE",
+    "iv": "D5eT0fC+GgTdzlfk",
     "sha256": "4bb87145dca736dae4aaf3c672909a8e329af44518e36a2525ed9e0f7cd6bb4b",
     "bytes": 17545075,
     "parts": [
@@ -55,162 +55,185 @@
     ]
    },
    {
+    "name": "DCR-2026-005776.pdf",
+    "id": "f03-02a73469",
+    "iv": "NVZGPBttGW+8rGMW",
+    "sha256": "02a734692f5b66b3b94ffd8f499e92b35241c6271431ba8967bc9c7c5a126c2a",
+    "bytes": 2431902,
+    "parts": [
+     "assets/f03-02a73469/part001.enc",
+     "assets/f03-02a73469/part002.enc",
+     "assets/f03-02a73469/part003.enc",
+     "assets/f03-02a73469/part004.enc"
+    ]
+   },
+   {
     "name": "Driveway Permit TR 01247.pdf",
-    "id": "f03-54ea87cb",
-    "iv": "J+rWL/6pC7z1xwpp",
+    "id": "f04-54ea87cb",
+    "iv": "z+yNz9rCHoAQ3q4Z",
     "sha256": "54ea87cb5eef16177257f393e957d5e5f7612159bc8a92516e467413199c3baa",
     "bytes": 1376516,
     "parts": [
-     "assets/f03-54ea87cb/part001.enc",
-     "assets/f03-54ea87cb/part002.enc"
+     "assets/f04-54ea87cb/part001.enc",
+     "assets/f04-54ea87cb/part002.enc"
     ]
    },
    {
     "name": "Flexible Flashing-EagleRoof-product Information.pdf",
-    "id": "f04-d5e85b72",
-    "iv": "UQvGZQ17n2q5TZzT",
+    "id": "f05-d5e85b72",
+    "iv": "wYwZX7Zb764zMm7b",
     "sha256": "d5e85b721902f9522ad306d19c948c378443e8db972ed4470f67c0b8822a716d",
     "bytes": 271286,
     "parts": [
-     "assets/f04-d5e85b72/part001.enc"
+     "assets/f05-d5e85b72/part001.enc"
     ]
    },
    {
     "name": "Grading TR 01247.pdf",
-    "id": "f05-64d3a88a",
-    "iv": "CuNkvQILOWZaJk3V",
+    "id": "f06-64d3a88a",
+    "iv": "1pxX/+1Qz5F9k1YZ",
     "sha256": "64d3a88afb5152d5282f08552d51314281479795e64a6d46668965c9cb5e335b",
     "bytes": 439397,
     "parts": [
-     "assets/f05-64d3a88a/part001.enc"
+     "assets/f06-64d3a88a/part001.enc"
     ]
    },
    {
     "name": "Letter-Pasco Co-No caulk at window sill.pdf",
-    "id": "f06-61058697",
-    "iv": "1FCRtHhLv3rKJt8r",
+    "id": "f07-61058697",
+    "iv": "/6KPuwUd+WOL3gT5",
     "sha256": "61058697a63814bacf58bf43c1b502d5dd04409a7fe0b00dff94e70fa1e4cdcd",
     "bytes": 125473,
     "parts": [
-     "assets/f06-61058697/part001.enc"
+     "assets/f07-61058697/part001.enc"
     ]
    },
    {
     "name": "PCS_Details_FL ZONE-WFL-2020-11-27.pdf",
-    "id": "f07-6dec3a2c",
-    "iv": "f95BOKHk1tiExN6Y",
+    "id": "f08-6dec3a2c",
+    "iv": "3+xhSkybc+E28ae0",
     "sha256": "6dec3a2c40e8481f93c4c2fc024ddf4ed15cbb62a35c7498c996ecd5553cb0f6",
     "bytes": 3745352,
     "parts": [
-     "assets/f07-6dec3a2c/part001.enc",
-     "assets/f07-6dec3a2c/part002.enc",
-     "assets/f07-6dec3a2c/part003.enc",
-     "assets/f07-6dec3a2c/part004.enc",
-     "assets/f07-6dec3a2c/part005.enc"
+     "assets/f08-6dec3a2c/part001.enc",
+     "assets/f08-6dec3a2c/part002.enc",
+     "assets/f08-6dec3a2c/part003.enc",
+     "assets/f08-6dec3a2c/part004.enc",
+     "assets/f08-6dec3a2c/part005.enc"
     ]
    },
    {
     "name": "Product Approval TR 70's 01247.pdf",
-    "id": "f08-232b5ce0",
-    "iv": "+qEZ5l8UltJLRkvX",
+    "id": "f09-232b5ce0",
+    "iv": "gtoSMTGNLmsdKVf6",
     "sha256": "232b5ce0c293e8599c6acdb445169f710f2320ebe3304591dfad3e74bf5408b3",
     "bytes": 65328,
     "parts": [
-     "assets/f08-232b5ce0/part001.enc"
+     "assets/f09-232b5ce0/part001.enc"
     ]
    },
    {
     "name": "TR 01247 Calcs (Rev).pdf",
-    "id": "f09-86118dd7",
-    "iv": "dhWzyOrQG9apGpwx",
+    "id": "f10-86118dd7",
+    "iv": "a36E5+XMbT3TZ9yr",
     "sha256": "86118dd7dc330b262a7c83a2b0aaf14fd6fac85c9ad6fc8bba0a504048b7c640",
     "bytes": 468061,
     "parts": [
-     "assets/f09-86118dd7/part001.enc"
+     "assets/f10-86118dd7/part001.enc"
     ]
    },
    {
     "name": "TR Lot-8898-01247-Regalia-RFM-LED Lights.pdf",
-    "id": "f10-315895dc",
-    "iv": "ofyZa6z+xv6QMpqU",
+    "id": "f11-315895dc",
+    "iv": "LeF9FnITr1q172e1",
     "sha256": "315895dc1b2f45c5917e5d637d8d590258429a8230c14ff8a05d02ab8075d676",
     "bytes": 10206944,
     "parts": [
-     "assets/f10-315895dc/part001.enc",
-     "assets/f10-315895dc/part002.enc",
-     "assets/f10-315895dc/part003.enc",
-     "assets/f10-315895dc/part004.enc",
-     "assets/f10-315895dc/part005.enc",
-     "assets/f10-315895dc/part006.enc",
-     "assets/f10-315895dc/part007.enc",
-     "assets/f10-315895dc/part008.enc",
-     "assets/f10-315895dc/part009.enc",
-     "assets/f10-315895dc/part010.enc",
-     "assets/f10-315895dc/part011.enc",
-     "assets/f10-315895dc/part012.enc",
-     "assets/f10-315895dc/part013.enc",
-     "assets/f10-315895dc/part014.enc"
+     "assets/f11-315895dc/part001.enc",
+     "assets/f11-315895dc/part002.enc",
+     "assets/f11-315895dc/part003.enc",
+     "assets/f11-315895dc/part004.enc",
+     "assets/f11-315895dc/part005.enc",
+     "assets/f11-315895dc/part006.enc",
+     "assets/f11-315895dc/part007.enc",
+     "assets/f11-315895dc/part008.enc",
+     "assets/f11-315895dc/part009.enc",
+     "assets/f11-315895dc/part010.enc",
+     "assets/f11-315895dc/part011.enc",
+     "assets/f11-315895dc/part012.enc",
+     "assets/f11-315895dc/part013.enc",
+     "assets/f11-315895dc/part014.enc"
     ]
    },
    {
     "name": "TR70_8898_01247_NOC.pdf",
-    "id": "f11-1c01cebc",
-    "iv": "Rp8HzHuvgNvKLjON",
+    "id": "f12-1c01cebc",
+    "iv": "yO04/L4Lch7MCGON",
     "sha256": "1c01cebc4a244993318057aaceaf18a889b545b8e54e47cf7488f338d31b516c",
     "bytes": 101067,
     "parts": [
-     "assets/f11-1c01cebc/part001.enc"
+     "assets/f12-1c01cebc/part001.enc"
     ]
    },
    {
     "name": "TUG TR 01247.pdf",
-    "id": "f12-6d59c764",
-    "iv": "ulvXZJpUekiCR2YS",
+    "id": "f13-6d59c764",
+    "iv": "cv1LUmK3eAuNIlDH",
     "sha256": "6d59c764b4784c8f4bdee544d0f3a590361d4b15b1f363d69780c62cef78e062",
     "bytes": 209409,
     "parts": [
-     "assets/f12-6d59c764/part001.enc"
+     "assets/f13-6d59c764/part001.enc"
     ]
    },
    {
     "name": "Termite Letter of Intent TR 01247.pdf",
-    "id": "f13-93b40adc",
-    "iv": "4XpIAntltCllkAU7",
+    "id": "f14-93b40adc",
+    "iv": "T5q7OnnV0wE7Y/uL",
     "sha256": "93b40adc36f2d162c570e56eb6e545848e7449f97a3c831086609d05e52f1c2b",
     "bytes": 147055,
     "parts": [
-     "assets/f13-93b40adc/part001.enc"
+     "assets/f14-93b40adc/part001.enc"
+    ]
+   },
+   {
+    "name": "UNSIGNED FEES-2026-005776.pdf",
+    "id": "f15-86e7f3c7",
+    "iv": "bZIlBNOxmMQ6eezi",
+    "sha256": "86e7f3c726ca099f4d93af722b16895e1ac7addfb4a8d714d8076ebbcdb1bc75",
+    "bytes": 112167,
+    "parts": [
+     "assets/f15-86e7f3c7/part001.enc"
     ]
    },
    {
     "name": "WFL-Wall Sections and Details.pdf",
-    "id": "f14-487cd6db",
-    "iv": "mUFDPLax+wBa1w5S",
+    "id": "f16-487cd6db",
+    "iv": "Jq2HOdDp799ogxnH",
     "sha256": "487cd6dbf026a3ad0a28e679574a7949db531a7e485d6a8e3b07e335a27a68b3",
     "bytes": 6942073,
     "parts": [
-     "assets/f14-487cd6db/part001.enc",
-     "assets/f14-487cd6db/part002.enc",
-     "assets/f14-487cd6db/part003.enc",
-     "assets/f14-487cd6db/part004.enc",
-     "assets/f14-487cd6db/part005.enc",
-     "assets/f14-487cd6db/part006.enc",
-     "assets/f14-487cd6db/part007.enc",
-     "assets/f14-487cd6db/part008.enc",
-     "assets/f14-487cd6db/part009.enc",
-     "assets/f14-487cd6db/part010.enc"
+     "assets/f16-487cd6db/part001.enc",
+     "assets/f16-487cd6db/part002.enc",
+     "assets/f16-487cd6db/part003.enc",
+     "assets/f16-487cd6db/part004.enc",
+     "assets/f16-487cd6db/part005.enc",
+     "assets/f16-487cd6db/part006.enc",
+     "assets/f16-487cd6db/part007.enc",
+     "assets/f16-487cd6db/part008.enc",
+     "assets/f16-487cd6db/part009.enc",
+     "assets/f16-487cd6db/part010.enc"
     ]
    },
    {
     "name": "typar-buildingwrap-installation-guide.pdf",
-    "id": "f15-2ec8c35b",
-    "iv": "4DTYg1oOa5Le5Bw/",
+    "id": "f17-2ec8c35b",
+    "iv": "jaerbF/Mxe0g8gDn",
     "sha256": "2ec8c35baec4a96dfa8aa6352c6de7252cbeb3905e03ba59252e08113ae35c9d",
     "bytes": 1754169,
     "parts": [
-     "assets/f15-2ec8c35b/part001.enc",
-     "assets/f15-2ec8c35b/part002.enc",
-     "assets/f15-2ec8c35b/part003.enc"
+     "assets/f17-2ec8c35b/part001.enc",
+     "assets/f17-2ec8c35b/part002.enc",
+     "assets/f17-2ec8c35b/part003.enc"
     ]
    }
   ],
@@ -221,42 +244,64 @@
    },
    {
     "name": "Building_Permit_SSRS_V1_20261118_094321.pdf",
-    "id": "f16-5089d7f0",
-    "iv": "IYgVuXluMc9Ln6WC",
+    "id": "f18-5089d7f0",
+    "iv": "5m/Uab7OZyQs/CeS",
     "sha256": "5089d7f00d86ea2451b09019aad354ddfbd537a29991b517991095132205b48d",
     "bytes": 229389,
     "parts": [
-     "assets/f16-5089d7f0/part001.enc"
+     "assets/f18-5089d7f0/part001.enc"
     ]
    },
    {
     "name": "InspectionPlacardCommercialResidential_V3_20261118_094332.pdf",
-    "id": "f17-f7b8d237",
-    "iv": "D9sWFyAm+3KKw1mc",
+    "id": "f19-f7b8d237",
+    "iv": "Yp9lolUkTO+acU90",
     "sha256": "f7b8d2375dd1d4d3ed9463895a8b964a4dca23959ec5215c600996de0089f5a0",
     "bytes": 69708,
     "parts": [
-     "assets/f17-f7b8d237/part001.enc"
+     "assets/f19-f7b8d237/part001.enc"
     ]
    },
    {
     "name": "PASCO LANDSCAPE CHECKLIST SIGNED.pdf",
-    "id": "f18-44d2968c",
-    "iv": "2KIN4f8JpBUz2mW9",
+    "id": "f20-44d2968c",
+    "iv": "KMXNU8xnYphH6PD/",
     "sha256": "44d2968c8b04c5f941a289f0cea4aa92be56876d4d58a140e2b3d374aecc6ada",
     "bytes": 109934,
     "parts": [
-     "assets/f18-44d2968c/part001.enc"
+     "assets/f20-44d2968c/part001.enc"
     ]
    },
    {
     "name": "PASCO SPRINKLER PERMIT AFFIDAVIT SIGNED (1).pdf",
-    "id": "f19-d4262df8",
-    "iv": "GhOzSTYhyNmy11La",
+    "id": "f21-d4262df8",
+    "iv": "Vq1hBHsuJ95hs9YP",
     "sha256": "d4262df8fb1aa60f9e78d59d142b2f9e598e8caf41146d7e4c5c5fb5bee41d6c",
     "bytes": 203234,
     "parts": [
-     "assets/f19-d4262df8/part001.enc"
+     "assets/f21-d4262df8/part001.enc"
+    ]
+   }
+  ],
+  "STMWTR-2026-004185": [
+   {
+    "name": "InspectionPlacardCommercialResidential_V3_20261124_105755.pdf",
+    "id": "f22-d7136c98",
+    "iv": "zE/7PzJqqiMINXtc",
+    "sha256": "d7136c9844fa532c18527dad0e917d6a7042d26e689f6b255c62c15ac3f9deba",
+    "bytes": 70754,
+    "parts": [
+     "assets/f22-d7136c98/part001.enc"
+    ]
+   },
+   {
+    "name": "PCStormwaterPermit_V2_Converted_20261124_105747.pdf",
+    "id": "f23-277a7a52",
+    "iv": "ggjqF69f7Vzu7oqu",
+    "sha256": "277a7a5255378a025eb62a267024c2d7ed67487715402ddeeff16b6d379a8ad7",
+    "bytes": 62701,
+    "parts": [
+     "assets/f23-277a7a52/part001.enc"
     ]
    }
   ]
