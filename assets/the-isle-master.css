@@ -171,25 +171,30 @@ a{ color:inherit; }
 .switch[data-mode="dark"] .k-sun{ display:none; }
 .switch[data-mode="dark"] .k-moon{ display:flex; }
 
-/* The button: one form everywhere, settled November 22, 2026 from new
-   samples shown on /ref, the Lot Viewer and the Shadow Study.
-   Off rests; on fills with Page Gold. */
+/* The button: one form everywhere, the form the Reference
+   Catalogues carried, restored as the standard November 24, 2026.
+   Sharp corners, capitals, a gold border; the secondary is
+   transparent and fills with its gold on hover, the primary
+   fills with The Isle Navy and lifts to Panel on hover. */
 .btn{
-  font-family:var(--sans); font-size:12.5px; font-weight:600; padding:8px 12px; min-height:44px; border-radius:6px;
-  background:var(--panel); color:var(--ivory); border:1px solid var(--gold-line); cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none;
+  font-family:var(--sans); font-size:14.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  padding:14px 22px; min-height:44px; border-radius:0;
+  background:transparent; color:var(--ivory); border:1px solid var(--gold-bright); cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:10px; text-decoration:none;
+  transition:background .2s ease, color .2s ease, border-color .2s ease;
 }
-.btn svg{ width:14px; height:14px; flex:none; }
-.btn:hover{ border-color:var(--gold); }
-.btn.on{ background:var(--gold); color:#1d2a3b; border-color:var(--gold); }
-[data-theme="light"] .btn{ background:#f3eee0; color:#1d2a3b; }
-[data-theme="light"] .btn.on{ background:var(--gold); color:#f0e8d5; border-color:var(--gold); }
+.btn svg{ width:17px; height:17px; flex:none; }
+.btn:hover, .btn:focus-visible{ background:var(--gold-bright); color:#152130; }
+.btn.on{ background:#1d2a3b; color:#f0e8d5; border-color:var(--gold-bright); }
+.btn.on:hover, .btn.on:focus-visible{ background:#22344a; color:#f0e8d5; }
+[data-theme="light"] .btn:hover, [data-theme="light"] .btn:focus-visible{ color:#f0e8d5; }
+[data-theme="light"] .btn.on{ border-color:#1d2a3b; }
 
 /* The field: one form everywhere. At least 44px tall, Source Sans 3
    at 17px, on Panel in dark and Light Tint in light, with a 1px
-   border of Page Gold at the button's resting percentage (the
-   --gold-line token: 30 percent in dark, 38 percent in light),
-   curved corners of 6px and padding 8px by 12px. On focus the
+   border of Page Gold at 30 percent in dark and 38 percent in
+   light (the --gold-line token), curved corners of 6px and
+   padding 8px by 12px. On focus the
    border brightens to Page Gold and the field shows the 2px gold
    focus outline. A field's label is a label in the house form. */
 .field{
