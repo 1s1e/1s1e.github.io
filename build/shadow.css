@@ -71,6 +71,12 @@ html, body{ height:100%; }
 .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .grid2 .wide{ grid-column:1 / -1; }
 .grid2 .btn{ width:100%; }
+/* The grid button exception (guide section 12): this panel's grid
+   buttons carry 13px type, letter-spacing 0.05em and 12px
+   horizontal padding, so the longest label, Shortest Day, sits
+   on one line. Every other part of the button form is the
+   master's, unchanged. The exception lives in this sheet only. */
+.grid2 .btn{ font-size:13px; letter-spacing:0.05em; padding:14px 12px; }
 .stack{ display:flex; flex-direction:column; gap:8px; }
 .stack .btn{ width:100%; }
 .readoutgrp{ display:flex; flex-direction:column; gap:6px; }
