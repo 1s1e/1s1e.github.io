@@ -97,8 +97,8 @@ colour's name is never shortened, in speech, in records or in code.
 
 ### The Isle Navy, its steps
 
-- Panel #22344a, RGB 34 52 74, CMYK 54 30 0 71: panels and cards on the navy ground, and the button's
-  rest on dark.
+- Panel #22344a, RGB 34 52 74, CMYK 54 30 0 71: panels and cards on the navy ground, and the primary
+  button's hover lift.
 - Deep #152130, RGB 21 33 48, CMYK 56 31 0 81: the deepest tone: the page gradient's fall, wells and
   frames, and the switch's track and its knob glyph.
 
@@ -116,7 +116,7 @@ colour's name is never shortened, in speech, in records or in code.
 
 ### Light grounds and their ink
 
-- Light Tint #f3eee0, RGB 243 238 224, CMYK 0 2 8 5: tinted panels on light, and the button's rest on
+- Light Tint #f3eee0, RGB 243 238 224, CMYK 0 2 8 5: tinted panels on light, and the field's ground on
   light.
 - Soft Ink #3c4763, RGB 60 71 99, CMYK 39 28 0 61: secondary text on light, and the chart's curves on
   light.
@@ -626,22 +626,25 @@ What is required of anything created:
   localStorage under the key isle-theme. A remembered choice stands
   over the system preference, and nothing is sent anywhere.
 - Touch: every control stands at least 44px tall, the Apple standard.
-  The button carries a 44px minimum height, its padding unchanged,
+  The button carries a 44px minimum height,
   and the switch stands 44px tall, grown in proportion
   from its first form. No control on any page is smaller to touch
   than 44px.
 - Form fields are one form everywhere: a field stands at least 44px
   tall, in Source Sans 3 at 17px, on Panel in dark and Light Tint in
-  light, with a 1px border of Page Gold at the button's resting
-  percentage, curved corners of 6px and padding 8px by 12px. On focus
+  light, with a 1px border of Page Gold at 30 percent in dark and
+  38 percent in light, curved corners of 6px and padding 8px by
+  12px. On focus
   the border brightens to Page Gold and the field shows the 2px gold
   focus outline. A field's label is a label in the house form.
-- The buttons are one form everywhere: the panel button with curved
-  corners at 6px. Source Sans 3 at 12.5px, weight 600, in Title Case,
-  padding 8px by 12px, a 1px border.
+- The buttons are one form everywhere, the form the Reference
+  Catalogues carried: sharp corners. Source Sans 3 at 14.5px, weight
+  700, letter-spacing 0.1em, the labels written in Title Case and set
+  in capitals by the form, padding 14px by 22px, a 1px border and a
+  44px minimum height.
 - A button carries an icon only where the action has a true symbol of
   its own: the open book for reading, the tray arrow for a download.
-  The icon stands at 14px before the words, with an 8px gap. Utility
+  The icon stands at 17px before the words, with a 10px gap. Utility
   buttons carry no icon.
 - The master symbol list. Navigation: Home, the house; Back, the left
   arrow; Menu, the three lines; Close, the ×. Documents and media:
@@ -661,7 +664,7 @@ What is required of anything created:
   their setting, and no fill, save where an established symbol is
   solid by nature. The switch's sun and moon are the one exception:
   drawn small inside the pill, their stroke is 1.8. Set in a button,
-  a symbol stands at 14px, as the book and the tray are drawn on
+  a symbol stands at 17px, as the book and the tray are drawn on
   /ref.
 - Four symbols stand alone, replacing the words: Menu, Close, Search
   and Settings. A button carrying a symbol alone always keeps its
@@ -677,19 +680,22 @@ What is required of anything created:
   the menu is closed and the × while it is open. Play and Pause are
   a pair, and the expand and collapse chevrons are a pair. The
   switch's sun and moon are state glyphs of the same kind.
-- Off, the button rests on Panel in dark with a border of Page Gold dark
-  at 30 percent, and on Light Tint in light with a border of Page Gold
-  light at 38 percent. On hover the border brightens to Page Gold.
-- On, the button fills with Page Gold, #c2a15c in dark and #a07f3a in
-  light, and its text turns to The Isle Navy in dark and The Isle
-  Ivory in light. Off and on are never carried by colour alone: the
-  fill itself changes.
+- Off, the button is transparent, with a border of The Isle Gold in
+  dark and Page Gold light in light, and its text in the mode's ink:
+  The Isle Ivory in dark, The Isle Navy in light. On hover it fills
+  with that gold, and its text turns to Deep in dark and The Isle
+  Ivory in light.
+- On, the button fills with The Isle Navy, its text The Isle Ivory,
+  with a border of The Isle Gold in dark and The Isle Navy in light.
+  On hover the fill lifts to Panel, the border unchanged. Off and on
+  are never carried by colour alone: the fill itself changes.
 - The assignment rule: the primary action on a page takes the on form,
   secondary actions take the off form, and utility actions stay text
   links, not buttons. The worked example: Read is a button in the on
   form; Download is a button in the off form; Previous and Next are
-  buttons in the off form; Full size, Link to this page, Copy link,
-  Hide and their kind are text links, and stay text.
+  buttons in the off form; the Reader's Download PDF and Try Again
+  are buttons in the off form; Full size, Link to this page, Copy
+  link, Hide and their kind are text links, and stay text.
 - A link inside text stands in Page Gold, dark or light by the mode,
   and brightens on hover. It is never set in the body text colour, and
   never in a colour outside the sixteen. A link that performs an action
