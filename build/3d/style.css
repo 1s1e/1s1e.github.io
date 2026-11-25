@@ -392,3 +392,17 @@ body.panelhidden #menu-show { display: block; }
    track, ending their second columns at x292 against the x291 grid edge.
    Their second columns are trimmed 1px (144 to 143, 152 to 151) so every
    fitted control in every pane measures x16 to x291. */
+
+/* Menu cleanup pass, spacing only: no control changes size, no label wraps.
+   Layers: subgroup label margins 12/4 to 4/2, grid row gap 6 to 2, bulk row
+   and pane padding tightened. House: the Show and Measure labels take the
+   same tightened rhythm so the grouping costs as little height as
+   possible. */
+#pane-layers .laysec { margin: 4px 0 2px; }
+#pane-layers .laygrid { row-gap: 2px; }
+#pane-layers .bulkrow { padding-bottom: 0; }
+#pane-layers .bulkrow .satrow { gap: 4px; }
+#pane-layers .grp { padding: 8px 0 6px; }
+#pane-house .laysec { margin: 4px 0 2px; }
+#pane-house .grp { padding: 8px 0 6px; }
+#pane-house .grp .group { margin-bottom: 4px; }
