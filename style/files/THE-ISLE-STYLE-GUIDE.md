@@ -649,7 +649,11 @@ What is required of anything created:
   Shadow Study carry a smaller size, 10.5px on the Lot Viewer and
   13px on the Shadow Study, letter-spacing 0.05em and horizontal
   padding of 12px, so their longest labels sit on one line. Every
-  other part of the form is unchanged.
+  other part of the form is unchanged. Within that exception, the
+  Shadow Study's three sun buttons, Sunrise, Solar Noon and Sunset,
+  carry their name and their time on two lines by design, the name
+  on the first line and the time on the second, at the grid's 13px,
+  so the three stand at one uniform height.
 - A button carries an icon only where the action has a true symbol of
   its own: the open book for reading, the tray arrow for a download.
   The icon stands at 17px before the words, with a 10px gap. Utility

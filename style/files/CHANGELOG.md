@@ -1,5 +1,8 @@
 # THE ISLE · MASTER CHANGE LOG
 
+## The Shadow Study sun buttons take a two-line form (Nov 24, 2026)
+
+On the user's ruling, the Shadow Study's three sun buttons, Sunrise, Solar Noon and Sunset, take a designed two-line form inside the grid button exception recorded in section 12 of the guide. Each carries its name on the first line and its time on the second, at the grid's 13px, letter-spacing 0.05em and horizontal padding of 12px, so the three stand at one uniform height; Sunset, which spans the full width of the grid, carries the same form. The times remain live: the page's script writes each time into its own element, and clicking a sun button still jumps the study to that sun time. The other grid buttons stay on one line, unchanged.
 ## A grid button exception for the Lot Viewer and Shadow Study (Nov 24, 2026)
 
 On the user’s ruling, one exception to the button form is recorded in section 12 of the guide. The panel grid buttons of the Lot Viewer and the Shadow Study carry a smaller size, so their longest labels sit on one line: 10.5px on the Lot Viewer and 13px on the Shadow Study, letter-spacing 0.05em and horizontal padding of 12px. The sizes were set by measurement in WebKit at both iPad sizes, the Lot Viewer’s longest label Show All Layers and the Shadow Study’s Shortest Day each on one line with room to spare. Every other part of the form is unchanged: the weight, the capitals, the colours, the border, the sharp corners, the vertical padding and the 44px minimum height. The exception lives in the two section sheets only.
