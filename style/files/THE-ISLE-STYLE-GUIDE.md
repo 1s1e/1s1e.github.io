@@ -416,7 +416,10 @@ whole length, at the foot as well as the top.
   the house and the lot, through the day and the year.", OPEN · 365
   DAYS. 03, eyebrow THE RECORD, title Permits & Documents, to
   /build/permits/, "The county permit record for the house: documents,
-  inspections and reviews, kept current.", OPEN · 20 DOCUMENTS.
+  inspections and reviews, kept current.", OPEN · 20 DOCUMENTS. 04,
+  eyebrow THE FORM, title 3D Model, to /build/3d/, "The house as a
+  model: its form, rooms and grounds, turned and viewed from every
+  side.", OPEN · THE WHOLE HOUSE.
 - The splash poster set, in its confirmed order, stated in full: The
   Mountain Poster, The Sunset Poster, Lahaina, Kauai Cliffs, Kauai Bird,
   Pristine Beaches, Lanikai Beach, Bora Bora, Bali Nusa Penida and
@@ -642,6 +645,11 @@ What is required of anything created:
   700, letter-spacing 0.1em, the labels written in Title Case and set
   in capitals by the form, padding 14px by 22px, a 1px border and a
   44px minimum height.
+- One exception: the panel grid buttons of the Lot Viewer and the
+  Shadow Study carry a smaller size, 10.5px on the Lot Viewer and
+  13px on the Shadow Study, letter-spacing 0.05em and horizontal
+  padding of 12px, so their longest labels sit on one line. Every
+  other part of the form is unchanged.
 - A button carries an icon only where the action has a true symbol of
   its own: the open book for reading, the tray arrow for a download.
   The icon stands at 17px before the words, with a 10px gap. Utility
