@@ -238,3 +238,157 @@ body.panelhidden #menu-show { display: block; }
 #themesw { flex: none; display: flex; }
 #menu-hide { flex: 1 1 100%; }
 .sunbtns .btn, .laybtns .btn { flex: 1 1 auto; }
+
+/* Round 2 shared fitted grid: one content track per container, uniform rhythm.
+   Groups separated by hairlines, labels on one pattern, every control row
+   at least 44px, no wrapped button labels. */
+.grp { padding: 13px 0 12px; border-bottom: 1px solid var(--color-border); }
+.grp-label { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); line-height: 15px; margin-bottom: 9px; }
+.grp .group { margin: 0 0 6px; }
+.grp .group:last-child { margin-bottom: 0; }
+
+/* Segmented controls and chips fill their track, edges flush */
+.segmented, .seg { display: flex; width: 100%; }
+.segmented button, .seg button { flex: 1 1 0; padding: 0 8px; min-height: 44px; white-space: nowrap; }
+.chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+.chips button { min-height: 44px; padding: 0 4px; white-space: nowrap; width: 100%; }
+
+/* House toggles: two aligned columns, tracks on two vertical lines */
+.toggrid { display: grid; grid-template-columns: 118px 150px; column-gap: 8px; row-gap: 6px; }
+.toggrid .toggle { min-height: 44px; margin: 0; white-space: nowrap; font-size: 14px; gap: 6px; }
+
+/* Actions: Photo / Full screen on one row sized from their labels, Download full width */
+.actgrid { display: grid; grid-template-columns: 118px 151px; column-gap: 6px; row-gap: 6px; }
+.actgrid .btn { width: 100%; justify-content: center; white-space: nowrap; }
+.actgrid #download { grid-column: 1 / -1; }
+
+/* Sun: date row and slider row on the same label track; clock sits with the slider */
+.sunctl { margin-top: 0; gap: 6px; }
+.sunrow { gap: 8px; }
+.sunlab { width: 64px; flex: none; }
+#sun-date { flex: 1; min-width: 0; }
+#sun-time { flex: 1; min-width: 0; }
+.sunclock { min-width: 42px; text-align: right; }
+.sunbtns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sunbtns .btn { width: 100%; justify-content: center; white-space: nowrap; padding: 14px 12px; letter-spacing: 0.05em; }
+.sunbtns #sun-playyear { grid-column: 1 / -1; }
+.sunfacts { line-height: 1.5; }
+
+/* Ground: toggle row, then the image segmented as a fitted 2-column grid */
+.satrow { margin: 0 0 6px; }
+.satrow:last-child { margin-bottom: 0; }
+.satrow .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--color-fill); border-radius: var(--radius-md); padding: 3px; }
+.satrow .seg button { min-height: 44px; }
+.satrow .seg button:last-child { grid-column: 1 / -1; }
+
+/* Bulk row: three full-width buttons, one rhythm */
+.bulkrow { padding: 0 0 4px; }
+.bulkrow .satrow { display: grid; gap: 6px; }
+.bulkrow .btn { width: 100%; justify-content: center; white-space: nowrap; }
+
+/* Layer groups: label on the group pattern, toggles in aligned columns */
+.laysec { border-top: none; margin: 12px 0 4px; padding-top: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; }
+.laygrid { display: grid; grid-template-columns: 146px 146px; column-gap: 8px; row-gap: 6px; margin: 0; }
+.laygrid .toggle { min-height: 44px; margin: 0; white-space: nowrap; font-size: 14px; gap: 6px; }
+.laygrid .toggle.span2 { grid-column: 1 / -1; }
+.btn.wide { width: 100%; justify-content: center; }
+
+/* Sample F, top text row: the five section entries leave the left rail and
+   stand as plain text in one row at the top of the panel, under the head.
+   No boxes, no borders, no fills: the names in the house label form,
+   inactive in the mode's dimmer ink, the active entry in Page Gold with a
+   2px gold underline under its word, sitting on the row's hairline.
+   The rail's width is returned to the pane: the panel narrows from 436px
+   to 400px and every pane takes the full panel width on the shared grid. */
+#panel { width: 400px; flex: 0 0 400px; }
+#menutabs { flex: none; display: flex; align-items: stretch; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid var(--color-border); }
+#menutabs button { position: relative; background: none; border: 0; margin: 0; padding: 0 4px; min-height: 48px; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-text-muted); cursor: pointer; white-space: nowrap; }
+#menutabs button:hover { color: var(--color-text); }
+#menutabs button.on { color: var(--color-accent); }
+#menutabs button.on::after { content: ''; position: absolute; left: 4px; right: 4px; bottom: -1px; height: 2px; background: var(--color-accent); }
+#menutabs button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.pane .toggrid { grid-template-columns: 1fr 1fr; }
+.pane .actgrid { grid-template-columns: 1fr 1.3fr; }
+.pane .laygrid { grid-template-columns: 1fr 1fr; }
+
+/* Sample F slim: the same top text row menu, slimmed down.
+   1. Panel width returns to the site's standard 308px (from 400px), so the
+      pane track is 276px, the D single column track. The grids take D's
+      proven geometry at this width: House toggles 124/144, actions 118/152,
+      layer toggles in two 1fr columns at 13px so Flood lines (old) and
+      Flood map (old) hold one line, corner-to-corner toggles full width.
+   2. Panel head: one row. Measured first with Hide Menu as a text button:
+      Project Home (44px) + the settled switch (117px) + gaps + Hide Menu
+      at the standard button form (about 143px) came to about 320px
+      against the 276px track, which did not fit. With the hide control
+      carrying the settled Close glyph alone (44px tap area, its name kept
+      for assistive technology), the row fits cleanly: 44 + 117 + 44 with
+      gaps, about 221px. Project Home carries no lines around the house:
+      no border, no box, no background; the glyph stands alone on the
+      panel ground with its 44px tap area. The restore control on the
+      stage carries the settled Menu glyph alone, its name likewise kept.
+   3. The text row slims from 49px to the 44px touch floor (entries 44px
+      plus the hairline), form unchanged.
+   4. Vertical rhythm tightened throughout the panes: group padding
+      13/12 to 10/9, group label margin 9 to 7, layer section margins
+      12/4 to 9/3, controls foot padding 16 to 12. No control is shrunk:
+      button rows, the switch and every 44px row stand as they were. */
+#panel { width: 308px; flex: 0 0 308px; }
+.panel-head { padding: 8px 16px; gap: 8px; flex-wrap: nowrap; align-items: center; }
+.panel-head .home-btn { border: none; background: none; box-shadow: none; }
+#menu-hide { flex: none; width: 44px; height: 44px; margin-left: auto; padding: 0; display: flex; align-items: center; justify-content: center; background: none; border: none; box-shadow: none; color: var(--color-text); cursor: pointer; font: inherit; }
+#menu-hide svg { display: block; }
+#menu-show svg { display: block; }
+#menutabs button { min-height: 44px; }
+.grp { padding: 10px 0 9px; }
+.grp-label { margin-bottom: 7px; }
+.laysec { margin: 9px 0 3px; }
+.controls { padding-bottom: 12px; }
+.pane .toggrid { grid-template-columns: 124px 143px; column-gap: 8px; }
+.pane .actgrid { grid-template-columns: 118px 151px; column-gap: 6px; }
+.pane .laygrid { grid-template-columns: 1fr 1fr; column-gap: 6px; }
+.pane .laygrid .toggle { font-size: 13px; }
+
+/* ---- F foot (samples-7): the theme switch leaves the top row and
+   stands alone in its own slim row at the FOOT of the panel, pinned
+   below the pane (the panel is a flex column and .controls is the
+   only scrolling child, so this row is always on screen in every
+   pane). No line above the row (removed at the user's direction);
+   the settled switch unchanged, 117 by 44, at the row's left on
+   the shared grid edge (x16), centred vertically. Nothing else
+   joins the row. ---- */
+.panel-foot { flex: none; height: 58px; display: flex; align-items: center; padding: 0 16px; }
+.panel-foot #themesw { display: flex; align-items: center; }
+
+/* ---- Cleanup (user's option b): the repeated pane labels are dropped
+   and the Layers bulk pair shares one row.
+   1. Each pane opened with a gold .grp-label repeating the pane's own
+      name (House, Sun & Shadow, Ground, Layers, Lot Facts) directly
+      under the text row that already names and lights the pane. Those
+      five labels are removed from the markup; every pane now opens
+      directly with its first control group at the .grp top padding,
+      the same top spacing on all five. The sub-group labels inside a
+      pane (the Layers .laysec names) are untouched. The Facts pane's
+      text carried its own 10px top margin from the section sheet,
+      which sat where the label stood; it is zeroed so the text starts
+      at the same top spacing as the other panes' first elements.
+   2. In the Layers pane, Show all layers and Hide all layers pair on
+      one row, two equal columns on the pane's grid (each 134.5px of
+      the 275px track); Reset to defaults keeps its full width row
+      beneath them in the standard button form. The pair's size was
+      measured in WebKit at letter-spacing 0.05em and 12px horizontal
+      padding: at 13px the Show label measured 114.1px against a
+      108.5px content box and pushed its column off the grid; at 12px
+      it fit but with only 3.7px of slack; at 11.5px both labels hold
+      one line on the grid with real slack (Show 8.0px, Hide 14.6px),
+      so the pair stands at 11.5px. ---- */
+.lotfacts { margin-top: 0; }
+.bulkrow .satrow { grid-template-columns: 1fr 1fr; }
+.bulkrow #layers-reset { grid-column: 1 / -1; }
+.bulkrow #layers-all, .bulkrow #layers-none { font-size: 11.5px; letter-spacing: 0.05em; padding: 14px 12px; }
+
+/* Publish correction (Nov 25, 2026): in the F slim block above, the House
+   toggle grid and the action grid each totalled 276px on the pane's 275px
+   track, ending their second columns at x292 against the x291 grid edge.
+   Their second columns are trimmed 1px (144 to 143, 152 to 151) so every
+   fitted control in every pane measures x16 to x291. */

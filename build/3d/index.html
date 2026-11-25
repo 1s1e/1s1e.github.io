@@ -32,12 +32,12 @@
 <aside id="panel">
   <div class="panel-head">
     <a class="btn home-btn" href="/build/" aria-label="Project Home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg></a>
-    <div id="themesw"><button type="button" class="switch" id="themeToggle" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div>
-    <button id="menu-hide" type="button" class="btn">Hide Menu</button>
+    <button id="menu-hide" type="button" class="glyphctl" aria-label="Hide Menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
+  <nav id="menutabs" aria-label="Menu groups"><button type="button" data-pane="house" class="on" aria-current="true">House</button><button type="button" data-pane="sun">Sun</button><button type="button" data-pane="ground">Ground</button><button type="button" data-pane="layers">Layers</button><button type="button" data-pane="facts">Facts</button></nav>
   <section class="controls" id="controls" aria-label="View controls">
-    <div class="sec" id="sec-house"><div class="sec-head"><button type="button" class="sec-toggle">House<span class="chev">▾</span></button></div><div class="sec-body"><div class="group">
-      <span class="group-label" id="lvl-label">Show</span>
+    <div class="pane" id="pane-house"><div class="grp "><div class="group">
+      
       <div class="segmented" role="radiogroup" aria-labelledby="lvl-label">
         <button role="radio" aria-checked="true" data-mode="exterior">Exterior</button>
         <button role="radio" aria-checked="false" data-mode="upper">Upper floor</button>
@@ -45,7 +45,7 @@
       </div>
     </div>
 <div class="group">
-      <span class="group-label" id="cam-label">Camera</span>
+      
       <div class="chips" role="group" aria-labelledby="cam-label">
         <button data-view="hero">3/4</button>
         <button data-view="front">Front</button>
@@ -57,7 +57,7 @@
         <button data-view="pool">Pool</button>
       </div>
     </div>
-<div class="group toggles">
+<div class="group toggles toggrid">
       <label class="toggle"><input type="checkbox" id="t-house" checked><span class="track" aria-hidden="true"></span><span>House</span></label>
       <label class="toggle"><input type="checkbox" id="t-pool" checked><span class="track" aria-hidden="true"></span><span>Pool &amp; cage</span></label>
       <label class="toggle"><input type="checkbox" id="t-lawn" checked><span class="track" aria-hidden="true"></span><span>Lawn</span></label>
@@ -66,22 +66,21 @@
       <label class="toggle"><input type="checkbox" id="t-elev"><span class="track" aria-hidden="true"></span><span>True elevations</span></label>
       <label class="toggle"><input type="checkbox" id="t-spin"><span class="track" aria-hidden="true"></span><span>Turntable</span></label>
     </div>
-<div class="group actions">
+<div class="group actions actgrid">
       <button class="btn" id="photo" type="button">Photo</button>
       <button class="btn" id="full" type="button">Full screen</button>
       <button class="btn" id="download" type="button">Download<span class="ext"> .glb</span></button>
-    </div></div></div>
-    <div class="sec" id="sec-sun"><div class="sec-head"><button type="button" class="sec-toggle">Sun &amp; Shadow<span class="chev">▾</span></button></div><div class="sec-body"><div class="sunctl">
+    </div></div></div><div class="pane" id="pane-sun" hidden><div class="grp "><div class="sunctl">
       
-      <div class="sunrow">
+      <div class="sunrow drow">
         <label class="sunlab" for="sun-date">Date</label>
         <input type="date" id="sun-date" value="2026-11-23" min="2025-01-01" max="2035-12-31">
-        <span class="sunclock" id="sun-clock">11:30</span>
+        
       </div>
-      <div class="sunrow">
+      <div class="sunrow srow">
         <label class="sunlab" for="sun-time">Time of day</label>
         <input type="range" id="sun-time" min="300" max="1260" step="1" value="690">
-      </div>
+      <span class="sunclock" id="sun-clock">11:30</span></div>
       <div class="sunbtns">
         <button type="button" class="btn" id="sun-rise">Sunrise</button>
         <button type="button" class="btn" id="sun-noon">Solar noon</button>
@@ -92,58 +91,51 @@
         <button type="button" class="btn" id="sun-playyear">Play year</button>
       </div>
       <div class="sunfacts" id="sun-facts"></div>
-    </div></div></div>
-    <div class="sec" id="sec-ground"><div class="sec-head"><button type="button" class="sec-toggle">Ground<span class="chev">▾</span></button></div><div class="sec-body"><div class="satrow"><span class="satlab">Ground</span>
+    </div></div></div><div class="pane" id="pane-ground" hidden><div class="grp "><div class="satrow">
         <label class="toggle"><input type="checkbox" id="t-sat" checked><span class="track" aria-hidden="true"></span><span>Image</span></label>
       </div>
-      <div class="satrow"><span class="satlab">Image</span>
+      <div class="satrow">
         <div class="seg" id="seg-variant" role="group" aria-label="Ground image">
           <button type="button" data-v="master">Neighborhood</button><button type="button" data-v="cleaned">Neighbors</button><button type="button" data-v="render" class="on">Empty</button><button type="button" data-v="shadow">Shadow study</button><button type="button" data-v="shadownat">Shadow natural</button>
         </div>
       </div>
-</div></div>
-    <div class="bulkrow"><div class="satrow laybtns">
+</div></div><div class="pane" id="pane-layers" hidden><div class="grp "><div class="bulkrow"><div class="satrow laybtns">
         <button type="button" class="btn" id="layers-all">Show all layers</button>
         <button type="button" class="btn" id="layers-none">Hide all layers</button>
        <button type="button" class="btn" id="layers-reset">Reset to defaults</button></div></div>
-    <div class="sec" id="sec-isle"><div class="sec-head"><button type="button" class="sec-toggle">The Isle<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+    <div class="laysec">The Isle</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-interior" checked><span class="track" aria-hidden="true"></span><span>Interior</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-exterior" checked><span class="track" aria-hidden="true"></span><span>Exterior</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-prop"><div class="sec-head"><button type="button" class="sec-toggle">Property Data<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+      </div><div class="laysec">Property Data</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-property" checked><span class="track" aria-hidden="true"></span><span>Property lines</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-surveylines"><span class="track" aria-hidden="true"></span><span>Survey lines</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-surveydata"><span class="track" aria-hidden="true"></span><span>Survey data</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-fema"><div class="sec-head"><button type="button" class="sec-toggle">FEMA Data<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+      </div><div class="laysec">FEMA Data</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-flood"><span class="track" aria-hidden="true"></span><span>Flood lines</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-floodmap"><span class="track" aria-hidden="true"></span><span>Flood map</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-floodold"><span class="track" aria-hidden="true"></span><span>Flood lines (old)</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-floodmapold"><span class="track" aria-hidden="true"></span><span>Flood map (old)</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-meas"><div class="sec-head"><button type="button" class="sec-toggle">Measurements<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+      </div><div class="laysec">Measurements</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-mhside"><span class="track" aria-hidden="true"></span><span>House side</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-mhback"><span class="track" aria-hidden="true"></span><span>House back</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-mhfront"><span class="track" aria-hidden="true"></span><span>House front</span></label>
-        <label class="toggle"><input type="checkbox" id="t-ov-mhcorner"><span class="track" aria-hidden="true"></span><span>House corner to corner</span></label>
+        <label class="toggle span2"><input type="checkbox" id="t-ov-mhcorner"><span class="track" aria-hidden="true"></span><span>House corner to corner</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-meside"><span class="track" aria-hidden="true"></span><span>Enclosure side</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-meback"><span class="track" aria-hidden="true"></span><span>Enclosure back</span></label>
-        <label class="toggle"><input type="checkbox" id="t-ov-mecorner"><span class="track" aria-hidden="true"></span><span>Enclosure corner to corner</span></label>
-      </div></div></div>
-    <div class="sec" id="sec-misc"><div class="sec-head"><button type="button" class="sec-toggle">Miscellaneous<span class="chev">▾</span></button></div><div class="sec-body"><div class="laygrid">
+        <label class="toggle span2"><input type="checkbox" id="t-ov-mecorner"><span class="track" aria-hidden="true"></span><span>Enclosure corner to corner</span></label>
+      </div><div class="laysec">Miscellaneous</div><div class="laygrid">
         <label class="toggle"><input type="checkbox" id="t-ov-street"><span class="track" aria-hidden="true"></span><span>Street map</span></label>
         <label class="toggle"><input type="checkbox" id="t-ov-highlight"><span class="track" aria-hidden="true"></span><span>Lot highlight</span></label>
-      </div></div></div>
-    <div class="sec closed" id="sec-facts"><div class="sec-head"><button type="button" class="sec-toggle">Lot Facts<span class="chev">▾</span></button></div><div class="sec-body"><div class="lotfacts">Lot area 11,635 sq ft<br>
+      </div></div></div><div class="pane" id="pane-facts" hidden><div class="grp "><div class="lotfacts">Lot area 11,635 sq ft<br>
       Flood: Zone X (minimal hazard). A Zone AE sliver (3.9 sq m) touches the far eastern end of the rear line.<br>
       Finished floor 72.60 ft, base flood elevation 67.8 ft<br>
-      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</div></div></div>
-  </section>
+      Current flood map: FIRM panel 12101C0461F as revised by LOMR 26-04-1287P, effective November 5, 2026</div></div></div></section>
+  <div class="panel-foot"><div id="themesw"><button type="button" class="switch" id="themeToggle" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button></div></div>
 </aside>
 <main id="stage" aria-label="3D model viewport">
   <canvas id="view" aria-label="Interactive 3D model of The Isle. Drag to orbit, scroll to zoom."></canvas>
   <div id="labels" aria-hidden="true"></div>
-  <button id="menu-show" type="button" class="btn">Menu</button>
+  <button id="menu-show" type="button" class="btn" aria-label="Menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="loading" id="loading" role="status" aria-live="polite">
     <span class="spinner" aria-hidden="true"></span><span id="loading-text">Building model…</span>
   </div>
@@ -157,6 +149,23 @@
   function sync() { var t = root.dataset.theme || 'dark'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#f0e8d5' : '#1d2a3b'); if (btn) { btn.setAttribute('data-mode', t); btn.setAttribute('aria-checked', t === 'dark' ? 'true' : 'false'); } }
   if (btn) btn.addEventListener('click', function () { root.dataset.theme = (root.dataset.theme === 'dark') ? 'light' : 'dark'; try { localStorage.setItem('isle-theme', root.dataset.theme); } catch (e) {} sync(); });
   sync();
+})();
+</script>
+<script>
+(function(){
+  var tabs = document.getElementById('menutabs');
+  var controls = document.getElementById('controls');
+  tabs.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      tabs.querySelectorAll('button').forEach(function(x){
+        var on = (x === b);
+        x.classList.toggle('on', on);
+        if (on) { x.setAttribute('aria-current', 'true'); } else { x.removeAttribute('aria-current'); }
+      });
+      document.querySelectorAll('.pane').forEach(function(p){ p.hidden = (p.id !== 'pane-' + b.dataset.pane); });
+      controls.scrollTop = 0;
+    });
+  });
 })();
 </script>
 </body>
