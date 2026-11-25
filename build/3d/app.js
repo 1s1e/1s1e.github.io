@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { LAWN_PATCH } from './lawn-patch.js?v=24';
+import { LAWN_PATCH } from './lawn-patch.js?v=25';
 
 const FT = 0.3048;
 // ---- shared master frame (Web Mercator image stack, 8455 x 8543 px) ------
@@ -255,10 +255,58 @@ const BASE_DEFS = {
   shadownat: { file: 'layers/ground-natural.jpg', rect: [3300, 3600, 1900, 1800], scale: MPP_SHADOW }
 };
 const baseMeshes = {};
+function poolHoleMaster() {
+  // The pool opening in master-frame px: the same outline the lawn slab
+  // keeps (the lawn patch's boundary), carried model -> world -> master.
+  const pts = lawnPatchOutline();
+  if (pts.length < 3) return null;
+  const g = new THREE.Object3D();
+  g.rotation.y = THREE.MathUtils.degToRad(-15.8323);
+  g.position.set(-16.706, 0, 2.648);
+  g.updateMatrixWorld(true);
+  return pts.map(([mx, mz]) => {
+    const w = new THREE.Vector3(mx, 0, mz).applyMatrix4(g.matrixWorld);
+    return [(w.x + GW / 2) / MPP_SHADOW + SHADOW_ORIGIN[0], (w.z + GD / 2) / MPP_SHADOW + SHADOW_ORIGIN[1]];
+  });
+}
+function baseGeometry(rect, scale) {
+  // The ground photo plane with the pool opening cut out. The plane lies
+  // above the pool's water surface, so without the opening it lids the
+  // pool: from above, its depth hides the water and the basin, and the
+  // pool shows the photograph instead. Placed exactly as rectPlane places
+  // a base (same centre, same scale), only with the hole.
+  const [fx, fy, w, h] = rect;
+  const cxp = fx + w / 2, cyp = fy + h / 2;
+  const shape = new THREE.Shape();
+  shape.moveTo(-w / 2, h / 2); shape.lineTo(w / 2, h / 2); shape.lineTo(w / 2, -h / 2); shape.lineTo(-w / 2, -h / 2); shape.closePath();
+  const hole = poolHoleMaster();
+  if (hole) {
+    const p = new THREE.Path();
+    hole.forEach(([hx, hy], i) => {
+      const sx = hx - cxp, sy = -(hy - cyp);
+      if (i === 0) p.moveTo(sx, sy); else p.lineTo(sx, sy);
+    });
+    p.closePath();
+    shape.holes.push(p);
+  }
+  const geo = new THREE.ShapeGeometry(shape);
+  const pos = geo.getAttribute('position');
+  const uv = new Float32Array(pos.count * 2);
+  for (let i = 0; i < pos.count; i++) {
+    uv[i * 2] = pos.getX(i) / w + 0.5;
+    uv[i * 2 + 1] = pos.getY(i) / h + 0.5;
+  }
+  geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  geo.scale(scale, scale, 1);
+  geo.rotateX(-Math.PI / 2);
+  return geo;
+}
 function ensureBase(key) {
   if (baseMeshes[key]) return baseMeshes[key];
   const d = BASE_DEFS[key];
-  const m = rectPlane(d.rect, d.scale, GROUND_Y, new THREE.MeshStandardMaterial({ map: loadTex('./' + d.file), roughness: 1, metalness: 0 }));
+  const [cx, cz] = worldFromMaster(d.rect[0] + d.rect[2] / 2, d.rect[1] + d.rect[3] / 2);
+  const m = new THREE.Mesh(baseGeometry(d.rect, d.scale), new THREE.MeshStandardMaterial({ map: loadTex('./' + d.file), roughness: 1, metalness: 0 }));
+  m.position.set(cx, GROUND_Y, cz);
   m.receiveShadow = true;
   m.visible = false;
   layerGroup.add(m);
@@ -454,7 +502,7 @@ function buildLawnSlab(lawnMesh) {
   return mesh;
 }
 function loadModel() {
-  new GLTFLoader().load('./model.glb?v=24', (gltf) => {
+  new GLTFLoader().load('./model.glb?v=25', (gltf) => {
     modelGroup = new THREE.Group();
     modelGroup.rotation.y = THREE.MathUtils.degToRad(-15.8323);
     modelGroup.position.set(-16.706, 0, 2.648);
