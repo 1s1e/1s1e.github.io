@@ -455,18 +455,22 @@ How things are created:
 
 - This guide governs everything created for The Isle, without exception.
   A value, a name or a practice that is not in this guide is not settled.
-- No page hard-codes anything: anything created for the site takes
-  its shared layer from the master style sheet, the-isle-master.css,
-  published at /assets/the-isle-master.css, and links it as
-  published. A page carries none of the shared values as its own
-  copy: not the colour variables, not the font stacks or the type
-  roles, not the switch, the button and field forms, and not the
-  link colours. What a page keeps is its layout and what is
-  specific to it.
-- An exception to the shared layer is never written into a page:
-  where a section must depart from the master, the exception lives
-  in that section's own folder, as the section's style sheet,
-  layered on the master, and the master itself is unchanged.
+- No page hard-codes anything: everything created for the site
+  takes its styling from the one master style sheet,
+  the-isle-master.css, published at /assets/the-isle-master.css,
+  and links it as published. The master carries the whole site's
+  styling, the shared layer and every page's own rules together,
+  each page's rules scoped to that page inside the master. A page
+  carries none of the values as its own copy: not the colour
+  variables, not the font stacks or the type roles, not the
+  switch, the button and field forms, and not the link colours.
+- An exception is never written into a page: where a section must
+  depart from the master, the exception lives in that section's
+  own folder, as that folder's style sheet, layered on the master,
+  and the sheet holds only the exception, nothing else. A folder
+  sheet is never a section's styling layer: the section's ordinary
+  styling stands in the master, scoped to its pages, and the
+  master itself is unchanged by an exception.
 - Images follow the same rule: one version of each image, at one
   address, and every page that uses it references that copy, so an
   image is updated in one place and the update is universal. An
@@ -601,9 +605,11 @@ What is required of anything created:
 - The master style sheet is published at /assets/the-isle-master.css,
   byte identical to the copy in the master file set, and every page
   on the site links it.
-- Where a section departs from the shared layer, its exception is
-  kept in that section's own folder, as the section's style sheet,
-  layered on the published master; the master itself is unchanged.
+- Where a section departs from the master, its exception is kept
+  in that section's own folder, as that folder's style sheet,
+  holding only the exception, layered on the published master.
+  Every other rule for every page stands in the published master
+  itself, scoped to its page.
 - Each image stands at one address and is referenced from there by
   every page that uses it, so an update to an image is made once
   and lands everywhere. An image specific to a section is kept in

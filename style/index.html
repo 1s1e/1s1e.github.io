@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" class="pg-style">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/the-isle-master.css">
-<link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
 <div class="wrap">
@@ -279,8 +278,8 @@
   <p class="subhead">How things are created:</p>
   <ul>
     <li>This guide governs everything created for The Isle, without exception. A value, a name or a practice that is not in this guide is not settled, and anything that departs from it is drift, to be corrected.</li>
-    <li>No page hard-codes anything: anything created for the site takes its shared layer from the master style sheet, published at /assets/the-isle-master.css, and links it as published. A page carries none of the shared values as its own copy: not the colour variables, not the font stacks or the type roles, not the switch, the button and field forms, and not the link colours. What a page keeps is its layout and what is specific to it.</li>
-    <li>An exception to the shared layer is never written into a page: where a section must depart from the master, the exception lives in that section's own folder, as the section's style sheet, layered on the master, and the master itself is unchanged. This page's own sheet, style.css in this folder, is the standing example.</li>
+    <li>No page hard-codes anything: everything created for the site takes its styling from the one master style sheet, published at /assets/the-isle-master.css, and links it as published. The master carries the whole site's styling, the shared layer and every page's own rules together, each page's rules scoped to that page inside the master. A page carries none of the values as its own copy: not the colour variables, not the font stacks or the type roles, not the switch, the button and field forms, and not the link colours.</li>
+    <li>An exception is never written into a page: where a section must depart from the master, the exception lives in that section's own folder, as that folder's style sheet, layered on the master, and the sheet holds only the exception, nothing else. A folder sheet is never a section's styling layer: the section's ordinary styling stands in the master, scoped to its pages, and the master itself is unchanged by an exception. The Lot Viewer's grid buttons and the 404's font stack are the standing examples.</li>
     <li>Images follow the same rule: one version of each image, at one address, and every page that uses it references that copy, so an image is updated in one place and the update is universal. An image specific to a section lives in that section's folder.</li>
     <li>One approved sample precedes any full round of creative work. Samples are true samples, built from the real pages and their real style sheet, shown in every state the decision turns on, in both modes, at full quality. Alternatives differ in composition, organisation and visual world, never in cover imagery alone.</li>
     <li>No substitutions without asking: an image, a file, a product, a design element or wording the user chose or supplied is never replaced without asking.</li>
@@ -325,7 +324,7 @@
   <p class="kicker">How the site stands</p>
   <ul>
     <li>The site is GitHub Pages, repository 1s1e/1s1e.github.io, branch main, published by git over SSH with the repository's dedicated key.</li>
-    <li>The master style sheet is published at /assets/the-isle-master.css, byte identical to the copy in the master file set, and every page on the site links it. Where a section departs from the shared layer, its exception is kept in that section's own folder, as the section's style sheet, layered on the published master.</li>
+    <li>The master style sheet is published at /assets/the-isle-master.css, byte identical to the copy in the master file set, and every page on the site links it. Where a section departs from the master, its exception is kept in that section's own folder, as that folder's style sheet, holding only the exception, layered on the published master. Every other rule for every page stands in the published master itself, scoped to its page.</li>
     <li>Each image stands at one address and is referenced from there by every page that uses it, so an update to an image is made once and lands everywhere. An image specific to a section is kept in that section's folder.</li>
     <li>Visitor counting is GoatCounter, one counter per website; this site's counter is 1s1e, reported only on new activity, with the visits' locations. A page that counts by hand loads its tracker without counting, and counts each view once.</li>
     <li>robots.txt allows the landing page and its /assets/ only.</li>
@@ -359,15 +358,15 @@
   <h2><span class="num">13</span>The documents</h2>
   <p class="kicker">The guide and its files, to open in the browser</p>
   <p>Everything in the master, as files. Each name opens the file itself.</p>
-  <div class="docrow"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a><span class="kind">PDF · 28 pages</span><span class="size">586 KB</span></div>
-  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">40.7 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">8.9 KB</span></div>
+  <div class="docrow"><a href="files/The-Isle-Style-Guide.pdf">The Style Guide, the book</a><span class="kind">PDF · 29 pages</span><span class="size">587 KB</span></div>
+  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">41.0 KB</span></div>
+  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">136.4 KB</span></div>
   <div class="docrow"><a href="files/the-isle-tokens.json">Design tokens</a><span class="kind">JSON</span><span class="size">7.1 KB</span></div>
   <div class="docrow"><a href="files/The-Isle-Colour-Swatches.pdf">The swatch sheet</a><span class="kind">PDF</span><span class="size">39.4 KB</span></div>
   <div class="docrow"><a href="files/the-isle-colour-swatches.png">The swatch sheet</a><span class="kind">PNG</span><span class="size">196 KB</span></div>
   <div class="docrow"><a href="files/the-isle-palette.ase">The palette</a><span class="kind">Adobe Swatch Exchange</span><span class="size">846 B</span></div>
   <div class="docrow"><a href="files/the-isle-palette.gpl">The palette</a><span class="kind">GIMP palette</span><span class="size">426 B</span></div>
-  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">33.8 KB</span></div>
+  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">35.0 KB</span></div>
 </section>
 
 <footer>
