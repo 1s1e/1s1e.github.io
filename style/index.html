@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
-<title>The Isle · Style Guide</title>
+<title>The Isle · Style</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
@@ -19,356 +19,356 @@
 <link rel="stylesheet" href="/assets/the-isle-master.css">
 </head>
 <body>
-<div class="wrap">
-<header>
-  <button type="button" class="switch" id="themeSwitch" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
-  <img class="lockup" id="lockup" src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle">
-  <p class="tagline">More than a place you come to, a place you stay.</p>
-  <div class="grule"></div>
-  <p class="kicker">The Style Guide · Settled November 22, 2026</p>
-  <nav class="contents">
-    <a href="#name">Name</a><a href="#colours">Colours</a><a href="#icon">Icon</a><a href="#logo">Logo</a><a href="#type">Type</a><a href="#spacing">Spacing</a><a href="#chart">Chart</a><a href="#report">Report</a><a href="#rules">Rules</a><a href="#references">References</a><a href="#technical">Technical</a><a href="#switchbuttons">Switch</a><a href="#documents">Documents</a>
+<div class="sx-wrap">
+<header class="sx-head" id="top">
+  <button type="button" class="switch" id="swHead" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
+  <p class="sx-eyebrow t-label">The Isle</p>
+  <h1 class="sx-title t-display">Style</h1>
+  <p class="sx-tagline t-serif-line">More than a place you come to, a place you stay.</p>
+  <div class="sx-grule"></div>
+  <p class="sx-intro t-body">The fonts, colours, measures and forms from which every page for The Isle is built, and the rules that govern their use. The specimens stand live from the master style sheet itself, and every value stated is drawn from the design tokens.</p>
+  <nav class="sx-nav">
+    <a href="#type">Type</a><a href="#colours">Colours</a><a href="#layout">Layout</a><a href="#switch">Switch</a><a href="#buttons">Buttons</a><a href="#fields">Fields</a><a href="#links">Links</a><a href="#symbols">Symbols</a><a href="#logo">Logo</a><a href="#naming">Naming</a><a href="#register">Register</a><a href="#correspondence">Correspondence</a><a href="#print">Print</a><a href="#manner">Manner</a><a href="#materials">Materials</a>
   </nav>
 </header>
 
-<section id="name">
-  <h2><span class="num">1</span>Name and the words</h2>
-  <p class="kicker">How The Isle is named and how it speaks</p>
+<section class="sx-sec" id="type">
+  <h2 class="sx-h2"><span class="sx-num">1</span>Type</h2>
+  <p class="sx-kicker">Two faces, six roles</p>
+  <p>Two faces only, everywhere on 1s1e.com: Playfair Display for display, headings and serif lines; Source Sans 3 for body, labels and small text. Text pages load the faces once, with exactly this line:</p>
+  <p class="sx-spec">https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap</p>
+  <p>The fallback stacks are "Playfair Display", Georgia, "Times New Roman", serif for the serif and "Source Sans 3", "Avenir Next", "Segoe UI", sans-serif for the sans. The splash, whose lettering is artwork, loads Playfair Display 500 only, for its fallback text.</p>
+    <div class="sx-role"><div class="t-display">The Isle</div><p class="sx-spec">Display: Playfair Display, weight 500, 64px</p></div>
+    <div class="sx-role"><div class="t-serif-line">More than a place you come to, a place you stay.</div><p class="sx-spec">Serif line: Playfair Display, weight 500, italic, 19px</p></div>
+    <div class="sx-role"><div class="t-heading">Permits &amp; Documents</div><p class="sx-spec">Heading: Playfair Display, weight 500, 34px</p></div>
+    <div class="sx-role"><div class="t-body">Body text carries the page's ordinary reading matter: the descriptions, the notes and the record, set at the size a reader takes in without effort.</div><p class="sx-spec">Body: Source Sans 3, weight 400, 17px, line height 1.65</p></div>
+    <div class="sx-role"><div class="t-label">The Isle · Style</div><p class="sx-spec">Label: Source Sans 3, weight 600, 11px, letter spacing .34em, uppercase</p></div>
+    <div class="sx-role"><div class="t-small">Settled November 26, 2026 · 1s1e.com</div><p class="sx-spec">Small: Source Sans 3, weight 400, 10.5px, letter spacing .26em</p></div>
+</section>
+
+<section class="sx-sec" id="colours">
+  <h2 class="sx-h2"><span class="sx-num">2</span>Colours</h2>
+  <p class="sx-kicker">Seventeen colours: the five masters and twelve working steps</p>
+  <p>Every colour is spoken and written under its full house name; a master colour's name is never shortened, in speech, in records or in code.</p>
+  <div class="sx-masters">
+      <div class="sx-master"><div class="sx-chip" style="background:#1d2a3b"></div><p class="sx-cname">The Isle Navy</p><p class="sx-cval">#1d2a3b</p><p class="sx-cval">RGB 29 42 59</p><p class="sx-cval">CMYK 51 29 0 77</p><p class="sx-crole">The one common blue for the whole group: grounds, ink, and the logo's island, waterline and lettering in colour artwork, and the icon ground.</p></div>
+      <div class="sx-master"><div class="sx-chip" style="background:#46936a"></div><p class="sx-cname">The Isle Green</p><p class="sx-cval">#46936a</p><p class="sx-cval">RGB 70 147 106</p><p class="sx-cval">CMYK 52 0 28 42</p><p class="sx-crole">The palm crown, in the artwork only.</p></div>
+      <div class="sx-master"><div class="sx-chip" style="background:#c9ab72"></div><p class="sx-cname">The Isle Gold</p><p class="sx-cval">#c9ab72</p><p class="sx-cval">RGB 201 171 114</p><p class="sx-cval">CMYK 0 15 43 21</p><p class="sx-crole">The palm trunk, in the artwork only; it is never a page accent.</p></div>
+      <div class="sx-master"><div class="sx-chip" style="background:#C0C0C0"></div><p class="sx-cname">The Isle Silver</p><p class="sx-cval">#C0C0C0</p><p class="sx-cval">RGB 192 192 192</p><p class="sx-cval">CMYK 0 0 0 25</p><p class="sx-crole">The dark mode silver: the logo's island, waterline and text in dark mode, and the site accent on dark grounds.</p></div>
+      <div class="sx-master"><div class="sx-chip" style="background:#f0e8d5"></div><p class="sx-cname">The Isle Ivory</p><p class="sx-cval">#f0e8d5</p><p class="sx-cval">RGB 240 232 213</p><p class="sx-cval">CMYK 0 3 11 6</p><p class="sx-crole">Text on dark grounds, and the light page ground.</p></div>
+  </div>
+
+    <p class="sx-subhead">The Isle Navy, its steps</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#22344a"></span><span class="sx-nm">Panel</span><span class="sx-hx">#22344a</span><span class="sx-ck">RGB 34 52 74 · CMYK 54 30 0 71</span><span class="sx-ds">Panels and cards on the navy ground, and the primary button's hover lift.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#152130"></span><span class="sx-nm">Deep</span><span class="sx-hx">#152130</span><span class="sx-ck">RGB 21 33 48 · CMYK 56 31 0 81</span><span class="sx-ds">The deepest tone: the page gradient's fall, wells and frames, and the switch's track.</span></div>
+    <p class="sx-subhead">Text steps on dark</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#d9d0ba"></span><span class="sx-nm">Ivory Soft</span><span class="sx-hx">#d9d0ba</span><span class="sx-ck">RGB 217 208 186 · CMYK 0 4 14 15</span><span class="sx-ds">Secondary text on dark.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#a89f88"></span><span class="sx-nm">Ivory Dim</span><span class="sx-hx">#a89f88</span><span class="sx-ck">RGB 168 159 136 · CMYK 0 5 19 34</span><span class="sx-ds">Labels, captions and meta text on dark.</span></div>
+    <p class="sx-subhead">Gold in print</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#c2a15c"></span><span class="sx-nm">Page Gold dark</span><span class="sx-hx">#c2a15c</span><span class="sx-ck">RGB 194 161 92 · CMYK 0 17 53 24</span><span class="sx-ds">Gold for print on dark grounds; on pages the accent is silver.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#a07f3a"></span><span class="sx-nm">Page Gold light</span><span class="sx-hx">#a07f3a</span><span class="sx-ck">RGB 160 127 58 · CMYK 0 21 64 37</span><span class="sx-ds">Gold for print on light grounds; on pages the accent on light grounds is Page Silver.</span></div>
+    <p class="sx-subhead">Silver for light</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#686868"></span><span class="sx-nm">Page Silver</span><span class="sx-hx">#686868</span><span class="sx-ck">RGB 104 104 104 · CMYK 0 0 0 59</span><span class="sx-ds">The Isle Silver's page step for light grounds, where the master silver is too pale to read.</span></div>
+    <p class="sx-subhead">Light grounds and their ink</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#f3eee0"></span><span class="sx-nm">Light Tint</span><span class="sx-hx">#f3eee0</span><span class="sx-ck">RGB 243 238 224 · CMYK 0 2 8 5</span><span class="sx-ds">Tinted panels on light, and the field's ground on light.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#3c4763"></span><span class="sx-nm">Soft Ink</span><span class="sx-hx">#3c4763</span><span class="sx-ck">RGB 60 71 99 · CMYK 39 28 0 61</span><span class="sx-ds">Secondary text on light, and the chart's curves on light.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#767c8d"></span><span class="sx-nm">Dim Ink</span><span class="sx-hx">#767c8d</span><span class="sx-ck">RGB 118 124 141 · CMYK 16 12 0 45</span><span class="sx-ds">Labels and meta text on light, at large sizes only; small secondary text on light takes Soft Ink.</span></div>
+    <p class="sx-subhead">The splash</p>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#dfe2e6"></span><span class="sx-nm">Poster Mat</span><span class="sx-hx">#dfe2e6</span><span class="sx-ck">RGB 223 226 230 · CMYK 3 2 0 10</span><span class="sx-ds">The mat inside the poster frame.</span></div>
+    <div class="sx-steprow"><span class="sx-sw" style="background:#93a7c9"></span><span class="sx-nm">Terra</span><span class="sx-hx">#93a7c9</span><span class="sx-ck">RGB 147 167 201 · CMYK 27 17 0 21</span><span class="sx-ds">The splash's quiet secondary tone.</span></div>
+  <p class="sx-subhead">The colours in use</p>
   <ul>
-    <li>The house and the place are called <b>The Isle</b>, with a capital T, in every use, including mid sentence and the possessive, The Isle's.</li>
+    <li>Text stands in its settled pairings: The Isle Ivory and Ivory Soft on The Isle Navy, Panel and Deep; The Isle Navy and Soft Ink on The Isle Ivory and Light Tint. Accent text is The Isle Silver in dark and Page Silver in light.</li>
+    <li>Text pairings meet a contrast floor: 4.5 to 1 minimum for body text, 3 to 1 minimum for large text. Page Silver on The Isle Ivory measures 4.57 to 1 and meets the body floor. Dim Ink on The Isle Ivory measures 3.42 to 1, a large text pairing only: in light mode, small secondary text, labels and meta text take Soft Ink, and Dim Ink stands at large sizes only.</li>
+    <li>The floors govern text and the borders that define a control. The settled hairline borders, silver at low alpha dividing and edging the panels, are decorative and stand outside the floor.</li>
+    <li>The accent follows the ground, not the mode: The Isle Silver on dark grounds and Page Silver on light grounds, on every page. Chrome standing on The Isle Navy keeps full silver in both modes.</li>
+    <li>The ground rule: in each mode, the theme colour, the body ground and the page gradient's first and last stops are the one ground colour, The Isle Navy in dark and The Isle Ivory in light, so the browser bars meet the page without a seam. A page is checked along its whole length, at the foot as well as the top.</li>
+    <li>The inversion: in light mode a page turns over. Its bands and its footer exchange ground and ink with their dark form, Panel exchanging with Light Tint and Deep and The Isle Navy with The Isle Ivory, and the accent steps from The Isle Silver to Page Silver, so the light page is the dark page mirrored, not a different page. What is imagery does not invert. Page chrome always inverts.</li>
+    <li>Colour in proportion: the ground carries the page, with Panel and Deep as its steps in dark and Light Tint in light. Silver marks the page: it is reserved to structure, labels, eyebrows, rules, dots, the switch and its knob, the coastline of the chart and small marks of that kind; silver never fills a field or a panel and it is never a ground. The Isle Green and The Isle Gold appear only inside the artwork. A page that gives silver a field, or green or gold a surface, is out of proportion and is corrected.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="layout">
+  <h2 class="sx-h2"><span class="sx-num">3</span>Layout and spacing</h2>
+  <p class="sx-kicker">The settled measures</p>
+    <div class="sx-mrow"><span class="sx-mk">The index split</span><span class="sx-mv">46% / 54%</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Divider inset</span><span class="sx-mv">52px top and bottom</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Left panel padding</span><span class="sx-mv">52px 46px 30px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Right panel padding</span><span class="sx-mv">34px 50px 78px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Lockup width</span><span class="sx-mv">min(252px, 72%)</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Tagline gap</span><span class="sx-mv">26px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Report gap</span><span class="sx-mv">40px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Entries grid</span><span class="sx-mv">96px 1fr, gap 8px 22px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Entry padding</span><span class="sx-mv">30px 14px 28px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Entry numeral</span><span class="sx-mv">Playfair Display 500, 58px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Status rule</span><span class="sx-mv">26px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Report label column</span><span class="sx-mv">104px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Report lead</span><span class="sx-mv">Playfair Display 600, 22px</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Tagline rule</span><span class="sx-mv">56px by 1px, in the mode's silver, at .75 opacity</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Status dot</span><span class="sx-mv">5px, in the mode's silver, with a soft glow ring</span></div>
+    <div class="sx-mrow"><span class="sx-mk">Touch minimum</span><span class="sx-mv">44px on every control, the Apple standard</span></div>
+  <p>Nothing on any page requires sideways scrolling, at any width. On phones the panels stack in order, and the divider and the chart are hidden.</p>
+</section>
+
+<section class="sx-sec" id="switch">
+  <h2 class="sx-h2"><span class="sx-num">4</span>The switch</h2>
+  <p class="sx-kicker">One form everywhere, shown live</p>
+  <button type="button" class="switch" id="swSpec" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
+  <ul>
+    <li>A pill, 117px by 44px, fully rounded, on a Deep ground at 94 percent, with a 1px border of The Isle Silver at 55 percent, brightening to full The Isle Silver on hover.</li>
+    <li>A sun glyph stands at the left, 11px in, and a moon glyph at the right, both in The Isle Silver at 85 percent. Drawn small inside the pill, their stroke is 1.8, the one exception to the symbols' stroke of 2.</li>
+    <li>The knob is 54px by 32px, fully rounded, in The Isle Silver, carrying the glyph of the mode in use in Deep. It rests on the side of the mode in use and slides 51px to change, on a .25s ease.</li>
+    <li>The switch is a real switch, role="switch", with its checked state carried for assistive technology, and its focus outline is 2px in The Isle Silver.</li>
+    <li>The choice is remembered on the visitor's own device, in localStorage under the key isle-theme. A remembered choice stands over the system preference, and nothing is sent anywhere. Pages with a toggle open in dark mode; where a page remembers the visitor's choice, the remembered choice stands over the opening default.</li>
+    <li>Touch: every control stands at least 44px tall, the Apple standard, and the switch stands 44px tall.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="buttons">
+  <h2 class="sx-h2"><span class="sx-num">5</span>Buttons</h2>
+  <p class="sx-kicker">One form everywhere, in its two states</p>
+  <div class="sx-btnband">
+  <div class="sx-btnrow">
+    <figure class="sx-btnfig"><button type="button" class="btn on"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Read</button><figcaption>Primary, the on form, at rest</figcaption></figure>
+    <figure class="sx-btnfig"><button type="button" class="btn on sx-hover-on"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Read</button><figcaption>Primary, on hover</figcaption></figure>
+    <figure class="sx-btnfig"><button type="button" class="btn"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button><figcaption>Secondary, the off form, at rest</figcaption></figure>
+    <figure class="sx-btnfig"><button type="button" class="btn sx-hover-off"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button><figcaption>Secondary, on hover</figcaption></figure>
+  </div>
+  </div>
+  <ul>
+    <li>The form: sharp corners. Source Sans 3 at 14.5px, weight 700, letter-spacing .1em, the labels written in Title Case and set in capitals by the form, padding 14px by 22px, a 1px border and a 44px minimum height.</li>
+    <li>On: the button fills with The Isle Navy, its text The Isle Ivory, with a border of The Isle Silver in dark and The Isle Navy in light. On hover the fill lifts to Panel, the border unchanged.</li>
+    <li>Off: the button is transparent, with a border of The Isle Silver in dark and Page Silver in light, and its text in the mode's ink, The Isle Ivory in dark and The Isle Navy in light. On hover it fills with that silver, and its text turns to Deep in dark and The Isle Ivory in light.</li>
+    <li>Off and on are never carried by colour alone: the fill itself changes.</li>
+    <li>A button carries an icon only where the action has a true symbol of its own: the open book for reading, the tray arrow for a download. The icon stands at 17px before the words, with a 10px gap. Utility buttons carry no icon.</li>
+    <li>The assignment rule: the primary action on a page takes the on form, secondary actions take the off form, and utility actions stay text links, not buttons. Read is a button in the on form; Download is a button in the off form; Previous and Next are buttons in the off form; Full Size, Link to This Page, Tear Sheet and their kind are text links, and stay text.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="fields">
+  <h2 class="sx-h2"><span class="sx-num">6</span>Fields</h2>
+  <p class="sx-kicker">One form everywhere</p>
+  <div class="sx-fieldwrap">
+    <label class="t-label" for="sampleField">Field label</label>
+    <input class="field" id="sampleField" type="text" placeholder="Text stands here">
+  </div>
+  <ul>
+    <li>A field stands at least 44px tall, in Source Sans 3 at 17px, on Panel in dark and Light Tint in light, with a 1px border of The Isle Silver at 30 percent in dark and Page Silver at 38 percent in light, curved corners of 6px and padding 8px by 12px.</li>
+    <li>On focus the border brightens to the mode's silver and the field shows the 2px silver focus outline. A field's label is a label in the house form.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="links">
+  <h2 class="sx-h2"><span class="sx-num">7</span>Links</h2>
+  <p class="sx-kicker">Text links and the links inside text</p>
+  <p>A link inside text stands in silver, as <a class="t-link" href="#links">this link</a> stands in this sentence: The Isle Silver in dark and Page Silver in light, brightening on hover. It is never set in the body text colour, and never in a colour outside the seventeen.</p>
+  <p>A link that performs an action follows the assignment rule given with the buttons: an action with a button's weight takes a button's form, and a utility action stays a text link.</p>
+</section>
+
+<section class="sx-sec" id="symbols">
+  <h2 class="sx-h2"><span class="sx-num">8</span>Symbols</h2>
+  <p class="sx-kicker">The master symbol list, each at its button size</p>
+  <div class="sx-symgrid">
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg><p>Home</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><p>Back</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg><p>Menu</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><p>Close</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><p>Read</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><p>Download</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><p>Print</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><p>Play</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><p>Pause</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><p>Calendar</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><p>Map</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><p>Layers</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><p>Secure</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><p>Confirm</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>Warning</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>Information</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><p>Settings</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Share</p></div>
+      <div class="sx-sym"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg><p>Reset</p></div>
+  </div>
+  <ul>
+    <li>Symbols are drawn to one specification: on a 24 by 24 grid, with a stroke of 2, round caps and round joins, in the currentColor of their setting, and no fill, save where an established symbol is solid by nature. The switch's sun and moon are the one exception: drawn small inside the pill, their stroke is 1.8. Set in a button, a symbol stands at 17px.</li>
+    <li>A new action joins this list only when its symbol is genuinely established, and every symbol is drawn in the one line style, never an invented variant. Actions with no established symbol, Hide, Show, Continue, Apply and their kind, carry no icon.</li>
+    <li>Four symbols stand alone, replacing the words: Menu, Close, Search and Settings. A button carrying a symbol alone always keeps its name for assistive technology. Every other symbol stands beside its words.</li>
+    <li>State pairs: a control that changes state carries the symbol of the state it is in. Menu and Close are one pair, Play and Pause are a pair, the expand and collapse chevrons are a pair, and the switch's sun and moon are state glyphs of the same kind.</li>
+  </ul>
+  <p class="sx-subhead">Project Home</p>
+  <p>Project Home, the way back to The Build index, is a control with the home glyph alone, with no words. The control carries no border, no box and no background: the house glyph alone is the button. The glyph stands at 20px, and it keeps its name for assistive technology: Project Home.</p>
+  <figure class="sx-homefig"><button type="button" class="sx-homebtn" id="homeBtn" aria-label="Project Home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg></button></figure>
+</section>
+
+<section class="sx-sec" id="logo">
+  <h2 class="sx-h2"><span class="sx-num">9</span>The logo</h2>
+  <p class="sx-kicker">Its parts, its clear space and its minimum sizes</p>
+  <ul>
+    <li>The parts, named exactly: the logo is the island, the palm and the words together. The mark is the island and the palm, without the words. The palm alone is an element of the artwork, never the logo and never the mark. These names are used exactly, everywhere.</li>
+    <li>The anatomy of the mark, always: the crown is The Isle Green, the trunk is The Isle Gold, and the island, its waterline and the text follow the colourway. In colour artwork the island, the waterline and the text are The Isle Navy. In dark mode the island, the waterline and the text are The Isle Silver, and that does not change. The palm's green and gold never change.</li>
+    <li>The colourways are five: black, colour, silver, white, and silver with a colour tree. Colour is the form for light grounds. Silver with a colour tree is the dark mode form. Black and white are the single-colour forms, for print and reproduction where colour cannot go. Every colourway exists as a mark, a horizontal lockup and a vertical lockup, in PNG and vector, and copies for any use are issued from the masters in the master file set, never redrawn and never recoloured locally.</li>
+    <li>The mark is never redrawn, never recoloured outside the five colourways, never stretched, rotated, outlined or shadowed, and never placed on a ground that fights it.</li>
+  </ul>
+  <p class="sx-subhead">The mark standing alone</p>
+  <ul>
+    <li>The mark stands alone where the words are already given, or where they will not fit. Standing alone it carries the house in full: it is not a lesser form of the logo, and it is never set beside the words as a substitute for a lockup.</li>
+    <li>Standing alone, the mark takes the colourway its ground calls for, exactly as the logo does: the colour colourway on light grounds, silver with a colour tree on The Isle Navy and dark grounds, and black or white where a single colour is required.</li>
+    <li>The mark is never separated from its island, and the palm is never lifted out of it.</li>
+  </ul>
+  <p class="sx-subhead">The palm</p>
+  <ul>
+    <li>The palm's settled places are four: the artwork of the icon set; the seal, the palm centred above the name of the house; the profile picture off the site, whole and uncropped on white or The Isle Ivory; and the catalogue footer, where it flanks The Isle on both sides.</li>
+    <li>Two palms stand in the house's artwork and they are never interchanged: the windswept palm of the logo, which is the palm of the icon, the seal and the profile picture, and the Grand palm of the catalogue footer.</li>
+    <li>Beyond its settled places the palm is not decoration. In rare circumstances it may serve as an ornament; such a use is the exception, taken deliberately, and never becomes a habit or a motif.</li>
+    <li>The palm is never recoloured outside the colourways, never reversed, never cropped, and never redrawn.</li>
+  </ul>
+  <p class="sx-subhead">Off the site</p>
+  <ul>
+    <li>As a profile picture or avatar the mark stands in its colour colourway on white or The Isle Ivory, whole and uncropped, with its clear space.</li>
+    <li>As a seal it stands alone, in the colourway the ground calls for.</li>
+    <li>It is never set on a colour outside the seventeen.</li>
+  </ul>
+  <p class="sx-subhead">Clear space</p>
+  <ul>
+    <li>For a lockup: on all sides, three quarters of the height of the mark in the lockup, and nothing stands inside it.</li>
+    <li>For the mark standing alone: clear space of half the mark's own height on every side, and nothing enters it. The two measures, three quarters for the lockup and half for the mark, are not interchanged.</li>
+  </ul>
+  <p class="sx-subhead">Minimum sizes</p>
+  <ul>
+    <li>The horizontal lockup is never shown below 160px wide (40mm print).</li>
+    <li>The vertical lockup is never shown below 90px tall (22mm print).</li>
+    <li>The mark is never shown below 24px tall (6mm print). Below its minimum size the mark is not used; the icon serves at small sizes instead.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="naming">
+  <h2 class="sx-h2"><span class="sx-num">10</span>Naming</h2>
+  <p class="sx-kicker">How The Isle is named</p>
+  <ul>
+    <li>The house and the place are called The Isle, with a capital T, in every use, including mid sentence and the possessive, The Isle's.</li>
     <li>The street address never appears in anything created, presented, published or filed, including file names. Everything is just The Isle.</li>
     <li>Regalia is the builder's plan and model name. It appears only inside source documents, never as the home's name in anything presented, written or published.</li>
     <li>The Isle is a single residence, not a multi-structure facility, with unique named rooms, among them the Map Room, the Lanai, the Theater, the Studio and the Guest Suite.</li>
-    <li>The register: high end, elusive, exclusive, and at the same time barefoot luxury, down to earth and easy going. Nothing boasts and nothing sells. Quality is stated plainly and warmly; confidence comes through restraint and ease. The Isle is the ultimate destination, a cut above the rest, and says so by how it is made, not by claiming it.</li>
-    <li>The line of the house: "More than a place you come to, a place you stay." It is set in Playfair Display, italic, weight 500, wherever it stands, and its words are exact, never paraphrased.</li>
+    <li>Every colour is spoken and written under its full house name; a master colour's name is never shortened, in speech, in records or in code. The parts of the artwork are named exactly, as the logo section states them.</li>
+  </ul>
+</section>
+
+<section class="sx-sec" id="register">
+  <h2 class="sx-h2"><span class="sx-num">11</span>The register</h2>
+  <p class="sx-kicker">How The Isle speaks</p>
+  <p>The register: high end, elusive, exclusive, and at the same time barefoot luxury, down to earth and easy going. Nothing boasts and nothing sells. Quality is stated plainly and warmly; confidence comes through restraint and ease. The Isle is the ultimate destination, a cut above the rest, and says so by how it is made, not by claiming it. It is intentionally mysterious, complicated and robust, ultra in tropical luxury, and its complexity is embraced, never simplified away: stop trying to make it simple, it is complicated. The standard is luxury, refined elegance, the highest level for the most discerning guest.</p>
+  <ul>
+    <li>The line of the house: "More than a place you come to, a place you stay." It is set in Playfair Display, italic, weight 500, wherever it stands. The words of the house line are exact and are never paraphrased.</li>
     <li>Page titles: the splash is titled The Isle. Interior pages follow the form The Isle · &lt;Name&gt;: The Isle · The Build, The Isle · Reference Catalogues, The Isle · Secure. The 404 page carries Page Not Found · 1s1e.com.</li>
-    <li>Words in use: dates are written in full, "November 22, 2026", and times as "7:21 AM"; a date and a time are joined by the middot, the house separator. Labels are uppercase, letterspaced. Buttons and titles are in Title Case; body text and descriptions are in sentence case.</li>
-    <li>Units and numbers: measurements are feet and inches; elevations and levels are given to two decimal places; thousands are separated by commas; a figure and its unit are joined by a space.</li>
     <li>No em dashes, anywhere, in messages or in anything created.</li>
+    <li>Words in use: dates are written in full, "November 22, 2026", and times as "7:21 AM"; a date and a time are joined by the middot. The middot is the house separator, in page titles, in statuses and in label groups, and a status stands in the form OPEN · &lt;measure&gt;. Labels are uppercase, letterspaced. Buttons and titles are in Title Case; body text and descriptions are in sentence case.</li>
+    <li>Units and numbers: measurements are feet and inches; elevations and levels are given to two decimal places; thousands are separated by commas; a figure and its unit are joined by a space.</li>
   </ul>
-  <p class="subhead">In use</p>
+  <p class="sx-subhead">In use</p>
   <p>The register, shown. Three subjects, each set the house's way, and then the way the house never speaks.</p>
-  <div class="pair">
-    <p class="way">The house line, as the house speaks</p>
-    <p class="said">"More than a place you come to, a place you stay."</p>
-    <p class="way never">As it never speaks</p>
-    <p class="neversaid">"The ultimate luxury island escape. Book your unforgettable stay today!"</p>
-    <p class="fault">The wrong version boasts, sells and exclaims; the line itself claims nothing and sells nothing.</p>
+  <div class="sx-pair">
+    <p class="sx-way">The house line, as the house speaks</p>
+    <p class="sx-said">"More than a place you come to, a place you stay."</p>
+    <p class="sx-way sx-never">As it never speaks</p>
+    <p class="sx-neversaid">"The ultimate luxury island escape. Book your unforgettable stay today!"</p>
+    <p class="sx-fault">The wrong version boasts, sells and exclaims; the line itself claims nothing and sells nothing.</p>
   </div>
-  <div class="pair">
-    <p class="way">An entry, the 3D Model, as the house speaks</p>
-    <p class="said">"The house as a model: its form, rooms and grounds, turned and viewed from every side."</p>
-    <p class="way never">As it never speaks</p>
-    <p class="neversaid">"Everything about the house — every room and view, even the tide charts."</p>
-    <p class="fault">The wrong version sets an em dash, which never appears in the house's words; it is shown here once, as the fault itself. It also claims tide charts the page does not carry.</p>
+  <div class="sx-pair">
+    <p class="sx-way">An entry, the 3D Model, as the house speaks</p>
+    <p class="sx-said">"The house as a model: its form, rooms and grounds, turned and viewed from every side."</p>
+    <p class="sx-way sx-never">As it never speaks</p>
+    <p class="sx-neversaid">"Everything about the house [em dash] every room and view, even the tide charts."</p>
+    <p class="sx-fault">The wrong version sets an em dash, which never appears in the house's words; the dash is named here rather than set, and the fault is the same. It also claims tide charts the page does not carry.</p>
   </div>
-  <div class="pair">
-    <p class="way">The report, the Last Check, as the house speaks</p>
-    <p class="said">"November 22, 2026 · 7:21 AM. Documents: No new documents found. Action: Full check completed against the record. Nothing to publish."</p>
-    <p class="way never">As it never speaks</p>
-    <p class="neversaid">"Wonderful news! Every Regalia permit is approved and ready!"</p>
-    <p class="fault">The wrong version calls the home by the builder's plan name, exclaims, and claims an approval the record does not state.</p>
+  <div class="sx-pair">
+    <p class="sx-way">The report, the Last Check, as the house speaks</p>
+    <p class="sx-said">"November 22, 2026 · 7:21 AM. Documents: No new documents found. Action: Full check completed against the record. Nothing to publish."</p>
+    <p class="sx-way sx-never">As it never speaks</p>
+    <p class="sx-neversaid">"Wonderful news! Every Regalia permit is approved and ready!"</p>
+    <p class="sx-fault">The wrong version calls the home by the builder's plan name, exclaims, and claims an approval the record does not state.</p>
   </div>
 </section>
 
-<section id="colours">
-  <h2><span class="num">2</span>Colours</h2>
-  <p class="kicker">Seventeen in total · Every colour carries the house name</p>
-  <p>Seventeen colours in total: the five masters and twelve working steps. Every colour is spoken and written under its full house name; a master colour's name is never shortened, in speech, in records or in code. Each colour carries its CMYK build, for print.</p>
-  <div class="masters">
-    <div class="master"><div class="chip" style="background:#1d2a3b"></div><div class="name">The Isle Navy</div><div class="hex">#1D2A3B</div><div class="rgb">RGB 29 42 59</div><div class="cmyk">CMYK 51 29 0 77</div></div>
-    <div class="master"><div class="chip" style="background:#46936a"></div><div class="name">The Isle Green</div><div class="hex">#46936A</div><div class="rgb">RGB 70 147 106</div><div class="cmyk">CMYK 52 0 28 42</div></div>
-    <div class="master"><div class="chip" style="background:#c9ab72"></div><div class="name">The Isle Gold</div><div class="hex">#C9AB72</div><div class="rgb">RGB 201 171 114</div><div class="cmyk">CMYK 0 15 43 21</div></div>
-    <div class="master"><div class="chip" style="background:#C0C0C0"></div><div class="name">The Isle Silver</div><div class="hex">#C0C0C0</div><div class="rgb">RGB 192 192 192</div><div class="cmyk">CMYK 0 0 0 25</div></div>
-    <div class="master"><div class="chip" style="background:#f0e8d5"></div><div class="name">The Isle Ivory</div><div class="hex">#F0E8D5</div><div class="rgb">RGB 240 232 213</div><div class="cmyk">CMYK 0 3 11 6</div></div>
-  </div>
-  <p class="subhead">The Isle Navy, its steps</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#22344a"></span><span class="nm">Panel</span><span class="hx">#22344A</span><span class="ck">CMYK 54 30 0 71</span><span class="ds">Panels and cards on the navy ground, and the primary button's hover lift</span></div>
-    <div class="steprow"><span class="sw" style="background:#152130"></span><span class="nm">Deep</span><span class="hx">#152130</span><span class="ck">CMYK 56 31 0 81</span><span class="ds">The deepest tone: the gradient's fall, wells and frames, the switch's track</span></div>
-  </div>
-  <p class="subhead">Text steps on dark</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#d9d0ba"></span><span class="nm">Ivory Soft</span><span class="hx">#D9D0BA</span><span class="ck">CMYK 0 4 14 15</span><span class="ds">Secondary text on dark</span></div>
-    <div class="steprow"><span class="sw" style="background:#a89f88"></span><span class="nm">Ivory Dim</span><span class="hx">#A89F88</span><span class="ck">CMYK 0 5 19 34</span><span class="ds">Labels, captions and meta text on dark</span></div>
-  </div>
-  <p class="subhead">Gold in print</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#c2a15c"></span><span class="nm">Page Gold dark</span><span class="hx">#C2A15C</span><span class="ck">CMYK 0 17 53 24</span><span class="ds">Gold for print on dark grounds, and for the book's own form; on pages the accent is silver</span></div>
-    <div class="steprow"><span class="sw" style="background:#a07f3a"></span><span class="nm">Page Gold light</span><span class="hx">#A07F3A</span><span class="ck">CMYK 0 21 64 37</span><span class="ds">Gold for print on light grounds; on pages the accent on light grounds is Page Silver</span></div>
-  </div>
-  <p class="subhead">Silver for light</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#686868"></span><span class="nm">Page Silver</span><span class="hx">#686868</span><span class="ck">CMYK 0 0 0 59</span><span class="ds">The Isle Silver's page step for light grounds, 4.57 to 1 on The Isle Ivory; the accent on light grounds</span></div>
-  </div>
-  <p class="subhead">Light grounds and their ink</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#f3eee0"></span><span class="nm">Light Tint</span><span class="hx">#F3EEE0</span><span class="ck">CMYK 0 2 8 5</span><span class="ds">Tinted panels on light, and the field's ground on light</span></div>
-    <div class="steprow"><span class="sw" style="background:#3c4763"></span><span class="nm">Soft Ink</span><span class="hx">#3C4763</span><span class="ck">CMYK 39 28 0 61</span><span class="ds">Secondary text on light, and the chart's curves on light</span></div>
-    <div class="steprow"><span class="sw" style="background:#767c8d"></span><span class="nm">Dim Ink</span><span class="hx">#767C8D</span><span class="ck">CMYK 16 12 0 45</span><span class="ds">Labels and meta text on light, at large sizes; small secondary text on light takes Soft Ink</span></div>
-  </div>
-  <p class="subhead">The splash</p>
-  <div class="steps">
-    <div class="steprow"><span class="sw" style="background:#dfe2e6"></span><span class="nm">Poster Mat</span><span class="hx">#DFE2E6</span><span class="ck">CMYK 3 2 0 10</span><span class="ds">The mat inside the poster frame</span></div>
-    <div class="steprow"><span class="sw" style="background:#93a7c9"></span><span class="nm">Terra</span><span class="hx">#93A7C9</span><span class="ck">CMYK 27 17 0 21</span><span class="ds">The splash's quiet secondary tone</span></div>
-  </div>
-  <ul style="margin-top:26px">
-    <li>Text stands in its settled pairings: The Isle Ivory and Ivory Soft on The Isle Navy, Panel and Deep; The Isle Navy and Soft Ink on The Isle Ivory and Light Tint. Accent text is The Isle Silver in dark and Page Silver in light. The Isle Gold lives in the artwork only, the palm trunk, the catalogue covers' own lettering and the posters; it is never a page accent.</li>
-    <li>Text pairings meet a contrast floor: 4.5 to 1 for body text, 3 to 1 for large text. Dim Ink on The Isle Ivory (3.4 to 1) is a large text pairing only: in light mode, small secondary text, labels and meta text take Soft Ink, and Dim Ink stands at large sizes only. Page Silver on The Isle Ivory (4.57 to 1) meets the body floor, and every dark pairing in use passes the body floor. The floors govern text and the borders that define a control. The settled hairline borders, silver at low alpha dividing and edging the panels, are decorative and stand outside the floor.</li>
-    <li>Colour in proportion: the ground carries the page. Silver marks the page: The Isle Silver in dark and Page Silver in light are reserved to structure, labels, eyebrows, rules, dots, the switch and its knob, the coastline of the chart and small marks of that kind; silver never fills a field or a panel and it is never a ground. The Isle Green and The Isle Gold appear only inside the artwork.</li>
-    <li>The ground rule: in each mode, the theme colour, the body ground and the page gradient's first and last stops are the one ground colour, The Isle Navy in dark and The Isle Ivory in light, checked along the page's whole length.</li>
-    <li>The inversion: in light mode a page turns over. Its bands and its footer exchange ground and ink with their dark form, Panel exchanging with Light Tint and Deep and The Isle Navy with The Isle Ivory, and the accent steps from The Isle Silver to Page Silver, so the light page is the dark page mirrored, not a different page. What is imagery does not invert: a photograph, a rendered stage, a specimen shown on its dark ground. Page chrome always inverts.</li>
-    <li>Colour misuse is shown, not only stated: Plate B of the book shows The Isle Gold filling a field, The Isle Green used as a surface, a colour outside the seventeen set as a ground, and body text set in Dim Ink on The Isle Ivory, below the contrast floor.</li>
-  </ul>
-  <p>The full swatch sheet, every colour on one page: <a href="files/the-isle-colour-swatches.png">PNG</a> · <a href="files/The-Isle-Colour-Swatches.pdf">PDF</a>. The palette as files: <a href="files/the-isle-palette.ase">Adobe Swatch Exchange</a> · <a href="files/the-isle-palette.gpl">GIMP palette</a> · <a href="files/the-isle-tokens.json">Design tokens, JSON</a>.</p>
-</section>
-
-<section id="icon">
-  <h2><span class="num">3</span>Icon</h2>
-  <p class="kicker">The windswept palm, on The Isle Navy, on every page</p>
-  <p>Every page on the site carries the full favicon set, without exception: favicon.ico, PNG icons at 512, 48, 32 and 16, the apple touch icon at 180 by 180, the mask icon coloured The Isle Navy, and the theme-color meta, which follows the mode, The Isle Navy in dark and The Isle Ivory in light. A page that carries the web app manifest links site.webmanifest as well. The artwork is the windswept palm, crown The Isle Green, trunk The Isle Gold, on a ground of The Isle Navy; the ground is part of the icon.</p>
-  <div class="iconpanel">
-    <figure class="iconfig"><img src="/assets/favicon.png" width="150" height="150" alt="The icon at 512"><figcaption>512, shown at 150</figcaption></figure>
-    <figure class="iconfig"><img src="/assets/apple-touch-icon.png" width="90" height="90" alt="The apple touch icon at 180"><figcaption>180, shown at 90</figcaption></figure>
-    <figure class="iconfig"><img src="/assets/favicon-48.png" width="48" height="48" alt="The icon at 48"><figcaption>48, true size</figcaption></figure>
-    <figure class="iconfig"><img src="/assets/favicon-32.png" width="32" height="32" alt="The icon at 32"><figcaption>32, true size</figcaption></figure>
-    <figure class="iconfig"><img src="/assets/favicon-16.png" width="16" height="16" alt="The icon at 16"><figcaption>16, true size</figcaption></figure>
-  </div>
-  <p>On the 512 icon the artwork is 299 by 230, at position 105, 141. The other sizes keep their measured geometry: 240 by 184 at 135, 164 on the maskable, 113 by 87 at 39, 53 at 192, 105 by 81 at 37, 50 on the apple touch icon, 89 by 68 at 30, 41 on the tile, 29 by 22 at 9, 13 at 48, 19 by 16 at 6, 8 at 32, and 9 by 8 at 3, 4 at 16. favicon.png and icon-512.png are byte identical, and so are the two apple touch icons. The ICO contains 16, 32 and 48.</p>
-</section>
-
-<section id="logo">
-  <h2><span class="num">4</span>Logo and the artwork</h2>
-  <p class="kicker">Five colourways · The artwork itself, never redrawn</p>
-  <p>The parts, named exactly: the logo is the island, the palm and the words together. The mark is the island and the palm, without the words. The palm alone is an element of the artwork, never the logo and never the mark. The anatomy never changes: the crown is The Isle Green, the trunk is The Isle Gold, and the island, its waterline and the text follow the colourway. In dark mode the island and the text are The Isle Silver, and that stays. In the colour artwork for light grounds, the island and the text are The Isle Navy.</p>
-  <div class="logopanel ivory"><img src="assets/the-isle-horizontal-colour.png" alt="The Isle lockup in colour"></div>
-  <p class="cap"><b>Colour, for light grounds.</b> Crown The Isle Green, trunk The Isle Gold, island and text The Isle Navy.</p>
-  <div class="logopanel navy"><img src="assets/the-isle-horizontal-silver-colourtree.png" alt="The Isle lockup in silver with a colour tree"></div>
-  <p class="cap"><b>Silver with a colour tree, the dark mode form.</b> The island and the text are The Isle Silver; the tree keeps its colours.</p>
-  <div class="logopanel navy"><img src="assets/the-isle-horizontal-silver.png" alt="The Isle lockup in silver"></div>
-  <p class="cap"><b>Silver.</b> The whole lockup in The Isle Silver.</p>
-  <div class="logopanel ivory"><img src="assets/the-isle-horizontal-black.png" alt="The Isle lockup in black"></div>
-  <p class="cap"><b>Black.</b> For print and single colour work.</p>
-  <div class="logopanel navy"><img src="assets/the-isle-horizontal-white.png" alt="The Isle lockup in white"></div>
-  <p class="cap"><b>White.</b> For reversal out of dark grounds and photographs.</p>
+<section class="sx-sec" id="correspondence">
+  <h2 class="sx-h2"><span class="sx-num">12</span>Correspondence</h2>
+  <p class="sx-kicker">The closings</p>
   <ul>
-    <li>The wordmarks are Playfair Display, weight 500, held as master artwork, never set as live page text and never redrawn. Copies for a site or for print are issued from the master file set, never recoloured locally.</li>
-    <li>The mark is never redrawn, never recoloured outside the five colourways, never stretched, rotated, outlined or shadowed, and never placed on a ground that fights it. Logo misuse is shown, not only stated: Plate A of the book shows the lockup stretched, squashed, recoloured outside the colourways, set on a ground that fights it and tilted, and the palm lifted out and set alone as if it were the logo.</li>
-    <li>Clear space: on all sides of a lockup, three quarters of the height of the mark in the lockup. Standing alone, the mark keeps clear space of half its own height. The two measures are not interchanged.</li>
-    <li>Minimum sizes: the horizontal lockup never below 160px wide on screen or 40mm in print; the vertical lockup never below 90px tall or 22mm; the mark never below 24px tall or 6mm. Below the mark's minimum, the icon serves instead.</li>
-    <li>The mark stands alone where the words are already given, or where they will not fit. The palm stands only in its settled places: the icon, the seal, the profile picture, whole and uncropped on white or The Isle Ivory, and the catalogue footer, flanking The Isle on both sides. Beyond them it is not decoration; in rare circumstances it may serve as an ornament, taken deliberately, never as a habit or a motif.</li>
-  </ul>
-</section>
-
-<section id="type">
-  <h2><span class="num">5</span>Type</h2>
-  <p class="kicker">Two faces · Six roles · At their true sizes</p>
-  <p>Two faces only, everywhere on 1s1e.com: Playfair Display for display, headings and serif lines; Source Sans 3 for body, labels and small text. Text pages load the faces once, with the guide's canonical line. The splash loads Playfair Display 500 only, for its fallback text. The fallback stacks are Georgia, Times New Roman, serif, and Avenir Next, Segoe UI, sans-serif.</p>
-  <div class="role"><div class="t-display">The Isle</div><div class="what">DISPLAY · Playfair Display 500 · 64px</div></div>
-  <div class="role"><div class="t-serif-line">More than a place you come to, a place you stay.</div><div class="what">SERIF LINE · Playfair Display 500 italic · 19px</div></div>
-  <div class="role"><div class="t-heading">Furniture</div><div class="what">HEADING · Playfair Display 500 · 34px</div></div>
-  <div class="role"><div class="t-body">The complete record of the home, in three volumes and a companion appendix. Furniture and decor are recorded piece by piece, each one photographed, measured and described on its own page.</div><div class="what">BODY · Source Sans 3 400 · 17px · line height 1.65</div></div>
-  <div class="role"><div class="t-label">The Last Check · Open · 18 Layers</div><div class="what">LABEL · Source Sans 3 600 · 11px · letterspacing .34em</div></div>
-  <div class="role"><div class="t-small">1s1e.com · The Isle</div><div class="what">SMALL · Source Sans 3 400 · 10.5px · letterspacing .26em</div></div>
-  <ul style="margin-top:24px">
-    <li>Page measures, as patterns: the tagline is the serif line at clamp(19px, 2vw, 23px); report headings are labels in bright silver with the silver dot; entry titles are Playfair Display 600 at clamp(28px, 3vw, 36px); entry and report body text is 16.5px at line height 1.5 to 1.55; row labels are 10px labels at letterspacing .24em.</li>
-    <li>Catalogue measures, as patterns: the catalogue's line is Playfair Display at clamp(17px, 3vw, 23px), letterspacing .52em, uppercase; its hero wordmark is set at clamp(54px, 9vw, 88px); its volume headings sit at clamp(36px, 5vw, 50px).</li>
-    <li>All fonts, sizing, spacing and weights match across the whole group. A page does not keep a private typography. Cormorant Garamond and Jost are retired from the group.</li>
-  </ul>
-</section>
-
-<section id="spacing">
-  <h2><span class="num">6</span>Spacing and layout</h2>
-  <p class="kicker">The measures of the settled compositions</p>
-  <div class="splitfig">
-    <div class="cell"><div class="big">46</div><p>The left panel of the index: the lockup, the tagline, the report. Padding 52, 46, 30.</p></div>
-    <div class="cell"><div class="big">54</div><p>The right panel: the entries. Padding 34, 50, 78. One hairline divides the two, inset 52px from top and bottom.</p></div>
-  </div>
-  <ul>
-    <li>The index composition is a split, two columns at 46 and 54 fractions, no outer frame, the page edge to edge. On phones the panels stack in order, and the divider and the chart are hidden.</li>
-    <li>The lockup sits atop the left panel, width min(252px, 72%). The tagline stands 26px below it, then the tagline rule, 56px by 1px, in silver at .75 opacity. The report begins 40px below. The left panel's foot carries 1s1e.com and the mode toggle.</li>
-    <li>Entries: a grid of a 96px numeral column and the text, gap 8px by 22px, padding 30px, 14px, 28px. The numeral is Playfair Display 500 at 58px. The status line under each entry is a 10.5px label preceded by a 26px silver rule.</li>
-    <li>The splash: a full viewport column, no scrolling. Masthead 112px, 78px on short screens, 100px on narrow, 74px on both. The wordmark is artwork, its set width 7.1652em; below it a short centred silver rule, clamp(140px, 28vw, 240px). The frame's mat is Poster Mat, its padding clamp(10px, 3vmin, 28px); the poster viewport is aspect 2 to 3, crossfading at 1.2 seconds, six seconds each, always starting on the first poster. All ten posters are preloaded after the first.</li>
-    <li>The catalogue manner: a hero band in The Isle Navy with a 3px silver top border, a centred ornament and the title in large serif; a footer on Deep, centred, the palm flanking The Isle on both sides, the imprint M &amp; D Silver in spaced silver capitals, a thin silver line, then small text. In light mode the band and the footer invert with the page: the band stands on The Isle Ivory easing to Light Tint with the wordmark in its navy artwork, and the footer stands on Light Tint with the lockup in its colour artwork. The footer palm is the Grand palm, not the windswept palm.</li>
-    <li>Nothing on any page requires sideways scrolling, at any width.</li>
-  </ul>
-</section>
-
-<section id="chart">
-  <h2><span class="num">7</span>Chart</h2>
-  <p class="kicker">Soundings in fathoms · A fragment of an engraved chart</p>
-  <div class="platebox"><svg viewBox="0 0 640 400" role="img" aria-label="The chart plate: a shore with soundings taken along survey lines">
-      <text class="platecap" x="30" y="42">SOUNDINGS IN FATHOMS</text>
-      <path class="curve drift-a" d="M -10 186 C 60 162 110 138 170 142 C 230 146 260 182 320 188 C 380 194 420 162 480 158 C 540 154 600 172 650 166"/>
-      <path class="curve drift-b" d="M -10 240 C 60 216 110 192 170 196 C 230 200 260 236 320 242 C 380 248 420 216 480 212 C 540 208 600 226 650 220"/>
-      <path class="curve drift-c" d="M -10 294 C 60 270 110 246 170 250 C 230 254 260 290 320 296 C 380 302 420 270 480 266 C 540 262 600 280 650 274"/>
-      <path class="shore" d="M-10 132 C 60 108, 110 84, 170 88 C 230 92, 260 128, 320 134 C 380 140, 420 108, 480 104 C 540 100, 600 118, 650 112"/>
-      <path class="shore2" d="M -10 140 C 60 116 110 92 170 96 C 230 100 260 136 320 142 C 380 148 420 116 480 112 C 540 108 600 126 650 120"/>
-      <g class="pulse-a"><text class="fig" x="118" y="172">2</text><text class="fig" x="298" y="168">3</text><text class="fig" x="468" y="140">2</text><text class="fig" x="580" y="146">4</text></g>
-      <g class="pulse-b"><text class="fig" x="126" y="226">5</text><text class="fig" x="306" y="222">7</text><text class="fig" x="476" y="196">6</text><text class="fig" x="588" y="196">9</text></g>
-      <g class="pulse-c"><text class="fig" x="112" y="282">11</text><text class="fig" x="294" y="272">14</text><text class="fig" x="470" y="246">13</text><text class="fig" x="584" y="300">17</text></g>
-      <g class="pulse-a"><text class="fig" x="122" y="336">19</text><text class="fig" x="302" y="330">23</text><text class="fig" x="478" y="330">22</text></g>
-      <text class="platei" x="610" y="372" text-anchor="end">PLATE I</text>
-    </svg></div>
-  <ul>
-    <li>The chart is the house's signature graphic, drawn to one plate, viewBox 640 by 400. It is set in its own block in open ground, never behind text. One coastline, a fine double shore line in silver, entering and leaving the edges in the upper third, with a point and a bay, the land above it empty. No anchor, no hachures, no headlands, no names or labels. The plate carries no frame and no compass rose.</li>
-    <li>Three depth curves follow the shore as true parallel offsets, at +54, +108 and +162 units, dotted, in ivory. The soundings are taken along four survey lines run off the shore, deepening along each line in small steps: 2, 5, 11 and 19 down the first line, 3, 7, 14 and 23 down the second, 2, 6, 13 and 22 down the third, 4, 9 and 17 down the last, every figure clear of the curves. Sounding figures are Playfair Display, italic, 500, 13px.</li>
-    <li>Motion is gentle and always on the water only: the depth curves drift on staggered cycles of 13, 17 and 21 seconds, the soundings pulse on 10, 14 and 18 seconds, the coastline never moves. Under reduced motion the chart is still. Sound follows the same discipline: nothing sounds uninvited, and sound and music stand off by default.</li>
-  </ul>
-</section>
-
-<section id="report">
-  <h2><span class="num">8</span>Report and the entries</h2>
-  <p class="kicker">The settled forms, as they stand on the index</p>
-  <p>A status report is set in two headed groups. It rests on one universal check of the whole record, no matter how many records there ultimately are for the address. Each heading is a label in bright silver, preceded by the silver dot, a 5px circle with a soft glow ring. The lead line is Playfair Display 600 at 22px, a date and a time. Rows are label and value pairs on a 104px label column.</p>
-  <div class="reportpanel">
-    <div class="rp-head"><span class="rp-dot"></span>The Last Check</div>
-    <div class="rp-lead">November 22, 2026 · 7:21 AM</div>
-    <div class="rp-row"><span class="k">Documents</span><span>No new documents found</span></div>
-    <div class="rp-row"><span class="k">Action</span><span>Full check completed against the record. Nothing to publish.</span></div>
-    <div class="rp-div"></div>
-    <div class="rp-head"><span class="rp-dot"></span>What Happens Next</div>
-    <div class="rp-row" style="margin-top:14px"><span class="k">Next Check</span><span>A full check of the whole record, run automatically.</span></div>
-  </div>
-  <p>An index entry carries a large pale numeral, a silver eyebrow label, a Playfair title, the exact description, and a quiet status line in the form OPEN plus its measure, and the whole block is the link. The two entries, as settled:</p>
-  <div class="entrypanel">
-    <div class="entry">
-      <div class="numeral">01</div>
-      <div>
-        <div class="eyebrow">The Record</div>
-        <div class="etitle">Permits &amp; Documents</div>
-        <div class="edesc">The county permit record for the house: documents, inspections and reviews, kept current.</div>
-        <div class="estatus">Open · 20 Documents</div>
-      </div>
-    </div>
-    <div class="entry">
-      <div class="numeral">02</div>
-      <div>
-        <div class="eyebrow">The Form</div>
-        <div class="etitle">3D Model</div>
-        <div class="edesc">The house as a model: its form, rooms and grounds, turned and viewed from every side.</div>
-        <div class="estatus">Open · The Whole House</div>
-      </div>
-    </div>
-  </div>
-  <p>Records are set in rows: a full width table with a hairline under the header and under each row, header labels at 10px, letterspaced and uppercase, cells padded 8px by 10px, and figures right aligned in tabular numerals. A record's identifier is copied exactly and never shortened.</p>
-</section>
-
-<section id="rules">
-  <h2><span class="num">9</span>Rules for creating anything</h2>
-  <p class="kicker">How things are created, and what is required of them</p>
-  <p class="subhead">How things are created:</p>
-  <ul>
-    <li>This guide governs everything created for The Isle, without exception. A value, a name or a practice that is not in this guide is not settled, and anything that departs from it is drift, to be corrected.</li>
-    <li>No page hard-codes anything: everything created for the site takes its styling from the one master style sheet, published at /assets/the-isle-master.css, and links it as published. The master carries the whole site's styling, the shared layer and every page's own rules together, each page's rules scoped to that page inside the master. A page carries none of the values as its own copy: not the colour variables, not the font stacks or the type roles, not the switch, the button and field forms, and not the link colours.</li>
-    <li>An exception is never written into a page: where a section must depart from the master, the exception lives in that section's own folder, as that folder's style sheet, layered on the master, and the sheet holds only the exception, nothing else. A folder sheet is never a section's styling layer: the section's ordinary styling stands in the master, scoped to its pages, and the master itself is unchanged by an exception. The 404's font stack is the standing example.</li>
-    <li>Images follow the same rule: one version of each image, at one address, and every page that uses it references that copy, so an image is updated in one place and the update is universal. An image specific to a section lives in that section's folder.</li>
-    <li>One approved sample precedes any full round of creative work. Samples are true samples, built from the real pages and their real style sheet, shown in every state the decision turns on, in both modes, at full quality. Alternatives differ in composition, organisation and visual world, never in cover imagery alone.</li>
-    <li>No substitutions without asking: an image, a file, a product, a design element or wording the user chose or supplied is never replaced without asking.</li>
-    <li>Corrections propagate everywhere the old value appears, and each is verified in place. A file that has been presented is never silently overwritten: a changed version is reissued under a fresh version name.</li>
-    <li>Publishing is by git over SSH from the local clones, never by browser upload, and a publish is verified the Bear LP way: the served source fetched directly and hash compared, a nonexistent path fetched for the served 404, and a dashboard hit treated as final proof where a dashboard exists. Deletions are enumerated first and removed in one commit. Nothing is published, sent or deleted without the user's approval of the specific item.</li>
-  </ul>
-  <p class="subhead">What is required of anything created:</p>
-  <ul>
-    <li>Every page carries the full favicon set, the master colours and the master type only. A page does not keep private colours or a private typography.</li>
-    <li>Both modes are always built and always checked. Nothing requires sideways scrolling, at any width.</li>
-    <li>Every file created is audited against its source and this guide, fixed, and re-audited in full, repeating until one complete pass finds zero defects. Layout is verified in the rendered result, at the size the user will see it, and every page is checked at phone width, at iPad portrait and landscape, and at desktop width, in the engine the user actually uses.</li>
-    <li>Anything created is stripped of metadata. Where an author field is required it reads MDS. Nothing created carries any credit, attribution or other reference to its making.</li>
-    <li>Every interactive element shows a visible focus, and every image carries alt text.</li>
-  </ul>
-</section>
-
-<section id="references">
-  <h2><span class="num">10</span>References</h2>
-  <p class="kicker">Precedents, sources of truth, and the documents</p>
-  <p>Precedents, researched November 2026, for the private site's guest experience: the Four Seasons Residences app and the Four Seasons app itinerary and chat; Aman; Six Senses; Belmond; Cheval Blanc Randheli; Waldorf Astoria Residences; and the great private islands, North Island, COMO Laucala and Necker Island. The recognition principle: at this level there are no points and no tiers; the guest is known.</p>
-  <p>Sources of truth, in order: this guide; the master file set and its MANIFEST.md; the live pages at 1s1e.com; the local publishing clone. The master documents are kept to endure, at fixed names, one canonical copy in each master file set, updated in place as things change; their history is kept separately, in CHANGELOG.md, never inside the documents themselves. This guide changes only on the user's word.</p>
-  <p class="subhead">Documents and print</p>
-  <ul>
-    <li>A document follows the book's own format: US Letter, margins of 56pt at the sides and the foot and 44pt at the top, no running head, and a running foot of one line in the label form naming the document "THE ISLE · &lt;TITLE&gt;" at the left of the column, the folio at the right. Covers stand on The Isle Navy, with the mark in its silver with colour tree colourway.</li>
-    <li>A PDF carries MDS as its author of record, with producer and creator blank. In print, the seventeen are built as CMYK from the tabulated builds in section 2 and proofed against the master values on the stock in use. The Isle Gold and The Isle Silver print as flat colour, never as metallic foil.</li>
-    <li>The catalogue PDFs are finished print documents with their own settled interior design. The site presents them; the site palette does not govern their contents.</li>
-  </ul>
-  <p class="subhead">Correspondence</p>
-  <ul>
-    <li>A personal closing takes one of two forms: The Isle with M &amp; D Silver beneath it, the imprint form, or The Isle alone.</li>
+    <li>A personal closing takes one of two forms, both allowed: The Isle with M &amp; D Silver beneath it, the imprint form, or The Isle alone.</li>
     <li>House email, from the house's own address, is signed The Isle Staff: one line, in Title Case, standing as the whole closing.</li>
   </ul>
-  <p class="subhead">Imagery</p>
+</section>
+
+<section class="sx-sec" id="print">
+  <h2 class="sx-h2"><span class="sx-num">13</span>Print</h2>
+  <p class="sx-kicker">Documents and print standards</p>
   <ul>
-    <li>The house is shown in its own photography, photographed as it stands, in full colour and untreated in character. Where the subject is inspiration rather than the house, curated photographs from resorts and hotels around the world may be used, captioned as what they are. Artwork leads where artwork is the subject, as the posters lead the splash.</li>
-    <li>No stock imagery, and no image of another house is ever presented as The Isle. Image files for pages are issued from the masters at the size they will be shown: photographs as JPEG or WebP, flat artwork as PNG or WebP, each stripped of metadata.</li>
+    <li>A document follows this format: US Letter, margins of 56pt at the sides and the foot and 44pt at the top, no running head, and a running foot of one line in the label form naming the document "THE ISLE · &lt;TITLE&gt;" at the left of the column, the folio at the right.</li>
+    <li>Covers stand on The Isle Navy, with the mark in its silver with colour tree colourway.</li>
+    <li>A PDF carries MDS as its author of record, with producer and creator blank. Documents are issued at fixed names from the master file set.</li>
+    <li>In print, the mark stands in its black or colour colourway, on ivory or white stock. The catalogue PDFs are the standing example of finished print documents.</li>
+    <li>In print, the seventeen are built as CMYK from the tabulated builds in the colours section and proofed against the master values on the stock in use. The Isle Gold and The Isle Silver print as flat colour, never as metallic foil.</li>
+    <li>Gold in print takes the Page Golds: Page Gold dark on dark grounds and Page Gold light on light grounds. On pages the accent is silver, never the Page Golds.</li>
+    <li>The print minimums stand with the logo: the horizontal lockup never below 40mm wide, the vertical lockup never below 22mm tall, the mark never below 6mm tall.</li>
   </ul>
 </section>
 
-<section id="technical">
-  <h2><span class="num">11</span>Technical standards</h2>
-  <p class="kicker">How the site stands</p>
+<section class="sx-sec" id="manner">
+  <h2 class="sx-h2"><span class="sx-num">14</span>Motion, sound and imagery</h2>
+  <p class="sx-kicker">How a page moves, sounds and shows</p>
   <ul>
-    <li>The site is GitHub Pages, repository 1s1e/1s1e.github.io, branch main, published by git over SSH with the repository's dedicated key.</li>
-    <li>The master style sheet is published at /assets/the-isle-master.css, byte identical to the copy in the master file set, and every page on the site links it. Where a section departs from the master, its exception is kept in that section's own folder, as that folder's style sheet, holding only the exception, layered on the published master. Every other rule for every page stands in the published master itself, scoped to its page.</li>
-    <li>Each image stands at one address and is referenced from there by every page that uses it, so an update to an image is made once and lands everywhere. An image specific to a section is kept in that section's folder.</li>
-    <li>Visitor counting is GoatCounter, one counter per website; this site's counter is 1s1e, reported only on new activity, with the visits' locations. A page that counts by hand loads its tracker without counting, and counts each view once.</li>
-    <li>robots.txt allows the landing page and its /assets/ only.</li>
-    <li>Locked pages are encrypted with AES-256-GCM, the key derived by PBKDF2-SHA256 at 250,000 iterations, decrypted in the visitor's browser by Web Crypto. Passwords are never published, filed or recorded. A locked page shows only its heading, the password field and the Open button; a wrong password is answered with one sentence only: "That password does not open this page." The secure zone is titled The Isle · Secure and headed Secure Test Zone.</li>
-    <li>Pages with a toggle open in dark mode, and the toggle switches the whole page. The one exception: where a page remembers the visitor's choice, the remembered choice stands over the opening default, and otherwise their system preference is followed. Both modes are always built and always checked.</li>
-    <li>The ground rule of section 2 is a check on every page: in each mode the theme colour, the body ground and the page gradient's first and last stops are the one ground colour, and the page is checked along its whole length, at the foot as well as the top.</li>
+    <li>Motion everywhere follows one manner: gentle, slow and ambient. Fades run about a second; the poster crossfade is 1.2 seconds. Control transitions are short, a .25 second ease. Ambient cycles run from 10 to 21 seconds. Nothing that carries information moves. Hover brightens and never shifts the layout. Under reduced motion everything is still, and that is always honoured.</li>
+    <li>Sound follows the same discipline as motion: nothing sounds uninvited. Sound and music stand off by default, are offered deliberately, and a choice is remembered on the visitor's own device only.</li>
+    <li>The house is shown in its own photography, photographed as it stands, in full colour and untreated in character.</li>
+    <li>Where the subject is inspiration rather than the house, curated photographs from resorts and hotels around the world may be used, captioned as what they are.</li>
+    <li>Artwork leads where artwork is the subject, as the posters lead the splash.</li>
+    <li>No stock imagery, and no image of another house is ever presented as The Isle.</li>
+    <li>Image files for pages are issued from the masters at the size they will be shown, never enlarged beyond their master: photographs as JPEG or WebP, flat artwork as PNG or WebP, each stripped of metadata.</li>
   </ul>
 </section>
 
-<section id="switchbuttons">
-  <h2><span class="num">12</span>Switch and the buttons</h2>
-  <p class="kicker">One switch, one button, everywhere</p>
-  <p>The switch at the head of this page is the settled form itself, drawn from the master style sheet: a pill, 117 by 44px, on a Deep ground at 94 percent, with a 1px border of The Isle Silver at 55 percent, brightening to full The Isle Silver on hover. Its knob, 54 by 32px in The Isle Silver, carries the glyph of the mode in use in Deep, rests on the side of that mode, and slides 51px to change, on a .25 second ease. The choice is remembered on the visitor's own device, in localStorage under the key isle-theme.</p>
-  <div class="btnrow">
-    <button class="btn on" type="button">Read</button>
-    <button class="btn" type="button">Download</button>
-    <input class="field" type="text" placeholder="A form field" aria-label="A form field, shown as a specimen">
-  </div>
-  <ul>
-    <li>Touch: every control stands at least 44px tall, the Apple standard. The switch stands 44px tall, and the button carries a 44px minimum height.</li>
-    <li>The button is one form everywhere, the form the Reference Catalogues carried: sharp corners, Source Sans 3 at 14.5px, weight 700, letter-spacing 0.1em, the labels written in Title Case and set in capitals by the form, padding 14px by 22px, a 1px border and a 44px minimum height. Off, it is transparent with a border of The Isle Silver in dark and Page Silver in light, its text in the mode's ink; on hover it fills with that silver and its text turns to Deep in dark and The Isle Ivory in light. On, it fills with The Isle Navy, its text The Isle Ivory, its border The Isle Silver in dark and The Isle Navy in light; on hover the fill lifts to Panel, the border unchanged.</li>
-    <li>Form fields are one form everywhere: at least 44px tall, Source Sans 3 at 17px, on Panel in dark and Light Tint in light, a 1px border of The Isle Silver at 30 percent in dark and Page Silver at 38 percent in light, corners of 6px, padding 8px by 12px, and on focus the border brightens to the mode's silver with the 2px silver focus outline.</li>
-    <li>A button carries an icon only where the action has a true symbol of its own: the open book for reading, the tray arrow for a download, at 17px before the words with a 10px gap. Symbols are drawn to one specification: on a 24 by 24 grid, with a stroke of 2, round caps and round joins, in the currentColor of their setting, and no fill, save where an established symbol is solid by nature. The switch's sun and moon are the one exception: drawn small inside the pill, their stroke is 1.8.</li>
-    <li>Four symbols stand alone, replacing the words: Menu, Close, Search and Settings, each keeping its name for assistive technology. Project Home, the way back to The Build index, is a control with the home glyph alone, at 20px, with no words. A control that changes state carries the symbol of the state it is in: Menu and Close, Play and Pause, and the switch's sun and moon are pairs of that kind.</li>
-    <li>The assignment rule: the primary action on a page takes the on form, secondary actions take the off form, and utility actions stay text links, not buttons. Read is a button in the on form; Download, Previous and Next, the Reader's Download PDF and Try Again are buttons in the off form; Full Size, Link to This Page, Copy Link and Hide are text links, and stay text. A link inside text stands in silver, The Isle Silver in dark and Page Silver in light, and brightens on hover.</li>
-  </ul>
+<section class="sx-sec" id="materials">
+  <h2 class="sx-h2"><span class="sx-num">15</span>The building materials</h2>
+  <p class="sx-kicker">The sheet, the tokens and the palettes</p>
+  <p>No page hard-codes anything: everything created for the site takes its styling from the one master style sheet, published at /assets/the-isle-master.css, and links it as published. A page carries none of the values as its own copy: not the colour variables, not the font stacks or the type roles, and not the switch, the button and field forms. Where a section must depart from the master, the exception lives in that section's own folder, as that folder's only style sheet, holding only the exception. Images follow the same rule: one version of each image, at one address, referenced by every page that uses it.</p>
+  <p>The building materials themselves, as downloads, each issued from the master file set.</p>
+    <div class="sx-dlrow"><a href="/style/assets/the-isle-master.css">the-isle-master.css</a><span>The master style sheet</span></div>
+    <div class="sx-dlrow"><a href="/style/assets/the-isle-tokens.json">the-isle-tokens.json</a><span>The design tokens</span></div>
+    <div class="sx-dlrow"><a href="/style/assets/the-isle-palette.ase">the-isle-palette.ase</a><span>The palette, ASE</span></div>
+    <div class="sx-dlrow"><a href="/style/assets/the-isle-palette.gpl">the-isle-palette.gpl</a><span>The palette, GPL</span></div>
+    <div class="sx-dlrow"><a href="/style/assets/The-Isle-Colour-Swatches.pdf">The-Isle-Colour-Swatches.pdf</a><span>The swatch sheet</span></div>
 </section>
 
-<section id="documents">
-  <h2><span class="num">13</span>The documents</h2>
-  <p class="kicker">The guide and its files, to open in the browser</p>
-  <p>Everything in the master, as files. Each name opens the file itself.</p>
-  <div class="docrow"><a href="files/THE-ISLE-STYLE-GUIDE.md">The Style Guide, source</a><span class="kind">Markdown</span><span class="size">40.3 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-master.css">The style sheet</a><span class="kind">CSS</span><span class="size">120.3 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-tokens.json">Design tokens</a><span class="kind">JSON</span><span class="size">7.1 KB</span></div>
-  <div class="docrow"><a href="files/The-Isle-Colour-Swatches.pdf">The swatch sheet</a><span class="kind">PDF</span><span class="size">38.6 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-colour-swatches.png">The swatch sheet</a><span class="kind">PNG</span><span class="size">197.4 KB</span></div>
-  <div class="docrow"><a href="files/the-isle-palette.ase">The palette</a><span class="kind">Adobe Swatch Exchange</span><span class="size">846 B</span></div>
-  <div class="docrow"><a href="files/the-isle-palette.gpl">The palette</a><span class="kind">GIMP palette</span><span class="size">426 B</span></div>
-  <div class="docrow"><a href="files/CHANGELOG.md">The change log</a><span class="kind">Markdown · kept separate, by design</span><span class="size">39.2 KB</span></div>
-</section>
-
-<footer>
-  <img src="/assets/the-isle-tree.png" alt="The windswept palm">
-  <div class="fname">The Isle · Style Guide</div>
+<footer class="sx-foot">
+  <hr class="rule-soft">
+  <p class="t-small" style="margin-top:22px">The Isle · Style · 1s1e.com</p>
 </footer>
 </div>
 <script>
 (function(){
   var root = document.documentElement;
-  var lockup = document.getElementById('lockup');
-  var sw = document.getElementById('themeSwitch');
   var meta = document.querySelector('meta[name="theme-color"]');
-  sw.addEventListener('click', function(){
-    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    sw.setAttribute('data-mode', next);
-    sw.setAttribute('aria-checked', next === 'dark' ? 'true' : 'false');
-    sw.setAttribute('aria-label', next === 'dark' ? 'Dark mode' : 'Light mode');
-    meta.setAttribute('content', next === 'dark' ? '#1d2a3b' : '#f0e8d5');
-    lockup.src = next === 'dark' ? 'assets/the-isle-horizontal-silver-colourtree.png' : 'assets/the-isle-horizontal-colour.png';
+  var DARK = "#1d2a3b", LIGHT = "#f0e8d5";
+  function apply(mode, store){
+    root.setAttribute('data-theme', mode);
+    document.querySelectorAll('.switch').forEach(function(sw){
+      sw.setAttribute('data-mode', mode);
+      sw.setAttribute('aria-checked', mode === 'dark' ? 'true' : 'false');
+      sw.setAttribute('aria-label', mode === 'dark' ? 'Dark mode' : 'Light mode');
+    });
+    meta.setAttribute('content', mode === 'dark' ? DARK : LIGHT);
+    if (store) { try { localStorage.setItem('isle-theme', mode); } catch (e) {} }
+  }
+  var start = 'dark';
+  try { var s = localStorage.getItem('isle-theme'); if (s === 'light' || s === 'dark') start = s; } catch (e) {}
+  apply(start, false);
+  document.querySelectorAll('.switch').forEach(function(sw){
+    sw.addEventListener('click', function(){
+      apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+    });
   });
+  var home = document.getElementById('homeBtn');
+  if (home) home.addEventListener('click', function(){ window.scrollTo({top: 0, behavior: 'smooth'}); });
 })();
 </script>
 </body>

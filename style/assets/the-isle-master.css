@@ -2,7 +2,7 @@
    The single source for every colour, face, size and space on 1s1e.com.
    Anything created for The Isle starts from this sheet. Values here are
    copied from the live pages they govern; a value that is not in this
-   sheet is not a master value. The companion document is THE-ISLE-STYLE-GUIDE.md.
+   sheet is not a master value. The companion is the Style page, at /style/.
    This sheet is the site's only style sheet: every page's rules stand
    here, in the page blocks at the foot, each scoped to its page by the
    pg- name on that page's html element at unchanged specificity. A
@@ -71,7 +71,7 @@
   --ivory:#1d2a3b;
   --ivory-soft:#3c4763;
   --ivory-dim:#767c8d;
-  /* Small secondary text: Soft Ink on light, Ivory Dim on dark (guide section 2) */
+  /* Small secondary text: Soft Ink on light, Ivory Dim on dark (the Style page, Colours) */
   --dim-sm:#3c4763;
   /* The accent on light: Page Silver, silver's step */
   --gold:#686868;
@@ -711,7 +711,7 @@ html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; 
 :where(html.pg-permits) .chip.open { color: var(--gold); border-color: var(--gold); }
 :where(html.pg-permits) table.conds .chip { margin-left: 0; }
 :where(html.pg-permits) .unlinked { padding: 22px 0 4px 0; font-size: 13.5px; line-height: 1.55; color: var(--ivory-soft); }
-/* In-text links (guide section 12) take the master sheet's .t-link,
+/* In-text links (the Style page, Links) take the master sheet's .t-link,
      carried on the element itself; the underline is the browser's own. */
 :where(html.pg-permits) footer { text-align: center; padding: 26px 0 34px 0; }
 :where(html.pg-permits) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); opacity: 0.75; }
@@ -1459,129 +1459,81 @@ html:where(.pg-secure) { --silver:#C0C0C0; }
 html:where(.pg-secure)[data-theme="light"] body { color:#1d2a3b; }
 html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 
-/* ---------- The style guide page, /style/ ---------- */
-:where(html.pg-style) .wrap {max-width:1060px;margin:0 auto;padding:0 34px}
-:where(html.pg-style) body {font-size:17px;line-height:1.65;-webkit-text-size-adjust:100%}
-:where(html.pg-style) header {position:relative;text-align:center;padding:64px 0 8px}
-:where(html.pg-style) header img.lockup {width:min(430px,84%);height:auto}
-:where(html.pg-style) header .switch {position:absolute;top:26px;right:0}
-:where(html.pg-style) .tagline {font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(19px,2vw,23px);margin:26px 0 0}
-:where(html.pg-style) .grule {width:56px;height:1px;background:var(--gold);opacity:.75;margin:20px auto 0}
-:where(html.pg-style) .kicker {font-size:10.5px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--gold);text-align:center;max-width:none}
-:where(html.pg-style) header .kicker {margin-top:22px}
-:where(html.pg-style) nav.contents {display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;border-top:1px solid var(--gold-line-soft);border-bottom:1px solid var(--gold-line-soft);padding:16px 0;margin-top:38px}
-:where(html.pg-style) nav.contents a {color:var(--ivory-soft);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
-:where(html.pg-style) nav.contents a:hover {color:var(--gold)}
-:where(html.pg-style) section {padding:52px 0 8px;border-bottom:1px solid var(--gold-line-soft)}
-:where(html.pg-style) section:last-of-type {border-bottom:none}
-:where(html.pg-style) h2 {font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.2;margin:0 0 10px}
-:where(html.pg-style) h2 .num {font-style:italic;color:var(--gold);font-size:22px;margin-right:12px}
-:where(html.pg-style) section .kicker {text-align:left;margin:0 0 26px}
-:where(html.pg-style) p {max-width:72ch}
-:where(html.pg-style) ul {max-width:72ch;padding-left:20px}
-:where(html.pg-style) li {margin-bottom:12px}
-:where(html.pg-style) a {color:var(--gold)}
-:where(html.pg-style) a:hover {color:var(--gold-bright)}
-/* The switch's knob glyph: the master sheet draws the pill and the knob;
-   the glyph of the mode in use stands inside the knob, in Deep. */
-:where(html.pg-style) .switch .knob-glyph {position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#152130}
-:where(html.pg-style) .switch[data-mode="dark"] .knob-glyph.k-moon {display:flex}
-:where(html.pg-style) .switch[data-mode="light"] .knob-glyph.k-sun {display:flex}
-/* Section 1: the voice, in use */
-:where(html.pg-style) .pair {border:1px solid var(--gold-line-soft);padding:20px 22px;margin:14px 0;max-width:72ch}
-:where(html.pg-style) .pair .way {font-size:10px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}
-:where(html.pg-style) .pair .said {font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.45;margin:0}
-:where(html.pg-style) .pair .never {margin:16px 0 0}
-:where(html.pg-style) .pair .neversaid {margin:0;color:var(--ivory-soft)}
-:where(html.pg-style) .pair .fault {margin:10px 0 0;font-size:15px;color:var(--dim-sm)}
-/* Section 2: the colours */
-:where(html.pg-style) .masters {display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin:26px 0 8px}
-:where(html.pg-style) .chip {height:104px;border:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .master .name {font-weight:600;margin-top:12px}
-:where(html.pg-style) .master .hex, :where(html.pg-style) .master .rgb, :where(html.pg-style) .master .cmyk {font-size:13.5px;color:var(--ivory-soft);white-space:nowrap}
-:where(html.pg-style) .steps {margin-top:6px}
-:where(html.pg-style) .steprow {display:grid;grid-template-columns:34px 172px 104px 158px 1fr;column-gap:18px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .steprow .sw {width:30px;height:16px;align-self:center;border:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .steprow .nm {font-weight:600;white-space:nowrap}
-:where(html.pg-style) .steprow .hx {color:var(--ivory-soft);white-space:nowrap;font-size:15px}
-:where(html.pg-style) .steprow .ck {color:var(--ivory-soft);white-space:nowrap;font-size:15px}
-:where(html.pg-style) .steprow .ds {color:var(--ivory-soft)}
-:where(html.pg-style) .subhead {font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--gold);margin:34px 0 6px}
-/* Sections 3 and 4: fixed panels, Deep in both modes, as the artwork
-   and the icon are always shown on their own grounds */
-:where(html.pg-style) .iconpanel {background:#152130;padding:38px 30px 26px;display:flex;align-items:flex-end;gap:44px;flex-wrap:wrap;margin:24px 0}
-:where(html.pg-style) .iconfig {margin:0;text-align:center}
-:where(html.pg-style) .iconfig img {display:block;margin:0 auto}
-:where(html.pg-style) .iconfig figcaption {font-size:12.5px;color:#a89f88;margin-top:12px}
-:where(html.pg-style) .logopanel {padding:44px 30px;text-align:center;margin-bottom:14px}
-:where(html.pg-style) .logopanel img {width:min(560px,88%);height:auto}
-:where(html.pg-style) .logopanel.ivory {background:#f0e8d5}
-:where(html.pg-style) .logopanel.navy {background:#1d2a3b}
-:where(html.pg-style) .cap {color:var(--ivory-soft);max-width:72ch;margin:0 0 34px}
-:where(html.pg-style) .cap b {color:var(--ivory)}
-/* Section 5: the type roles are the master sheet's own classes;
-   this is only the frame each specimen stands in */
-:where(html.pg-style) .role {padding:20px 0;border-bottom:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .role .what {font-size:12.5px;color:var(--dim-sm);letter-spacing:.08em;margin-top:8px}
-/* Section 6: the split figure */
-:where(html.pg-style) .splitfig {display:grid;grid-template-columns:46fr 54fr;border:1px solid var(--gold-line);margin:24px 0}
-:where(html.pg-style) .splitfig .cell {padding:24px 26px}
-:where(html.pg-style) .splitfig .cell:first-child {background:var(--panel);border-right:1px solid var(--gold-line)}
-:where(html.pg-style) .splitfig .big {font-family:var(--serif);font-weight:500;font-size:40px}
-:where(html.pg-style) .splitfig p {color:var(--ivory-soft);margin:8px 0 0}
-/* Section 7: the plate stands on Deep in both modes, and its text
-   carries the plate's own colours as colour as well as fill, so the
-   mode's ink never reaches into the plate */
-:where(html.pg-style) .platebox {background:#152130;padding:30px 26px 18px;margin:24px 0}
-:where(html.pg-style) .platebox svg {width:100%;height:auto;display:block}
-:where(html.pg-style) .platebox .shore {stroke:#C0C0C0;stroke-width:1.6;fill:none}
-:where(html.pg-style) .platebox .shore2 {stroke:#C0C0C0;stroke-width:.8;fill:none;opacity:.75}
-:where(html.pg-style) .platebox .curve {stroke:#f0e8d5;stroke-width:1;fill:none;stroke-dasharray:1.5 5;opacity:.8}
-:where(html.pg-style) .platebox .fig {fill:#f0e8d5;color:#f0e8d5;font-family:var(--serif);font-style:italic;font-weight:500;font-size:13px}
-:where(html.pg-style) .platebox .platecap {fill:#C0C0C0;color:#C0C0C0;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.34em}
-:where(html.pg-style) .platebox .platei {fill:#C0C0C0;color:#C0C0C0;font-family:var(--serif);font-weight:600;font-size:10.5px;letter-spacing:.30em}
-/* Section 8: the report and entry specimens stand on Deep in both modes */
-:where(html.pg-style) .reportpanel {background:#152130;color:#f0e8d5;padding:30px 32px;margin:24px 0}
-:where(html.pg-style) .rp-head {font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#C0C0C0;display:flex;align-items:center;gap:10px}
-:where(html.pg-style) .rp-dot {width:5px;height:5px;border-radius:50%;background:#C0C0C0;box-shadow:0 0 0 3px rgba(192,192,192,.18);flex:none}
-:where(html.pg-style) .rp-lead {font-family:var(--serif);font-weight:600;font-size:22px;margin:14px 0 16px}
-:where(html.pg-style) .rp-row {display:grid;grid-template-columns:104px 1fr;column-gap:18px;align-items:baseline;margin-bottom:10px}
-:where(html.pg-style) .rp-row .k {font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#a89f88}
-:where(html.pg-style) .rp-div {border-top:1px solid rgba(192,192,192,.16);margin:20px 0}
-:where(html.pg-style) .entrypanel {background:#152130;color:#f0e8d5;padding:30px 32px;margin:24px 0}
-:where(html.pg-style) .entry {display:grid;grid-template-columns:96px 1fr;column-gap:22px;padding:22px 0;border-bottom:1px solid rgba(192,192,192,.16)}
-:where(html.pg-style) .entry:first-child {padding-top:0}
-:where(html.pg-style) .entry:last-child {padding-bottom:0;border-bottom:none}
-:where(html.pg-style) .entry .numeral {font-family:var(--serif);font-weight:500;font-size:58px;line-height:1;color:rgba(240,232,213,.14)}
-:where(html.pg-style) .entry .eyebrow {font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#C0C0C0}
-:where(html.pg-style) .entry .etitle {font-family:var(--serif);font-weight:600;font-size:30px;margin:6px 0 8px}
-:where(html.pg-style) .entry .edesc {font-size:16.5px;line-height:1.55;color:#d9d0ba;max-width:56ch}
-:where(html.pg-style) .entry .estatus {display:flex;align-items:center;gap:12px;margin-top:16px;font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#a89f88}
-:where(html.pg-style) .entry .estatus::before {content:"";width:26px;height:1px;background:#C0C0C0}
-/* Section 12: specimens of the button and the field, in the master forms */
-:where(html.pg-style) .btnrow {display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
-/* Section 13: the documents */
-:where(html.pg-style) .docrow {display:grid;grid-template-columns:minmax(220px,300px) 1fr 84px;column-gap:20px;max-width:860px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .docrow a {font-weight:600}
-:where(html.pg-style) .docrow .kind {color:var(--ivory-soft)}
-:where(html.pg-style) .docrow .size {color:var(--ivory-soft);text-align:right;white-space:nowrap}
-:where(html.pg-style) footer {text-align:center;padding:56px 0 64px}
-:where(html.pg-style) footer img {width:56px;height:auto}
-:where(html.pg-style) footer .fname {font-size:10.5px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:var(--ivory-soft);margin-top:14px}
+/* ---------- The Style page, /style/ ---------- */
+/* The Style page's own rules, scoped to the page. The specimens
+   themselves are the master sheet's shared classes and carry no
+   local styling. */
+:where(html.pg-style) .sx-wrap { max-width:1060px; margin:0 auto; padding:0 34px; }
+:where(html.pg-style) .sx-head { position:relative; text-align:center; padding:64px 0 8px; }
+:where(html.pg-style) .sx-head .switch { position:absolute; top:26px; right:0; }
+:where(html.pg-style) .sx-eyebrow { color:var(--gold); margin:0 0 18px; }
+:where(html.pg-style) .sx-title { margin:0; }
+:where(html.pg-style) .sx-tagline { margin:26px 0 0; }
+:where(html.pg-style) .sx-grule { width:56px; height:1px; background:var(--gold); opacity:.75; margin:20px auto 0; }
+:where(html.pg-style) .sx-intro { max-width:72ch; margin:22px auto 0; color:var(--ivory-soft); }
+:where(html.pg-style) .sx-nav { display:flex; flex-wrap:wrap; gap:10px 26px; justify-content:center; border-top:1px solid var(--gold-line-soft); border-bottom:1px solid var(--gold-line-soft); padding:16px 0; margin-top:38px; }
+:where(html.pg-style) .sx-nav a { color:var(--ivory-soft); text-decoration:none; font-size:11px; font-weight:600; letter-spacing:.24em; text-transform:uppercase; }
+:where(html.pg-style) .sx-nav a:hover { color:var(--gold); }
+:where(html.pg-style) .sx-sec { padding:52px 0 10px; border-bottom:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-sec:last-of-type { border-bottom:none; }
+:where(html.pg-style) .sx-h2 { font-family:var(--serif); font-weight:500; font-size:34px; line-height:1.2; margin:0 0 10px; }
+:where(html.pg-style) .sx-h2 .sx-num { font-style:italic; color:var(--gold); font-size:22px; margin-right:12px; }
+:where(html.pg-style) .sx-kicker { font-size:10.5px; font-weight:600; letter-spacing:.30em; text-transform:uppercase; color:var(--gold); margin:0 0 26px; }
+:where(html.pg-style) .sx-subhead { font-size:11px; font-weight:600; letter-spacing:.30em; text-transform:uppercase; color:var(--gold); margin:34px 0 6px; }
+:where(html.pg-style) .sx-sec p { max-width:72ch; }
+:where(html.pg-style) .sx-sec ul { max-width:72ch; padding-left:20px; }
+:where(html.pg-style) .sx-sec li { margin-bottom:12px; }
+:where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; }
+:where(html.pg-style) .sx-role { padding:20px 0; border-bottom:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-role:last-child { border-bottom:none; }
+:where(html.pg-style) .sx-masters { display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin:26px 0 8px; }
+:where(html.pg-style) .sx-chip { height:104px; border:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-cname { font-weight:600; margin:12px 0 0; }
+:where(html.pg-style) .sx-cval { font-size:13.5px; color:var(--ivory-soft); margin:0; white-space:nowrap; }
+:where(html.pg-style) .sx-crole { font-size:13.5px; color:var(--ivory-soft); margin:6px 0 0; }
+:where(html.pg-style) .sx-steprow { display:grid; grid-template-columns:34px 190px 96px 1fr; column-gap:18px; align-items:baseline; padding:11px 0; border-bottom:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-steprow .sx-sw { width:30px; height:16px; align-self:center; border:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-steprow .sx-nm { font-weight:600; white-space:nowrap; }
+:where(html.pg-style) .sx-steprow .sx-hx { color:var(--ivory-soft); white-space:nowrap; font-size:15px; }
+:where(html.pg-style) .sx-steprow .sx-ck { color:var(--ivory-soft); white-space:nowrap; font-size:15px; }
+:where(html.pg-style) .sx-steprow .sx-ds { color:var(--ivory-soft); grid-column:2 / -1; }
+:where(html.pg-style) .sx-mrow { display:grid; grid-template-columns:250px 1fr; column-gap:18px; padding:10px 0; border-bottom:1px solid var(--gold-line-soft); align-items:baseline; }
+:where(html.pg-style) .sx-mk { font-size:11px; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:var(--ivory-soft); }
+:where(html.pg-style) .sx-mv { font-size:16px; }
+:where(html.pg-style) .sx-btnband { background:var(--raise); padding:28px 30px 22px; margin:22px 0 6px; }
+:where(html.pg-style) .sx-btnrow { display:flex; flex-wrap:wrap; gap:26px; }
+:where(html.pg-style) .sx-btnfig { margin:0; }
+:where(html.pg-style) .sx-btnfig figcaption { font-size:13.5px; color:var(--ivory-soft); margin-top:10px; }
+:where(html.pg-style) .sx-hover-off { background:var(--gold-bright); color:#152130; }
+:where(html[data-theme="light"].pg-style) .sx-hover-off { color:#f0e8d5; }
+:where(html.pg-style) .sx-hover-on { background:#22344a; color:#f0e8d5; }
+:where(html.pg-style) .sx-fieldwrap { max-width:420px; margin:22px 0 6px; }
+:where(html.pg-style) .sx-fieldwrap label { display:block; margin-bottom:10px; }
+:where(html.pg-style) .sx-fieldwrap .field { width:100%; }
+:where(html.pg-style) .sx-symgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin:24px 0 8px; }
+:where(html.pg-style) .sx-sym { border:1px solid var(--gold-line-soft); padding:18px 10px 12px; text-align:center; color:var(--ivory); }
+:where(html.pg-style) .sx-sym p { margin:10px 0 0; font-size:12.5px; color:var(--ivory-soft); }
+:where(html.pg-style) .sx-homefig { margin:22px 0 6px; }
+:where(html.pg-style) .sx-homebtn { background:none; border:0; padding:12px; margin:-12px; cursor:pointer; color:var(--ivory); }
+:where(html.pg-style) .sx-homebtn:hover { color:var(--gold); }
+:where(html.pg-style) .sx-pair { border:1px solid var(--gold-line-soft); padding:20px 22px; margin:14px 0; max-width:72ch; }
+:where(html.pg-style) .sx-pair .sx-way { font-size:10px; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); margin:0 0 8px; }
+:where(html.pg-style) .sx-pair .sx-said { font-family:var(--serif); font-weight:500; font-size:19px; line-height:1.45; margin:0; }
+:where(html.pg-style) .sx-pair .sx-never { margin:16px 0 0; }
+:where(html.pg-style) .sx-pair .sx-neversaid { margin:0; color:var(--ivory-soft); max-width:none; }
+:where(html.pg-style) .sx-pair .sx-fault { margin:10px 0 0; font-size:15px; color:var(--dim-sm); max-width:none; }
+:where(html.pg-style) .sx-dlrow { display:flex; gap:18px; align-items:baseline; padding:11px 0; border-bottom:1px solid var(--gold-line-soft); }
+:where(html.pg-style) .sx-dlrow a { color:var(--gold); text-decoration:none; font-weight:600; white-space:nowrap; }
+:where(html.pg-style) .sx-dlrow a:hover { color:var(--gold-bright); }
+:where(html.pg-style) .sx-dlrow span { color:var(--ivory-soft); }
+:where(html.pg-style) .sx-foot { padding:36px 0 46px; text-align:center; }
+:where(html.pg-style) .sx-foot p { color:var(--ivory-soft); margin:0; }
 @media (max-width:760px) {
-  :where(html.pg-style) .wrap {padding:0 20px}
-  :where(html.pg-style) header {padding-top:34px}
-  :where(html.pg-style) header .switch {position:static;margin:0 auto 18px}
-  :where(html.pg-style) .masters {grid-template-columns:repeat(2,1fr)}
-  :where(html.pg-style) .steprow {grid-template-columns:34px 1fr 96px}
-  :where(html.pg-style) .steprow .ck {grid-column:2}
-  :where(html.pg-style) .steprow .ds {grid-column:2 / 4}
-  :where(html.pg-style) .docrow {grid-template-columns:1fr 84px}
-  :where(html.pg-style) .docrow .kind {grid-column:1 / 2}
-  :where(html.pg-style) .entry {grid-template-columns:64px 1fr}
-  :where(html.pg-style) .entry .numeral {font-size:40px}
-  :where(html.pg-style) .splitfig {grid-template-columns:1fr}
-  :where(html.pg-style) .splitfig .cell:first-child {border-right:none;border-bottom:1px solid var(--gold-line)}
+  :where(html.pg-style) .sx-masters { grid-template-columns:repeat(2,1fr); }
+  :where(html.pg-style) .sx-symgrid { grid-template-columns:repeat(4,1fr); }
+  :where(html.pg-style) .sx-steprow { grid-template-columns:34px 1fr 96px; }
+  :where(html.pg-style) .sx-steprow .sx-ck { display:none; }
+  :where(html.pg-style) .sx-mrow { grid-template-columns:1fr; row-gap:4px; }
 }
 
 /* ---------- 3D Model, /build/3d/, the viewer's base ---------- */
@@ -2112,3 +2064,133 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) #pane-layers .oprange::-moz-range-track { height: 4px; background: var(--gold); }
 :where(html.pg-3d) #pane-layers .oprange::-moz-range-thumb { width: 16px; height: 16px; background: var(--gold); border: none; border-radius: 0; }
 :where(html.pg-3d) #pane-layers .pct { font-size: 12px; color: var(--dim-sm); width: 36px; flex: none; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Pages, /pages/ ----------
+   This sheet is the pg-pages block exactly as it will stand in
+   the master style sheet at publish: every rule scoped to its
+   page by :where(html.pg-pages), at unchanged specificity, after
+   the shared layer. At publish the block lifts into
+   the-isle-master.css unchanged and the page links the master
+   alone. Values are the settled ones: the single column and
+   header of Permits & Documents, the entry form of The Build. */
+
+:where(html.pg-pages) body { transition: background 0.4s ease, color 0.4s ease; }
+:where(html.pg-pages) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+:where(html.pg-pages) header { padding: 8svh 0 0 0; text-align: center; }
+:where(html.pg-pages) .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+:where(html.pg-pages) h1 { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: 0.02em; margin: 12px 0 0 0; }
+:where(html.pg-pages) .line { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ivory-soft); margin: 16px auto 0 auto; max-width: 56ch; }
+:where(html.pg-pages) .rule { border-top: 1px solid var(--gold-line); margin: 34px 0 0 0; }
+:where(html.pg-pages) .group { margin-top: 44px; }
+:where(html.pg-pages) .group-head {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .34em;
+  color: var(--gold-bright);
+  display: flex; align-items: center; gap: 10px;
+}
+:where(html.pg-pages) .entries { margin-top: 10px; }
+:where(html.pg-pages) .entries > * + * { border-top: 1px solid var(--gold-line-soft); }
+:where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 8px 22px;
+  padding: 30px 14px 28px;
+  text-decoration: none;
+  position: relative;
+  transition: background .35s ease;
+}
+:where(html.pg-pages) .entry-parent { display: block; padding: 0; }
+:where(html.pg-pages) .entry:hover, :where(html.pg-pages) .entry:focus-visible,
+:where(html.pg-pages) .entry-main:hover, :where(html.pg-pages) .entry-main:focus-visible { background: var(--entry-hover); }
+:where(html.pg-pages) .entry:focus-visible, :where(html.pg-pages) .entry-main:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
+:where(html.pg-pages) .num {
+  grid-row: 1 / span 4;
+  font-family: var(--serif);
+  font-size: 58px; line-height: .95; font-weight: 500;
+  color: var(--num-c);
+  font-variant-numeric: lining-nums;
+  padding-top: 2px;
+  transition: color .35s ease;
+}
+:where(html.pg-pages) .entry:hover .num, :where(html.pg-pages) .entry-main:hover .num { color: var(--num-h); }
+:where(html.pg-pages) .eyebrow {
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: .32em;
+  color: var(--gold-bright);
+  margin: 2px 0 0;
+}
+:where(html.pg-pages) .entry h3, :where(html.pg-pages) .entry-main h3 {
+  margin: 7px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 600; line-height: 1.08;
+  color: var(--ivory);
+}
+:where(html.pg-pages) .desc {
+  margin: 9px 0 0;
+  font-family: var(--sans);
+  font-size: 16.5px; line-height: 1.55; font-weight: 400;
+  color: var(--ivory-soft);
+  max-width: 60ch;
+}
+:where(html.pg-pages) .entry .addr, :where(html.pg-pages) .entry-main .addr {
+  margin: 15px 0 0;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
+  color: var(--dim-sm);
+}
+:where(html.pg-pages) .entry .addr::before, :where(html.pg-pages) .entry-main .addr::before {
+  content: ""; width: 26px; height: 1px; background: var(--gold); flex: none;
+}
+:where(html.pg-pages) .records { margin: 2px 0 10px 118px; }
+:where(html.pg-pages) .record {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--gold-line-soft);
+  padding: 18px 14px 16px 0;
+  transition: background .35s ease;
+}
+:where(html.pg-pages) .record:hover, :where(html.pg-pages) .record:focus-visible { background: var(--entry-hover); }
+:where(html.pg-pages) .record:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
+:where(html.pg-pages) .record .eye { display: block; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+:where(html.pg-pages) .record b {
+  display: block;
+  font-family: var(--serif);
+  font-size: 21px; font-weight: 600;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
+}
+:where(html.pg-pages) .record:hover b, :where(html.pg-pages) .record:focus-visible b { color: var(--gold); }
+:where(html.pg-pages) .record .d { display: block; font-size: 13.5px; line-height: 1.6; color: var(--ivory-soft); margin-top: 6px; }
+:where(html.pg-pages) .record .addr {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
+  color: var(--dim-sm);
+}
+:where(html.pg-pages) footer {
+  margin-top: 52px;
+  display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; row-gap: 8px;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 400; letter-spacing: .26em;
+  color: var(--dim-sm);
+  white-space: nowrap;
+}
+:where(html.pg-pages) footer .site { color: var(--ivory-soft); }
+:where(html.pg-pages) .switch { cursor: pointer; flex: none; }
+@media (max-width: 760px) {
+  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main { grid-template-columns: 64px 1fr; padding: 24px 6px 22px; }
+  :where(html.pg-pages) .num { font-size: 40px; }
+  :where(html.pg-pages) .records { margin-left: 86px; }
+  :where(html.pg-pages) footer { flex-wrap: wrap; white-space: normal; row-gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main, :where(html.pg-pages) .record { transition: none; }
+}
