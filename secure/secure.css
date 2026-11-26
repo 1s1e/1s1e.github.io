@@ -18,3 +18,15 @@ label { display:block; color:var(--ivory-dim); margin-bottom:12px; }
 input { width:100%; text-align:center; }
 .box .btn { width:100%; margin-top:14px; }
 .err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }
+
+/* Light mode inverts the lock screen by the same exchange as the
+   master sheet: the ground (var(--field)) and the field (Panel to
+   Light Tint) already exchange through the master tokens, the
+   label and error text already exchange through --ivory-dim and
+   --ivory-soft, and the button through the master's .btn. What
+   stands here is only this sheet's own silver ink: in light mode
+   the wordmark and box text take The Isle Navy, and the rule
+   takes the light mode accent, the master's --gold token, which
+   computes to the silver grey of the light palette. */
+[data-theme="light"] body { color:#1d2a3b; }
+[data-theme="light"] .rule { background:var(--gold); }
