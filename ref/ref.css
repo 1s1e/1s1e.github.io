@@ -183,6 +183,14 @@
          the label at The Isle Silver on the navy band, is not needed
          once the band inverts and is replaced by this rule. */
       :root[data-theme="light"] .hero-dl .btn { color: #6e6e6e; }
+      /* On hover the master sheet fills the button with the accent and
+         sets The Isle Ivory as its label, but the label rule above
+         outranks the master sheet's hover colour, which would leave
+         the light step standing on its own fill. The mirrored form
+         therefore states the master sheet's light hover pairing
+         itself: the accent fill, which the master sheet supplies,
+         with The Isle Ivory text. */
+      :root[data-theme="light"] .hero-dl .btn:hover, :root[data-theme="light"] .hero-dl .btn:focus-visible { color: #f0e8d5; }
 
       /* ---------- volume sections ---------- */
       .vol { padding: 76px 20px 84px; }
@@ -425,7 +433,7 @@
          governs only the grounds that turn ivory. */
       :root[data-theme="light"] .reader-topbar { border-bottom-color: #C0C0C0; }
       :root[data-theme="light"] .back-link { color: #C0C0C0; }
-      :root[data-theme="light"] .back-link:hover, :root[data-theme="light"] .back-link:focus-visible { background: #C0C0C0; }
+      :root[data-theme="light"] .back-link:hover, :root[data-theme="light"] .back-link:focus-visible { background: #C0C0C0; color: #152130; }
       :root[data-theme="light"] .reader-brand span { color: #C0C0C0; }
       :root[data-theme="light"] .reader-topbar-vol span { color: #C0C0C0; }
       :root[data-theme="light"] .fullsize-bar { border-bottom-color: #C0C0C0; }
