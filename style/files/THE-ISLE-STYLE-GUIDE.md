@@ -118,9 +118,9 @@ colour's name is never shortened, in speech, in records or in code.
 
 ### Silver for light
 
-- Page Silver #6e6e6e, RGB 110 110 110, CMYK 0 0 0 57: The Isle Silver's page step for
+- Page Silver #686868, RGB 104 104 104, CMYK 0 0 0 59: The Isle Silver's page step for
   light grounds, where the master silver is too pale to read; it
-  measures 4.18 to 1 on The Isle Ivory. On every page the accent is
+  measures 4.57 to 1 on The Isle Ivory. On every page the accent is
   The Isle Silver on dark grounds and Page Silver on light grounds.
 
 ### Light grounds and their ink
@@ -129,7 +129,8 @@ colour's name is never shortened, in speech, in records or in code.
   light.
 - Soft Ink #3c4763, RGB 60 71 99, CMYK 39 28 0 61: secondary text on light, and the chart's curves on
   light.
-- Dim Ink #767c8d, RGB 118 124 141, CMYK 16 12 0 45: labels and meta text on light.
+- Dim Ink #767c8d, RGB 118 124 141, CMYK 16 12 0 45: labels and meta text on light, at
+  large sizes; small secondary text on light takes Soft Ink.
 
 ### The splash
 
@@ -166,9 +167,14 @@ its dark ground. Page chrome always inverts.
 - Text pairings meet a contrast floor: 4.5 to 1 for body text, 3 to 1
   for large text. A pairing that falls short of the body floor is
   reserved for large text and labels. On the measured pairings, Dim
-  Ink on The Isle Ivory (3.4 to 1) and Page Silver on The Isle
-  Ivory (4.18 to 1) are large text pairings only; every dark pairing
-  in use passes the body floor.
+  Ink on The Isle Ivory (3.4 to 1) is a large text pairing only: in
+  light mode, small secondary text, labels and meta text take Soft
+  Ink, and Dim Ink stands at large sizes only. Page Silver on The
+  Isle Ivory (4.57 to 1) meets the body floor, and every dark pairing
+  in use passes the body floor. The floors govern text and the
+  borders that define a control. The settled hairline borders,
+  silver at low alpha dividing and edging the panels, are decorative
+  and stand outside the floor.
 - Colour in proportion: the ground carries the page, The Isle Navy
   in dark and The Isle Ivory in light, with Panel and Deep as its
   steps in dark and Light Tint in light. Text and surfaces take the

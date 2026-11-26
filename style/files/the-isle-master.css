@@ -26,6 +26,7 @@
   --ivory:#f0e8d5;
   --ivory-soft:#d9d0ba;
   --ivory-dim:#a89f88;
+  --dim-sm:#a89f88;
   /* The accent on dark: The Isle Silver */
   --gold:#C0C0C0;
   --gold-bright:#C0C0C0;
@@ -70,17 +71,19 @@
   --ivory:#1d2a3b;
   --ivory-soft:#3c4763;
   --ivory-dim:#767c8d;
+  /* Small secondary text: Soft Ink on light, Ivory Dim on dark (guide section 2) */
+  --dim-sm:#3c4763;
   /* The accent on light: Page Silver, silver's step */
-  --gold:#6e6e6e;
-  --gold-bright:#6e6e6e;
-  --gold-line:rgba(110,110,110,.38);
-  --gold-line-soft:rgba(110,110,110,.20);
-  --dot-glow:rgba(110,110,110,.16);
-  --link-line:rgba(110,110,110,.7);
+  --gold:#686868;
+  --gold-bright:#686868;
+  --gold-line:rgba(104,104,104,.38);
+  --gold-line-soft:rgba(104,104,104,.20);
+  --dot-glow:rgba(104,104,104,.16);
+  --link-line:rgba(104,104,104,.7);
   /* The chart on light */
-  --chart-border:rgba(110,110,110,.22);
-  --chart-cap:rgba(110,110,110,.72);
-  --coast:#6e6e6e;
+  --chart-border:rgba(104,104,104,.22);
+  --chart-cap:rgba(104,104,104,.72);
+  --coast:#686868;
   --curve:#3c4763;
   --figure:#1d2a3b;
   /* Entries on light */
@@ -88,10 +91,10 @@
   --num-c:rgba(29,42,59,.12);
   --num-h:rgba(29,42,59,.24);
   --ghost-num:rgba(29,42,59,.06);
-  --ghost-eyebrow:rgba(110,110,110,.5);
+  --ghost-eyebrow:rgba(104,104,104,.5);
   --ghost-title:rgba(29,42,59,.36);
   --ghost-text:rgba(60,71,99,.42);
-  --plate-c:rgba(110,110,110,.68);
+  --plate-c:rgba(104,104,104,.68);
   /* Toggle on light */
   --toggle-bg:#1d2a3b;
   --toggle-ink:#f0e8d5;
@@ -217,7 +220,7 @@ a{ color:inherit; }
    in light the step already stands at full strength and holds. */
 .t-link{ color:var(--gold); }
 .t-link:hover, .t-link:focus-visible{ color:var(--gold-bright); }
-[data-theme="light"] .t-link:hover, [data-theme="light"] .t-link:focus-visible{ color:#6e6e6e; }
+[data-theme="light"] .t-link:hover, [data-theme="light"] .t-link:focus-visible{ color:#686868; }
 
 /* ================================================================
 PAGE BLOCKS
@@ -504,7 +507,7 @@ html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; 
     font-family:var(--sans);
     font-size:10px; font-weight:600;
     letter-spacing:.24em;
-    color:var(--ivory-dim);
+    color:var(--dim-sm);
     padding-top:3px;
   }
 :where(html.pg-build) .row dd {
@@ -559,7 +562,7 @@ html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; 
     display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; row-gap:8px;
     font-family:var(--sans);
     font-size:11px; font-weight:400; letter-spacing:.26em;
-    color:var(--ivory-dim);
+    color:var(--dim-sm);
     white-space:nowrap;
   }
 :where(html.pg-build) .foot .site { color:var(--ivory-soft); }
@@ -613,7 +616,7 @@ html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; 
     display:flex; align-items:center; gap:12px;
     font-family:var(--sans);
     font-size:10.5px; font-weight:600; letter-spacing:.26em;
-    color:var(--ivory-dim);
+    color:var(--dim-sm);
   }
 :where(html.pg-build) .status::before {
     content:""; width:26px; height:1px; background:var(--gold); flex:none;
@@ -684,7 +687,7 @@ html:where(.pg-lot)[data-theme="light"] {
 :where(html.pg-lot) #topbar .tb-back { text-decoration:none; border:none; background:none; box-shadow:none; padding:0; width:44px; height:44px; flex:none; }
 :where(html.pg-lot) #topbar .tb-back svg { width:20px; height:20px; }
 :where(html.pg-lot) #themesw { display:flex; align-items:center; gap:8px; }
-:where(html.pg-lot) #themesw .tw-label { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ivory-dim); }
+:where(html.pg-lot) #themesw .tw-label { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim-sm); }
 @media (max-width:760px) {
   :where(html.pg-lot) #topbar { flex-wrap:nowrap; gap:10px; padding:8px 14px; }
   :where(html.pg-lot) #topbar .tb-tree { height:24px; }
@@ -724,10 +727,10 @@ html:where(.pg-lot), :where(html.pg-lot) body { height:100%; }
 :where(html.pg-lot) .sec { border-bottom:1px solid var(--gold-line); }
 :where(html.pg-lot) .sec-head { display:flex; align-items:center; gap:4px; padding:11px 6px 8px; }
 :where(html.pg-lot) .sec-toggle { flex:1; display:flex; align-items:center; background:none; border:none; cursor:pointer; padding:0; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); text-align:left; }
-:where(html.pg-lot) .sec-toggle .chev { margin-left:8px; color:var(--ivory-dim); font-size:11px; transition:transform 0.15s; }
+:where(html.pg-lot) .sec-toggle .chev { margin-left:8px; color:var(--dim-sm); font-size:11px; transition:transform 0.15s; }
 :where(html.pg-lot) .sec-head .sec-all:first-of-type { margin-left:auto; }
 :where(html.pg-lot) .sec.closed .sec-toggle .chev { transform:rotate(-90deg); }
-:where(html.pg-lot) .sec-all { background:none; border:1px solid var(--gold-line); border-radius:6px; color:var(--ivory-dim); font-family:inherit; font-size:10px; font-weight:600; padding:3px 7px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; letter-spacing:0.05em; }
+:where(html.pg-lot) .sec-all { background:none; border:1px solid var(--gold-line); border-radius:6px; color:var(--dim-sm); font-family:inherit; font-size:10px; font-weight:600; padding:3px 7px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; letter-spacing:0.05em; }
 :where(html.pg-lot) .sec-all:hover { color:var(--ivory); background:var(--panel); }
 :where(html.pg-lot) #measurebar { position:absolute; left:50%; transform:translateX(-50%); bottom:14px; z-index:15; display:none; align-items:center; gap:10px; background:var(--bar-bg); border:1px solid var(--gold-line); border-radius:6px; padding:8px 10px 8px 14px; font-size:13px; color:var(--ivory); max-width:94%; box-shadow:0 4px 18px rgba(29,42,59,0.45); }
 :where(html.pg-lot) #measurebar.show { display:flex; }
@@ -739,7 +742,7 @@ html:where(.pg-lot), :where(html.pg-lot) body { height:100%; }
 :where(html.pg-lot) .sec.closed .sec-body { display:none; }
 :where(html.pg-lot) .layer .name { font-size:13.5px; font-weight:500; flex:1; line-height:1.25; }
 :where(html.pg-lot) .layer .eye { background:none; border:1px solid var(--gold-line); border-radius:6px; color:var(--ivory); width:44px; height:44px; cursor:pointer; font-family:inherit; font-size:13px; line-height:1; }
-:where(html.pg-lot) .layer.off .name { color:var(--ivory-dim); }
+:where(html.pg-lot) .layer.off .name { color:var(--dim-sm); }
 :where(html.pg-lot) .layer.off .eye { opacity:0.45; }
 :where(html.pg-lot) .layer.off .row2 { opacity:0.45; }
 html:where(.pg-lot)[data-theme="light"] .layer.off .row2 { opacity:0.62; }
@@ -751,7 +754,7 @@ html:where(.pg-lot)[data-theme="light"] .layer.off .row2 { opacity:0.62; }
 :where(html.pg-lot) .layer input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:16px; height:16px; margin-top:-6px; background:var(--rng-thumb); border:none; border-radius:0; }
 :where(html.pg-lot) .layer input[type=range]::-moz-range-track { height:4px; background:var(--rng-track); }
 :where(html.pg-lot) .layer input[type=range]::-moz-range-thumb { width:16px; height:16px; background:var(--rng-thumb); border:none; border-radius:0; }
-:where(html.pg-lot) .layer .pct { font-size:12px; color:var(--ivory-dim); width:36px; text-align:right; font-variant-numeric:tabular-nums; }
+:where(html.pg-lot) .layer .pct { font-size:12px; color:var(--dim-sm); width:36px; text-align:right; font-variant-numeric:tabular-nums; }
 :where(html.pg-lot) #facts { border-top:1px solid var(--gold-line); border-bottom:none; padding:0; font-size:12px; color:var(--ivory-soft); line-height:1.55; }
 :where(html.pg-lot) #facts .facts-inner { padding:0 6px 12px; }
 :where(html.pg-lot) #facts b { color:var(--ivory); font-weight:600; }
@@ -767,7 +770,7 @@ html:where(.pg-lot)[data-theme="light"] .layer.off .row2 { opacity:0.62; }
 :where(html.pg-lot) #loading .t { font-size:15px; }
 :where(html.pg-lot) #loading .track { width:min(420px, 70%); height:8px; background:var(--track); border-radius:0; overflow:hidden; }
 :where(html.pg-lot) #loading .fill { height:100%; width:0%; background:var(--gold); transition:width 0.2s; }
-:where(html.pg-lot) #loading .s { font-size:12px; color:var(--ivory-dim); }
+:where(html.pg-lot) #loading .s { font-size:12px; color:var(--dim-sm); }
 :where(html.pg-lot) #paneltoggle { display:none; }
 :where(html.pg-lot) #menubtn { display:none; position:absolute; top:12px; left:12px; z-index:6; }
 :where(html.pg-lot) #main.panelhidden #panel { display:none; }
@@ -803,7 +806,7 @@ html:where(.pg-shadow)[data-theme="light"] {
 :where(html.pg-shadow) #topbar .tb-back { text-decoration:none; border:none; background:none; box-shadow:none; padding:0; width:44px; height:44px; flex:none; }
 :where(html.pg-shadow) #topbar .tb-back svg { width:20px; height:20px; }
 :where(html.pg-shadow) #themesw { display:flex; align-items:center; gap:8px; }
-:where(html.pg-shadow) #themesw .tw-label { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ivory-dim); }
+:where(html.pg-shadow) #themesw .tw-label { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim-sm); }
 @media (max-width:760px) {
   :where(html.pg-shadow) #topbar { flex-wrap:nowrap; gap:10px; padding:8px 14px; }
   :where(html.pg-shadow) #topbar .tb-tree { height:24px; }
@@ -853,7 +856,7 @@ html:where(.pg-shadow), :where(html.pg-shadow) body { height:100%; }
 :where(html.pg-shadow) #sunfacts { border-top:1px solid var(--gold-line); margin-top:16px; padding-top:4px; }
 :where(html.pg-shadow) #sunfacts .sec-head { display:flex; align-items:center; }
 :where(html.pg-shadow) #sunfacts .sec-toggle { flex:1; display:flex; align-items:center; background:none; border:none; padding:11px 0 8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); text-align:left; }
-:where(html.pg-shadow) #sunfacts .sec-toggle .chev { margin-left:auto; font-size:11px; color:var(--ivory-dim); transition:transform 0.15s; }
+:where(html.pg-shadow) #sunfacts .sec-toggle .chev { margin-left:auto; font-size:11px; color:var(--dim-sm); transition:transform 0.15s; }
 :where(html.pg-shadow) #sunfacts.closed .sec-toggle .chev { transform:rotate(-90deg); }
 :where(html.pg-shadow) #sunfacts.closed .sec-body { display:none; }
 :where(html.pg-shadow) #readout { line-height:1.55; font-size:13px; color:var(--ivory-soft); }
@@ -872,7 +875,7 @@ html:where(.pg-shadow), :where(html.pg-shadow) body { height:100%; }
 :where(html.pg-shadow) input[type="range"]::-moz-range-track { height:4px; background:var(--gold-line); }
 :where(html.pg-shadow) input[type="range"]::-moz-range-thumb { width:16px; height:16px; background:var(--gold); border:none; border-radius:0; }
 :where(html.pg-shadow) #clock { font-size:15px; font-weight:600; min-width:52px; }
-:where(html.pg-shadow) .hint { font-size:11px; color:var(--ivory-dim); }
+:where(html.pg-shadow) .hint { font-size:11px; color:var(--dim-sm); }
 :where(html.pg-shadow) .hint-touch { display:none; }
 @media (pointer:coarse) {
   :where(html.pg-shadow) .hint-mouse { display:none; }
@@ -889,12 +892,12 @@ html:where(.pg-shadow), :where(html.pg-shadow) body { height:100%; }
 :where(html.pg-permits) h2 { font-family: var(--serif); font-size: 27px; font-weight: 600; margin: 9px 0 0 0; overflow-wrap: anywhere; }
 :where(html.pg-permits) .line { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ivory-soft); margin: 16px auto 0 auto; max-width: 56ch; }
 :where(html.pg-permits) .rule { border-top: 1px solid var(--gold-line); margin: 34px 0 0 0; }
-:where(html.pg-permits) .back { display: inline-block; margin-top: 22px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); text-decoration: none; }
+:where(html.pg-permits) .back { display: inline-block; margin-top: 22px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--dim-sm); text-decoration: none; }
 :where(html.pg-permits) .back:hover { color: var(--gold); }
 :where(html.pg-permits) .home { display: inline-flex; align-items: center; justify-content: center; color: var(--ivory); background: none; border: none; box-shadow: none; padding: 0; width: 44px; height: 44px; text-decoration: none; margin-top: 22px; }
 :where(html.pg-permits) .home:hover { color: var(--gold); }
 :where(html.pg-permits) .glance { display: flex; flex-wrap: wrap; gap: 18px 40px; padding: 24px 0 4px 0; }
-:where(html.pg-permits) .glance .g dt { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ivory-dim); }
+:where(html.pg-permits) .glance .g dt { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim-sm); }
 :where(html.pg-permits) .glance .g dd { margin: 5px 0 0 0; font-family: var(--serif); font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
 :where(html.pg-permits) .glance .g dd small { font-family: var(--sans); font-size: 12px; color: var(--ivory-soft); font-weight: 400; }
 :where(html.pg-permits) .watch { margin: 16px 0 0 0; font-size: 13.5px; line-height: 1.6; }
@@ -906,24 +909,24 @@ html:where(.pg-shadow), :where(html.pg-shadow) body { height:100%; }
 :where(html.pg-permits) .cards a:hover b, :where(html.pg-permits) .cards a:focus b { color: var(--gold); }
 :where(html.pg-permits) .cards .st2 { display: block; font-size: 13.5px; font-weight: 600; color: var(--gold); margin-top: 6px; }
 :where(html.pg-permits) .cards span.d { display: block; font-size: 13px; line-height: 1.6; color: var(--ivory-soft); margin-top: 7px; }
-:where(html.pg-permits) .cards .open { display: block; margin-top: 12px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ivory-dim); }
+:where(html.pg-permits) .cards .open { display: block; margin-top: 12px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim-sm); }
 @media (max-width: 640px) {
   :where(html.pg-permits) .cards { flex-direction: column; gap: 8px; }
 }
 :where(html.pg-permits) .secnav { position: sticky; top: 0; background: var(--field); display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 14px 0 12px 0; border-bottom: 1px solid var(--gold-line); margin-top: 26px; z-index: 5; }
-:where(html.pg-permits) .secnav a { font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ivory-dim); text-decoration: none; }
+:where(html.pg-permits) .secnav a { font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim-sm); text-decoration: none; }
 :where(html.pg-permits) .secnav a:hover { color: var(--gold); }
 :where(html.pg-permits) .rstat { font-size: 15px; font-weight: 600; color: var(--gold); margin: 7px 0 0 0; }
 :where(html.pg-permits) .rdesc { font-size: 14px; line-height: 1.55; color: var(--ivory-soft); margin: 6px 0 0 0; }
 :where(html.pg-permits) .facts { display: flex; flex-wrap: wrap; gap: 14px 34px; margin: 18px 0 4px 0; }
-:where(html.pg-permits) .facts dt { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ivory-dim); }
+:where(html.pg-permits) .facts dt { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim-sm); }
 :where(html.pg-permits) .facts dd { margin: 4px 0 0 0; font-size: 15px; font-variant-numeric: tabular-nums; }
 :where(html.pg-permits) h3 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 30px 0 8px 0; scroll-margin-top: 64px; }
 :where(html.pg-permits) h4 { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; margin: 18px 0 4px 0; font-weight: 600; }
 :where(html.pg-permits) h4 .st { letter-spacing: normal; text-transform: none; }
 :where(html.pg-permits) .note { font-size: 13px; line-height: 1.55; color: var(--ivory-soft); margin: 0 0 10px 0; max-width: 62ch; }
 :where(html.pg-permits) table.docs, :where(html.pg-permits) table.conds { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-:where(html.pg-permits) table.docs th, :where(html.pg-permits) table.conds th { text-align: left; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ivory-dim); font-weight: 600; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--gold-line); }
+:where(html.pg-permits) table.docs th, :where(html.pg-permits) table.conds th { text-align: left; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim-sm); font-weight: 600; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--gold-line); }
 :where(html.pg-permits) table.docs td, :where(html.pg-permits) table.conds td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--gold-line); vertical-align: top; line-height: 1.45; }
 :where(html.pg-permits) table.docs .num, :where(html.pg-permits) table.conds .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-right: 0; }
 :where(html.pg-permits) table.docs th.num, :where(html.pg-permits) table.conds th.num { text-align: right; padding-right: 0; }
@@ -946,7 +949,7 @@ html:where(.pg-shadow), :where(html.pg-shadow) body { height:100%; }
 /* In-text links (guide section 12) take the master sheet's .t-link,
      carried on the element itself; the underline is the browser's own. */
 :where(html.pg-permits) footer { text-align: center; padding: 26px 0 34px 0; }
-:where(html.pg-permits) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
+:where(html.pg-permits) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); opacity: 0.75; }
 :where(html.pg-permits) footer .src { font-size: 12px; color: var(--ivory-soft); margin-top: 10px; }
 :where(html.pg-permits) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
 
@@ -972,8 +975,8 @@ html:where(.pg-ref) {
         --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.45), 0 2px 6px rgba(29, 42, 59, 0.3);
       }
 html:where(.pg-ref)[data-theme="light"] {
-        --gold-const: #6e6e6e;
-        --gold-const-bright: #6e6e6e;
+        --gold-const: #686868;
+        --gold-const-bright: #686868;
         --ink-soft: #3c4763;
         --shadow-cover: 0 22px 44px rgba(29, 42, 59, 0.32), 0 4px 12px rgba(29, 42, 59, 0.18);
         --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.16), 0 2px 6px rgba(29, 42, 59, 0.1);
@@ -1123,7 +1126,7 @@ html:where(.pg-ref) { scroll-behavior: smooth; touch-action: manipulation; -webk
          and at its label, set here. The Option B hero fix, which held
          the label at The Isle Silver on the navy band, is not needed
          once the band inverts and is replaced by this rule. */
-html:where(.pg-ref)[data-theme="light"] .hero-dl .btn { color: #6e6e6e; }
+html:where(.pg-ref)[data-theme="light"] .hero-dl .btn { color: #686868; }
 /* On hover the master sheet fills the button with the accent and
          sets The Isle Ivory as its label, but the label rule above
          outranks the master sheet's hover colour, which would leave
@@ -1341,18 +1344,18 @@ html:where(.pg-ref)[data-theme="light"] .hero {
 html:where(.pg-ref)[data-theme="light"] .hero-intro { color: #3c4763; }
 html:where(.pg-ref)[data-theme="light"] .hero-note { color: #3c4763; }
 html:where(.pg-ref)[data-theme="light"] .stats {
-        border-top-color: rgba(110, 110, 110, 0.35);
-        border-bottom-color: rgba(110, 110, 110, 0.35);
+        border-top-color: rgba(104, 104, 104, 0.35);
+        border-bottom-color: rgba(104, 104, 104, 0.35);
       }
-html:where(.pg-ref)[data-theme="light"] .stat + .stat { border-left-color: rgba(110, 110, 110, 0.22); }
+html:where(.pg-ref)[data-theme="light"] .stat + .stat { border-left-color: rgba(104, 104, 104, 0.22); }
 html:where(.pg-ref)[data-theme="light"] .stat b { color: #1d2a3b; }
 html:where(.pg-ref)[data-theme="light"] .trio .t-name { color: #1d2a3b; }
 html:where(.pg-ref)[data-theme="light"] .trio .t-pages { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] .trio img { outline-color: rgba(110, 110, 110, 0.4); }
+html:where(.pg-ref)[data-theme="light"] .trio img { outline-color: rgba(104, 104, 104, 0.4); }
 html:where(.pg-ref)[data-theme="light"] .hero .dl-fail { color: #3c4763; }
 html:where(.pg-ref)[data-theme="light"] footer { background: #f3eee0; color: #3c4763; }
 html:where(.pg-ref)[data-theme="light"] footer p:not(.f-imprint) { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] footer .f-line { background: rgba(110, 110, 110, 0.35); }
+html:where(.pg-ref)[data-theme="light"] footer .f-line { background: rgba(104, 104, 104, 0.35); }
 /* The wordmark and lockup swaps: each band carries both artworks
          and shows the one its ground calls for. The hidden artwork is
          display none, so dark mode renders exactly as it did. */
@@ -1499,7 +1502,7 @@ html:where(.pg-ref)[data-theme="light"] .page-nav .nav-btn:hover, html:where(.pg
 :where(html.pg-ref) .toc-entry:hover { background: var(--raise); }
 :where(html.pg-ref) .toc-entry .pg { font-family: var(--serif); color: var(--gold-bright); font-size: 14px; flex: none; }
 :where(html.pg-ref) .toc-entry.current { background: rgba(192, 192, 192, 0.22); box-shadow: inset 3px 0 0 var(--gold-const-bright); }
-html:where(.pg-ref)[data-theme="light"] .toc-entry.current { background: rgba(110, 110, 110, 0.16); box-shadow: none; }
+html:where(.pg-ref)[data-theme="light"] .toc-entry.current { background: rgba(104, 104, 104, 0.16); box-shadow: none; }
 /* Stage */
 :where(html.pg-ref) .stage {
         background: var(--navy-deep); padding: 26px 18px 22px;
@@ -1674,7 +1677,7 @@ html:where(.pg-secure) { --silver:#C0C0C0; }
 :where(html.pg-secure) .box { width:100%; max-width:340px; text-align:center; }
 :where(html.pg-secure) h1 { font-family:var(--serif); font-weight:500; letter-spacing:.35em; font-size:26px; text-transform:uppercase; }
 :where(html.pg-secure) .rule { height:1px; background:var(--silver); margin:20px 0 26px; }
-:where(html.pg-secure) label { display:block; color:var(--ivory-dim); margin-bottom:12px; }
+:where(html.pg-secure) label { display:block; color:var(--dim-sm); margin-bottom:12px; }
 :where(html.pg-secure) input { width:100%; text-align:center; }
 :where(html.pg-secure) .box .btn { width:100%; margin-top:14px; }
 :where(html.pg-secure) .err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }
@@ -1724,7 +1727,7 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .pair .said {font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.45;margin:0}
 :where(html.pg-style) .pair .never {margin:16px 0 0}
 :where(html.pg-style) .pair .neversaid {margin:0;color:var(--ivory-soft)}
-:where(html.pg-style) .pair .fault {margin:10px 0 0;font-size:15px;color:var(--ivory-dim)}
+:where(html.pg-style) .pair .fault {margin:10px 0 0;font-size:15px;color:var(--dim-sm)}
 /* Section 2: the colours */
 :where(html.pg-style) .masters {display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin:26px 0 8px}
 :where(html.pg-style) .chip {height:104px;border:1px solid var(--gold-line-soft)}
@@ -1753,7 +1756,7 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 /* Section 5: the type roles are the master sheet's own classes;
    this is only the frame each specimen stands in */
 :where(html.pg-style) .role {padding:20px 0;border-bottom:1px solid var(--gold-line-soft)}
-:where(html.pg-style) .role .what {font-size:12.5px;color:var(--ivory-dim);letter-spacing:.08em;margin-top:8px}
+:where(html.pg-style) .role .what {font-size:12.5px;color:var(--dim-sm);letter-spacing:.08em;margin-top:8px}
 /* Section 6: the split figure */
 :where(html.pg-style) .splitfig {display:grid;grid-template-columns:46fr 54fr;border:1px solid var(--gold-line);margin:24px 0}
 :where(html.pg-style) .splitfig .cell {padding:24px 26px}
@@ -1924,6 +1927,7 @@ html:where(.pg-3d) {
   --color-surface: #22344a;
   --color-text: #f0e8d5;
   --color-text-muted: #a89f88;
+  --color-text-muted-sm: #a89f88;
   --color-border: rgba(192, 192, 192, 0.30);
   --color-primary: #C0C0C0;
   --color-primary-strong: #C0C0C0;
@@ -1944,10 +1948,11 @@ html:where(.pg-3d)[data-theme="light"] {
   --color-surface: #f3eee0;
   --color-text: #1d2a3b;
   --color-text-muted: #767c8d;
-  --color-border: rgba(110, 110, 110, 0.38);
+  --color-text-muted-sm: #3c4763;
+  --color-border: rgba(104, 104, 104, 0.38);
   --color-primary: #1d2a3b;
   --color-primary-strong: #1d2a3b;
-  --color-accent: #6e6e6e;
+  --color-accent: #686868;
   --color-on-primary: #f0e8d5;
   --color-fill: rgb(29 42 59 / 0.07);
   --room-bg: rgba(243, 238, 224, 0.90);
@@ -1973,7 +1978,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .title-card { top: var(--space-4); left: var(--space-4); padding: var(--space-3) var(--space-5) var(--space-4); max-width: min(28rem, calc(100vw - 2rem)); }
 :where(html.pg-3d) .eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent); }
 :where(html.pg-3d) h1 { font-family: var(--serif); font-weight: 700; font-size: var(--text-xl); letter-spacing: 0.01em; margin-top: 2px; }
-:where(html.pg-3d) .meta { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+:where(html.pg-3d) .meta { font-size: var(--text-sm); color: var(--color-text-muted-sm); margin-top: 2px; font-variant-numeric: tabular-nums; }
 :where(html.pg-3d) .controls {
   left: 50%; bottom: var(--space-4); transform: translateX(-50%);
   display: flex; align-items: center; gap: var(--space-4);
@@ -1982,7 +1987,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
   width: max-content; max-width: calc(100vw - 2rem);
 }
 :where(html.pg-3d) .group { display: flex; align-items: center; gap: var(--space-2); }
-:where(html.pg-3d) .group-label { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-muted); }
+:where(html.pg-3d) .group-label { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-muted-sm); }
 :where(html.pg-3d) .segmented { display: flex; background: var(--color-fill); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
 :where(html.pg-3d) .segmented button {
   font-size: var(--text-sm); font-weight: 500; padding: 0 var(--space-3); min-height: 44px;
@@ -2007,14 +2012,14 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .toggle input:focus-visible + .track { outline: 2px solid var(--color-primary); outline-offset: 3px; }
 :where(html.pg-3d) .actions { gap: var(--space-2); }
 :where(html.pg-3d) .hint {
-  position: absolute; right: var(--space-4); top: var(--space-4); font-size: var(--text-xs); color: var(--color-text-muted);
+  position: absolute; right: var(--space-4); top: var(--space-4); font-size: var(--text-xs); color: var(--color-text-muted-sm);
   background: var(--room-bg); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
   transition: opacity 600ms ease; max-width: none;
 }
 :where(html.pg-3d) .hint.gone { opacity: 0; }
 :where(html.pg-3d) .loading {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted);
+  display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted-sm);
   background: var(--color-surface); padding: var(--space-3) var(--space-5); border-radius: var(--radius-full); border: 1px solid var(--color-border);
   transition: opacity 400ms ease;
 }
@@ -2030,7 +2035,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
   padding: 3px 8px; border-radius: var(--radius-sm);
   opacity: 0; transition: opacity 250ms ease;
 }
-:where(html.pg-3d) .room small { display: block; font-weight: 500; font-size: 0.75rem; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+:where(html.pg-3d) .room small { display: block; font-weight: 500; font-size: 0.75rem; color: var(--color-text-muted-sm); font-variant-numeric: tabular-nums; }
 :where(html.pg-3d) .room.on { opacity: 1; }
 :where(html.pg-3d) .room.dim { background: var(--color-primary); color: var(--color-on-primary); border-color: transparent; font-variant-numeric: tabular-nums; }
 @media (max-width: 1240px) {
@@ -2039,7 +2044,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 }
 :where(html.pg-3d) .satctl { display: grid; gap: 6px; margin-top: 10px; }
 :where(html.pg-3d) .satrow { display: flex; align-items: center; gap: 8px; }
-:where(html.pg-3d) .satlab { font-size: 12px; color: var(--color-text-muted); width: 44px; flex: none; }
+:where(html.pg-3d) .satlab { font-size: 12px; color: var(--color-text-muted-sm); width: 44px; flex: none; }
 :where(html.pg-3d) .satrow .seg { flex: 1; }
 :where(html.pg-3d) .satrow .seg button { flex: 1; padding: 7px 2px; font-size: 12px; }
 @media (max-width: 640px) {
@@ -2058,10 +2063,10 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
   :where(html.pg-3d) .room small { display: none; }
   :where(html.pg-3d) .room { padding: 2px 6px; }
 }
-:where(html.pg-3d) .laysec { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); margin: 10px 0 2px; }
+:where(html.pg-3d) .laysec { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted-sm); margin: 10px 0 2px; }
 :where(html.pg-3d) .laygrid { display: flex; flex-wrap: wrap; gap: 6px 14px; }
 :where(html.pg-3d) .laybtns { gap: 8px; margin-top: 10px; }
-:where(html.pg-3d) .lotfacts { font-size: 12px; line-height: 1.5; color: var(--color-text-muted); margin-top: 10px; }
+:where(html.pg-3d) .lotfacts { font-size: 12px; line-height: 1.5; color: var(--color-text-muted-sm); margin-top: 10px; }
 :where(html.pg-3d) .controls { max-height: 52vh; overflow-y: auto; overscroll-behavior: contain; }
 :where(html.pg-3d) .seg { display: flex; background: var(--color-fill); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
 :where(html.pg-3d) .seg button { font-size: var(--text-sm); font-weight: 500; padding: 0 var(--space-3); min-height: 44px; border-radius: calc(var(--radius-md) - 3px); color: var(--color-text); white-space: nowrap; background: transparent; border: 0; cursor: pointer; }
@@ -2070,12 +2075,12 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .laysec { border-top: 1px solid rgb(201 171 114 / 0.5); padding-top: 8px; color: var(--gold); font-weight: 700; }
 :where(html.pg-3d) .sunctl { display: grid; gap: 6px; margin-top: 10px; width: 100%; }
 :where(html.pg-3d) .sunrow { display: flex; align-items: center; gap: 8px; }
-:where(html.pg-3d) .sunlab { font-size: 12px; color: var(--color-text-muted); width: 64px; flex: none; }
+:where(html.pg-3d) .sunlab { font-size: 12px; color: var(--color-text-muted-sm); width: 64px; flex: none; }
 :where(html.pg-3d) .sunclock { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
 :where(html.pg-3d) #sun-date { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); min-height: 44px; }
 :where(html.pg-3d) #sun-time { flex: 1; accent-color: var(--color-primary); min-height: 44px; }
 :where(html.pg-3d) .sunbtns { display: flex; flex-wrap: wrap; gap: 6px; }
-:where(html.pg-3d) .sunfacts { font-size: 12px; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+:where(html.pg-3d) .sunfacts { font-size: 12px; color: var(--color-text-muted-sm); font-variant-numeric: tabular-nums; }
 :where(html.pg-3d) #menu-show { position: absolute; right: var(--space-4); bottom: var(--space-4); z-index: 30; box-shadow: var(--shadow-card); }
 /* ---- side panel, on the Lot Viewer pattern ---- */
 :where(html.pg-3d) body { display: flex; }
@@ -2089,7 +2094,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .sec-toggle { flex: 1; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); text-align: left; min-height: 44px; }
 :where(html.pg-3d) .sec-all { background: none; border: none; cursor: pointer; font: inherit; font-size: 12px; font-weight: 600; color: var(--color-primary-strong); min-height: 44px; padding: 0 6px; flex: none; }
 :where(html.pg-3d) .sec-all:hover { text-decoration: underline; }
-:where(html.pg-3d) .sec-toggle .chev { margin-left: 8px; color: var(--color-text-muted); font-size: 11px; transition: transform 0.15s; }
+:where(html.pg-3d) .sec-toggle .chev { margin-left: 8px; color: var(--color-text-muted-sm); font-size: 11px; transition: transform 0.15s; }
 :where(html.pg-3d) .sec.closed .sec-toggle .chev { transform: rotate(-90deg); }
 :where(html.pg-3d) .sec.closed .sec-body { display: none; }
 :where(html.pg-3d) .sec-body .group { margin: 6px 0; }
@@ -2181,7 +2186,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
    to 400px and every pane takes the full panel width on the shared grid. */
 :where(html.pg-3d) #panel { width: 400px; flex: 0 0 400px; }
 :where(html.pg-3d) #menutabs { flex: none; display: flex; align-items: stretch; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid var(--color-border); }
-:where(html.pg-3d) #menutabs button { position: relative; background: none; border: 0; margin: 0; padding: 0 4px; min-height: 48px; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-text-muted); cursor: pointer; white-space: nowrap; }
+:where(html.pg-3d) #menutabs button { position: relative; background: none; border: 0; margin: 0; padding: 0 4px; min-height: 48px; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-text-muted-sm); cursor: pointer; white-space: nowrap; }
 :where(html.pg-3d) #menutabs button:hover { color: var(--color-text); }
 :where(html.pg-3d) #menutabs button.on { color: var(--color-accent); }
 :where(html.pg-3d) #menutabs button.on::after { content: ''; position: absolute; left: 4px; right: 4px; bottom: -1px; height: 2px; background: var(--color-accent); }
@@ -2283,12 +2288,12 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 /* Facts moved down: the foot row carries a Facts link opposite the theme
    switch, opening a small text card above the foot. */
 :where(html.pg-3d) .panel-foot { justify-content: space-between; }
-:where(html.pg-3d) .factslink { background: none; border: none; cursor: pointer; min-height: 44px; padding: 0 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-muted); }
+:where(html.pg-3d) .factslink { background: none; border: none; cursor: pointer; min-height: 44px; padding: 0 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-muted-sm); }
 :where(html.pg-3d) .factslink[aria-expanded="true"] { color: var(--gold); }
 :where(html.pg-3d) .factspop { position: absolute; left: 12px; right: 12px; bottom: 70px; z-index: 40; background: var(--color-surface, #22344a); border: 1px solid var(--color-border); padding: 12px 16px 14px; }
 :where(html.pg-3d) .factspop-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 :where(html.pg-3d) .factspop-head span { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
-:where(html.pg-3d) .factspop-x { background: none; border: none; cursor: pointer; color: var(--color-text-muted); font-size: 18px; line-height: 1; min-width: 32px; min-height: 32px; padding: 0; }
+:where(html.pg-3d) .factspop-x { background: none; border: none; cursor: pointer; color: var(--color-text-muted-sm); font-size: 18px; line-height: 1; min-width: 32px; min-height: 32px; padding: 0; }
 :where(html.pg-3d) .factspop p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.55; color: var(--color-text); }
 :where(html.pg-3d) .factspop p:last-child { margin-bottom: 0; }
 /* Shadow data cleaned up: the sun figures as five ruled rows under the
@@ -2296,7 +2301,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .sunfacts { margin-top: 8px; margin-bottom: -11px; }
 :where(html.pg-3d) .sfrow { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--color-border); line-height: 1.25; }
 :where(html.pg-3d) .sfrow:last-child { border-bottom: none; }
-:where(html.pg-3d) .sfrow .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
+:where(html.pg-3d) .sfrow .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted-sm); }
 :where(html.pg-3d) .sfrow .v { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--color-text); }
 /* The pop-up anchors to the panel, not the page: the panel becomes the
    positioned parent so the card sits inside the panel width. Scoped to
