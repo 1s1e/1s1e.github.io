@@ -1503,6 +1503,7 @@ html:where(.pg-ref)[data-theme="light"] .page-nav .nav-btn:hover, html:where(.pg
 :where(html.pg-ref) .toc-entry .pg { font-family: var(--serif); color: var(--gold-bright); font-size: 14px; flex: none; }
 :where(html.pg-ref) .toc-entry.current { background: rgba(192, 192, 192, 0.22); box-shadow: inset 3px 0 0 var(--gold-const-bright); }
 html:where(.pg-ref)[data-theme="light"] .toc-entry.current { background: rgba(104, 104, 104, 0.16); box-shadow: none; }
+html:where(.pg-ref)[data-theme="light"] .toc-entry.current .pg { color: var(--ink-soft); }
 /* Stage */
 :where(html.pg-ref) .stage {
         background: var(--navy-deep); padding: 26px 18px 22px;
