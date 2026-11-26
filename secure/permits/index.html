@@ -8,54 +8,22 @@
 <meta name="author" content="MDS">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<title>Permit Documents, The Isle</title>
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b">
+<meta name="theme-color" content="#1d2a3b">
+<title>The Isle · Permit Documents</title>
 <script>
-  try { var t = localStorage.getItem('isle-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  try { var t = localStorage.getItem('isle-theme'); if (t !== 'light' && t !== 'dark') t = 'dark'; document.documentElement.dataset.theme = t; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#f0e8d5' : '#1d2a3b'); } catch (e) {}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
-<style>
-  :root { --bg: #faf7ee; --ink: #1b2a4a; --muted: #75808d; --line: #ddd5bd; --accent: #a67c3d; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #152130; --ink: #ece8db; --muted: #93a0b4; --line: #31435f; --accent: #c9a35f; } }
-  :root[data-theme="dark"] { --bg: #152130; --ink: #ece8db; --muted: #93a0b4; --line: #31435f; --accent: #c9a35f; }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
-  header { padding: 8svh 0 0 0; text-align: center; }
-  .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
-  h1 { font-family: "Playfair Display", Georgia, serif; font-size: 36px; font-weight: 600; margin: 12px 0 0 0; }
-  h2 { font-family: "Playfair Display", Georgia, serif; font-size: 24px; font-weight: 600; margin: 34px 0 4px 0; overflow-wrap: anywhere; }
-  .line { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-size: 16.5px; color: var(--muted); margin: 14px auto 0 auto; max-width: 54ch; }
-  .rule { border-top: 1px solid var(--line); margin: 30px 0 0 0; }
-  .gate { max-width: 420px; margin: 40px auto 0 auto; text-align: center; }
-  .gate label { display: block; font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-  .gate input { width: 100%; padding: 13px 14px; font-size: 16px; text-align: center; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 0; outline: none; }
-  .gate input:focus { border-color: var(--accent); }
-  .gate button { margin-top: 16px; padding: 12px 34px; font-size: 11.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--bg); background: var(--ink); border: none; cursor: pointer; }
-  .gate button:disabled { opacity: 0.5; cursor: wait; }
-  .err { color: #b3402e; font-size: 13.5px; margin-top: 14px; min-height: 18px; }
-  .note { font-size: 13px; line-height: 1.55; color: var(--muted); }
-  table.docs { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
-  table.docs td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.45; }
-  td.dn { overflow-wrap: anywhere; }
-  td.act { text-align: right; white-space: nowrap; padding-right: 0; }
-  .read { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); background: none; border: 1px solid var(--accent); padding: 7px 14px; cursor: pointer; }
-  .read:disabled { opacity: 0.55; cursor: wait; }
-  .sz { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-  #viewer { margin-top: 30px; display: none; }
-  #viewer .bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
-  #vname { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
-  #vopen { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; white-space: nowrap; }
-  #vframe { width: 100%; height: 78svh; border: 1px solid var(--line); margin-top: 12px; background: #fff; }
-  footer { text-align: center; padding: 30px 0 34px 0; }
-  footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--muted); opacity: 0.75; }
-  .back { display: inline-block; margin-top: 20px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
-  .back:hover { color: var(--accent); }
-  [hidden] { display: none !important; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/the-isle-master.css">
+<link rel="stylesheet" href="/secure/permits/viewer.css">
 </head>
 <body>
 <div class="wrap">
@@ -63,16 +31,16 @@
     <span class="eye">The Isle, Secure</span>
     <h1>Permit Documents</h1>
     <p class="line">The permit documents themselves, readable here. Nothing leaves the page: each file is decrypted in this browser only.</p>
-    <a class="back" href="/site/permits/">Back to the public index</a>
+    <a class="back" href="/build/permits/">Back to Permits &amp; Documents</a>
   </header>
   <div class="rule"></div>
 
   <div class="gate" id="gate">
     <form id="gateform">
       <label for="pw">House password</label>
-      <input type="password" id="pw" autocomplete="current-password" required>
+      <input type="password" id="pw" class="field" autocomplete="current-password" required>
       <br>
-      <button type="submit" id="unlock">Unlock</button>
+      <button type="submit" id="unlock" class="btn on">Unlock</button>
       <p class="err" id="err"></p>
     </form>
   </div>
@@ -80,13 +48,14 @@
   <main id="content" hidden>
     <div id="lists"></div>
     <div id="viewer">
-      <div class="bar"><span id="vname"></span><a id="vopen" href="#" target="_blank" rel="noopener">Open full screen</a></div>
+      <div class="bar"><span id="vname"></span><a id="vopen" class="t-link" href="#" target="_blank" rel="noopener">Open full screen</a></div>
       <iframe id="vframe" title="Document viewer"></iframe>
     </div>
   </main>
 
   <footer>
     <div class="dom">1s1e.com</div>
+    <button type="button" class="switch" id="themeSwitch" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
   </footer>
 </div>
 <script>
@@ -194,6 +163,29 @@
     });
   });
 })();
+</script>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var themeSwitch = document.getElementById('themeSwitch');
+    var metaTheme = document.querySelector('meta[name="theme-color"]');
+    function setTheme(t) {
+      root.setAttribute('data-theme', t);
+      root.style.colorScheme = t;
+      if (metaTheme) metaTheme.setAttribute('content', (t === 'light') ? '#f0e8d5' : '#1d2a3b');
+      if (themeSwitch) {
+        themeSwitch.setAttribute('data-mode', t);
+        themeSwitch.setAttribute('aria-checked', (t === 'dark') ? 'true' : 'false');
+        themeSwitch.setAttribute('aria-label', (t === 'dark') ? 'Dark mode' : 'Light mode');
+      }
+    }
+    setTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    if (themeSwitch) themeSwitch.addEventListener('click', function () {
+      var next = (root.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      setTheme(next);
+      try { localStorage.setItem('isle-theme', next); } catch (e) {}
+    });
+  })();
 </script>
 </body>
 </html>

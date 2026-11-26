@@ -1,0 +1,43 @@
+/* THE ISLE · PERMIT DOCUMENTS VIEWER · FOLDER EXCEPTION SHEET
+   The exception sheet for /secure/permits/, linked after the master
+   style sheet at /assets/the-isle-master.css. Everything shared comes
+   from the master: the colours, the faces, the type roles, the field
+   and button forms, the switch and the text link. This sheet carries
+   only what is specific to this page: its layout, its document table
+   and its reader frame. Every colour below is a master token. */
+
+  body { transition: background 0.4s ease, color 0.4s ease; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+  header { padding: 8svh 0 0 0; text-align: center; }
+  .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+  h1 { font-family: var(--serif); font-size: 36px; font-weight: 600; margin: 12px 0 0 0; }
+  h2 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin: 34px 0 4px 0; overflow-wrap: anywhere; }
+  .line { font-family: var(--serif); font-style: italic; font-size: 16.5px; color: var(--ivory-soft); margin: 14px auto 0 auto; max-width: 54ch; }
+  .rule { border-top: 1px solid var(--gold-line); margin: 30px 0 0 0; }
+  .back { display: inline-block; margin-top: 20px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); text-decoration: none; }
+  .back:hover { color: var(--gold); }
+  .gate { max-width: 420px; margin: 40px auto 0 auto; text-align: center; }
+  .gate label { display: block; font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); margin-bottom: 12px; }
+  .gate .field { width: 100%; text-align: center; }
+  .gate .btn { margin-top: 16px; }
+  .gate .btn:disabled { opacity: 0.5; cursor: wait; }
+  .err { color: var(--gold); font-size: 13.5px; margin-top: 14px; min-height: 18px; }
+  .note { font-size: 13px; line-height: 1.55; color: var(--ivory-soft); }
+  table.docs { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+  table.docs td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--gold-line); vertical-align: top; line-height: 1.45; }
+  td.dn { overflow-wrap: anywhere; }
+  td.act { text-align: right; white-space: nowrap; padding-right: 0; }
+  .read { font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); background: none; border: 1px solid var(--gold); padding: 7px 14px; cursor: pointer; }
+  .read:hover { background: var(--gold); color: var(--sea-deep); }
+  [data-theme="light"] .read:hover { color: var(--field); }
+  .read:disabled { opacity: 0.55; cursor: wait; }
+  .sz { color: var(--ivory-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  #viewer { margin-top: 30px; display: none; }
+  #viewer .bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--gold-line); padding-bottom: 8px; }
+  #vname { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+  #vopen { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+  #vframe { width: 100%; height: 78svh; border: 1px solid var(--gold-line); margin-top: 12px; background: #fff; }
+  footer { text-align: center; padding: 30px 0 34px 0; }
+  footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
+  .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
+  [hidden] { display: none !important; }
