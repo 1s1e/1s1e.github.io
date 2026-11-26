@@ -380,7 +380,7 @@
     var pts = measure.pts, pen = measure.pending;
     if (!pts.length && !pen) return;
     g.save();
-    g.strokeStyle = "#c2a15c"; g.fillStyle = "#c2a15c";
+    g.strokeStyle = "#C0C0C0"; g.fillStyle = "#C0C0C0";
     g.lineWidth = 2 / s; g.lineJoin = "round"; g.lineCap = "round";
     if (pts.length > 1) {
       g.beginPath();
@@ -398,7 +398,7 @@
       g.beginPath(); g.arc(X, Y, 5.5 / s, 0, 7); g.fill();
       g.fillStyle = "#1d2a3b";
       g.beginPath(); g.arc(X, Y, 2.2 / s, 0, 7); g.fill();
-      g.fillStyle = "#c2a15c";
+      g.fillStyle = "#C0C0C0";
     });
     if (pen) {
       var X2 = pen.x * s + ox, Y2 = pen.y * s + oy;

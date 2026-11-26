@@ -128,6 +128,15 @@ body{ overflow:hidden; }
 #facts b{ color:var(--ivory); font-weight:600; }
 #facts a{ color:var(--gold); }
 
+/* Light inversion for the on state: the master .btn.on keeps its
+   dark form in both modes (Navy ground, ivory text, Panel hover).
+   As page chrome it inverts in light by the exact exchange, Navy
+   to Ivory, Panel to Light Tint, ivory text to navy. This covers
+   the Measure button and the measure bar's Set Point button.
+   Dark mode is untouched. */
+:root[data-theme="light"] .btn.on{ background:#f0e8d5; color:#1d2a3b; }
+:root[data-theme="light"] .btn.on:hover, :root[data-theme="light"] .btn.on:focus-visible{ background:#f3eee0; color:#1d2a3b; }
+
 /* Viewer */
 #viewer{ flex:1; position:relative; overflow:hidden; background:var(--viewer-bg); touch-action:none; cursor:grab; }
 #viewer.dragging{ cursor:grabbing; }

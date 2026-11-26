@@ -107,6 +107,13 @@ html, body{ height:100%; }
   #scene{ flex:0 0 42vh; min-height:240px; order:-1; }
   #controls{ width:auto; flex:1 1 auto; border-right:none; border-top:1px solid var(--gold-line); }
 }
+/* Light inversion for the on state: the master .btn.on keeps its
+   dark form in both modes (Navy ground, ivory text, Panel hover).
+   As page chrome it inverts in light by the exact exchange, Navy
+   to Ivory, Panel to Light Tint, ivory text to navy. Dark mode is
+   untouched. */
+:root[data-theme="light"] .btn.on{ background:#f0e8d5; color:#1d2a3b; }
+:root[data-theme="light"] .btn.on:hover, :root[data-theme="light"] .btn.on:focus-visible{ background:#f3eee0; color:#1d2a3b; }
 label{ font-size:11px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); }
 input[type="date"]{ background:var(--input-bg); color:var(--ivory); border:1px solid var(--gold-line); border-radius:0; padding:5px 7px; font-family:inherit; font-size:13.5px; }
 input[type="range"]{ -webkit-appearance:none; appearance:none; box-sizing:border-box; flex:1 1 220px; height:44px; padding:12px 0; background:transparent; cursor:pointer; }

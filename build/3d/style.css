@@ -18,15 +18,15 @@
   --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-16: 4rem;
 
   /* The viewer's panel colours on dark: Panel ground, Ivory text,
-     Page Gold dark carrying the active states. */
+     The Isle Silver carrying the active states. */
   --color-bg: #1d2a3b;
   --color-surface: #22344a;
   --color-text: #f0e8d5;
   --color-text-muted: #a89f88;
-  --color-border: rgba(194, 161, 92, 0.30);
-  --color-primary: #c2a15c;
-  --color-primary-strong: #c9ab72;
-  --color-accent: #c2a15c;
+  --color-border: rgba(192, 192, 192, 0.30);
+  --color-primary: #C0C0C0;
+  --color-primary-strong: #C0C0C0;
+  --color-accent: #C0C0C0;
   --color-on-primary: #152130;
   --color-fill: rgba(240, 232, 213, 0.07);
   --room-bg: rgba(21, 33, 48, 0.88);
@@ -39,15 +39,15 @@
 
 :root[data-theme="light"] {
   /* The viewer's panel colours on light: Light Tint ground, The
-     Isle Navy text and active fills, Page Gold light the accent. */
+     Isle Navy text and active fills, Page Silver the accent. */
   --color-bg: #f0e8d5;
   --color-surface: #f3eee0;
   --color-text: #1d2a3b;
   --color-text-muted: #767c8d;
-  --color-border: rgba(160, 127, 58, 0.38);
+  --color-border: rgba(110, 110, 110, 0.38);
   --color-primary: #1d2a3b;
   --color-primary-strong: #1d2a3b;
-  --color-accent: #a07f3a;
+  --color-accent: #6e6e6e;
   --color-on-primary: #f0e8d5;
   --color-fill: rgb(29 42 59 / 0.07);
   --room-bg: rgba(243, 238, 224, 0.90);
@@ -299,8 +299,8 @@ body.panelhidden #menu-show { display: block; }
 /* Sample F, top text row: the five section entries leave the left rail and
    stand as plain text in one row at the top of the panel, under the head.
    No boxes, no borders, no fills: the names in the house label form,
-   inactive in the mode's dimmer ink, the active entry in Page Gold with a
-   2px gold underline under its word, sitting on the row's hairline.
+   inactive in the mode's dimmer ink, the active entry in the mode's
+   silver with a 2px silver underline under its word, sitting on the row's hairline.
    The rail's width is returned to the pane: the panel narrows from 436px
    to 400px and every pane takes the full panel width on the shared grid. */
 #panel { width: 400px; flex: 0 0 400px; }
