@@ -2112,3 +2112,133 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) #pane-layers .oprange::-moz-range-track { height: 4px; background: var(--gold); }
 :where(html.pg-3d) #pane-layers .oprange::-moz-range-thumb { width: 16px; height: 16px; background: var(--gold); border: none; border-radius: 0; }
 :where(html.pg-3d) #pane-layers .pct { font-size: 12px; color: var(--dim-sm); width: 36px; flex: none; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Pages, /pages/ ----------
+   This sheet is the pg-pages block exactly as it will stand in
+   the master style sheet at publish: every rule scoped to its
+   page by :where(html.pg-pages), at unchanged specificity, after
+   the shared layer. At publish the block lifts into
+   the-isle-master.css unchanged and the page links the master
+   alone. Values are the settled ones: the single column and
+   header of Permits & Documents, the entry form of The Build. */
+
+:where(html.pg-pages) body { transition: background 0.4s ease, color 0.4s ease; }
+:where(html.pg-pages) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+:where(html.pg-pages) header { padding: 8svh 0 0 0; text-align: center; }
+:where(html.pg-pages) .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+:where(html.pg-pages) h1 { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: 0.02em; margin: 12px 0 0 0; }
+:where(html.pg-pages) .line { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ivory-soft); margin: 16px auto 0 auto; max-width: 56ch; }
+:where(html.pg-pages) .rule { border-top: 1px solid var(--gold-line); margin: 34px 0 0 0; }
+:where(html.pg-pages) .group { margin-top: 44px; }
+:where(html.pg-pages) .group-head {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .34em;
+  color: var(--gold-bright);
+  display: flex; align-items: center; gap: 10px;
+}
+:where(html.pg-pages) .entries { margin-top: 10px; }
+:where(html.pg-pages) .entries > * + * { border-top: 1px solid var(--gold-line-soft); }
+:where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 8px 22px;
+  padding: 30px 14px 28px;
+  text-decoration: none;
+  position: relative;
+  transition: background .35s ease;
+}
+:where(html.pg-pages) .entry-parent { display: block; padding: 0; }
+:where(html.pg-pages) .entry:hover, :where(html.pg-pages) .entry:focus-visible,
+:where(html.pg-pages) .entry-main:hover, :where(html.pg-pages) .entry-main:focus-visible { background: var(--entry-hover); }
+:where(html.pg-pages) .entry:focus-visible, :where(html.pg-pages) .entry-main:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
+:where(html.pg-pages) .num {
+  grid-row: 1 / span 4;
+  font-family: var(--serif);
+  font-size: 58px; line-height: .95; font-weight: 500;
+  color: var(--num-c);
+  font-variant-numeric: lining-nums;
+  padding-top: 2px;
+  transition: color .35s ease;
+}
+:where(html.pg-pages) .entry:hover .num, :where(html.pg-pages) .entry-main:hover .num { color: var(--num-h); }
+:where(html.pg-pages) .eyebrow {
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: .32em;
+  color: var(--gold-bright);
+  margin: 2px 0 0;
+}
+:where(html.pg-pages) .entry h3, :where(html.pg-pages) .entry-main h3 {
+  margin: 7px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 600; line-height: 1.08;
+  color: var(--ivory);
+}
+:where(html.pg-pages) .desc {
+  margin: 9px 0 0;
+  font-family: var(--sans);
+  font-size: 16.5px; line-height: 1.55; font-weight: 400;
+  color: var(--ivory-soft);
+  max-width: 60ch;
+}
+:where(html.pg-pages) .entry .addr, :where(html.pg-pages) .entry-main .addr {
+  margin: 15px 0 0;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
+  color: var(--dim-sm);
+}
+:where(html.pg-pages) .entry .addr::before, :where(html.pg-pages) .entry-main .addr::before {
+  content: ""; width: 26px; height: 1px; background: var(--gold); flex: none;
+}
+:where(html.pg-pages) .records { margin: 2px 0 10px 118px; }
+:where(html.pg-pages) .record {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--gold-line-soft);
+  padding: 18px 14px 16px 0;
+  transition: background .35s ease;
+}
+:where(html.pg-pages) .record:hover, :where(html.pg-pages) .record:focus-visible { background: var(--entry-hover); }
+:where(html.pg-pages) .record:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
+:where(html.pg-pages) .record .eye { display: block; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+:where(html.pg-pages) .record b {
+  display: block;
+  font-family: var(--serif);
+  font-size: 21px; font-weight: 600;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
+}
+:where(html.pg-pages) .record:hover b, :where(html.pg-pages) .record:focus-visible b { color: var(--gold); }
+:where(html.pg-pages) .record .d { display: block; font-size: 13.5px; line-height: 1.6; color: var(--ivory-soft); margin-top: 6px; }
+:where(html.pg-pages) .record .addr {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--sans);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
+  color: var(--dim-sm);
+}
+:where(html.pg-pages) footer {
+  margin-top: 52px;
+  display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; row-gap: 8px;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 400; letter-spacing: .26em;
+  color: var(--dim-sm);
+  white-space: nowrap;
+}
+:where(html.pg-pages) footer .site { color: var(--ivory-soft); }
+:where(html.pg-pages) .switch { cursor: pointer; flex: none; }
+@media (max-width: 760px) {
+  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main { grid-template-columns: 64px 1fr; padding: 24px 6px 22px; }
+  :where(html.pg-pages) .num { font-size: 40px; }
+  :where(html.pg-pages) .records { margin-left: 86px; }
+  :where(html.pg-pages) footer { flex-wrap: wrap; white-space: normal; row-gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main, :where(html.pg-pages) .record { transition: none; }
+}
