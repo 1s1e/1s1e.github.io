@@ -1,5 +1,9 @@
 # THE ISLE · MASTER CHANGE LOG
 
+## The style guide book retired (Nov 26, 2026)
+
+On the user's direction, the style guide book is retired. The book file, documents/The-Isle-Style-Guide.pdf, comes out of both master file sets, and its served copy and its download row come off the style page. The guide no longer states a book drawn from it: section 10's list of the master documents and its amendment rule drop the book, and the document format stands in section 10 as the document standard itself, US Letter, the settled margins and the running foot. The misuse plates in sections 2 and 4 and the print gold note in section 2 stand without their reference to the book. The guide itself, THE-ISLE-STYLE-GUIDE.md, stands as the standard, and the style page stays.
+
 ## The Lot Viewer and the Shadow Study retired (Nov 26, 2026)
 
 On the user's direction, the Lot Viewer and the Shadow Study are retired: the 3D Model carries both jobs now, the lot in its layers and measurements, the sun and shadow in its Sun pane. The two pages come off the site and their addresses serve the site 404, the settled form for a retired address. The Build index loses its first two entries and the remaining entries renumber: Permits & Documents stands as 01, eyebrow THE RECORD, and the 3D Model as 02, eyebrow THE FORM, their descriptions, links and status lines unchanged. The master style sheet loses the two pages' scoped blocks, and their folder exception sheets go with them. Section 8 of the guide states the two entries in full under their new numbers; section 12's grid button exception and sun button form, which existed only for those pages, come out; and section 1's entry example now sets the 3D Model entry in the retired entry's place, its faults unchanged. The pages stand in the repository's history if they are ever wanted back.

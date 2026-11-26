@@ -112,7 +112,7 @@ colour's name is never shortened, in speech, in records or in code.
 ### Gold in print
 
 - Page Gold dark #c2a15c, RGB 194 161 92, CMYK 0 17 53 24: gold for print on dark
-  grounds, and for the book's own form; on pages the accent is silver.
+  grounds; on pages the accent is silver.
 - Page Gold light #a07f3a, RGB 160 127 58, CMYK 0 21 64 37: gold for print on light
   grounds; on pages the accent on light grounds is Page Silver.
 
@@ -186,7 +186,7 @@ its dark ground. Page chrome always inverts.
   The Isle Gold appear only inside the artwork. A page that gives
   silver a field, or green or gold a surface, is out of proportion
   and is corrected.
-- Colour misuse is shown, not only stated: Plate B of the book shows
+- Colour misuse is shown, not only stated: Plate B shows
   The Isle Gold filling a field, The Isle Green used as a surface, a
   colour outside the seventeen set as a ground, and body text set in
   Dim Ink on The Isle Ivory, below the contrast floor.
@@ -244,7 +244,7 @@ its dark ground. Page chrome always inverts.
 - The mark is never redrawn, never recoloured outside the five
   colourways, never stretched, rotated, outlined or shadowed, and never
   placed on a ground that fights it.
-- Logo misuse is shown, not only stated: Plate A of the book shows
+- Logo misuse is shown, not only stated: Plate A shows
   the lockup stretched, squashed, recoloured outside the colourways,
   set on a ground that fights it and tilted, and the palm lifted out
   and set alone as if it were the logo.
@@ -542,15 +542,14 @@ What is required of anything created:
   MANIFEST.md; the live pages at 1s1e.com; the local publishing clone.
 - The master documents are kept to endure, at fixed names, one canonical
   copy in each master file set, updated in place as things change: this
-  guide, THE-ISLE-STYLE-GUIDE.md, and the book drawn from it,
-  documents/The-Isle-Style-Guide.pdf; the style sheet,
+  guide, THE-ISLE-STYLE-GUIDE.md; the style sheet,
   the-isle-master.css; the design tokens, the-isle-tokens.json; the
   palettes, the-isle-palette.ase and the-isle-palette.gpl; and the
   swatch sheet, in swatches/. Their history is kept separately, in
   CHANGELOG.md in the set, never inside the documents themselves.
 - This guide changes only on the user's word. Every change is entered
   in CHANGELOG.md, and a change is not complete until both master file
-  sets carry it and the book drawn from it agrees.
+  sets carry it.
 - File and asset discipline: published files carry no version numbers.
   Copies for any use are issued from the masters only. The two master
   file set copies are kept identical, and a change is not complete
@@ -561,7 +560,7 @@ What is required of anything created:
 
 ### Documents and print
 
-- A document follows the book's own format: US Letter, margins of 56pt at
+- A document follows this format: US Letter, margins of 56pt at
   the sides and the foot and 44pt at the top, no running head, and a
   running foot of one line in the label form naming the document
   "THE ISLE · <TITLE>" at the left of the column, the folio at the
