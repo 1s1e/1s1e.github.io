@@ -431,10 +431,21 @@
       :root[data-theme="light"] .fullsize-bar { border-bottom-color: #C0C0C0; }
       :root[data-theme="light"] .fullsize-title span { color: #C0C0C0; }
       :root[data-theme="light"] .fullsize-close { color: #C0C0C0; }
-      :root[data-theme="light"] .fullsize-close:hover, :root[data-theme="light"] .fullsize-close:focus-visible { background: #C0C0C0; }
+      :root[data-theme="light"] .fullsize-close:hover, :root[data-theme="light"] .fullsize-close:focus-visible { background: #C0C0C0; color: #152130; }
       :root[data-theme="light"] .stage figcaption .cap-page { color: #C0C0C0; }
       :root[data-theme="light"] .stage img.page:focus-visible { outline-color: #C0C0C0; }
       :root[data-theme="light"] .progress i { background: #C0C0C0; }
+      /* The pager pair stands on the stage, so it keeps the same
+         silver as the rest of the Reader chrome: labels, arrows and
+         borders in The Isle Silver, where the mode tokens would
+         otherwise put navy text and the light step on Deep. On
+         hover it takes the dark form's own pairing, the silver
+         fill with Deep text, which the master sheet's light hover
+         would otherwise override. The full size Close above takes
+         the same pairing on its silver fill, for the same reason:
+         its text stays Deep, never the silver of the fill. */
+      :root[data-theme="light"] .page-nav .nav-btn { color: #C0C0C0; border-color: #C0C0C0; }
+      :root[data-theme="light"] .page-nav .nav-btn:hover, :root[data-theme="light"] .page-nav .nav-btn:focus-visible { background: #C0C0C0; color: #152130; }
 
       /* ---------- full reader ---------- */
       .reader-section { padding: 76px 20px 84px; background: var(--raise); }
