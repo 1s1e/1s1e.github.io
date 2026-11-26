@@ -128,7 +128,6 @@ a{ color:inherit; }
 }
 
 /* Hairlines */
-.rule-gold{ border:0; border-top:1px solid var(--gold-line); }
 .rule-soft{ border:0; border-top:1px solid var(--gold-line-soft); }
 
 /* Motion: the chart drifts and pulses; the coastline never moves.
@@ -1059,7 +1058,6 @@ html:where(.pg-ref)[data-theme="light"] .hero-dl .btn:hover, html:where(.pg-ref)
         margin: 18px auto 0;
       }
 :where(html.pg-ref) footer .f-title-row .f-title { margin: 0; }
-:where(html.pg-ref) footer .f-palm { width: 44px; height: 44px; flex: none; }
 :where(html.pg-ref) footer .f-imprint {
         margin: 5px auto 0; font-size: 13px; font-weight: 600;
         letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase; color: var(--gold-const-bright);
