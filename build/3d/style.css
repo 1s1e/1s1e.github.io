@@ -272,6 +272,9 @@ body.panelhidden #menu-show { display: block; }
 .sunbtns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .sunbtns .btn { width: 100%; justify-content: center; white-space: nowrap; padding: 14px 12px; letter-spacing: 0.05em; }
 .sunbtns #sun-playyear { grid-column: 1 / -1; }
+#seg-variant [data-v="shadownat"] { grid-column: 1 / -1; }
+#seg-variant { grid-template-columns: 1fr; flex: 1; }
+#seg-variant .btn.on { background: var(--gold-bright); color: #152130; border-color: var(--gold-bright); }
 .sunfacts { line-height: 1.5; }
 
 /* Ground: toggle row, then the image segmented as a fitted 2-column grid */
