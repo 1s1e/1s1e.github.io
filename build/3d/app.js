@@ -573,6 +573,8 @@ function loadModel() {
       const o = gltf.scene.getObjectByName(n);
       if (o) o.scale.y = CAGE_RAISE;
     }
+    buildPoolSunSamples();
+    applySun();
     dimGroupInit();
     setMode(state.mode, false);
     applyLayers();
@@ -759,6 +761,56 @@ function setMode(mode, moveCamera = true) {
 // ---------------------------------------------------------------- sun controls
 const sunState = { date: '2026-11-23', mins: 690 };
 let shadowDim = 1;   // Shadow slider on the Sun pane: 1 is the standard look
+// Pool in sun readout: the share of the pool water surface with a clear line
+// to the sun, sampled on a grid over the water and ray-tested against the
+// same meshes that cast the shadows in the scene (screen and glass cast
+// none, so they shade none here either).
+let poolSunPts = null, poolOccluders = [], poolSunKey = '';
+const poolSunEl = document.getElementById('sf-pool');
+const poolSunRc = new THREE.Raycaster();
+function buildPoolSunSamples() {
+  modelGroup.updateMatrixWorld(true);
+  poolOccluders = [];
+  const waters = [];
+  modelGroup.traverse((o) => {
+    if (!o.isMesh) return;
+    if (o.userData.mat === 'water') waters.push(o);
+    else if (o.castShadow) poolOccluders.push(o);
+  });
+  const pts = [];
+  const down = new THREE.Vector3(0, -1, 0);
+  const rc = new THREE.Raycaster();
+  const step = 1.25 * FT;
+  for (const w of waters) {
+    const bb = new THREE.Box3().setFromObject(w);
+    for (let x = bb.min.x + step / 2; x < bb.max.x; x += step) {
+      for (let z = bb.min.z + step / 2; z < bb.max.z; z += step) {
+        rc.set(new THREE.Vector3(x, bb.max.y + 1, z), down);
+        rc.far = 2;
+        const hit = rc.intersectObject(w, false);
+        if (hit.length) pts.push(hit[0].point.clone());
+      }
+    }
+  }
+  poolSunPts = pts;
+}
+function updatePoolSun(alt, az, dir) {
+  if (!poolSunEl) return;
+  if (!poolSunPts || !poolSunPts.length) { poolSunEl.textContent = ''; return; }
+  if (alt <= 0) { poolSunEl.textContent = '0%'; poolSunKey = 'night'; return; }
+  const key = Math.round(alt * 2) + '/' + Math.round(az * 2);
+  if (key === poolSunKey) return;
+  poolSunKey = key;
+  poolSunRc.far = 400;
+  let lit = 0;
+  const org = new THREE.Vector3();
+  for (const pt of poolSunPts) {
+    org.copy(pt).addScaledVector(dir, 0.05);
+    poolSunRc.set(org, dir);
+    if (!poolSunRc.intersectObjects(poolOccluders, false).length) lit++;
+  }
+  poolSunEl.textContent = Math.round(100 * lit / poolSunPts.length) + '%';
+}
 const fmtClock = (mins) => {
   if (mins === null || mins === undefined || isNaN(mins)) return '--:--';
   const m = Math.round(mins);
@@ -780,6 +832,7 @@ function applySun() {
   document.getElementById('sf-set').textContent = fmtClock(t.set);
   document.getElementById('sf-alt').textContent = alt.toFixed(1) + '°';
   document.getElementById('sf-az').textContent = az.toFixed(1) + '°';
+  updatePoolSun(alt, az, dir);
   invalidate(2, true);
 }
 const sunDateEl = document.getElementById('sun-date');

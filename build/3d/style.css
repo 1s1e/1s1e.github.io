@@ -421,8 +421,8 @@ body.panelhidden #menu-show { display: block; }
 
 /* Shadow data cleaned up: the sun figures as five ruled rows under the
    buttons, label left, value right, instead of one run-on line. */
-.sunfacts { margin-top: 8px; }
-.sfrow { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid var(--color-border); }
+.sunfacts { margin-top: 8px; margin-bottom: -11px; }
+.sfrow { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--color-border); line-height: 1.25; }
 .sfrow:last-child { border-bottom: none; }
 .sfrow .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
 .sfrow .v { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--color-text); }
