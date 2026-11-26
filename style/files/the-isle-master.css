@@ -21,28 +21,28 @@
   --ivory:#f0e8d5;
   --ivory-soft:#d9d0ba;
   --ivory-dim:#a89f88;
-  /* Golds on dark */
-  --gold:#c2a15c;
-  --gold-bright:#c9ab72;
-  --gold-line:rgba(194,161,92,.30);
-  --gold-line-soft:rgba(194,161,92,.16);
-  --dot-glow:rgba(194,161,92,.14);
-  --link-line:rgba(194,161,92,.65);
+  /* The accent on dark: The Isle Silver */
+  --gold:#C0C0C0;
+  --gold-bright:#C0C0C0;
+  --gold-line:rgba(192,192,192,.30);
+  --gold-line-soft:rgba(192,192,192,.16);
+  --dot-glow:rgba(192,192,192,.14);
+  --link-line:rgba(192,192,192,.65);
   /* The chart on dark */
-  --chart-border:rgba(194,161,92,.14);
-  --chart-cap:rgba(201,171,114,.50);
-  --coast:#c9ab72;
+  --chart-border:rgba(192,192,192,.14);
+  --chart-cap:rgba(192,192,192,.50);
+  --coast:#C0C0C0;
   --curve:#f0e8d5;
   --figure:#f0e8d5;
   /* Entries on dark */
   --entry-hover:rgba(240,232,213,.035);
   --num-c:rgba(240,232,213,.13);
-  --num-h:rgba(201,171,114,.30);
+  --num-h:rgba(192,192,192,.30);
   --ghost-num:rgba(240,232,213,.07);
-  --ghost-eyebrow:rgba(194,161,92,.45);
+  --ghost-eyebrow:rgba(192,192,192,.45);
   --ghost-title:rgba(240,232,213,.42);
   --ghost-text:rgba(217,208,186,.42);
-  --plate-c:rgba(194,161,92,.62);
+  --plate-c:rgba(192,192,192,.62);
   /* Toggle on dark */
   --toggle-bg:#f0e8d5;
   --toggle-ink:#1d2a3b;
@@ -65,17 +65,17 @@
   --ivory:#1d2a3b;
   --ivory-soft:#3c4763;
   --ivory-dim:#767c8d;
-  /* Golds on light */
-  --gold:#a07f3a;
-  --gold-bright:#a07f3a;
-  --gold-line:rgba(160,127,58,.38);
-  --gold-line-soft:rgba(160,127,58,.20);
-  --dot-glow:rgba(160,127,58,.16);
-  --link-line:rgba(160,127,58,.7);
+  /* The accent on light: Page Silver, silver's step */
+  --gold:#6e6e6e;
+  --gold-bright:#6e6e6e;
+  --gold-line:rgba(110,110,110,.38);
+  --gold-line-soft:rgba(110,110,110,.20);
+  --dot-glow:rgba(110,110,110,.16);
+  --link-line:rgba(110,110,110,.7);
   /* The chart on light */
-  --chart-border:rgba(160,127,58,.22);
-  --chart-cap:rgba(160,127,58,.72);
-  --coast:#a07f3a;
+  --chart-border:rgba(110,110,110,.22);
+  --chart-cap:rgba(110,110,110,.72);
+  --coast:#6e6e6e;
   --curve:#3c4763;
   --figure:#1d2a3b;
   /* Entries on light */
@@ -83,10 +83,10 @@
   --num-c:rgba(29,42,59,.12);
   --num-h:rgba(29,42,59,.24);
   --ghost-num:rgba(29,42,59,.06);
-  --ghost-eyebrow:rgba(160,127,58,.5);
+  --ghost-eyebrow:rgba(110,110,110,.5);
   --ghost-title:rgba(29,42,59,.36);
   --ghost-text:rgba(60,71,99,.42);
-  --plate-c:rgba(160,127,58,.68);
+  --plate-c:rgba(110,110,110,.68);
   /* Toggle on light */
   --toggle-bg:#1d2a3b;
   --toggle-ink:#f0e8d5;
@@ -112,7 +112,7 @@ a{ color:inherit; }
 .t-label{ font-family:var(--sans); font-weight:600; font-size:11px; letter-spacing:.34em; text-transform:uppercase; }
 .t-small{ font-family:var(--sans); font-weight:400; font-size:10.5px; letter-spacing:.26em; }
 
-/* The gold dot that heads a status group */
+/* The silver dot that heads a status group */
 .dot{
   width:5px; height:5px; border-radius:50%;
   background:var(--gold); flex:none;
@@ -142,23 +142,23 @@ a{ color:inherit; }
 }
 
 /* The switch: one form everywhere, the slider from /ref.
-   A pill on Deep, a gold knob resting on the side of the mode in use. */
+   A pill on Deep, a silver knob resting on the side of the mode in use. */
 .switch{
   width:117px; height:44px; border-radius:999px; padding:0; position:relative;
-  background:rgba(21,33,48,.94); border:1px solid rgba(201,171,114,.55);
+  background:rgba(21,33,48,.94); border:1px solid rgba(192,192,192,.55);
   color:#152130;
 }
-.switch:hover{ border-color:#c9ab72; }
-.switch:focus-visible{ outline:2px solid #c9ab72; outline-offset:2px; }
+.switch:hover{ border-color:#C0C0C0; }
+.switch:focus-visible{ outline:2px solid #C0C0C0; outline-offset:2px; }
 .switch .glyph{
   position:absolute; top:50%; transform:translateY(-50%);
-  font-size:11px; line-height:1; color:rgba(201,171,114,.85);
+  font-size:11px; line-height:1; color:rgba(192,192,192,.85);
 }
 .switch .sun{ left:11px; }
 .switch .moon{ right:11px; }
 .switch .knob{
   position:absolute; top:50%; left:5px; width:54px; height:32px; border-radius:999px;
-  background:#c9ab72; transform:translate(0,-50%); transition:transform .25s ease;
+  background:#C0C0C0; transform:translate(0,-50%); transition:transform .25s ease;
 }
 .switch[data-mode="dark"] .knob{ transform:translate(51px,-50%); }
 
@@ -173,8 +173,8 @@ a{ color:inherit; }
 
 /* The button: one form everywhere, the form the Reference
    Catalogues carried, restored as the standard November 24, 2026.
-   Sharp corners, capitals, a gold border; the secondary is
-   transparent and fills with its gold on hover, the primary
+   Sharp corners, capitals, a silver border; the secondary is
+   transparent and fills with its silver on hover, the primary
    fills with The Isle Navy and lifts to Panel on hover. */
 .btn{
   font-family:var(--sans); font-size:14.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
@@ -192,11 +192,11 @@ a{ color:inherit; }
 
 /* The field: one form everywhere. At least 44px tall, Source Sans 3
    at 17px, on Panel in dark and Light Tint in light, with a 1px
-   border of Page Gold at 30 percent in dark and 38 percent in
+   border of the accent at 30 percent in dark and 38 percent in
    light (the --gold-line token), curved corners of 6px and
    padding 8px by 12px. On focus the
-   border brightens to Page Gold and the field shows the 2px gold
-   focus outline. A field's label is a label in the house form. */
+   border brightens to the accent and the field shows the 2px
+   silver focus outline. A field's label is a label in the house form. */
 .field{
   font-family:var(--sans); font-size:17px; min-height:44px;
   padding:8px 12px; color:var(--ivory);
@@ -206,10 +206,10 @@ a{ color:inherit; }
 [data-theme="light"] .field{ background:#f3eee0; }
 .field:focus{ border-color:var(--gold); outline:2px solid var(--gold); outline-offset:2px; }
 
-/* A link inside text: Page Gold, dark or light by the mode, and
-   brightening on hover, never a colour outside the sixteen. In
-   light the resting colour is already the deeper gold, so the
-   brightening there is to Page Gold dark. */
+/* A link inside text: silver, The Isle Silver in dark and Page
+   Silver in light, brightening on hover, never a colour outside
+   the seventeen. In dark the hover brightens to the full silver;
+   in light the step already stands at full strength and holds. */
 .t-link{ color:var(--gold); }
 .t-link:hover, .t-link:focus-visible{ color:var(--gold-bright); }
-[data-theme="light"] .t-link:hover, [data-theme="light"] .t-link:focus-visible{ color:#c2a15c; }
+[data-theme="light"] .t-link:hover, [data-theme="light"] .t-link:focus-visible{ color:#6e6e6e; }

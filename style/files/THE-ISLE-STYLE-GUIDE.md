@@ -77,7 +77,7 @@ then the way the house never speaks.
 
 ## 2. Colours
 
-Sixteen colours in total: the five masters and eleven working steps.
+Seventeen colours in total: the five masters and twelve working steps.
 Every colour is spoken and written under its full house name; a master
 colour's name is never shortened, in speech, in records or in code.
 
@@ -88,10 +88,12 @@ colour's name is never shortened, in speech, in records or in code.
   colour artwork, and the icon ground.
 - The Isle Green, #46936a, RGB 70 147 106, CMYK 52 0 28 42. The palm crown, in the artwork
   only.
-- The Isle Gold, #c9ab72, RGB 201 171 114, CMYK 0 15 43 21. The palm trunk, and gold on
-  dark grounds: the coastline, headings, bright accents.
+- The Isle Gold, #c9ab72, RGB 201 171 114, CMYK 0 15 43 21. The palm trunk, in the
+  artwork only; it is never a page accent.
 - The Isle Silver, #C0C0C0, RGB 192 192 192, CMYK 0 0 0 25. The dark mode silver: the
   logo's island, waterline and text in dark mode, and the splash's name.
+  It is the site accent on dark grounds: labels, eyebrows, rules, dots,
+  the switch and its knob, the chart's coastline and bright accents.
 - The Isle Ivory, #f0e8d5, RGB 240 232 213, CMYK 0 3 11 6. Text on dark grounds, the
   chart's curves and sounding figures on dark, and the light page ground.
 
@@ -107,12 +109,19 @@ colour's name is never shortened, in speech, in records or in code.
 - Ivory Soft #d9d0ba, RGB 217 208 186, CMYK 0 4 14 15: secondary text on dark.
 - Ivory Dim #a89f88, RGB 168 159 136, CMYK 0 5 19 34: labels, captions and meta text on dark.
 
-### Gold for text
+### Gold in print
 
-- Page Gold dark #c2a15c, RGB 194 161 92, CMYK 0 17 53 24: the gold dot, rules, eyebrows and gold text on
-  dark grounds.
-- Page Gold light #a07f3a, RGB 160 127 58, CMYK 0 21 64 37: gold text and rules on light grounds, where
-  the artwork gold is too pale to read.
+- Page Gold dark #c2a15c, RGB 194 161 92, CMYK 0 17 53 24: gold for print on dark
+  grounds, and for the book's own form; on pages the accent is silver.
+- Page Gold light #a07f3a, RGB 160 127 58, CMYK 0 21 64 37: gold for print on light
+  grounds; on pages the accent on light grounds is Page Silver.
+
+### Silver for light
+
+- Page Silver #6e6e6e, RGB 110 110 110, CMYK 0 0 0 57: The Isle Silver's page step for
+  light grounds, where the master silver is too pale to read; it
+  measures 4.18 to 1 on The Isle Ivory. On every page the accent is
+  The Isle Silver on dark grounds and Page Silver on light grounds.
 
 ### Light grounds and their ink
 
@@ -137,32 +146,43 @@ Navy in dark and The Isle Ivory in light, so the browser bars meet the
 page without a seam at the top or the foot. A page is checked along its
 whole length, at the foot as well as the top.
 
+The inversion: in light mode a page turns over. Its bands and its
+footer exchange ground and ink with their dark form, Panel exchanging
+with Light Tint and Deep and The Isle Navy with The Isle Ivory, and
+the accent steps from The Isle Silver to Page Silver, so the light
+page is the dark page mirrored, not a different page. What is imagery
+does not invert: a photograph, a rendered stage, a specimen shown on
+its dark ground. Page chrome always inverts.
+
 ### The colours in use
 
 - Text stands in its settled pairings: The Isle Ivory and Ivory Soft on
   The Isle Navy, Panel and Deep; The Isle Navy and Soft Ink on The Isle
-  Ivory and Light Tint. Gold text is Page Gold, dark or light by the
-  mode. The Isle Green lives in the artwork only; it is never a page
-  text colour or a ground.
+  Ivory and Light Tint. Accent text is The Isle Silver in dark and
+  Page Silver in light. The Isle Green lives in the artwork only; it
+  is never a page text colour or a ground. The Isle Gold lives in the
+  artwork only likewise, the palm trunk, the catalogue covers' own
+  lettering and the posters; it is never a page accent.
 - Text pairings meet a contrast floor: 4.5 to 1 for body text, 3 to 1
   for large text. A pairing that falls short of the body floor is
   reserved for large text and labels. On the measured pairings, Dim
-  Ink on The Isle Ivory (3.4 to 1) and Page Gold light on The Isle
-  Ivory (3.1 to 1) are large text pairings only; every dark pairing
+  Ink on The Isle Ivory (3.4 to 1) and Page Silver on The Isle
+  Ivory (4.18 to 1) are large text pairings only; every dark pairing
   in use passes the body floor.
 - Colour in proportion: the ground carries the page, The Isle Navy
   in dark and The Isle Ivory in light, with Panel and Deep as its
   steps in dark and Light Tint in light. Text and surfaces take the
-  ivory and ink steps. The Isle Gold is reserved to labels,
-  eyebrows, rules, dots, the switch's knob, the coastline of the
-  chart and small marks of that kind; it never fills a field or a
-  panel and it is never a ground. The Isle Green appears only
-  inside the artwork, and The Isle Silver in the artwork and where
-  a colourway calls for it. A page that gives gold a field, or
-  green a surface, is out of proportion and is corrected.
+  ivory and ink steps. Silver marks the page: The Isle Silver in
+  dark and Page Silver in light are reserved to structure, labels,
+  eyebrows, rules, dots, the switch and its knob, the coastline of
+  the chart and small marks of that kind; silver never fills a
+  field or a panel and it is never a ground. The Isle Green and
+  The Isle Gold appear only inside the artwork. A page that gives
+  silver a field, or green or gold a surface, is out of proportion
+  and is corrected.
 - Colour misuse is shown, not only stated: Plate B of the book shows
   The Isle Gold filling a field, The Isle Green used as a surface, a
-  colour outside the sixteen set as a ground, and body text set in
+  colour outside the seventeen set as a ground, and body text set in
   Dim Ink on The Isle Ivory, below the contrast floor.
 
 ## 3. Icon
@@ -235,7 +255,7 @@ whole length, at the foot as well as the top.
   or avatar the mark stands in its colour colourway on white or The
   Isle Ivory, whole and uncropped, with its clear space; as a seal it
   stands alone, in the colourway the ground calls for. It is never set
-  on a colour outside the sixteen.
+  on a colour outside the seventeen.
 - No substitution: an image, file or element the user chose or supplied
   is never replaced without asking. If it cannot be used as it stands,
   that is said plainly and asked, never silently worked around.
@@ -293,8 +313,8 @@ whole length, at the foot as well as the top.
   letterspacing .34em, uppercase. Small, Source Sans 3 400, 10.5px,
   letterspacing .26em.
 - Page measures, as patterns: the tagline is the serif line at
-  clamp(19px, 2vw, 23px); report headings are labels in bright gold with
-  the gold dot; entry titles are Playfair Display 600 at clamp(28px, 3vw,
+  clamp(19px, 2vw, 23px); report headings are labels in bright silver
+  with the silver dot; entry titles are Playfair Display 600 at clamp(28px, 3vw,
   36px); entry and report body text is 16.5px at line height 1.5 to 1.55;
   row labels are 10px labels at letterspacing .24em.
 - Catalogue measures, as patterns: the catalogue's line is Playfair
@@ -314,7 +334,7 @@ whole length, at the foot as well as the top.
 - Panel measures: left panel padding 52px, 46px, 30px; right panel 34px,
   50px, 78px. The lockup sits atop the left panel, width
   min(252px, 72%). The tagline stands 26px below; the tagline
-  rule, 56px by 1px, in gold at .75 opacity. The report begins 40px
+  rule, 56px by 1px, in silver at .75 opacity. The report begins 40px
   below.
 - The left panel's foot carries 1s1e.com and the mode toggle.
 - The chart sits in its own block in the open ground of the left panel,
@@ -322,7 +342,7 @@ whole length, at the foot as well as the top.
 - Entries: a grid of a 96px numeral column and the text, gap 8px by 22px,
   padding 30px, 14px, 28px, divided by soft hairlines. The numeral is
   Playfair Display 500 at 58px. The status line under each entry is a
-  10.5px label preceded by a 26px gold rule.
+  10.5px label preceded by a 26px silver rule.
 - The splash: a full viewport column, no scrolling. Masthead 112px, 78px
   on short screens, 100px on narrow, 74px on both. The wordmark is
   artwork, at clamp(38px, 6.7vmin, 56px) with letterspacing .34em, its
@@ -337,12 +357,15 @@ whole length, at the foot as well as the top.
   masthead artwork over the framed poster
   and nothing else: no title extras, no buttons and no footer band stand
   on it.
-- The catalogue manner: a hero band in The Isle Navy with a 3px gold
+- The catalogue manner: a hero band in The Isle Navy with a 3px silver
   top border, a centred ornament and the title in large serif; a footer
   on Deep, centred, the palm flanking The Isle on both sides, the
-  imprint M & D Silver in spaced gold capitals, a thin gold line, then
-  small text. The footer palm is the Grand palm, not the windswept
-  palm.
+  imprint M & D Silver in spaced silver capitals, a thin silver line,
+  then small text. The footer palm is the Grand palm, not the
+  windswept palm. In light mode the band and the footer invert with
+  the page: the band stands on The Isle Ivory easing to Light Tint
+  with the wordmark in its navy artwork, and the footer stands on
+  Light Tint with the lockup in its colour artwork.
 - Nothing on any page requires sideways scrolling, at any width.
 
 ## 7. Chart
@@ -350,7 +373,7 @@ whole length, at the foot as well as the top.
 - The chart is the house's signature graphic: a fragment of an engraved
   nautical chart, drawn to one plate. It is set in its own block in open
   ground, never behind text, never colliding with it, never playful. One
-  coastline, a fine double shore line in gold, entering and leaving the
+  coastline, a fine double shore line in silver, entering and leaving the
   edges in the upper third, with a point and a bay, the land above it
   empty. No anchor, no hachures, no headlands, no names or labels. Its
   caption, SOUNDINGS IN FATHOMS, stands at the plate's top left. The
@@ -358,7 +381,7 @@ whole length, at the foot as well as the top.
 - The shore line is this path: M-10 132 C 60 108, 110 84, 170 88 C 230 92,
   260 128, 320 134 C 380 140, 420 108, 480 104 C 540 100, 600 118, 650
   112. The inner shore line is the same path shifted 8 units toward the
-  water, in gold and thinner. Three depth curves follow the shore as true
+  water, in silver and thinner. Three depth curves follow the shore as true
   parallel offsets, at +54, +108 and +162 units, dotted, in ivory.
 - Soundings are taken along four survey lines run off the shore,
   deepening along each line in small steps: 2, 5, 11 and 19 down the
@@ -370,9 +393,10 @@ whole length, at the foot as well as the top.
   10, 14 and 18 seconds, the coastline never moves. Under reduced motion
   the chart is still.
 - PLATE I stands at the plate's bottom right, Playfair Display 600,
-  10.5px, letterspacing .30em, in Page Gold: full Page Gold dark in the
-  plate itself; as the index's page mark, Page Gold at 62 percent in
-  dark mode and 68 percent in light, standing at the foot of the right
+  10.5px, letterspacing .30em, in silver: full The Isle Silver in the
+  plate itself; as the index's page mark, The Isle Silver at 62 percent
+  in dark mode and Page Silver at 68 percent in light, standing at the
+  foot of the right
   panel. The plate carries no frame and no compass rose: it sits
   unboxed, as the chart sits on the site. On the index itself the chart
   block carries the caption only, and PLATE I stands as the page mark.
@@ -392,8 +416,8 @@ whole length, at the foot as well as the top.
 - A status report is set in two headed groups. It rests on one
   universal check of the whole record, no matter how many records
   there ultimately are for the address. Each heading is a label in
-  bright gold, preceded by the gold dot: a 5px circle in gold with a soft
-  glow ring. The lead line under the first heading is Playfair Display
+  bright silver, preceded by the silver dot: a 5px circle in silver
+  with a soft glow ring. The lead line under the first heading is Playfair Display
   600 at 22px, a date and a time. Rows are label and value pairs on a
   104px label column. A soft hairline divides the groups. The first group,
   headed THE LAST CHECK, states the last thing that happened; the second,
@@ -404,7 +428,7 @@ whole length, at the foot as well as the top.
   and uppercase, cells padded 8px by 10px, and figures right aligned
   in tabular numerals. A record's identifier is copied exactly and
   never shortened.
-- An index entry carries a large pale numeral, a gold eyebrow label, a
+- An index entry carries a large pale numeral, a silver eyebrow label, a
   Playfair title, the exact description, and a quiet status line in the
   form OPEN plus its measure, and the whole block is the link. A work in
   preparation is shown ghosted, unlinked, in the same form.
@@ -543,7 +567,7 @@ What is required of anything created:
 - In print, the mark stands in its black or colour colourway, on ivory
   or white stock. The catalogue PDFs are the standing example of
   finished print documents.
-- In print, the sixteen are built as CMYK from the tabulated builds
+- In print, the seventeen are built as CMYK from the tabulated builds
   in section 2 and proofed against the master values on the stock in
   use. The Isle Gold and The Isle Silver print as flat colour, never
   as metallic foil.
@@ -616,14 +640,14 @@ What is required of anything created:
 - The light and dark switch is one form everywhere: a pill, 117 by
   44px, fully rounded, on a Deep ground at 94 percent, with a 1px
   border of
-  The Isle Gold at 55 percent, brightening to full The Isle Gold on
-  hover. A sun glyph stands at the left, 11px in, and a moon glyph at
-  the right, both in The Isle Gold at 85 percent.
-- The knob is 54 by 32px, fully rounded, in The Isle Gold, carrying the
+  The Isle Silver at 55 percent, brightening to full The Isle Silver
+  on hover. A sun glyph stands at the left, 11px in, and a moon glyph
+  at the right, both in The Isle Silver at 85 percent.
+- The knob is 54 by 32px, fully rounded, in The Isle Silver, carrying the
   glyph of the mode in use in Deep. It rests on the side of the mode in
   use and slides 51px to change, on a .25 second ease. The switch is a
   real switch, role="switch", with its checked state carried for
-  assistive technology, and its focus outline is 2px in The Isle Gold.
+  assistive technology, and its focus outline is 2px in The Isle Silver.
   Where the switch sits is each page's own furniture.
 - The choice is remembered on the visitor's own device, in
   localStorage under the key isle-theme. A remembered choice stands
@@ -635,11 +659,11 @@ What is required of anything created:
   than 44px.
 - Form fields are one form everywhere: a field stands at least 44px
   tall, in Source Sans 3 at 17px, on Panel in dark and Light Tint in
-  light, with a 1px border of Page Gold at 30 percent in dark and
-  38 percent in light, curved corners of 6px and padding 8px by
-  12px. On focus
-  the border brightens to Page Gold and the field shows the 2px gold
-  focus outline. A field's label is a label in the house form.
+  light, with a 1px border of The Isle Silver at 30 percent in dark
+  and Page Silver at 38 percent in light, curved corners of 6px and
+  padding 8px by 12px. On focus
+  the border brightens to the mode's silver and the field shows the
+  2px silver focus outline. A field's label is a label in the house form.
 - The buttons are one form everywhere, the form the Reference
   Catalogues carried: sharp corners. Source Sans 3 at 14.5px, weight
   700, letter-spacing 0.1em, the labels written in Title Case and set
@@ -693,13 +717,13 @@ What is required of anything created:
   the menu is closed and the × while it is open. Play and Pause are
   a pair, and the expand and collapse chevrons are a pair. The
   switch's sun and moon are state glyphs of the same kind.
-- Off, the button is transparent, with a border of The Isle Gold in
-  dark and Page Gold light in light, and its text in the mode's ink:
+- Off, the button is transparent, with a border of The Isle Silver in
+  dark and Page Silver in light, and its text in the mode's ink:
   The Isle Ivory in dark, The Isle Navy in light. On hover it fills
-  with that gold, and its text turns to Deep in dark and The Isle
+  with that silver, and its text turns to Deep in dark and The Isle
   Ivory in light.
 - On, the button fills with The Isle Navy, its text The Isle Ivory,
-  with a border of The Isle Gold in dark and The Isle Navy in light.
+  with a border of The Isle Silver in dark and The Isle Navy in light.
   On hover the fill lifts to Panel, the border unchanged. Off and on
   are never carried by colour alone: the fill itself changes.
 - The assignment rule: the primary action on a page takes the on form,
@@ -709,7 +733,8 @@ What is required of anything created:
   buttons in the off form; the Reader's Download PDF and Try Again
   are buttons in the off form; Full size, Link to this page, Copy
   link, Hide and their kind are text links, and stay text.
-- A link inside text stands in Page Gold, dark or light by the mode,
-  and brightens on hover. It is never set in the body text colour, and
-  never in a colour outside the sixteen. A link that performs an action
+- A link inside text stands in silver, The Isle Silver in dark and
+  Page Silver in light, and brightens on hover. It is never set in the
+  body text colour, and never in a colour outside the seventeen. A
+  link that performs an action
   follows the assignment rule above.

@@ -85,31 +85,31 @@ a:hover{color:var(--gold-bright)}
 /* Section 7: the plate stands on Deep in both modes */
 .platebox{background:#152130;padding:30px 26px 18px;margin:24px 0}
 .platebox svg{width:100%;height:auto;display:block}
-.platebox .shore{stroke:#c9ab72;stroke-width:1.6;fill:none}
-.platebox .shore2{stroke:#c9ab72;stroke-width:.8;fill:none;opacity:.75}
+.platebox .shore{stroke:#C0C0C0;stroke-width:1.6;fill:none}
+.platebox .shore2{stroke:#C0C0C0;stroke-width:.8;fill:none;opacity:.75}
 .platebox .curve{stroke:#f0e8d5;stroke-width:1;fill:none;stroke-dasharray:1.5 5;opacity:.8}
 .platebox .fig{fill:#f0e8d5;font-family:var(--serif);font-style:italic;font-weight:500;font-size:13px}
-.platebox .platecap{fill:#c2a15c;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.34em}
-.platebox .platei{fill:#c2a15c;font-family:var(--serif);font-weight:600;font-size:10.5px;letter-spacing:.30em}
+.platebox .platecap{fill:#C0C0C0;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.34em}
+.platebox .platei{fill:#C0C0C0;font-family:var(--serif);font-weight:600;font-size:10.5px;letter-spacing:.30em}
 
 /* Section 8: the report and entry specimens stand on Deep in both modes */
 .reportpanel{background:#152130;color:#f0e8d5;padding:30px 32px;margin:24px 0}
-.rp-head{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#c2a15c;display:flex;align-items:center;gap:10px}
-.rp-dot{width:5px;height:5px;border-radius:50%;background:#c9ab72;box-shadow:0 0 0 3px rgba(201,171,114,.18);flex:none}
+.rp-head{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#C0C0C0;display:flex;align-items:center;gap:10px}
+.rp-dot{width:5px;height:5px;border-radius:50%;background:#C0C0C0;box-shadow:0 0 0 3px rgba(192,192,192,.18);flex:none}
 .rp-lead{font-family:var(--serif);font-weight:600;font-size:22px;margin:14px 0 16px}
 .rp-row{display:grid;grid-template-columns:104px 1fr;column-gap:18px;align-items:baseline;margin-bottom:10px}
 .rp-row .k{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#a89f88}
-.rp-div{border-top:1px solid rgba(194,161,92,.16);margin:20px 0}
+.rp-div{border-top:1px solid rgba(192,192,192,.16);margin:20px 0}
 .entrypanel{background:#152130;color:#f0e8d5;padding:30px 32px;margin:24px 0}
-.entry{display:grid;grid-template-columns:96px 1fr;column-gap:22px;padding:22px 0;border-bottom:1px solid rgba(194,161,92,.16)}
+.entry{display:grid;grid-template-columns:96px 1fr;column-gap:22px;padding:22px 0;border-bottom:1px solid rgba(192,192,192,.16)}
 .entry:first-child{padding-top:0}
 .entry:last-child{padding-bottom:0;border-bottom:none}
 .entry .numeral{font-family:var(--serif);font-weight:500;font-size:58px;line-height:1;color:rgba(240,232,213,.14)}
-.entry .eyebrow{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#c2a15c}
+.entry .eyebrow{font-size:11px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#C0C0C0}
 .entry .etitle{font-family:var(--serif);font-weight:600;font-size:30px;margin:6px 0 8px}
 .entry .edesc{font-size:16.5px;line-height:1.55;color:#d9d0ba;max-width:56ch}
 .entry .estatus{display:flex;align-items:center;gap:12px;margin-top:16px;font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#a89f88}
-.entry .estatus::before{content:"";width:26px;height:1px;background:#c2a15c}
+.entry .estatus::before{content:"";width:26px;height:1px;background:#C0C0C0}
 
 /* Section 12: specimens of the button and the field, in the master forms */
 .btnrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
