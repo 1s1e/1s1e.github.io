@@ -21,12 +21,9 @@
 #topbar .tb-div{ width:1px; align-self:stretch; background:var(--gold-line); }
 #topbar .tb-title{ font-family:var(--serif); font-weight:500; font-size:20px; letter-spacing:0.02em; color:var(--ivory); white-space:nowrap; }
 #topbar .tb-spacer{ flex:1; }
-/* The live link stands 60px tall: the page's original sheet had no
-   universal box sizing reset, so its min-height 44px applied to the
-   content box and padding and border added 16px. The master sheet
-   sets border-box throughout; this height keeps the top bar at its
-   live 81px rather than shrinking it to 65px. */
-#topbar .tb-back{ text-decoration:none; height:60px; }
+/* Project Home stands in the lineless standard form: no border, no
+   box, no background, the house glyph alone in a 44px tap area. */
+#topbar .tb-back{ text-decoration:none; border:none; background:none; box-shadow:none; padding:0; width:44px; height:44px; flex:none; }
 #topbar .tb-back svg{ width:20px; height:20px; }
 #themesw{ display:flex; align-items:center; gap:8px; }
 #themesw .tw-label{ font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ivory-dim); }
@@ -35,7 +32,7 @@
   #topbar .tb-tree{ height:24px; }
   #topbar .tb-word{ font-size:13px; letter-spacing:0.22em; }
   #topbar .tb-title{ font-size:17px; white-space:nowrap; }
-  #topbar .tb-back{ height:58px; padding:6px 10px; font-size:12px; }
+  #topbar .tb-back{ padding:0; font-size:12px; }
 }
 @media (max-width:560px){
   #topbar .tb-word{ display:none; }
