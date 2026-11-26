@@ -89,7 +89,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.45;
 
-const state = { mode: 'exterior', house: true, labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: true, base: 'render', ov: {} };
+const state = { mode: 'exterior', house: true, labels: true, dims: false, elev: false, spin: false, pool: true, lawn: true, sat: true, base: 'render', ov: {}, op: {} };
 let lawnSlab = null, lawnPatch = null, wallPatchMesh = null, modelGroup = null;
 
 // render on demand
@@ -336,7 +336,7 @@ const OV_DEFS = [
   { key: 'meback', file: '19-measurements-enclosure-back.png', detail: '19-measurements-enclosure-back-detail.png', rect: LOT_FRAME, ord: 25, on: false },
   { key: 'mecorner', file: '20-measurements-enclosure-corner.png', detail: '20-measurements-enclosure-corner-detail.png', rect: LOT_FRAME, ord: 26, on: false }
 ];
-for (const d of OV_DEFS) state.ov[d.key] = d.on;
+for (const d of OV_DEFS) { state.ov[d.key] = d.on; state.op[d.key] = 100; }
 // The two survey sheets are 8640x12000 each; decoding and uploading one on
 // the first click stalls the view for seconds. Load and upload them in the
 // background once the viewer is up, one at a time, so the first click on
@@ -369,10 +369,17 @@ function ensureOverlay(d) {
     dm.renderOrder = 10 + d.ord + 0.5;
     g.add(dm);
   }
+  const opv = (state.op[d.key] ?? 100) / 100;
+  g.traverse((o) => { if (o.material) o.material.opacity = opv; });
   g.visible = false;
   layerGroup.add(g);
   ovMeshes[d.key] = g;
   return g;
+}
+function applyOpacity(key) {
+  const g = ovMeshes[key];
+  if (g) { const v = state.op[key] / 100; g.traverse((o) => { if (o.material) o.material.opacity = v; }); }
+  invalidate();
 }
 function applyLayers() {
   for (const k of Object.keys(baseMeshes)) baseMeshes[k].visible = false;
@@ -905,9 +912,49 @@ for (const d of OV_DEFS) {
   const el = document.getElementById('t-ov-' + d.key);
   if (el) el.addEventListener('change', (e) => { state.ov[d.key] = e.target.checked; applyLayers(); });
 }
+// Layers pane additions: per layer opacity sliders and per group
+// Show / Hide pairs, in the Lot Viewer's forms. Every overlay layer is a
+// textured plane whose material is already transparent, so the slider
+// drives the material opacity of the layer's own meshes, main sheet and
+// detail sheet alike. A slider moved above zero on a layer that is off
+// turns that layer on, as the Lot Viewer's sliders do.
+const LAYER_GROUPS = [
+  ['interior', 'exterior'],
+  ['property', 'surveylines', 'surveydata'],
+  ['flood', 'floodmap', 'floodold', 'floodmapold'],
+  ['mhside', 'mhback', 'mhfront', 'mhcorner', 'meside', 'meback', 'mecorner'],
+  ['street', 'highlight']
+];
+function syncCellOff(key) {
+  const cell = document.querySelector('.laycell[data-cell="' + key + '"]');
+  const el = document.getElementById('t-ov-' + key);
+  if (cell && el) cell.classList.toggle('off', !el.checked);
+}
+for (const d of OV_DEFS) {
+  const el = document.getElementById('t-ov-' + d.key);
+  if (el) el.addEventListener('change', () => syncCellOff(d.key));
+  syncCellOff(d.key);
+  const rng = document.querySelector('.oprange[data-key="' + d.key + '"]');
+  const pct = document.querySelector('.pct[data-pct="' + d.key + '"]');
+  if (rng) rng.addEventListener('input', () => {
+    state.op[d.key] = +rng.value;
+    if (pct) pct.textContent = rng.value + '%';
+    if (+rng.value > 0 && el && !el.checked) { el.checked = true; state.ov[d.key] = true; syncCellOff(d.key); applyLayers(); }
+    applyOpacity(d.key);
+  });
+}
+document.querySelectorAll('#pane-layers .sec-all').forEach((b) => b.addEventListener('click', () => {
+  const on = b.dataset.act === 'show';
+  for (const key of LAYER_GROUPS[+b.dataset.grp]) {
+    const el = document.getElementById('t-ov-' + key);
+    if (el) { el.checked = on; syncCellOff(key); }
+    state.ov[key] = on;
+  }
+  applyLayers();
+}));
 function setAllLayers(on) {
   state.sat = on; document.getElementById('t-sat').checked = on;
-  for (const d of OV_DEFS) { state.ov[d.key] = on; const el = document.getElementById('t-ov-' + d.key); if (el) el.checked = on; }
+  for (const d of OV_DEFS) { state.ov[d.key] = on; const el = document.getElementById('t-ov-' + d.key); if (el) el.checked = on; syncCellOff(d.key); }
   applyLayers();
 }
 document.querySelectorAll('.sec').forEach((sec) => {
@@ -932,6 +979,15 @@ document.getElementById('layers-reset').addEventListener('click', () => {
   state.base = 'render';
   document.querySelectorAll('#seg-variant button').forEach((x) => x.classList.toggle('on', x.dataset.v === 'render'));
   for (const d of OV_DEFS) { state.ov[d.key] = d.on; const el = document.getElementById('t-ov-' + d.key); if (el) el.checked = d.on; }
+  for (const d of OV_DEFS) {
+    state.op[d.key] = 100;
+    const rng = document.querySelector('.oprange[data-key="' + d.key + '"]');
+    const pct = document.querySelector('.pct[data-pct="' + d.key + '"]');
+    if (rng) rng.value = 100;
+    if (pct) pct.textContent = '100%';
+    syncCellOff(d.key);
+    applyOpacity(d.key);
+  }
   sunState.date = '2026-11-23'; sunState.mins = 690; syncSunInputs(); shadowRangeEl.value = 50; syncShadow(); applySun();
   applyLayers();
   setMode('exterior', false);

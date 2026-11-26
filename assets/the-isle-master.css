@@ -2321,3 +2321,29 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) .sunbtns .btn { min-width: 0; }
 /* Shadow depth slider on the Sun pane: same form as the time slider. */
 :where(html.pg-3d) #shadow-range { flex: 1; min-width: 0; accent-color: var(--color-primary); min-height: 44px; }
+/* Layers pane additions (Nov 26, 2026): the Lot Viewer's strengths
+   carried into the 3D Model, direction one of the viewer unification
+   programme.
+   1. Each layer group head carries a Show / Hide pair, taking the
+      page's own .sec-all form; the head becomes a row so the pair
+      stands at its right edge, as in the Lot Viewer's .sec-head.
+   2. Each layer row gains an opacity slider with a percentage readout,
+      the Lot Viewer's slider row form carried across: a 44px row under
+      the toggle, square thumb on the accent track, the readout at 12px
+      in the dimmer ink, tabular figures, 36px wide at the right. A
+      layer that is off shows its slider row dimmed, as the Lot Viewer
+      dims the row of an off layer. */
+:where(html.pg-3d) #pane-layers .laysec { display: flex; align-items: center; }
+:where(html.pg-3d) #pane-layers .laysec-name { flex: 1; }
+:where(html.pg-3d) #pane-layers .sec-all { letter-spacing: 0; text-transform: none; }
+:where(html.pg-3d) #pane-layers .laycell { min-width: 0; }
+:where(html.pg-3d) #pane-layers .laycell .toggle { display: flex; }
+:where(html.pg-3d) #pane-layers .laycell.span2 { grid-column: 1 / -1; }
+:where(html.pg-3d) #pane-layers .oprow { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+:where(html.pg-3d) #pane-layers .laycell.off .oprow { opacity: 0.45; }
+:where(html.pg-3d) #pane-layers .oprange { -webkit-appearance: none; appearance: none; box-sizing: border-box; flex: 1; min-width: 0; height: 44px; padding: 12px 0; background: transparent; cursor: pointer; }
+:where(html.pg-3d) #pane-layers .oprange::-webkit-slider-runnable-track { height: 4px; background: var(--gold); }
+:where(html.pg-3d) #pane-layers .oprange::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; margin-top: -6px; background: var(--gold); border: none; border-radius: 0; }
+:where(html.pg-3d) #pane-layers .oprange::-moz-range-track { height: 4px; background: var(--gold); }
+:where(html.pg-3d) #pane-layers .oprange::-moz-range-thumb { width: 16px; height: 16px; background: var(--gold); border: none; border-radius: 0; }
+:where(html.pg-3d) #pane-layers .pct { font-size: 12px; color: var(--dim-sm); width: 36px; flex: none; text-align: right; font-variant-numeric: tabular-nums; }
