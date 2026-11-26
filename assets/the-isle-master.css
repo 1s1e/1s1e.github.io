@@ -1484,6 +1484,12 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; }
 :where(html.pg-style) .sx-role { padding:20px 0; border-bottom:1px solid var(--gold-line-soft); }
 :where(html.pg-style) .sx-role:last-child { border-bottom:none; }
+/* The technical face specimen: a status line from the systems
+   console, set in Roboto Mono, the face the entry above it names.
+   The lamp is the console's own: 11px, its green, a tight 4px halo. */
+:where(html.pg-style) .sx-tech { font-family:"Roboto Mono", Menlo, Consolas, monospace; font-size:13px; letter-spacing:.08em; display:flex; align-items:center; gap:10px; color:var(--ivory-soft); }
+:where(html.pg-style) .sx-tech .sx-techlamp { width:11px; height:11px; border-radius:50%; flex:none; background:#3fb950; box-shadow:0 0 4px rgba(63,185,80,.45); }
+:where(html.pg-style) .sx-tech .sx-techfig { margin-left:auto; font-weight:500; white-space:nowrap; }
 :where(html.pg-style) .sx-masters { display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin:26px 0 8px; }
 :where(html.pg-style) .sx-chip { height:104px; border:1px solid var(--gold-line-soft); }
 :where(html.pg-style) .sx-cname { font-weight:600; margin:12px 0 0; }
