@@ -1504,9 +1504,14 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .sx-btnrow { display:flex; flex-wrap:wrap; gap:26px; }
 :where(html.pg-style) .sx-btnfig { margin:0; }
 :where(html.pg-style) .sx-btnfig figcaption { font-size:13.5px; color:var(--ivory-soft); margin-top:10px; }
-:where(html.pg-style) .sx-hover-off { background:var(--gold-bright); color:#152130; }
-:where(html[data-theme="light"].pg-style) .sx-hover-off { color:#f0e8d5; }
-:where(html.pg-style) .sx-hover-on { background:#22344a; color:#f0e8d5; }
+/* The two hover specimens carry the hover form standing still,
+   since a still example cannot be hovered. The values are the
+   sheet's own hover values for each form and mode, and the .btn
+   compound in each selector is what lets the specimen carry the
+   cascade against the .btn and .btn.on rules above. */
+:where(html.pg-style) .btn.sx-hover-off { background:var(--gold-bright); color:#152130; }
+:where(html[data-theme="light"].pg-style) .btn.sx-hover-off { color:#f0e8d5; }
+:where(html.pg-style) .btn.sx-hover-on { background:#22344a; color:#f0e8d5; }
 :where(html.pg-style) .sx-fieldwrap { max-width:420px; margin:22px 0 6px; }
 :where(html.pg-style) .sx-fieldwrap label { display:block; margin-bottom:10px; }
 :where(html.pg-style) .sx-fieldwrap .field { width:100%; }
