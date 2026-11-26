@@ -2435,7 +2435,8 @@ function pvRenderFeeds(){
     return '<div class="pv-feed"><span>' + PV_FEED_NAMES[key] + '</span>' +
       '<span class="pv-feed-state ' + st + '">' + word + '</span>' +
       '<span>' + when + '</span></div>';
-  }).join("");
+  }).join("") + (feeds.indexOf("region") >= 0 ?
+    '<div class="pv-feed"><span>Aircraft data from the OpenSky Network</span><span></span><span></span></div>' : "");
 }
 function pvRefreshLive(){
   Promise.all([
