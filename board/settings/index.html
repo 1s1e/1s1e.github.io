@@ -21,6 +21,7 @@
   .badge{ background: var(--amber); color:#111; font-size: 11px; font-weight:700;
           letter-spacing:.12em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
   .badge.editing{ background:#3a3b41; color: var(--ink); }
+  .badge.type{ background:#274435; color:#bfe6cf; }
   button{ background:#1e1f23; color:var(--ink); border:1px solid #3a3b41; border-radius: 7px;
           padding: 9px 13px; font-size: 13px; font-weight:600; cursor:pointer; min-height: 40px; }
   button:hover{ border-color:#5a5b63; }
@@ -51,6 +52,15 @@
   td{ padding: 3px; }
   td input{ min-height: 40px; padding: 8px; font-size: 14px; }
   td.del{ width: 44px; text-align:center; }
+  @media (max-width: 560px){
+    #flights-card{ overflow-x: auto; }
+    #flights-card table{ min-width: 540px; }
+    td{ padding: 2px; }
+    td input{ padding: 6px 4px; font-size: 12px; }
+    th{ font-size: 9px; letter-spacing:.08em; padding: 4px 2px 6px; }
+    td.del{ width: 32px; }
+    td.del button{ padding: 6px 8px; min-height: 34px; }
+  }
   .bar{ position: fixed; left:0; right:0; bottom:0; background: rgba(12,12,14,.96);
         border-top: 1px solid var(--line); padding: 12px 16px; z-index: 50; }
   .bar .inner{ max-width: 860px; margin: 0 auto; }
@@ -60,6 +70,15 @@
   .bar .btns button{ flex: 1; min-width: 100px; }
   .slider-val{ color: var(--ink); font-size: 13px; float: right; letter-spacing: 0; }
   .hint{ color: var(--mut); font-size: 12px; margin-top: 6px; }
+  /* ---- per-option test controls ---- */
+  .selrow{ display:flex; gap: 8px; align-items: stretch; }
+  .selrow select{ flex: 1; width: auto; min-width: 0; }
+  .slider-row{ display:flex; gap: 8px; align-items: center; }
+  .slider-row input[type="range"]{ flex: 1; width: auto; min-width: 0; }
+  .test-btn{ flex: none; min-height: 44px; padding: 9px 14px; white-space: nowrap; }
+  .slider-row .test-btn{ min-height: 38px; padding: 7px 12px; }
+  .test-btn.playing{ background: var(--amber); border-color: var(--amber); color:#141414; }
+  .note-text{ font-size: 15px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -73,7 +92,16 @@
 
   <h2>Editing: <span id="editing-name"></span></h2>
 
-  <div class="card">
+  <div class="card" id="shows-card">
+    <label for="sel-shows">Board shows</label>
+    <select id="sel-shows">
+      <option value="departures">Departures</option>
+      <option value="arrivals">Arrivals</option>
+    </select>
+    <div class="hint">Arrivals boards read THE ISLE · ARRIVALS at the top, and the DESTINATION column becomes FROM.</div>
+  </div>
+
+  <div class="card" id="flights-card">
     <label>Flights</label>
     <table>
       <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th></th></tr></thead>
@@ -82,36 +110,66 @@
     <button id="btn-add-flight" type="button" style="margin-top:10px;">+ Add flight</button>
   </div>
 
+  <div class="card" id="colour-note" style="display:none;">
+    <label>Colour board</label>
+    <div class="note-text">Colour board: the picture scene is built in; sound layers still apply if you turn them on.</div>
+  </div>
+
   <div class="card">
     <label for="sel-clack">Clack set (split-flap sound)</label>
-    <select id="sel-clack"></select>
-    <div class="hint">Pragotron is the default: one module, close and dry. The others are whole boards in their own rooms.</div>
+    <div class="selrow">
+      <select id="sel-clack"></select>
+      <button type="button" class="test-btn" id="btn-test-clack" data-test="clack-set" data-label="Test">Test</button>
+    </div>
+    <div class="hint">Pragotron is the default: one module, close and dry. The others are whole boards in their own rooms. Test plays a short cascade of the selected set.</div>
   </div>
 
   <div class="card">
     <div class="switch-row"><span class="lab">Airport sounds (ambience)</span>
       <span class="switch"><input type="checkbox" id="sw-amb"><span class="track"></span></span></div>
     <label for="sel-bed">Terminal bed</label>
-    <select id="sel-bed"></select>
+    <div class="selrow">
+      <select id="sel-bed"></select>
+      <button type="button" class="test-btn" id="btn-test-bed" data-test="bed" data-label="Play">Play</button>
+    </div>
     <label>Bed level <span class="slider-val" id="val-bed"></span></label>
-    <input type="range" id="rng-bed" min="0" max="100">
+    <div class="slider-row">
+      <input type="range" id="rng-bed" min="0" max="100">
+      <button type="button" class="test-btn" data-test="level-bed" data-label="Test">Test</button>
+    </div>
     <label>Event sounds level <span class="slider-val" id="val-events"></span></label>
-    <input type="range" id="rng-events" min="0" max="100">
+    <div class="slider-row">
+      <input type="range" id="rng-events" min="0" max="100">
+      <button type="button" class="test-btn" data-test="level-events" data-label="Test">Test</button>
+    </div>
     <label>Announcements level <span class="slider-val" id="val-announcements"></span></label>
-    <input type="range" id="rng-announcements" min="0" max="100">
+    <div class="slider-row">
+      <input type="range" id="rng-announcements" min="0" max="100">
+      <button type="button" class="test-btn" data-test="level-announcements" data-label="Test">Test</button>
+    </div>
     <label>Clack level <span class="slider-val" id="val-clack"></span></label>
-    <input type="range" id="rng-clack" min="0" max="100">
+    <div class="slider-row">
+      <input type="range" id="rng-clack" min="0" max="100">
+      <button type="button" class="test-btn" data-test="level-clack" data-label="Test">Test</button>
+    </div>
+    <div class="hint">Each Test plays a representative sound at that slider's level, whatever the ambience switch says.</div>
   </div>
 
   <div class="card">
     <label for="sel-voice">Announcement voice</label>
-    <select id="sel-voice"></select>
+    <div class="selrow">
+      <select id="sel-voice"></select>
+      <button type="button" class="test-btn" id="btn-test-voice" data-test="voice" data-label="Test">Test</button>
+    </div>
     <label for="sel-signal">Signal before announcements</label>
-    <select id="sel-signal">
-      <option value="dong">International double dong</option>
-      <option value="cdg">CDG motif (modelled)</option>
-      <option value="none">None</option>
-    </select>
+    <div class="selrow">
+      <select id="sel-signal">
+        <option value="dong">International double dong</option>
+        <option value="cdg">CDG motif (modelled)</option>
+        <option value="none">None</option>
+      </select>
+      <button type="button" class="test-btn" id="btn-test-signal" data-test="signal" data-label="Test">Test</button>
+    </div>
     <div class="switch-row"><span class="lab">Scheduled announcements on the board</span>
       <span class="switch"><input type="checkbox" id="sw-pa"><span class="track"></span></span></div>
     <div class="grid2">
@@ -123,8 +181,11 @@
 
   <div class="card">
     <label for="sel-solo">Hear an announcement on its own</label>
-    <select id="sel-solo"></select>
-    <div class="hint">Plays the signal, then the announcement in the voice chosen above. The three live recordings play in their own voices.</div>
+    <div class="selrow">
+      <select id="sel-solo"></select>
+      <button type="button" class="test-btn" id="btn-test-solo" data-test="solo-test" data-label="Test">Test</button>
+    </div>
+    <div class="hint">Test and Play both play the signal, then the announcement in the voice chosen above. The three live recordings play in their own voices.</div>
     <button id="btn-solo" type="button" class="primary" style="margin-top:12px;">Play announcement</button>
     <button id="btn-solo-stop" type="button" style="margin-top:12px;">Stop</button>
   </div>
@@ -172,51 +233,162 @@ var LIVE_PA = [
 ];
 var SETS = [["pragotron","Pragotron module"],["frankfurt","Frankfurt hall"],
             ["barcelona","Barcelona Sants"],["madeira","Madeira airport"]];
-var BEDS = [["manchester","Manchester Airport"],["kualalumpur","Kuala Lumpur Airport"],
-            ["lanzarote","Lanzarote Airport"],["rdu","Raleigh-Durham Terminal"]];
+var BEDS = [["manchester","Manchester Airport","ambience-manchester-airport.mp3"],
+            ["kualalumpur","Kuala Lumpur Airport","ambience-kualalumpur-calm.mp3"],
+            ["lanzarote","Lanzarote Airport","ambience-lanzarote-airport.mp3"],
+            ["rdu","Raleigh-Durham Terminal","ambience-rdu-terminal.mp3"]];
+function range(n){ var a = []; for(var i=0;i<n;i++) a.push(i); return a; }
+var SET_FILES = {
+  pragotron: { steps: [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63], flaps: [0,1,2,3] },
+  frankfurt: { steps: range(24), flaps: [0,1,2,3] },
+  barcelona: { steps: range(24), flaps: [0,1,2,3] },
+  madeira:   { steps: range(24), flaps: [0,1,2,3] }
+};
+function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
 
-function defaultBoard(){
-  return {
-    id: "board-departures", name: "Departures",
-    flights: [
-      {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
-      {time:"08:20", destination:"MIAMI",     flight:"AA 2241", gate:"C3", remarks:"FINAL CALL"},
-      {time:"09:15", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
-      {time:"10:40", destination:"BORA BORA", flight:"VT 442",  gate:"4",  remarks:"ON TIME"},
-      {time:"11:30", destination:"PHUKET",    flight:"TG 910",  gate:"9",  remarks:"ON TIME"},
-      {time:"12:05", destination:"SINGAPORE", flight:"SQ 25",   gate:"21", remarks:"ON TIME"},
-      {time:"13:45", destination:"LONDON",    flight:"BA 117",  gate:"15", remarks:"DELAYED"},
-      {time:"15:10", destination:"TOKYO",     flight:"NH 105",  gate:"18", remarks:"ON TIME"},
-      {time:"16:25", destination:"SYDNEY",    flight:"QF 8",    gate:"11", remarks:"ON TIME"}
-    ],
-    clackSet: "pragotron",
-    ambience: { on:false, bed:"manchester",
-                levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0.8 } },
-    voice: "isabella", signal: "dong",
-    announcements: { on:false, minSec:420, maxSec:1200,
-                     rotation:["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"] },
-    quietHours: { on:true, start:"23:00", end:"07:00" }
-  };
+/* ============ Demo library: seed + merge (keep in step with display page) ============ */
+var SEED_VERSION = 3;
+var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
+function nineFlights(){
+  return [
+    {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
+    {time:"08:20", destination:"MIAMI",     flight:"AA 2241", gate:"C3", remarks:"FINAL CALL"},
+    {time:"09:15", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
+    {time:"10:40", destination:"BORA BORA", flight:"VT 442",  gate:"4",  remarks:"ON TIME"},
+    {time:"11:30", destination:"PHUKET",    flight:"TG 910",  gate:"9",  remarks:"ON TIME"},
+    {time:"12:05", destination:"SINGAPORE", flight:"SQ 25",   gate:"21", remarks:"ON TIME"},
+    {time:"13:45", destination:"LONDON",    flight:"BA 117",  gate:"15", remarks:"DELAYED"},
+    {time:"15:10", destination:"TOKYO",     flight:"NH 105",  gate:"18", remarks:"ON TIME"},
+    {time:"16:25", destination:"SYDNEY",    flight:"QF 8",    gate:"11", remarks:"ON TIME"}
+  ];
 }
-function defaultConfig(){
-  var b = defaultBoard(); var cfg = { liveBoardId: b.id, boards: {} }; cfg.boards[b.id] = b; return cfg;
+function demoBoards(){
+  return [
+    {
+      id: "board-terminal-one", name: "Terminal One", type: "departures", shows: "departures",
+      flights: nineFlights(),
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.45, events:0.6, announcements:0.9, clack:0.8 } },
+      voice: "isabella", signal: "dong",
+      announcements: { on:true, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", shows: "departures",
+      flights: [
+        {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
+        {time:"08:40", destination:"FRANKFURT", flight:"LH 903",  gate:"14", remarks:"ON TIME"},
+        {time:"09:25", destination:"MUNICH",    flight:"LH 2481", gate:"9",  remarks:"ON TIME"},
+        {time:"10:15", destination:"ZURICH",    flight:"LX 317",  gate:"11", remarks:"ON TIME"},
+        {time:"11:05", destination:"VIENNA",    flight:"OS 452",  gate:"6",  remarks:"ON TIME"},
+        {time:"12:30", destination:"LONDON",    flight:"BA 117",  gate:"15", remarks:"ON TIME"},
+        {time:"13:20", destination:"PARIS",     flight:"AF 347",  gate:"8",  remarks:"BOARDING"},
+        {time:"14:45", destination:"AMSTERDAM", flight:"KL 602",  gate:"17", remarks:"ON TIME"},
+        {time:"16:10", destination:"ROME",      flight:"AZ 791",  gate:"5",  remarks:"ON TIME"}
+      ],
+      clackSet: "frankfurt",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.55, events:0.7, announcements:0.9, clack:0.85 } },
+      voice: "magnus", signal: "dong",
+      announcements: { on:true, minSec:300, maxSec:720, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", shows: "departures",
+      flights: [
+        {time:"17:40", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"ON TIME"},
+        {time:"18:25", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
+        {time:"19:10", destination:"BORA BORA", flight:"VT 442",  gate:"4",  remarks:"ON TIME"},
+        {time:"20:35", destination:"SINGAPORE", flight:"SQ 25",   gate:"21", remarks:"ON TIME"},
+        {time:"21:50", destination:"SYDNEY",    flight:"QF 8",    gate:"11", remarks:"ON TIME"}
+      ],
+      clackSet: "madeira",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.4, announcements:0.7, clack:0.5 } },
+      voice: "sunny", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"22:00", end:"07:00" }
+    },
+    {
+      id: "board-arrivals", name: "Arrivals", type: "departures", shows: "arrivals",
+      flights: [
+        {time:"07:55", destination:"MIAMI",     flight:"IS 809",  gate:"7",  remarks:"LANDED"},
+        {time:"08:10", destination:"MIAMI",     flight:"AA 2240", gate:"C3", remarks:"LANDED"},
+        {time:"09:40", destination:"HONOLULU",  flight:"HA 50",   gate:"12", remarks:"EXPECTED"},
+        {time:"11:15", destination:"BORA BORA", flight:"VT 443",  gate:"4",  remarks:"EXPECTED"},
+        {time:"12:30", destination:"PHUKET",    flight:"TG 911",  gate:"9",  remarks:"DELAYED"}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.55, announcements:0.85, clack:0.75 } },
+      voice: "aria", signal: "dong",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-colour", name: "Colour Board", type: "colour",
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    }
+  ];
+}
+function mergeSeeds(cfg){
+  if(!cfg || typeof cfg !== "object") cfg = {};
+  if(!cfg.boards || typeof cfg.boards !== "object") cfg.boards = {};
+  var wasEmpty = Object.keys(cfg.boards).length === 0;
+  var changed = false;
+  if((cfg.seedVersion || 0) < SEED_VERSION){
+    demoBoards().forEach(function(sb){
+      var nameTaken = Object.keys(cfg.boards).some(function(id){ return cfg.boards[id].name === sb.name; });
+      if(nameTaken) return;
+      if(cfg.boards[sb.id]){ sb.id = sb.id + "-seed"; }
+      cfg.boards[sb.id] = sb; changed = true;
+    });
+    cfg.seedVersion = SEED_VERSION; changed = true;
+  }
+  Object.keys(cfg.boards).forEach(function(id){
+    var b = cfg.boards[id];
+    if(b && !b.type){ b.type = "departures"; changed = true; }
+  });
+  if(!cfg.liveBoardId || !cfg.boards[cfg.liveBoardId]){
+    cfg.liveBoardId = (wasEmpty && cfg.boards["board-terminal-one"])
+      ? "board-terminal-one" : Object.keys(cfg.boards)[0];
+    changed = true;
+  }
+  return { cfg: cfg, changed: changed };
 }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function loadLive(){
+  var parsed = null;
   try{
     var raw = localStorage.getItem("isle-board-config-v1");
-    if(raw){ var cfg = JSON.parse(raw); if(cfg && cfg.boards && cfg.liveBoardId) return cfg; }
+    if(raw) parsed = JSON.parse(raw);
   }catch(e){}
-  var fresh = defaultConfig();
-  try{ localStorage.setItem("isle-board-config-v1", JSON.stringify(fresh)); }catch(e){}
-  return fresh;
+  var res = mergeSeeds(parsed);
+  if(res.changed || !parsed){
+    try{ localStorage.setItem("isle-board-config-v1", JSON.stringify(res.cfg)); }catch(e){}
+  }
+  return res.cfg;
 }
 var live = loadLive();
 var work = null, stagedExists = false;
 try{
   var s = localStorage.getItem("isle-board-demo-v1");
-  if(s){ var sc = JSON.parse(s); if(sc && sc.boards){ work = sc; stagedExists = true; } }
+  if(s){
+    var sc = JSON.parse(s);
+    if(sc && sc.boards){
+      var mres = mergeSeeds(sc);
+      work = mres.cfg; stagedExists = true;
+      if(mres.changed){ try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(work)); }catch(e){} }
+    }
+  }
 }catch(e){}
 if(!work) work = clone(live);
 var editingId = work.liveBoardId;
@@ -250,6 +422,7 @@ function renderLibrary(){
     var card = document.createElement("div"); card.className = "card";
     var row = document.createElement("div"); row.className = "board-row";
     var nm = document.createElement("span"); nm.className = "name"; nm.textContent = b.name; row.appendChild(nm);
+    if(b.type === "colour"){ var bt = document.createElement("span"); bt.className = "badge type"; bt.textContent = "Colour"; row.appendChild(bt); }
     if(id === work.liveBoardId){ var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "Live"; row.appendChild(bd); }
     if(id === editingId){ var bd2 = document.createElement("span"); bd2.className = "badge editing"; bd2.textContent = "Editing"; row.appendChild(bd2); }
     function mkBtn(label, cls, fn){
@@ -308,6 +481,11 @@ document.getElementById("btn-add-flight").addEventListener("click", function(){
 function bindEditor(){
   var b = board();
   document.getElementById("editing-name").textContent = b.name;
+  var isColour = b.type === "colour";
+  document.getElementById("shows-card").style.display = isColour ? "none" : "";
+  document.getElementById("sel-shows").value = b.shows === "arrivals" ? "arrivals" : "departures";
+  document.getElementById("flights-card").style.display = isColour ? "none" : "";
+  document.getElementById("colour-note").style.display = isColour ? "" : "none";
   document.getElementById("sel-clack").value = b.clackSet;
   document.getElementById("sw-amb").checked = !!b.ambience.on;
   document.getElementById("sel-bed").value = b.ambience.bed;
@@ -326,6 +504,7 @@ function bindEditor(){
   document.getElementById("time-end").value = b.quietHours.end;
   renderFlights();
 }
+document.getElementById("sel-shows").addEventListener("change", function(e){ board().shows = e.target.value; saveStaged(); });
 document.getElementById("sel-clack").addEventListener("change", function(e){ board().clackSet = e.target.value; saveStaged(); });
 document.getElementById("sw-amb").addEventListener("change", function(e){ board().ambience.on = e.target.checked; saveStaged(); });
 document.getElementById("sel-bed").addEventListener("change", function(e){ board().ambience.bed = e.target.value; saveStaged(); });
@@ -349,8 +528,176 @@ document.getElementById("sw-quiet").addEventListener("change", function(e){ boar
 document.getElementById("time-start").addEventListener("change", function(e){ board().quietHours.start = e.target.value || "23:00"; saveStaged(); });
 document.getElementById("time-end").addEventListener("change", function(e){ board().quietHours.end = e.target.value || "07:00"; saveStaged(); });
 
-/* ---- solo audition ---- */
+/* ---- per-option test player ----
+   Every Test button plays its own sound on its own, at the level set by the
+   relevant slider, independent of the ambience switch and of the live board.
+   Starting any test stops whatever test (or solo play) is still running;
+   pressing the running test's button again stops it. */
+var testAC = null;
+function testCtx(){
+  if(!testAC){ try{ testAC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+  if(testAC && testAC.state === "suspended") testAC.resume();
+  return testAC;
+}
+var testSession = null;
+function resetTestButtons(){
+  document.querySelectorAll(".test-btn").forEach(function(btn){
+    btn.textContent = btn.dataset.label; btn.classList.remove("playing");
+  });
+}
+function stopTests(){
+  if(testSession){ var s = testSession; testSession = null; try{ s.teardown(); }catch(e){} }
+  resetTestButtons();
+}
+function startSession(id){
+  stopTests();
+  var btn = document.querySelector('.test-btn[data-test="' + id + '"]');
+  if(btn){ btn.textContent = "Stop"; btn.classList.add("playing"); }
+  var sess = { id: id, audios: [], sources: [], timers: [], gains: [] };
+  sess.teardown = function(){
+    sess.timers.forEach(function(t){ clearTimeout(t); });
+    sess.audios.forEach(function(a){ try{ a.pause(); }catch(e){} });
+    sess.sources.forEach(function(s){ try{ s.stop(); }catch(e){} });
+    sess.gains.forEach(function(g){ try{ g.disconnect(); }catch(e){} });
+  };
+  sess.finishIn = function(ms){
+    sess.timers.push(setTimeout(function(){ if(testSession === sess) stopTests(); }, ms));
+  };
+  testSession = sess;
+  return sess;
+}
+function toggleTest(id, starter){
+  if(testSession && testSession.id === id){ stopTests(); return; }
+  stopSolo();
+  starter(startSession(id));
+}
+function playElement(sess, url, gainVal, loop){
+  var ac = testCtx();
+  var a = new Audio(url);
+  if(loop) a.loop = true;
+  if(ac){
+    var g = ac.createGain(); g.gain.value = gainVal; g.connect(ac.destination);
+    try{ var src = ac.createMediaElementSource(a); src.connect(g); sess.gains.push(g); }
+    catch(e){ a.volume = Math.min(1, gainVal); }
+  } else a.volume = Math.min(1, gainVal);
+  sess.audios.push(a);
+  a.play().catch(function(){ if(testSession === sess) stopTests(); });
+  return a;
+}
+var setBufCache = {};
+function loadSetBuffers(setName, cb){
+  if(setBufCache[setName]){ cb(setBufCache[setName]); return; }
+  var ac = testCtx(); if(!ac){ cb(null); return; }
+  var files = SET_FILES[setName] || SET_FILES.pragotron;
+  var out = { steps: [], flaps: [] }, pending = 0;
+  function grab(url, arr){
+    pending++;
+    fetch(url).then(function(r){ return r.arrayBuffer(); })
+      .then(function(ab){ return ac.decodeAudioData(ab); })
+      .then(function(b){ arr.push(b); })
+      .catch(function(){})
+      .then(function(){ if(--pending === 0){ setBufCache[setName] = out; cb(out); } });
+  }
+  files.steps.forEach(function(i){ grab(AUDIO + "sets/" + setName + "/step-" + pad2(i) + ".mp3", out.steps); });
+  files.flaps.forEach(function(i){ grab(AUDIO + "sets/" + setName + "/flap-" + pad2(i) + ".mp3", out.flaps); });
+}
+function playCascade(sess, setName, level){
+  loadSetBuffers(setName, function(bufs){
+    if(testSession !== sess || !bufs || !bufs.steps.length) return;
+    var ac = testCtx(); if(!ac) return;
+    var g = ac.createGain(); g.gain.value = level; g.connect(ac.destination); sess.gains.push(g);
+    var t = ac.currentTime + 0.05, i, src;
+    for(i = 0; i < 16; i++){
+      src = ac.createBufferSource();
+      src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+      src.playbackRate.value = 0.97 + Math.random() * 0.06;
+      src.connect(g); src.start(t + i * 0.055 + Math.random() * 0.02); sess.sources.push(src);
+    }
+    if(bufs.flaps.length){
+      src = ac.createBufferSource();
+      src.buffer = bufs.flaps[Math.floor(Math.random() * bufs.flaps.length)];
+      src.connect(g); src.start(t + 16 * 0.055 + 0.06); sess.sources.push(src);
+    }
+    sess.finishIn(16 * 55 + 1000);
+  });
+}
+function signalDuration(kind){
+  if(kind === "cdg") return 4 * 0.22 + 0.55;
+  if(kind === "dong") return 1.35;
+  return 0;
+}
+function playSignal(sess, kind, level, done){
+  var ac = testCtx();
+  if(!ac || kind === "none"){ if(done) done(); return; }
+  var g = ac.createGain(); g.gain.value = level; g.connect(ac.destination); sess.gains.push(g);
+  var t = ac.currentTime + 0.05;
+  function toneFn(f, t0, dur, gv){
+    var o = ac.createOscillator(), gn = ac.createGain();
+    o.type = "sine"; o.frequency.value = f;
+    gn.gain.setValueAtTime(0, t0);
+    gn.gain.linearRampToValueAtTime(gv, t0 + 0.02);
+    gn.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(gn); gn.connect(g); o.start(t0); o.stop(t0 + dur + 0.05);
+    sess.sources.push(o);
+  }
+  if(kind === "cdg") [1318.5, 1046.5, 783.99, 1046.5].forEach(function(f, i){ toneFn(f, t + i * 0.22, 0.5, 0.22); });
+  else { toneFn(830.61, t, 0.7, 0.25); toneFn(622.25, t + 0.28, 0.9, 0.25); }
+  if(done) sess.timers.push(setTimeout(function(){ if(testSession === sess) done(); }, signalDuration(kind) * 1000));
+}
+function paFileFor(scriptId){
+  for(var i = 0; i < LIVE_PA.length; i++) if(LIVE_PA[i][0] === scriptId) return LIVE_PA[i][2];
+  return scriptId + "--" + board().voice + ".mp3";
+}
+function playPa(sess, withSignal){
+  var level = board().ambience.levels.announcements;
+  var go = function(){
+    if(testSession !== sess) return;
+    var a = playElement(sess, AUDIO + "pa/" + paFileFor(document.getElementById("sel-solo").value), level, false);
+    a.onended = function(){ if(testSession === sess) stopTests(); };
+    sess.finishIn(90000); /* safety stop */
+  };
+  if(withSignal && board().signal !== "none") playSignal(sess, board().signal, level, go);
+  else go();
+}
+function levelOf(k){ return board().ambience.levels[k]; }
+function bedFile(){
+  var f = null;
+  BEDS.forEach(function(b){ if(b[0] === board().ambience.bed) f = b[2]; });
+  return f;
+}
+document.querySelectorAll(".test-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var id = btn.dataset.test;
+    toggleTest(id, function(sess){
+      if(id === "clack-set" || id === "level-clack"){
+        playCascade(sess, board().clackSet, levelOf("clack"));
+      } else if(id === "bed"){
+        playElement(sess, AUDIO + "beds/" + bedFile(), levelOf("bed"), true);
+      } else if(id === "level-bed"){
+        playElement(sess, AUDIO + "beds/" + bedFile(), levelOf("bed"), true);
+        sess.finishIn(5000);
+      } else if(id === "level-events"){
+        /* no footsteps/suitcase sample is in the library; the ngruber cascade wash stands in */
+        var a = playElement(sess, AUDIO + "bed-ngruber.mp3", levelOf("events"), false);
+        a.onended = function(){ if(testSession === sess) stopTests(); };
+        sess.finishIn(6000);
+      } else if(id === "level-announcements" || id === "voice"){
+        playPa(sess, false);
+      } else if(id === "signal"){
+        playSignal(sess, board().signal, levelOf("announcements"), null);
+        sess.finishIn(signalDuration(board().signal) * 1000 + 400);
+      } else if(id === "solo-test"){
+        playPa(sess, true);
+      }
+    });
+  });
+});
+
+/* ---- solo audition (kept; shares the stage with the test player) ---- */
 var soloAC = null, soloAudio = null;
+function stopSolo(){
+  if(soloAudio){ try{ soloAudio.pause(); soloAudio.currentTime = 0; }catch(e){} }
+}
 function soloCtx(){
   if(!soloAC){ try{ soloAC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
   if(soloAC && soloAC.state === "suspended") soloAC.resume();
@@ -378,6 +725,7 @@ function soloSignal(kind){
   return new Promise(function(res){ setTimeout(res, dur * 1000); });
 }
 document.getElementById("btn-solo").addEventListener("click", function(){
+  stopTests();
   var id = document.getElementById("sel-solo").value;
   var file = null;
   LIVE_PA.forEach(function(l){ if(l[0] === id) file = l[2]; });
@@ -389,7 +737,7 @@ document.getElementById("btn-solo").addEventListener("click", function(){
   });
 });
 document.getElementById("btn-solo-stop").addEventListener("click", function(){
-  if(soloAudio){ soloAudio.pause(); soloAudio.currentTime = 0; }
+  stopTests(); stopSolo();
 });
 
 /* ---- workflow bar ---- */
