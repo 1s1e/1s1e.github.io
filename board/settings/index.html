@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
 <title>The Isle · Flight Board Settings</title>
 <style>
   :root{ --amber:#e8a33d; --panel:#141416; --line:#2a2b30; --ink:#f2ede1; --mut:#9a978c; }
@@ -131,7 +138,92 @@
   #pv-sound{ min-height: 30px; padding: 4px 10px; font-size: 11px; }
   #btn-test-all.playing{ background:#1e1f23; color: var(--amber); border-color: var(--amber); }
 
+  /* ============ Preview: board styles ============ */
+  #pv-styled{ display:none; margin:0 auto; position:relative; overflow:hidden; border-radius:4px; }
+  #pv-pixcap{ display:none; color:#e8e6df; letter-spacing:.12em; font-weight:600; padding-top:8px; white-space:nowrap; overflow:hidden; font-size:12px; }
+  .pvst-gallery{ position:absolute; inset:0; font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#26241f; display:flex; flex-direction:column; background:linear-gradient(180deg,#e9e3d5 0%,#e3dac6 55%,#ded5c2 100%); }
+  .pvst-gallery .g-plaque{ display:flex; align-items:flex-end; justify-content:space-between; }
+  .pvst-gallery .g-title{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1.02; }
+  .pvst-gallery .g-sub{ letter-spacing:.30em; color:#7a7261; font-weight:600; }
+  .pvst-gallery .g-clock{ text-align:right; }
+  .pvst-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1; }
+  .pvst-gallery .g-clock .l{ letter-spacing:.26em; color:#7a7261; font-weight:600; }
+  .pvst-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); border:1px solid #2c2c2c; border-radius:6px; box-shadow:0 14px 28px -12px rgba(30,25,15,.45); margin:0 auto; }
+  .pvst-gallery .g-grid{ display:grid; }
+  .pvst-gallery .g-tile{ background:linear-gradient(180deg,#262624 0%,#1b1b1a 49%,#141413 50%,#1e1e1d 100%); color:#f2efe3; font-family:Archivo,"Helvetica Neue",sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:2px; width:100%; height:100%; }
+  .pvst-gallery .g-foot{ display:flex; align-items:center; justify-content:space-between; color:#8f887a; letter-spacing:.24em; font-weight:600; }
+  .pvst-clipper{ position:absolute; inset:0; background:#f5f8fa; color:#101418; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; display:flex; }
+  .pvst-clipper .c-rail{ border-right:1px solid #d7dee3; display:flex; flex-direction:column; flex:none; }
+  .pvst-clipper .c-time{ font-weight:700; color:#0b0e12; line-height:.95; }
+  .pvst-clipper .c-date{ color:#33404c; font-weight:600; }
+  .pvst-clipper .c-rule{ background:#00a3d9; }
+  .pvst-clipper .c-note{ color:#5a6a76; }
+  .pvst-clipper .c-main{ flex:1; display:flex; flex-direction:column; min-width:0; }
+  .pvst-clipper .c-word{ font-weight:700; color:#0a1f6e; line-height:1; }
+  .pvst-clipper .c-word .dot{ color:#00a3d9; }
+  .pvst-clipper .c-sub{ letter-spacing:.34em; color:#0a2a7a; font-weight:600; }
+  .pvst-clipper .c-bank + .c-bank{ border-top:1px solid #bcd2e8; }
+  .pvst-clipper .c-bankname{ letter-spacing:.30em; color:#0a2a7a; font-weight:700; }
+  .pvst-clipper .c-heads, .pvst-clipper .c-row{ display:flex; align-items:center; }
+  .pvst-clipper .c-heads{ color:#7c8a96; letter-spacing:.22em; font-weight:600; }
+  .pvst-clipper .c-timecell{ font-weight:700; color:#0b0e12; flex:none; }
+  .pvst-clipper .c-tiles{ display:flex; flex:none; }
+  .pvst-clipper .c-tile{ background:linear-gradient(180deg,#fdfdfb 0%,#f4f4ef 49%,#e9e9e2 50%,#f1f1ea 100%); color:#0a2472; font-weight:600; display:flex; align-items:center; justify-content:center; border:1px solid #d8d8d0; border-radius:1px; }
+  .pvst-clipper .c-clip{ font-style:italic; color:#20303e; white-space:nowrap; overflow:hidden; }
+  .pvst-clipper .c-rem{ font-weight:700; color:#0a2a7a; letter-spacing:.06em; white-space:nowrap; }
+  .pvst-clipper .c-rem.quiet{ color:#8ba3c9; font-weight:600; }
+  .pvst-clipper .c-rem.final{ color:#0b0e12; }
+  .pvst-patapata{ position:absolute; inset:0; background:#fdfdfc; color:#17181a; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; display:flex; flex-direction:column; }
+  .pvst-patapata .p-jp{ color:#d42b1e; font-weight:700; letter-spacing:.42em; }
+  .pvst-patapata .p-name{ font-weight:800; color:#101114; line-height:1; }
+  .pvst-patapata .p-kata{ color:#8a8d91; font-weight:600; letter-spacing:.18em; }
+  .pvst-patapata .p-disc{ background:#d42b1e; color:#fff; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
+  .pvst-patapata .p-disc .l{ letter-spacing:.3em; font-weight:600; }
+  .pvst-patapata .p-rule{ background:#d42b1e; flex:none; }
+  .pvst-patapata .p-heads{ display:flex; align-items:center; color:#6d7074; font-weight:700; }
+  .pvst-patapata .p-heads .jp{ color:#17181a; }
+  .pvst-patapata .p-row{ display:flex; align-items:center; border-top:1px solid #e3e4e2; }
+  .pvst-patapata .p-badge{ color:#fff; font-weight:800; letter-spacing:.04em; display:flex; align-items:center; justify-content:center; text-align:center; border-radius:2px; flex:none; line-height:1.08; }
+  .pvst-patapata .p-time{ font-weight:800; color:#101114; flex:none; }
+  .pvst-patapata .p-dest{ background:linear-gradient(180deg,#26282c,#232529); color:#f4f2ea; font-weight:700; letter-spacing:.10em; display:flex; align-items:center; border-radius:2px; flex:1; white-space:nowrap; overflow:hidden; }
+  .pvst-patapata .p-status{ font-weight:700; color:#3c3f44; flex:none; white-space:nowrap; }
+  .pvst-patapata .p-status.alert{ color:#d42b1e; }
+  .pvst-dator{ position:absolute; inset:0; background:#060606; color:#f2f0e9; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; display:flex; flex-direction:column; }
+  .pvst-dator .d-top{ display:flex; justify-content:space-between; color:#8f8c85; letter-spacing:.34em; font-weight:600; }
+  .pvst-dator .d-top b{ color:#f2f0e9; font-weight:700; }
+  .pvst-dator .d-stage{ flex:1; display:flex; align-items:center; }
+  .pvst-dator .d-stack{ display:flex; flex-direction:column; flex:none; }
+  .pvst-dator .d-lab{ color:#8f8c85; letter-spacing:.30em; font-weight:600; }
+  .pvst-dator .d-tiles{ display:flex; }
+  .pvst-dator .d-tile{ background:linear-gradient(180deg,#26282c 0%,#1b1c1f 49%,#101112 50%,#1e2023 100%); color:#f5f3ec; font-weight:700; display:flex; align-items:center; justify-content:center; border-radius:2px; box-shadow:inset 0 0 0 1px #000; }
+  .pvst-dator .d-tile.dim{ color:#55534e; }
+  .pvst-dator .d-tile.amb{ color:#ffb43a; }
+  .pvst-dator .d-clock{ display:flex; align-items:center; justify-content:center; flex:1; }
+  .pvst-dator .d-dig.min{ font-family:"DejaVu Sans","Liberation Sans",sans-serif; font-weight:600; }
+  .pvst-dator .d-colon{ display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
+  .pvst-dator .d-colon i{ background:#f5f3ec; border-radius:50%; display:block; }
+  .pvst-dator .d-foot{ border-top:1px solid #232323; display:flex; align-items:center; }
+  .pvst-projekt{ position:absolute; inset:0; background:#ffffff; color:#22224a; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; display:flex; flex-direction:column; }
+  .pvst-projekt .j-head{ background:#f2a900; display:flex; align-items:center; flex:none; }
+  .pvst-projekt .j-logo{ background:#22224a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:none; }
+  .pvst-projekt .j-name{ font-weight:700; color:#22224a; line-height:1; }
+  .pvst-projekt .j-sub{ color:#22224a; }
+  .pvst-projekt .j-clock{ margin-left:auto; text-align:right; flex:none; }
+  .pvst-projekt .j-clock .t{ font-weight:700; line-height:1; }
+  .pvst-projekt .j-heads{ display:flex; align-items:center; color:#22224a; font-weight:600; border-bottom:3px solid #22224a; }
+  .pvst-projekt .j-row{ display:flex; align-items:center; border-bottom:1px solid #d8daea; }
+  .pvst-projekt .j-time{ font-weight:700; flex:none; }
+  .pvst-projekt .j-ziel{ flex:none; white-space:nowrap; overflow:hidden; }
+  .pvst-projekt .j-flug{ color:#5a5e8c; flex:none; white-space:nowrap; }
+  .pvst-projekt .j-pic{ flex:none; display:flex; align-items:center; }
+  .pvst-projekt .j-rem{ white-space:nowrap; overflow:hidden; }
+  .pvst-projekt .j-rem.strong{ font-weight:700; }
+  .pvst-projekt .j-strip{ border-top:3px solid #22224a; display:flex; align-items:center; flex:none; }
+  .pvst-projekt .j-cell{ display:flex; align-items:center; white-space:nowrap; }
+  .pvst-projekt .j-cell .a{ font-weight:700; }
+  .pvst-projekt .j-cell .b{ color:#5a5e8c; }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="wrap">
@@ -145,6 +237,8 @@
         <div id="pv-colheads"></div>
         <div id="pv-rows"></div>
         <div id="pv-colour"></div>
+        <div id="pv-pixcap"></div>
+        <div id="pv-styled"></div>
       </div>
     </div>
     <div id="pv-foot"><span>Staged preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
@@ -191,6 +285,20 @@
     <div class="hint">The board renders exactly this many rows: extra flights are kept in the editor but not shown, and blank flap rows complete the board when fewer are listed. On a colour board the size chooses the picture canvas: 14 is the large, fine canvas and 5 is the standard, chunkier one. On a text board it is the number of lines.</div>
   </div>
 
+  <div class="card" id="style-card">
+    <label for="sel-style">Board style</label>
+    <select id="sel-style">
+      <option value="isle">The Isle (the current board)</option>
+      <option value="gallery">Gallery Six</option>
+      <option value="clipper">Clipper (Pan Am Jet Age)</option>
+      <option value="patapata">Patapata (Japanese platform board)</option>
+      <option value="dator">Dator (Solari clock)</option>
+      <option value="flappix">Flap Pix (picture board)</option>
+      <option value="projekt">Projekt 1400 (Aicher system)</option>
+    </select>
+    <div class="hint">The style is the board's display language: layout, type and flip behaviour. It never changes the board's content or its sounds. New boards start in Gallery Six, and choosing Gallery Six turns quiet hours on for the board, as that board keeps them. Flap Pix shows the picture treatment with the next departure in a caption band. On a colour board the scene carries the picture, and the style applies when the board shows flights or lines, except Flap Pix, which uses the picture treatment there too.</div>
+  </div>
+
   <div class="card" id="flights-card">
     <label>Flights</label>
     <table>
@@ -217,9 +325,21 @@
     <label for="sel-scene">Scene</label>
     <select id="sel-scene">
       <option value="walk">Walk</option>
+      <option value="level">Level (an original first level)</option>
       <option value="menorah">Menorah</option>
       <option value="dreidel">Dreidel</option>
       <option value="star">Star of David</option>
+      <optgroup label="Isle Palm">
+        <option value="palm">Isle Palm</option>
+        <option value="palm-night">Isle Palm at night</option>
+        <option value="palm-sunrise">Isle Palm at sunrise</option>
+        <option value="palm-sunset">Isle Palm at sunset</option>
+        <option value="palm-cloudy">Isle Palm, cloudy</option>
+        <option value="palm-rain">Isle Palm in rain</option>
+        <option value="palm-storm">Isle Palm in a storm</option>
+        <option value="palm-rainbow">Isle Palm with a rainbow</option>
+        <option value="palm-mist">Isle Palm in mist</option>
+      </optgroup>
     </select>
     <div id="night-row" style="display:none;">
       <label for="sel-night">Night</label>
@@ -282,6 +402,17 @@
       <button type="button" class="test-btn" data-test="level-clack" data-label="Test">Test</button>
     </div>
     <div class="hint">Each Test plays a representative sound at that slider's level, whatever the ambience switch says.</div>
+  </div>
+
+  <div class="card" id="scene-snd-card">
+    <div class="switch-row"><span class="lab">Scene sounds</span>
+      <span class="switch"><input type="checkbox" id="sw-scene-snd"><span class="track"></span></span></div>
+    <label>Scene sounds level <span class="slider-val" id="val-scene-snd"></span></label>
+    <div class="slider-row">
+      <input type="range" id="rng-scene-snd" min="0" max="100">
+      <button type="button" class="test-btn" id="btn-test-scene-snd" data-test="scene-snd" data-label="Test">Test</button>
+    </div>
+    <div class="hint">A soft wave sound under every Isle Palm scene, rain on the rain scene and distant thunder on the storm scene, each a minutes-long seamless loop. Off by default. Scene sounds follow the ambience rules: they fade in and out, duck under announcements and cascades, and stop in quiet hours. Test plays the waves loop at the set level for a few seconds.</div>
   </div>
 
   <div class="card">
@@ -377,7 +508,7 @@ function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
 
 /* ============ Demo library: seed + merge (keep in step with display page) ============ */
-var SEED_VERSION = 6;
+var SEED_VERSION = 7;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -553,6 +684,37 @@ function demoBoards(){
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-gallery-six", name: "Gallery Six", type: "departures", kind: "departures", shows: "departures", rows: 5,
+      style: "gallery",
+      flights: nineFlights(),
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0.8 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-level", name: "Level", type: "colour", rows: 14, scene: "level",
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-isle-palm", name: "Isle Palm", type: "colour", rows: 14, scene: "palm",
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
     }
   ];
 }
@@ -588,6 +750,8 @@ function mergeSeeds(cfg){
     }
     if(b.type === "colour" && !b.scene){ b.scene = "walk"; changed = true; }
     if(b.type === "colour" && !(b.night >= 1 && b.night <= 8)){ b.night = 8; changed = true; }
+    if(!b.style){ b.style = "isle"; changed = true; }
+    if(!b.sceneSounds){ b.sceneSounds = { on:false, level:0.5 }; changed = true; }
     if(!b.flights){ b.flights = []; changed = true; }
     if(!b.lines){ b.lines = []; changed = true; }
   });
@@ -695,6 +859,7 @@ document.getElementById("btn-new-board").addEventListener("click", function(){
   var copy = clone(src);
   copy.id = "board-" + Date.now().toString(36);
   copy.name = src.name + " copy";
+  copy.style = "gallery"; /* new boards start in Gallery Six, the picked default */
   work.boards[copy.id] = copy; editingId = copy.id;
   saveStaged(); renderAll();
 });
@@ -807,6 +972,11 @@ function bindEditor(){
   document.getElementById("custom-title-row").style.display = kind === "custom" ? "" : "none";
   document.getElementById("inp-custom-title").value = b.customTitle || "";
   document.getElementById("sel-rows").value = String(rowsOf(b));
+  document.getElementById("sel-style").value = b.style || "isle";
+  document.getElementById("sw-scene-snd").checked = !!(b.sceneSounds && b.sceneSounds.on);
+  var ssr = document.getElementById("rng-scene-snd");
+  ssr.value = Math.round(((b.sceneSounds && b.sceneSounds.level) || 0) * 100);
+  document.getElementById("val-scene-snd").textContent = ssr.value + "%";
   document.getElementById("flights-card").style.display = (!isColour && !isText) ? "" : "none";
   document.getElementById("lines-card").style.display = isText ? "" : "none";
   document.getElementById("colour-note").style.display = isColour ? "" : "none";
@@ -883,6 +1053,27 @@ document.getElementById("inp-custom-title").addEventListener("input", function(e
 document.getElementById("sel-rows").addEventListener("change", function(e){
   board().rows = +e.target.value; saveStaged(); bindEditor();
 });
+document.getElementById("sel-style").addEventListener("change", function(e){
+  var b = board(); b.style = e.target.value;
+  if(b.style === "gallery") b.quietHours.on = true; /* Gallery Six keeps quiet hours on by default */
+  saveStaged(); bindEditor();
+});
+document.getElementById("sw-scene-snd").addEventListener("change", function(e){
+  var b = board(); if(!b.sceneSounds) b.sceneSounds = { on: false, level: 0.5 };
+  b.sceneSounds.on = e.target.checked; saveStaged();
+});
+document.getElementById("rng-scene-snd").addEventListener("input", function(e){
+  var b = board(); if(!b.sceneSounds) b.sceneSounds = { on: false, level: 0.5 };
+  b.sceneSounds.level = e.target.value / 100;
+  document.getElementById("val-scene-snd").textContent = e.target.value + "%";
+  saveStaged();
+});
+document.getElementById("btn-test-scene-snd").addEventListener("click", function(){
+  toggleLayer("clack", "scene-snd", function(sess){
+    playElement(sess, AUDIO + "scenes/scene-waves.mp3", (board().sceneSounds && board().sceneSounds.level) || 0, true);
+    sess.finishIn(8000);
+  });
+});
 document.getElementById("sel-scene").addEventListener("change", function(e){
   board().scene = e.target.value; saveStaged(); bindEditor();
 });
@@ -939,7 +1130,7 @@ var boundBoardId = null;
 var LAYER_BTNS = {
   bed: ["bed", "level-bed"],
   ann: ["level-announcements"],
-  clack: ["clack-set", "level-clack", "level-events"]
+  clack: ["clack-set", "level-clack", "level-events", "scene-snd"]
 };
 function setBtn(id, playing){
   var btn = document.querySelector('.test-btn[data-test="' + id + '"]');
@@ -1364,6 +1555,7 @@ function pvFitColour(){
   var padX = iw * 0.006, padY = ih * 0.008; /* the display's boardPads, fullscreen */
   var tw = Math.min(84, Math.max(18, iw * 0.0205)); /* the display's fitColour header driver */
   var headBlock = 2.52 * tw + 2;
+  if((pvB.style || "isle") === "flappix") headBlock += tw * 1.15; /* the caption band, as on the display */
   var gapTotalW = (CW - 1) * 2, gapTotalH = (CH - 1) * 2;
   var px = Math.floor(Math.min((boardW - 2 * padX - gapTotalW) / CW,
                                (boardH - 2 * padY - headBlock - gapTotalH) / CH));
@@ -1418,8 +1610,13 @@ function pvBuildRows(b, text, rows){
 function pvRender(cascade){
   var b = board(); pvB = b;
   document.getElementById("pv-title").innerHTML = pvTitle(b);
-  if(b.type === "colour"){ showColour(); return; }
+  var st = b.style || "isle";
+  if(st === "flappix"){ pvHideStyled(); showColour(); pvShowPixCap(); return; }
+  pvHidePixCap();
+  if(b.type === "colour"){ pvHideStyled(); showColour(); return; }
   stopColour();
+  if(st !== "isle"){ pvShowStyled(st); return; }
+  pvHideStyled();
   document.getElementById("pv-rows").style.display = "";
   var text = pvIsText(b);
   document.getElementById("pv-colheads").style.display = text ? "none" : "";
@@ -1500,376 +1697,1061 @@ document.getElementById("pv-sound").addEventListener("click", function(){
 });
 setInterval(function(){
   var d = new Date();
-  document.getElementById("pv-clock").textContent =
-    (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  var t = (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  document.getElementById("pv-clock").textContent = t;
+  var sc = document.querySelectorAll(".pv-st-clock");
+  for(var i = 0; i < sc.length; i++) sc[i].textContent = t;
 }, 1000);
 window.addEventListener("resize", function(){ pvRender(false); });
 
-/* ============ Colour board scenes ============ */
-/* Every scene is drawn into a virtual 192x108 pixel field and sampled
-   down to whichever grid the board size selects (5: 48x27 chunky tiles,
-   14: 64x36 finer tiles), so each scene is the same picture at both
-   sizes. Scenes: walk, menorah, dreidel, star. Silent by default. */
-var VW = 192, VH = 108, VGY = 88; /* virtual field; ground line at VGY */
-var CW = 48, CH = 27, builtCW = 0, builtCH = 0;
-var SKY = "#5c94fc", CLOUD = "#fcfcfc", HILL = "#00a800", HILL_DARK = "#008000",
-    SUN = "#ffd94d", SUN_IN = "#ffe98a", BIRD = "#1c2f4a",
-    GROUND_TOP = "#d97b29", GROUND = "#a34d0d", GROUND_DARK = "#7c3806",
-    CAP = "#e7402e", SKIN = "#ffc7a1", EYE = "#202020", OVERALL = "#2b4bd8",
-    SHOE = "#8a4b08", SHELL = "#00a800", SHELL_LT = "#7ec850",
-    DARK = "#0d1120", GOLD = "#d9a441", GOLD_LT = "#f2c14e", CANDLE = "#f2ede1",
-    FLAME_O = "#ff9d2e", FLAME_Y = "#ffd94d", FLAME_C = "#fff3b0";
-var WALK_COLORS = { r: CAP, s: SKIN, e: EYE, b: OVERALL, h: SHOE };
+/* ============ Preview: board styles (miniature mirrors of the display styles) ============ */
+var pvStyledEl = document.getElementById("pv-styled");
+var pvPixcapEl = document.getElementById("pv-pixcap");
+function pvStEl(tag, cls, parent, text){
+  var d = document.createElement(tag);
+  if(cls) d.className = cls;
+  if(text != null) d.textContent = text;
+  if(parent) parent.appendChild(d);
+  return d;
+}
+function pvStRows(b){
+  if(pvIsText(b)){
+    return (b.lines || []).map(function(l){
+      return { time: "", destination: String(l.text || "").toUpperCase(), flight: "", gate: "", remarks: "", black: !!l.black };
+    });
+  }
+  return (b.flights || []).map(function(f){
+    return { time: f.time || "", destination: String(f.destination || "").toUpperCase(), flight: f.flight || "", gate: f.gate || "", remarks: String(f.remarks || "").toUpperCase(), black: !!f.black };
+  });
+}
+function pvHideStyled(){
+  pvStyledEl.style.display = "none"; pvStyledEl.innerHTML = "";
+  document.getElementById("pv-head").style.display = "";
+  document.getElementById("pv-board").style.background = "";
+}
+function pvShowStyled(st){
+  document.getElementById("pv-head").style.display = "none";
+  document.getElementById("pv-colheads").style.display = "none";
+  document.getElementById("pv-rows").style.display = "none";
+  document.getElementById("pv-colour").style.display = "none";
+  pvStyledEl.style.display = "block";
+  var fr = pvFrame();
+  var W = fr.w * (1 - 2 * PV_INSET_X), H = fr.h * (1 - 2 * PV_INSET_Y);
+  pvStyledEl.style.width = W + "px"; pvStyledEl.style.height = H + "px";
+  pvStyledEl.innerHTML = "";
+  var b = board();
+  if(st === "gallery") pvBuildGallery(b, W, H);
+  else if(st === "clipper") pvBuildClipper(b, W, H);
+  else if(st === "patapata") pvBuildPatapata(b, W, H);
+  else if(st === "dator") pvBuildDator(b, W, H);
+  else if(st === "projekt") pvBuildProjekt(b, W, H);
+  var d = new Date();
+  var t = (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  var sc = pvStyledEl.querySelectorAll(".pv-st-clock");
+  for(var i = 0; i < sc.length; i++) sc[i].textContent = t;
+}
+function pvShowPixCap(){
+  var b = board();
+  var data = pvStRows(b).filter(function(f){ return !f.black && (f.time || f.destination); });
+  var msg = data.length
+    ? "NEXT DEPARTURE " + data[0].time + " · " + data[0].destination + " · " + (data[0].remarks || "ON TIME")
+    : (b.name || "THE ISLE").toUpperCase() + " · MADE OF FLAPS";
+  pvPixcapEl.textContent = "THE ISLE · " + msg;
+  pvPixcapEl.style.display = "block";
+}
+function pvHidePixCap(){ pvPixcapEl.style.display = "none"; }
+
+/* Gallery Six miniature: the first composed page, divider and notice */
+var PV_G_COLORS = { R: "#cf3527", O: "#e87e1e", Y: "#eec41c", G: "#2f9e5f", B: "#2f6fd0", V: "#7a4fb3", W: "#f0ead9", K: "#171716" };
+function pvGWrap(text, width){
+  text = String(text || "").replace(/\s+/g, " ").trim();
+  if(!text) return [];
+  var words = text.split(" "), lines = [], cur = "";
+  words.forEach(function(w){
+    while(w.length > width){ if(cur){ lines.push(cur); cur = ""; } lines.push(w.slice(0, width)); w = w.slice(width); }
+    if(!cur) cur = w;
+    else if(cur.length + 1 + w.length <= width) cur += " " + w;
+    else { lines.push(cur); cur = w; }
+  });
+  if(cur) lines.push(cur);
+  return lines;
+}
+function pvBuildGallery(b, W, H){
+  var root = pvStEl("div", "pvst-gallery", pvStyledEl);
+  root.style.padding = (H * 0.035) + "px " + (W * 0.03) + "px";
+  var plaque = pvStEl("div", "g-plaque", root);
+  var left = pvStEl("div", "", plaque);
+  var title = pvStEl("div", "g-title", left, "The Isle · Gallery Six");
+  title.style.fontSize = (H * 0.052) + "px";
+  var sub = pvStEl("div", "g-sub", left, pvKind(b) === "arrivals" ? "ARRIVALS · WELCOME HOME" : "DEPARTURES · THE ISLE");
+  sub.style.fontSize = Math.max(6, H * 0.016) + "px"; sub.style.marginTop = (H * 0.012) + "px";
+  var clock = pvStEl("div", "g-clock", plaque);
+  var ct = pvStEl("div", "t pv-st-clock", clock, "--:--"); ct.style.fontSize = (H * 0.052) + "px";
+  var cl = pvStEl("div", "l", clock, "LOCAL TIME"); cl.style.fontSize = Math.max(6, H * 0.014) + "px"; cl.style.marginTop = (H * 0.010) + "px";
+  var rows = [];
+  pvStRows(b).forEach(function(f){
+    if(f.black){ rows.push(""); return; }
+    var s = pvIsText(b) ? f.destination : [f.time, f.destination, f.flight, f.gate].filter(Boolean).join("  ");
+    var wrapped = pvGWrap(s.toUpperCase(), 22);
+    if(!wrapped.length) wrapped = [""];
+    if(wrapped.length > 1 && wrapped[wrapped.length - 1].length <= 3){
+      var prevWords = wrapped[wrapped.length - 2].split(" ");
+      if(prevWords.length > 1){
+        var cand = prevWords[prevWords.length - 1] + " " + wrapped[wrapped.length - 1];
+        if(cand.length <= 22){
+          wrapped[wrapped.length - 2] = prevWords.slice(0, -1).join(" ");
+          wrapped[wrapped.length - 1] = cand;
+        }
+      }
+    }
+    wrapped.forEach(function(w){ rows.push(w); });
+  });
+  var notice = "WELCOME TO THE ISLE", lead = "G";
+  if(pvKind(b) === "art"){ notice = "MADE OF FLAPS"; lead = "R"; }
+  var availW = W * 0.94, availH = H - H * 0.07 - H * 0.115 - H * 0.014 - H * 0.05; /* last term reserves the panel foot */
+  var gap = 2;
+  var tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
+  gap = Math.max(1, Math.round(tileW * 0.055));
+  tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
+  var tileH = tileW * 1.717;
+  var panel = pvStEl("div", "g-board", root);
+  panel.style.padding = Math.round(tileW * 0.55) + "px";
+  panel.style.marginTop = (H * 0.014) + "px";
+  var grid = pvStEl("div", "g-grid", panel);
+  grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";
+  grid.style.gridTemplateRows = [tileH, tileH, tileH, tileH, tileH, tileH * 0.30, tileH].map(function(v){ return Math.round(v) + "px"; }).join(" ");
+  grid.style.gap = gap + "px";
+  var divPat = ["K","K","G","G","K","Y","Y","K","B","B","K","R","R","K","O","O","K","V","V","K","K","K"];
+  for(var r = 0; r < 7; r++){
+    for(var c = 0; c < 22; c++){
+      var t = pvStEl("div", "g-tile", grid);
+      t.style.fontSize = (tileW * 0.62) + "px";
+      if(r === 5){ t.style.background = PV_G_COLORS[divPat[c]]; }
+      else if(r === 6){
+        if(c < 2) t.style.background = PV_G_COLORS[lead];
+        else t.textContent = notice[c - 2] || "";
+      } else t.textContent = (rows[r] && rows[r][c]) || "";
+    }
+  }
+  var foot = pvStEl("div", "g-foot", panel);
+  foot.style.marginTop = Math.round(tileW * 0.4) + "px";
+  foot.style.fontSize = Math.max(6, H * 0.0135) + "px";
+  pvStEl("span", "", foot, "GALLERY SIX");
+  pvStEl("span", "", foot, pvIsText(b) ? "NOTES" : "FLIGHTS");
+  pvStEl("span", "", foot, "● ● ● ●");
+}
+
+/* Clipper miniature */
+var PV_GLOBE_SVG = '<svg viewBox="0 0 560 560" width="100%" height="100%"><circle cx="280" cy="280" r="272" fill="#0a2a7a"/><g fill="none" stroke="#ffffff" stroke-width="7"><circle cx="280" cy="280" r="272"/><ellipse cx="280" cy="280" rx="120" ry="272"/><ellipse cx="280" cy="280" rx="215" ry="272"/><line x1="8" y1="280" x2="552" y2="280"/><path d="M 40 175 Q 280 235 520 175"/><path d="M 40 385 Q 280 325 520 385"/><path d="M 95 95 Q 280 155 465 95"/><path d="M 95 465 Q 280 405 465 465"/></g></svg>';
+var PV_CLIP_NAMES = { "LONDON": "Clipper Sovereign", "MIAMI": "Clipper Trade Wind", "HONOLULU": "Clipper Pacific", "TOKYO": "Clipper Morning Star", "SYDNEY": "Clipper Southern Cross", "PARIS": "Clipper Flying Cloud", "NASSAU": "Clipper Caribe", "SINGAPORE": "Clipper Cathay", "FRANKFURT": "Clipper Atlantic", "THE ISLE": "Clipper Isle" };
+function pvClipName(dest){
+  if(PV_CLIP_NAMES[dest]) return PV_CLIP_NAMES[dest];
+  var w = (dest.split(" ")[0] || "").toLowerCase();
+  return "Clipper " + w.charAt(0).toUpperCase() + w.slice(1);
+}
+function pvTitleCase(s){
+  return s.toLowerCase().split(" ").map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1); }).join(" ");
+}
+function pvBuildClipper(b, W, H){
+  var root = pvStEl("div", "pvst-clipper", pvStyledEl);
+  var pad = W * 0.016;
+  var railW = Math.round(W * 0.19);
+  var rail = pvStEl("div", "c-rail", root);
+  rail.style.width = railW + "px"; rail.style.padding = (H * 0.03) + "px " + pad + "px";
+  var globe = pvStEl("div", "", rail); globe.innerHTML = PV_GLOBE_SVG;
+  globe.style.width = globe.style.height = (railW - pad * 1.2) + "px";
+  globe.style.margin = (H * 0.01) + "px auto 0";
+  var tm = pvStEl("div", "c-time pv-st-clock", rail, "--:--");
+  tm.style.fontSize = (W * 0.037) + "px"; tm.style.marginTop = (H * 0.028) + "px";
+  var d = new Date();
+  var dt = pvStEl("div", "c-date", rail, d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
+  dt.style.fontSize = Math.max(6, W * 0.0105) + "px"; dt.style.marginTop = (H * 0.008) + "px";
+  var rule = pvStEl("div", "c-rule", rail);
+  rule.style.height = Math.max(2, H * 0.004) + "px"; rule.style.margin = (H * 0.02) + "px 0";
+  var note = pvStEl("div", "c-note", rail, "All times local. Clipper service is operated for The Isle and its guests.");
+  note.style.fontSize = Math.max(6, W * 0.0095) + "px"; note.style.lineHeight = "1.5";
+  var main = pvStEl("div", "c-main", root);
+  main.style.padding = (H * 0.028) + "px " + pad + "px " + (H * 0.02) + "px " + (pad * 1.3) + "px";
+  var word = pvStEl("div", "c-word", main); word.innerHTML = 'The Isle<span class="dot">.</span>';
+  word.style.fontSize = (W * 0.030) + "px";
+  var sub = pvStEl("div", "c-sub", main, pvKind(b) === "arrivals" ? "CLIPPER ARRIVALS · JET AGE SERVICE" : "CLIPPER DEPARTURES · JET AGE SERVICE");
+  sub.style.fontSize = Math.max(6, W * 0.0095) + "px"; sub.style.marginTop = (H * 0.010) + "px";
+  var data = pvStRows(b);
+  var n = Math.max(1, data.length);
+  var bankSize = n <= 9 ? 3 : 5;
+  var banks = [], i;
+  for(i = 0; i < data.length; i += bankSize) banks.push(data.slice(i, i + bankSize));
+  if(!banks.length) banks.push([]);
+  var bankNames = ["TRANSATLANTIC", "TRANSPACIFIC", "THE AMERICAS"];
+  var mainW = W - railW - pad * 2.3;
+  var longest = 4;
+  data.forEach(function(f){ longest = Math.max(longest, Math.min(28, f.destination.length)); });
+  var tileW = Math.min(mainW * 0.46 / longest, H * 0.030);
+  var tileH = tileW * 1.82;
+  var needH = banks.length * (H * 0.042) + data.length * (tileH + H * 0.006) + H * 0.11;
+  if(needH > H * 0.97){ var k = (H * 0.97) / needH; tileH *= k; tileW = tileH / 1.82; }
+  banks.forEach(function(bank, bi){
+    var bk = pvStEl("div", "c-bank", main);
+    bk.style.marginTop = (H * 0.016) + "px"; bk.style.paddingTop = bi ? (H * 0.012) + "px" : "0";
+    var bn = pvStEl("div", "c-bankname", bk, bankNames[bi % 3]);
+    bn.style.fontSize = Math.max(6, W * 0.0085) + "px"; bn.style.marginBottom = (H * 0.008) + "px";
+    var heads = pvStEl("div", "c-heads", bk);
+    heads.style.fontSize = Math.max(6, W * 0.0075) + "px"; heads.style.marginBottom = (H * 0.006) + "px";
+    var hTime = pvStEl("span", "", heads, "TIME"); hTime.style.width = (W * 0.052) + "px"; hTime.style.flex = "none";
+    var hDest = pvStEl("span", "", heads, "DESTINATION"); hDest.style.width = (longest * (tileW + 2)) + "px"; hDest.style.flex = "none";
+    pvStEl("span", "", heads, "CLIPPER");
+    bank.forEach(function(f){
+      var row = pvStEl("div", "c-row", bk);
+      row.style.marginTop = (H * 0.006) + "px";
+      var tc = pvStEl("div", "c-timecell", row, f.black ? "" : f.time);
+      tc.style.width = (W * 0.052) + "px"; tc.style.fontSize = (tileH * 0.52) + "px";
+      var tiles = pvStEl("div", "c-tiles", row);
+      tiles.style.gap = "2px";
+      var dest = f.black ? "" : pvTitleCase(f.destination);
+      for(var ci = 0; ci < longest; ci++){
+        var t = pvStEl("div", "c-tile", tiles, dest[ci] || "");
+        t.style.width = tileW + "px"; t.style.height = tileH + "px"; t.style.fontSize = (tileW * 0.60) + "px";
+      }
+      var cn = pvStEl("div", "c-clip", row, (f.black || pvIsText(b)) ? "" : pvClipName(f.destination));
+      cn.style.marginLeft = (W * 0.014) + "px"; cn.style.fontSize = (tileH * 0.40) + "px";
+      var rm = pvStEl("div", "c-rem" + (f.remarks === "FINAL CALL" ? " final" : (!f.remarks || f.remarks === "ON TIME" ? " quiet" : "")), row, f.black ? "" : f.remarks);
+      rm.style.marginLeft = "auto"; rm.style.fontSize = (tileH * 0.38) + "px";
+    });
+  });
+}
+
+/* Patapata miniature */
+var PV_KATA = { "NASSAU": "ナッソー", "HONOLULU": "ホノルル", "LONDON": "ロンドン", "TOKYO": "トウキョウ", "MIAMI": "マイアミ", "PHUKET": "プーケット", "SINGAPORE": "シンガポール", "SYDNEY": "シドニー", "BORA BORA": "ボラボラ", "THE ISLE": "ジ・アイル", "FRANKFURT": "フランクフルト", "MUNICH": "ミュンヘン", "ZURICH": "チューリッヒ", "VIENNA": "ウィーン", "PARIS": "パリ", "AMSTERDAM": "アムステルダム", "ROME": "ローマ", "KEY WEST": "キーウェスト", "SAN JUAN": "サンフアン", "BERMUDA": "バミューダ" };
+function pvPBadge(dest){
+  if(dest === "KEY WEST") return ["FERRY LINK", "#1d3a6e"];
+  if(dest === "SAN JUAN") return ["SEAPLANE", "#e07b1f"];
+  if(["NASSAU", "BERMUDA", "BORA BORA", "PHUKET"].indexOf(dest) >= 0) return ["ISLAND HOPPER", "#1e8a4c"];
+  return ["NONSTOP", "#d42b1e"];
+}
+function pvBuildPatapata(b, W, H){
+  var root = pvStEl("div", "pvst-patapata", pvStyledEl);
+  var pad = W * 0.022;
+  root.style.padding = (H * 0.028) + "px " + pad + "px " + (H * 0.02) + "px";
+  var head = pvStEl("div", "", root);
+  head.style.display = "flex"; head.style.alignItems = "flex-start";
+  var hl = pvStEl("div", "", head);
+  var jp = pvStEl("div", "p-jp", hl, pvKind(b) === "arrivals" ? "到着案内" : "出発案内");
+  jp.style.fontSize = Math.max(7, H * 0.020) + "px";
+  var nm = pvStEl("div", "p-name", hl, "THE ISLE");
+  nm.style.fontSize = (H * 0.062) + "px"; nm.style.marginTop = (H * 0.008) + "px";
+  var kt = pvStEl("div", "p-kata", hl, pvKind(b) === "arrivals" ? "ジ・アイル · アライバルズ" : "ジ・アイル · デパーチャーズ");
+  kt.style.fontSize = Math.max(6, H * 0.016) + "px"; kt.style.marginTop = (H * 0.010) + "px";
+  var disc = pvStEl("div", "p-disc", head);
+  var dsz = H * 0.135;
+  disc.style.width = disc.style.height = dsz + "px"; disc.style.marginLeft = "auto";
+  var dc = pvStEl("div", "pv-st-clock", disc, "--:--");
+  dc.style.fontSize = (dsz * 0.26) + "px"; dc.style.fontWeight = "800";
+  var dl = pvStEl("div", "l", disc, "LOCAL"); dl.style.fontSize = Math.max(5, dsz * 0.10) + "px";
+  var rule = pvStEl("div", "p-rule", root);
+  rule.style.height = Math.max(2, H * 0.005) + "px"; rule.style.marginTop = (H * 0.018) + "px";
+  var data = pvStRows(b).slice(0, 8);
+  var n = Math.max(1, data.length);
+  var headsH = H * 0.045;
+  var rowH = (H - H * 0.048 - H * 0.155 - headsH) / n;
+  var badgeW = W * 0.115, timeW = W * 0.088, statusW = W * 0.165;
+  var heads = pvStEl("div", "p-heads", root);
+  heads.style.height = headsH + "px"; heads.style.fontSize = Math.max(6, rowH * 0.15) + "px";
+  var hb = pvStEl("span", "", heads); hb.style.width = badgeW + "px"; hb.style.flex = "none"; hb.innerHTML = '<span class="jp">種別</span> · TYPE';
+  var ht = pvStEl("span", "", heads); ht.style.width = timeW + "px"; ht.style.flex = "none"; ht.style.marginLeft = (W * 0.018) + "px"; ht.innerHTML = '<span class="jp">時刻</span> · TIME';
+  var hd = pvStEl("span", "", heads); hd.style.flex = "1"; hd.style.marginLeft = (W * 0.018) + "px"; hd.innerHTML = '<span class="jp">行先</span> · DESTINATION';
+  var hs = pvStEl("span", "", heads); hs.style.width = statusW + "px"; hs.style.flex = "none"; hs.innerHTML = '<span class="jp">案内</span> · STATUS';
+  data.forEach(function(f, ri){
+    var row = pvStEl("div", "p-row", root);
+    row.style.height = rowH + "px";
+    var bg = pvPBadge(f.destination);
+    var badge = pvStEl("div", "p-badge", row, f.black ? "" : bg[0]);
+    badge.style.width = badgeW + "px"; badge.style.height = (rowH * 0.52) + "px";
+    badge.style.background = bg[1]; badge.style.fontSize = Math.max(6, rowH * 0.145) + "px";
+    var tm = pvStEl("div", "p-time", row, f.black ? "" : f.time);
+    tm.style.width = timeW + "px"; tm.style.marginLeft = (W * 0.018) + "px"; tm.style.fontSize = (rowH * 0.335) + "px";
+    var dest = pvStEl("div", "p-dest", row, f.black ? "" : ((ri % 2 === 1 && PV_KATA[f.destination]) ? PV_KATA[f.destination] : f.destination));
+    dest.style.height = (rowH * 0.56) + "px"; dest.style.marginLeft = (W * 0.018) + "px";
+    dest.style.paddingLeft = (W * 0.014) + "px"; dest.style.fontSize = (rowH * 0.27) + "px";
+    var st = pvStEl("div", "p-status" + ((f.remarks === "BOARDING" || f.remarks === "FINAL CALL") ? " alert" : ""), row, f.black ? "" : f.remarks);
+    st.style.width = statusW + "px"; st.style.marginLeft = (W * 0.018) + "px"; st.style.fontSize = Math.max(6, rowH * 0.20) + "px";
+  });
+}
+
+/* Dator miniature */
+function pvDatorHouse(b){
+  var out = { TIDE: "HIGH 18:42", WIND: "SE 12 KT", SUNSET: "17:31" };
+  (b.lines || []).forEach(function(l){
+    var s = pvCleanRaw(l.text || "");
+    ["TIDE", "WIND", "SUNSET"].forEach(function(k){
+      var i = s.indexOf(k);
+      if(i >= 0){
+        var v = s.slice(i + k.length).replace(/·/g, " ").replace(/\s+/g, " ").replace(/^[\s:.-]+/, "").trim();
+        v = v.replace(/(\d)\s(\d\d)\s*(AM|PM)/, "$1:$2 $3");
+        if(v) out[k] = v.slice(0, 10);
+      }
+    });
+  });
+  return out;
+}
+function pvBuildDator(b, W, H){
+  var root = pvStEl("div", "pvst-dator", pvStyledEl);
+  var pad = W * 0.024;
+  root.style.padding = (H * 0.026) + "px " + pad + "px " + (H * 0.018) + "px";
+  var top = pvStEl("div", "d-top", root);
+  top.style.fontSize = Math.max(6, H * 0.016) + "px";
+  var tl = pvStEl("span", "", top); tl.innerHTML = "<b>THE ISLE</b> · SOLARI";
+  pvStEl("span", "", top, "DATOR · UDINE");
+  var stage = pvStEl("div", "d-stage", root);
+  var stageH = H * 0.70;
+  var digH = stageH * 0.45, digW = digH / 1.686;
+  var gap = Math.max(2, digW * 0.09);
+  var clockW = 4 * digW + 3 * gap + digW * 0.34 + gap;
+  var stackW = Math.max(60, (W - pad * 2 - clockW) / 2 - W * 0.02);
+  function stack(groups){
+    var sk = pvStEl("div", "d-stack", stage);
+    sk.style.width = stackW + "px";
+    groups.forEach(function(gr, gi){
+      var lab = pvStEl("div", "d-lab", sk, gr[0]);
+      lab.style.fontSize = Math.max(6, H * 0.0145) + "px";
+      lab.style.marginTop = gi ? (stageH * 0.075) + "px" : "0";
+      lab.style.marginBottom = (stageH * 0.02) + "px";
+      var row = pvStEl("div", "d-tiles", sk);
+      var th = stageH * 0.115;
+      var sGap = Math.max(2, Math.round(th * 0.07));
+      var tw = Math.min(th * 0.60, (stackW - (gr[1].length - 1) * sGap) / Math.max(1, gr[1].length));
+      for(var i = 0; i < gr[1].length; i++){
+        var t = pvStEl("div", "d-tile" + (gr[1][i] === " " ? " dim" : ""), row, gr[1][i]);
+        t.style.width = tw + "px"; t.style.height = th + "px"; t.style.fontSize = (th * 0.58) + "px";
+        if(i) t.style.marginLeft = sGap + "px";
+      }
+    });
+  }
+  var d = new Date();
+  var WDAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+  var MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+  var house = pvDatorHouse(b);
+  stack([["DAY OF WEEK", WDAYS[d.getDay()]], ["DATE", String(d.getDate()).padStart(2, " ")], ["MONTH", MONTHS[d.getMonth()]]]);
+  var clock = pvStEl("div", "d-clock", stage);
+  var timeStr = (d.getHours() < 10 ? "0" : "") + d.getHours() + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  function dig(ch, cls, ml){
+    var t = pvStEl("div", "d-tile d-dig " + cls, clock, ch);
+    t.style.width = digW + "px"; t.style.height = digH + "px"; t.style.fontSize = (digH * 0.72) + "px";
+    if(ml) t.style.marginLeft = gap + "px";
+  }
+  dig(timeStr[0], "hrs", false); dig(timeStr[1], "hrs", true);
+  var colon = pvStEl("div", "d-colon", clock);
+  colon.style.width = (digW * 0.34) + "px"; colon.style.gap = (digH * 0.16) + "px"; colon.style.marginLeft = gap + "px";
+  [0, 1].forEach(function(){ var dot = pvStEl("i", "", colon); dot.style.width = dot.style.height = Math.max(2, digW * 0.13) + "px"; });
+  dig(timeStr[2], "min", true); dig(timeStr[3], "min", true);
+  stack([["TIDE", house.TIDE], ["WIND", house.WIND], ["SUNSET", house.SUNSET]]);
+  var foot = pvStEl("div", "d-foot", root);
+  foot.style.height = (H * 0.105) + "px"; foot.style.marginTop = (H * 0.012) + "px"; foot.style.paddingTop = (H * 0.014) + "px";
+  var data = pvStRows(b).filter(function(f){ return !f.black && (f.time || f.destination); });
+  var f1 = data[0], f2 = data[1];
+  var left = "", ambFrom = -1, ambTo = -1;
+  if(f1 && f1.time){
+    left = "NEXT DEPARTURE " + f1.time + " · " + f1.destination + " · ";
+    ambFrom = left.length; left += f1.remarks; ambTo = left.length;
+  } else if(f1) left = f1.destination;
+  else left = (b.name || "THE ISLE").toUpperCase();
+  left = pvCleanRaw(left); ambTo = Math.min(ambTo, left.length);
+  var right = (f2 && f2.time) ? pvCleanRaw("THEN " + f2.time + " · " + f2.destination + " · " + f2.remarks) : "";
+  var ttw = H * 0.034, tgap = Math.max(1, ttw * 0.09);
+  var count = Math.max(10, Math.floor((W - pad * 2) / (ttw + tgap)));
+  var line = left.slice(0, count);
+  if(right && line.length + 2 + right.length <= count) line = line + " ".repeat(count - line.length - right.length) + right;
+  var trow = pvStEl("div", "d-tiles", foot);
+  for(var ci = 0; ci < line.length; ci++){
+    var tt = pvStEl("div", "d-tile" + (line[ci] === " " ? " dim" : "") + (ci >= ambFrom && ci < ambTo ? " amb" : ""), trow, line[ci]);
+    tt.style.width = ttw + "px"; tt.style.height = (ttw * 1.686) + "px"; tt.style.fontSize = (ttw * 0.62) + "px";
+    if(ci) tt.style.marginLeft = tgap + "px";
+  }
+}
+
+/* Projekt 1400 miniature */
+var PV_PIC = {
+  takeoff: '<svg viewBox="0 0 24 24"><path fill="#22224a" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" transform="rotate(-8 12 12)"/></svg>',
+  clock: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="7"><circle cx="50" cy="50" r="40"/><path d="M50 30 V50 L66 62" stroke-linecap="round"/></svg>',
+  gate: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="7"><path d="M28 88 V16 a6 6 0 0 1 6-6 h38 v78"/><path d="M8 50 h44 M42 38 l12 12-12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  sun: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="6" stroke-linecap="round"><circle cx="50" cy="50" r="17"/><path d="M50 8v10M50 82v10M8 50h10M82 50h10M20 20l7 7M73 73l7 7M80 20l-7 7M27 73l-7 7"/></svg>',
+  tide: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="6" stroke-linecap="round"><path d="M6 38 Q24 22 42 38 T78 38 T96 38"/><path d="M6 64 Q24 48 42 64 T78 64 T96 64"/></svg>',
+  dinner: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="6" stroke-linecap="round"><path d="M14 66 a36 30 0 0 1 72 0"/><path d="M6 78 h88"/><circle cx="50" cy="28" r="5"/></svg>',
+  music: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M38 74 V30 l44-10 v50"/><ellipse cx="28" cy="76" rx="11" ry="8"/><ellipse cx="72" cy="72" rx="11" ry="8"/></svg>',
+  sunset: '<svg viewBox="0 0 100 100" fill="none" stroke="#22224a" stroke-width="6" stroke-linecap="round"><path d="M22 66 a28 24 0 0 1 56 0"/><path d="M8 80 h84"/><path d="M50 14v10M18 30l7 6M82 30l-7 6"/></svg>'
+};
+var PV_CRANE_SVG = '<svg viewBox="0 0 100 100"><path fill="#f2a900" d="M15 71 Q27 39 55 29 Q41 45 39 61 Q53 51 71 55 Q49 82 27 82 Q17 79 15 71 Z"/><path fill="#f2a900" d="M39 61 Q47 33 71 19 L85 13 L75 27 Q57 39 49 63 Z"/><path fill="#f2a900" d="M85 13 L95 15 L84 21 Z"/><path fill="none" stroke="#f2a900" stroke-width="4" stroke-linecap="round" d="M22 84 Q50 92 78 84"/></svg>';
+var PV_REMARK_DE = { "ON TIME": "pünktlich", "BOARDING": "boarding", "FINAL CALL": "letzter aufruf", "GATE OPEN": "gate offen", "LANDED": "gelandet", "EXPECTED": "erwartet", "CANCELLED": "annulliert" };
+function pvRemarkDe(r){
+  if(!r) return "";
+  if(PV_REMARK_DE[r]) return PV_REMARK_DE[r];
+  if(r.indexOf("DELAYED") === 0) return "verspätet";
+  return r.toLowerCase();
+}
+function pvBuildProjekt(b, W, H){
+  var root = pvStEl("div", "pvst-projekt", pvStyledEl);
+  var pad = W * 0.024;
+  var headH = H * 0.21, stripH = H * 0.115;
+  var head = pvStEl("div", "j-head", root);
+  head.style.height = headH + "px"; head.style.padding = "0 " + pad + "px";
+  var logoSz = headH * 0.62;
+  var logo = pvStEl("div", "j-logo", head);
+  logo.style.width = logo.style.height = logoSz + "px"; logo.innerHTML = PV_CRANE_SVG;
+  logo.firstChild.style.width = "78%"; logo.firstChild.style.height = "78%";
+  var nm = pvStEl("div", "", head); nm.style.marginLeft = (W * 0.016) + "px";
+  var name = pvStEl("div", "j-name", nm, "the isle"); name.style.fontSize = (headH * 0.30) + "px";
+  var d = new Date();
+  var WD = ["sonntag", "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag"];
+  var MO = ["januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"];
+  var sub = pvStEl("div", "j-sub", nm, "");
+  sub.style.fontSize = Math.max(6, headH * 0.088) + "px"; sub.style.marginTop = (headH * 0.05) + "px";
+  sub.innerHTML = "<b>" + (pvKind(b) === "arrivals" ? "ankunft" : "abflug") + "</b> · " + (pvKind(b) === "arrivals" ? "arrivals" : "departures") + " · " + WD[d.getDay()] + ", " + d.getDate() + ". " + MO[d.getMonth()];
+  var ck = pvStEl("div", "j-clock", head);
+  var ct = pvStEl("div", "t pv-st-clock", ck, "--:--"); ct.style.fontSize = (headH * 0.21) + "px";
+  var cl = pvStEl("div", "", ck, "uhr · local time"); cl.style.fontSize = Math.max(6, headH * 0.075) + "px";
+  var data = pvStRows(b);
+  var n = (b.rows === 5 || b.rows === 14) ? b.rows : 14;
+  var tableH = H - headH - stripH;
+  var rowH = tableH / (n + 1);
+  var table = pvStEl("div", "", root);
+  table.style.padding = "0 " + pad + "px";
+  var colW = { time: W * 0.085, ziel: W * 0.30, flug: W * 0.14, pic: Math.max(rowH * 0.62, W * 0.048) };
+  var heads = pvStEl("div", "j-heads", table);
+  heads.style.height = rowH + "px"; heads.style.fontSize = Math.max(6, rowH * 0.33) + "px";
+  [["zeit", colW.time], ["ziel", colW.ziel], ["flug", colW.flug], ["zeichen", colW.pic], ["bemerkung", 0]].forEach(function(hd){
+    var s = pvStEl("span", "", heads, hd[0]);
+    if(hd[1]){ s.style.width = hd[1] + "px"; s.style.flex = "none"; } else s.style.flex = "1";
+  });
+  for(var ri = 0; ri < n; ri++){
+    var f = data[ri] || { time: "", destination: "", flight: "", remarks: "", black: false };
+    var row = pvStEl("div", "j-row", table);
+    row.style.height = rowH + "px"; row.style.fontSize = Math.max(6, rowH * 0.40) + "px";
+    var tm = pvStEl("span", "j-time", row, f.black ? "" : f.time); tm.style.width = colW.time + "px";
+    var zl = pvStEl("span", "j-ziel", row, f.black ? "" : f.destination.toLowerCase()); zl.style.width = colW.ziel + "px";
+    var fl = pvStEl("span", "j-flug", row, f.black ? "" : f.flight.toLowerCase()); fl.style.width = colW.flug + "px";
+    var pic = pvStEl("span", "j-pic", row);
+    pic.style.width = colW.pic + "px";
+    if(!f.black && (f.time || f.destination)){
+      var kind = f.remarks.indexOf("DELAYED") === 0 ? "clock" : (f.remarks === "GATE OPEN" ? "gate" : "takeoff");
+      pic.innerHTML = PV_PIC[kind];
+      var svg = pic.firstChild;
+      svg.style.width = (rowH * 0.52) + "px"; svg.style.height = (rowH * 0.52) + "px";
+      if(pvKind(b) === "arrivals" && f.remarks === "LANDED") svg.style.transform = "rotate(28deg)";
+    }
+    var strong = ["BOARDING", "FINAL CALL"].indexOf(f.remarks) >= 0 || f.remarks.indexOf("DELAYED") === 0;
+    pvStEl("span", "j-rem" + (strong ? " strong" : ""), row, (f.black || pvIsText(b)) ? "" : pvRemarkDe(f.remarks));
+  }
+  var strip = pvStEl("div", "j-strip", root);
+  strip.style.height = stripH + "px"; strip.style.padding = "0 " + pad + "px"; strip.style.gap = (W * 0.022) + "px";
+  [["sun", "sonnig · 29°", "sunny"], ["tide", "hochwasser 18:42", "high tide"], ["dinner", "abendessen 19:30", "dinner"], ["music", "musik · salon", "now playing"], ["sunset", "sonnenuntergang 17:31", "sunset"]].forEach(function(c){
+    var cell = pvStEl("div", "j-cell", strip);
+    cell.style.fontSize = Math.max(6, stripH * 0.165) + "px"; cell.style.gap = (stripH * 0.10) + "px";
+    var ic = pvStEl("span", "", cell); ic.innerHTML = PV_PIC[c[0]];
+    ic.firstChild.style.width = (stripH * 0.42) + "px"; ic.firstChild.style.height = (stripH * 0.42) + "px";
+    var tx = pvStEl("span", "", cell);
+    tx.innerHTML = '<span class="a">' + c[1] + '</span> <span class="b">/ ' + c[2] + '</span>';
+  });
+}
+
+/* === SCENE ENGINE BEGIN ===
+   Native tile scene engine, shared by the display page and the settings
+   preview. Scenes are drawn directly at grid resolution in whole cells:
+   no virtual field, no downsampling. This block is embedded identically
+   in both pages; keep the two copies byte-identical.
+   API: SceneEngine.createState() returns a state object;
+   SceneEngine.frame(state, sceneId, opts, W, H, dtSeconds) advances the
+   state and returns a flat array of W*H colour strings.
+   opts: { night: 1..8 } for the menorah. */
+var SceneEngine = (function(){
+"use strict";
+var SKY = "#5c94fc", DARK = "#101014";
+function H2(n){ var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function grid(W, H, bg){ var g = new Array(W * H); for(var i = 0; i < W * H; i++) g[i] = bg; return g; }
+function put(g, W, H, x, y, c){ x |= 0; y |= 0; if(x >= 0 && y >= 0 && x < W && y < H) g[y * W + x] = c; }
+function rect(g, W, H, x, y, w, h, c){ for(var j = 0; j < h; j++) for(var i = 0; i < w; i++) put(g, W, H, x + i, y + j, c); }
+function ellipse(g, W, H, cx, cy, rx, ry, c){
+  if(rx < 1) rx = 1; if(ry < 1) ry = 1;
+  for(var y = -ry; y <= ry; y++){
+    var w = Math.round(rx * Math.sqrt(Math.max(0, 1 - (y / ry) * (y / ry))));
+    for(var x = -w; x <= w; x++) put(g, W, H, cx + x, cy + y, c);
+  }
+}
+function circle(g, W, H, cx, cy, r, c){ ellipse(g, W, H, cx, cy, r, r, c); }
+function line(g, W, H, x0, y0, x1, y1, c, brush){
+  var dx = x1 - x0, dy = y1 - y0, steps = Math.max(Math.abs(dx), Math.abs(dy), 1);
+  for(var i = 0; i <= steps; i++){
+    var x = Math.round(x0 + dx * i / steps), y = Math.round(y0 + dy * i / steps);
+    put(g, W, H, x, y, c);
+    if(brush){ put(g, W, H, x, y + 1, c); put(g, W, H, x + 1, y, c); }
+  }
+}
+function stamp(g, W, H, map, pal, ox, oy){
+  for(var r = 0; r < map.length; r++){
+    var row = map[r];
+    for(var c2 = 0; c2 < row.length; c2++){
+      var ch = row[c2];
+      if(ch !== "." && pal[ch]) put(g, W, H, ox + c2, oy + r, pal[ch]);
+    }
+  }
+}
+function hill(g, W, H, cx, gy, hw, hh, c, dk){
+  for(var x = -hw; x <= hw; x++){
+    var f = 1 - (x / hw) * (x / hw);
+    var top = Math.round(gy - hh * f);
+    for(var y = top; y < gy; y++){
+      put(g, W, H, cx + x, y, c);
+      if(H2((cx + x) * 3.1 + y * 7.7) > 0.93) put(g, W, H, cx + x, y, dk);
+    }
+  }
+}
+function cloud(g, W, H, cx, cy, s, c){
+  ellipse(g, W, H, cx, cy, Math.round(6 * s), Math.round(2.2 * s), c);
+  ellipse(g, W, H, cx - Math.round(4 * s), cy + 1, Math.round(4 * s), Math.round(1.8 * s), c);
+  ellipse(g, W, H, cx + Math.round(4 * s), cy + 1, Math.round(4.5 * s), Math.round(1.9 * s), c);
+  ellipse(g, W, H, cx + Math.round(1 * s), cy - Math.round(1.6 * s), Math.round(3.6 * s), Math.round(1.7 * s), c);
+}
+function backdrop(g, W, H, t, sky, grn, dk, cloudC, sunC){
+  var i, gy = Math.round(H * 0.78);
+  for(i = 0; i < W * H; i++) g[i] = sky;
+  if(sunC) circle(g, W, H, Math.round(W * 0.86), Math.round(H * 0.16), Math.max(2, Math.round(H * 0.09)), sunC);
+  hill(g, W, H, Math.round(W * 0.16), gy, Math.round(W * 0.15), Math.round(H * 0.30), grn, dk);
+  hill(g, W, H, Math.round(W * 0.62), gy, Math.round(W * 0.10), Math.round(H * 0.20), grn, dk);
+  var cw = W + 30;
+  cloud(g, W, H, Math.round(((t * 1.1) % cw) - 15), Math.round(H * 0.15), Math.max(0.7, W / 64), cloudC);
+  cloud(g, W, H, Math.round(((t * 0.6 + W * 0.5) % cw) - 15), Math.round(H * 0.32), Math.max(0.55, W / 80), cloudC);
+  rect(g, W, H, 0, gy, W, H - gy, grn);
+  for(var x = 0; x < W; x += 4) put(g, W, H, x, gy + 2, dk);
+  return gy;
+}
+
+/* ---------- walk (ported to the native grid) ---------- */
+var WALK_PAL = { r: "#d82800", s: "#ffcf9e", b: "#2038ec", h: "#7c3a08" };
 var WALK_A = [
-  "....rrrrrr....",
-  "...rrrrrrrrrr.",
-  "...ssssssss...",
-  "...seessees...",
-  "....ssssss....",
-  ".....ssss.....",
-  "..rrbbbbbbbr..",
-  ".rrrbbbbbbbrr.",
-  "....bbbbbb....",
-  "....bbbbbb....",
-  "....bb...bb...",
-  "...bb.....bb..",
-  "...bb......bb.",
-  "..bb........bb",
-  "..hh........hh",
-  ".hhh........hh"
+  "....rrrr......","...rrrrrr.....","...ssssss.....","...ssssss.....",
+  "....ssss......","..rrbbbbbr....",".rrrbbbbbrr...","....bbbb......",
+  "...bb..bb.....","...bb...bb....","...bb....bb...","..bb......b...",
+  "..bb..........","..hh..........",".hhh..........",".............."
 ];
 var WALK_B = [
-  "....rrrrrr....",
-  "...rrrrrrrrrr.",
-  "...ssssssss...",
-  "...seessees...",
-  "....ssssss....",
-  ".....ssss.....",
-  "..rrbbbbbbbr..",
-  ".rrrbbbbbbbrr.",
-  "....bbbbbb....",
-  "....bbbbbb....",
-  "....bb...bb...",
-  "..bb......bb..",
-  ".bb........bb.",
-  "bb..........bb",
-  "hh..........hh",
-  "hhh.........hh"
+  "....rrrr......","...rrrrrr.....","...ssssss.....","...ssssss.....",
+  "....ssss......","..rrbbbbbr....",".rrrbbbbbrr...","....bbbb......",
+  "....bbbb......",".....bb.......","....b..b......","...b....b.....",
+  "...b.....b....","..bb......bb..","..hh.......hh.",".hhh.......hhh"
 ];
-var SHELL_COLORS = { l: SHELL_LT, w: "#fcfcfc", g: SHELL };
 var SHELL_MAP = [
-  "...llllll...",
-  ".llwwwwwwll.",
-  ".lggggggggl.",
-  "lggggggggggl",
-  "lggggggggggl",
-  ".gggggggggg.",
-  "..gggggggg.."
+  "...llllll...",".llwwwwwwll.",".lggggggggl.","lggggggggggl",
+  "lggggggggggl",".gggggggggg.","..gggggggg.."
 ];
-/* Simple pixel glyphs for the dreidel faces, 7 wide x 9 tall */
+var SHELL_PAL = { l: "#b8e6b8", w: "#f4f4f4", g: "#1e9e4c" };
+function drawWalk(g, W, H, st, t){
+  var gy = backdrop(g, W, H, t, SKY, "#00a800", "#007800", "#fcfcfc", "#fcfc54");
+  stamp(g, W, H, SHELL_MAP, SHELL_PAL, Math.round(st.shellX), gy - 7);
+  stamp(g, W, H, (Math.floor(t * 6) % 2 === 0) ? WALK_A : WALK_B, WALK_PAL, Math.round(st.mx), gy - 16);
+}
+
+/* ---------- menorah (ported) ---------- */
+function drawMenorah(g, W, H, t, night){
+  var i; for(i = 0; i < W * H; i++) g[i] = DARK;
+  var GOLD = "#c9a227", IVORY = "#f2ead8", FLAME = "#f4a81c", CORE = "#ffe9a8";
+  var cx = Math.floor(W / 2), sp = Math.max(3, Math.round(W / 13));
+  var baseY = H - 3, armBaseY = Math.round(H * 0.66), stemTopY = Math.round(H * 0.60);
+  var order = [8, 7, 6, 5, 3, 2, 1, 0];
+  var lit = { 4: true };
+  for(i = 0; i < night && i < 8; i++) lit[order[i]] = true;
+  var p, k, x;
+  for(p = 0; p < 9; p++){
+    k = p - 4; x = cx + k * sp;
+    var hgt = Math.round((H * 0.30) * Math.pow(Math.abs(k) / 4, 1.6));
+    var armTopY = armBaseY - hgt;
+    /* arm: a curve from the stem out and up to the candle column */
+    for(var s2 = 0; s2 <= 1.0001; s2 += 0.08){
+      var ax = cx + (x - cx) * s2;
+      var ay = stemTopY + (armTopY - stemTopY) * (s2 * s2);
+      put(g, W, H, Math.round(ax), Math.round(ay), GOLD);
+      put(g, W, H, Math.round(ax), Math.round(ay) + 1, GOLD);
+    }
+    var candleH = (p === 4) ? Math.round(H * 0.20) : Math.round(H * 0.15);
+    var topY = armTopY - candleH;
+    rect(g, W, H, x, topY, 1, candleH, IVORY);
+    put(g, W, H, x - 1, armTopY, GOLD); put(g, W, H, x + 1, armTopY, GOLD);
+    if(lit[p]){
+      var fl = H2(Math.floor(t * 7) * 13 + p * 29) > 0.5 ? 1 : 0;
+      put(g, W, H, x, topY - 1, FLAME);
+      put(g, W, H, x + fl, topY - 2, FLAME);
+      put(g, W, H, x, topY - 2, CORE);
+    }
+  }
+  rect(g, W, H, cx, stemTopY, 1, baseY - stemTopY, GOLD);
+  rect(g, W, H, cx - Math.round(sp * 0.9), baseY - 1, Math.round(sp * 1.8), 1, GOLD);
+  rect(g, W, H, cx - Math.round(sp * 1.3), baseY, Math.round(sp * 2.6), 1, GOLD);
+  rect(g, W, H, cx - Math.round(sp * 1.7), baseY + 1, Math.round(sp * 3.4), 1, GOLD);
+}
+
+/* ---------- dreidel (ported) ---------- */
 var GLYPHS = {
-  nun: [
-    "0111110",
-    "0100010",
-    "0100010",
-    "0100010",
-    "0100100",
-    "0101000",
-    "0110000",
-    "0100000",
-    "0100000"
-  ],
-  gimmel: [
-    "0111110",
-    "0000010",
-    "0000010",
-    "0000110",
-    "0001010",
-    "0010010",
-    "0100010",
-    "0100010",
-    "0100010"
-  ],
-  hey: [
-    "0111110",
-    "0000010",
-    "0000010",
-    "0111110",
-    "0100010",
-    "0100010",
-    "0100010",
-    "0100010",
-    "0100010"
-  ],
-  shin: [
-    "0101010",
-    "0101010",
-    "0101010",
-    "0101010",
-    "0101010",
-    "0101010",
-    "0011100",
-    "0001000",
-    "0011100"
-  ]
+  nun:    [".11111.",".1...1.",".1...1.",".1...1.",".1..1..",".1.1...",".11....",".1.....",".1....."],
+  gimmel: [".11111.",".....1.",".....1.","....11.","...1.1.","..1..1.",".1...1.",".1...1.",".1...1."],
+  hey:    [".11111.",".....1.",".....1.",".11111.",".1...1.",".1...1.",".1...1.",".1...1.",".1...1."],
+  shin:   [".1.1.1.",".1.1.1.",".1.1.1.",".1.1.1.",".1.1.1.",".1.1.1.","..111..","...1...","..111.."]
 };
 var DREIDEL_LETTERS = ["nun", "gimmel", "hey", "shin"];
-var colourEl = document.getElementById("pv-colour");
-var pxEls = [], pxState = [], colourTimer = null, anim = null;
-function colourDims(){
-  if(pvB.rows === 14){ CW = 64; CH = 36; } else { CW = 48; CH = 27; }
+function drawDreidel(g, W, H, t){
+  var gy = backdrop(g, W, H, t, SKY, "#00a800", "#007800", "#fcfcfc", "#fcfc54");
+  var cx = Math.floor(W / 2), topY = Math.round(H * 0.14);
+  var bodyH = Math.round(H * 0.44), maxW = Math.round(W * 0.42);
+  var phase = t * 2.4, wF = Math.abs(Math.cos(phase));
+  var bw = Math.max(3, Math.round(3 + (maxW - 3) * wF));
+  var bx = cx - Math.floor(bw / 2), by = topY + Math.round(H * 0.08);
+  rect(g, W, H, cx - 1, topY, 2, Math.round(H * 0.08), "#8a5a20");
+  rect(g, W, H, bx, by, bw, bodyH, "#2456c8");
+  rect(g, W, H, bx, by, bw, 1, "#7ea4f2");
+  var tipY = by + bodyH, tipH = Math.max(2, Math.round(H * 0.10));
+  for(var r2 = 0; r2 < tipH; r2++){
+    var tw = Math.max(1, Math.round(bw * (1 - r2 / tipH) / 2));
+    rect(g, W, H, cx - tw, tipY + r2, tw * 2, 1, "#2456c8");
+  }
+  if(bw >= 9 && tipY < gy + 2){
+    var letter = DREIDEL_LETTERS[Math.floor(phase / (Math.PI / 2)) % 4];
+    stamp(g, W, H, GLYPHS[letter], { "1": "#f2ead8" }, cx - 3, by + Math.max(1, Math.round(bodyH / 2) - 4));
+  }
 }
-function freshScene(){ return { t:0, mx:-24, shellX:80, shellV:0, shellKickT:-99 }; }
+
+/* ---------- star of david (ported) ---------- */
+function drawStar(g, W, H, t){
+  var i; for(i = 0; i < W * H; i++) g[i] = DARK;
+  var GOLD = "#c9a227", cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.36;
+  var pts = [];
+  for(i = 0; i < 6; i++){
+    var a = -Math.PI / 2 + i * Math.PI / 3;
+    pts.push([cx + R * Math.cos(a), cy + R * Math.sin(a)]);
+  }
+  line(g, W, H, pts[0][0], pts[0][1], pts[2][0], pts[2][1], GOLD, 1);
+  line(g, W, H, pts[2][0], pts[2][1], pts[4][0], pts[4][1], GOLD, 1);
+  line(g, W, H, pts[4][0], pts[4][1], pts[0][0], pts[0][1], GOLD, 1);
+  line(g, W, H, pts[1][0], pts[1][1], pts[3][0], pts[3][1], GOLD, 1);
+  line(g, W, H, pts[3][0], pts[3][1], pts[5][0], pts[5][1], GOLD, 1);
+  line(g, W, H, pts[5][0], pts[5][1], pts[1][0], pts[1][1], GOLD, 1);
+  var hp = pts[Math.floor(t * 5) % 6];
+  circle(g, W, H, Math.round(hp[0]), Math.round(hp[1]), 1, "#ffe9a8");
+}
+
+/* ---------- level: an original first level in the NES manner ---------- */
+var LV_TILES_Y = 9, LV_WORLD = 172;
+var LV_PIPES = [{ x: 18, h: 2 }, { x: 52, h: 3 }, { x: 100, h: 2 }];
+var LV_PITS = [[38, 40], [88, 90]];
+var LV_SPANS = [[6, 10], [24, 27], [44, 46], [70, 74], [96, 99], [118, 121]];
+function lvPit(tx){
+  for(var i = 0; i < LV_PITS.length; i++) if(tx >= LV_PITS[i][0] && tx <= LV_PITS[i][1]) return true;
+  return false;
+}
+function lvTile(tx, ty){
+  if(tx < 0 || tx >= LV_WORLD) return 0;
+  if(ty >= 7){ return lvPit(tx) ? 0 : (ty === 7 ? "G" : "g"); }
+  var i;
+  for(i = 0; i < LV_PIPES.length; i++){
+    var p = LV_PIPES[i];
+    if(tx === p.x || tx === p.x + 1){
+      if(ty === 7 - p.h) return "P";
+      if(ty > 7 - p.h) return "p";
+    }
+  }
+  for(i = 0; i < 4; i++){
+    if(tx === 128 + i && ty >= 7 - (i + 1)) return "B";
+    if(tx === 133 + i && ty >= 7 - (4 - i)) return "B";
+  }
+  if(ty === 3){
+    for(i = 0; i < LV_SPANS.length; i++){
+      if(tx >= LV_SPANS[i][0] && tx <= LV_SPANS[i][1]) return ((tx - LV_SPANS[i][0]) % 2 === 0) ? "?" : "B";
+    }
+  }
+  if(tx >= 154 && tx <= 157 && ty >= 4){
+    if(ty === 4 && tx !== 155 && tx !== 156) return "B";
+    if(ty >= 5) return "B";
+  }
+  return 0;
+}
+function lvTileDraw(g, W, H, sx, sy, TS, kind){
+  var x, y;
+  if(kind === "G" || kind === "g"){
+    rect(g, W, H, sx, sy, TS, TS, "#c84c0c");
+    if(kind === "G") rect(g, W, H, sx, sy, TS, 1, "#fca044");
+    for(y = 1; y < TS; y += 2) for(x = 0; x < TS; x += 2)
+      if(H2((sx + x) * 1.7 + (sy + y) * 3.1) > 0.6) put(g, W, H, sx + x, sy + y, "#7c3806");
+  } else if(kind === "B"){
+    rect(g, W, H, sx, sy, TS, TS, "#c84c0c");
+    rect(g, W, H, sx, sy, TS, 1, "#5e2403");
+    rect(g, W, H, sx, sy + Math.floor(TS / 2), TS, 1, "#5e2403");
+    put(g, W, H, sx + Math.floor(TS / 2), sy, "#5e2403");
+    put(g, W, H, sx + 1, sy + Math.floor(TS / 2), "#5e2403");
+    put(g, W, H, sx + TS - 1, sy + Math.floor(TS / 2), "#5e2403");
+  } else if(kind === "?"){
+    rect(g, W, H, sx, sy, TS, TS, "#f8b800");
+    rect(g, W, H, sx, sy, TS, 1, "#9c5a00"); rect(g, W, H, sx, sy + TS - 1, TS, 1, "#9c5a00");
+    rect(g, W, H, sx, sy, 1, TS, "#9c5a00"); rect(g, W, H, sx + TS - 1, sy, 1, TS, "#9c5a00");
+    put(g, W, H, sx + Math.floor(TS / 2), sy + Math.floor(TS / 2), "#9c5a00");
+    put(g, W, H, sx + 1, sy + 1, "#9c5a00"); put(g, W, H, sx + TS - 2, sy + 1, "#9c5a00");
+    put(g, W, H, sx + 1, sy + TS - 2, "#9c5a00"); put(g, W, H, sx + TS - 2, sy + TS - 2, "#9c5a00");
+  } else if(kind === "P" || kind === "p"){
+    rect(g, W, H, sx, sy, TS, TS, "#00a800");
+    rect(g, W, H, sx, sy, Math.max(1, Math.floor(TS / 3)), TS, "#80d010");
+    rect(g, W, H, sx + TS - 1, sy, 1, TS, "#005800");
+    if(kind === "P"){ rect(g, W, H, sx - 1, sy, TS + 2, 1, "#005800"); rect(g, W, H, sx - 1, sy + TS - 1, TS + 2, 1, "#005800"); }
+  }
+}
+var RUNNER_A = [
+  ".rrrrr..","rrrrrrr.","ssssss..","ssssss..","rbbbbbr.",".bbbb...",".bb.bb..","hh...hh."
+];
+var RUNNER_B = [
+  ".rrrrr..","rrrrrrr.","ssssss..","ssssss..","rbbbbbr.",".bbbb...","..bbb...",".hh.hh.."
+];
+var SHELL_SM = [".llll.","lwwwwl","gggggg",".gggg.","..gg.."];
+function lvGroundTop(tx){ return lvPit(tx) ? -1 : 7; }
+function drawLevel(g, W, H, st, t, dt){
+  var i; for(i = 0; i < W * H; i++) g[i] = SKY;
+  var TS = Math.max(3, Math.round(H / LV_TILES_Y));
+  var gy = 7 * TS;
+  if(!st.lv) st.lv = { off: 0, wy: 0, vy: 0, air: false, shellWX: 30 * TS, shellV: 0 };
+  var s = st.lv;
+  /* --- physics, in tile units --- */
+  var spd = 3.0; /* tiles per second */
+  s.off += spd * TS * dt;
+  var wxT = (s.off + W * 0.22) / TS; /* walker world x, tiles */
+  var frontTx = Math.floor(wxT + 0.9);
+  if(!s.air){
+    if(lvGroundTop(frontTx) < 0){ s.air = true; s.vy = 0; }
+    else if(lvGroundTop(Math.floor(wxT + 1.6)) < 0){ s.air = true; s.vy = -12.5; }
+  }
+  if(s.air){
+    s.wy += s.vy * dt; s.vy += 20 * dt;
+    if(s.wy >= 0){
+      if(lvGroundTop(frontTx) >= 0){ s.wy = 0; s.air = false; s.vy = 0; }
+      else if(s.wy > 3){ s.wy = 0; s.vy = -12.5; } /* safety hop over a long fall */
+    }
+  }
+  var walkerWX = s.off + W * 0.22;
+  if(s.shellV > 0.4 * TS){
+    s.shellWX += s.shellV * dt;
+    s.shellV *= Math.pow(0.35, dt);
+    var stx = Math.floor((s.shellWX + 6) / TS);
+    if(lvTile(stx, 6) || lvPit(stx)) s.shellV = 0;
+  } else if(!s.air && walkerWX + 9 >= s.shellWX && walkerWX < s.shellWX + 4 && s.shellWX < LV_WORLD * TS - 20 * TS){
+    s.shellV = 7 * TS;
+  }
+  if(lvPit(Math.floor(s.shellWX / TS)) && s.shellV <= 0.4 * TS) s.shellWX = walkerWX + 42 * TS;
+  if(s.off > LV_WORLD * TS - W - TS){ s.off = 0; s.shellWX = 30 * TS; s.shellV = 0; s.wy = 0; s.air = false; }
+  /* --- scenery behind the tiles --- */
+  var off = s.off;
+  hill(g, W, H, Math.round(6 * TS - off), gy, 6 * TS, Math.round(H * 0.34), "#00a800", "#007800");
+  hill(g, W, H, Math.round(60 * TS - off), gy, 4 * TS, Math.round(H * 0.20), "#00a800", "#007800");
+  var cw2 = [[8, 1], [30, 0], [58, 1], [84, 0], [120, 1], [150, 0]];
+  for(i = 0; i < cw2.length; i++)
+    cloud(g, W, H, Math.round(cw2[i][0] * TS - off + TS / 2), Math.round(cw2[i][1] * TS + TS * 0.6), Math.max(0.8, TS / 3.4), "#fcfcfc");
+  var bushX = [12, 66, 112];
+  for(i = 0; i < bushX.length; i++)
+    ellipse(g, W, H, Math.round(bushX[i] * TS - off), gy - 1, Math.round(TS * 1.6), Math.max(1, Math.round(TS * 0.55)), "#00a800");
+  /* --- tiles --- */
+  var tx0 = Math.floor(off / TS);
+  for(var tx = tx0; tx <= tx0 + Math.ceil(W / TS) + 1; tx++){
+    for(var ty = 0; ty < LV_TILES_Y; ty++){
+      var kind = lvTile(tx, ty);
+      if(kind) lvTileDraw(g, W, H, Math.round(tx * TS - off), ty * TS, TS, kind);
+    }
+  }
+  /* --- flag --- */
+  var flagX = Math.round(146 * TS - off + TS / 2);
+  if(flagX > -8 && flagX < W + 8){
+    rect(g, W, H, flagX, TS, 1, gy - TS, "#0c930c");
+    circle(g, W, H, flagX, TS - 1, 1, "#f8b800");
+    for(var fr = 0; fr < 4; fr++) rect(g, W, H, flagX - 1 - (3 - fr), TS + 1 + fr, 1, 1, "#00a800");
+    rect(g, W, H, flagX - 2, TS + 4, 3, 1, "#00a800");
+  }
+  /* --- shell and walker --- */
+  var shellSX = Math.round(s.shellWX - off);
+  if(shellSX > -10 && shellSX < W + 4) stamp(g, W, H, SHELL_SM, SHELL_PAL, shellSX, gy - 5);
+  var wyC = Math.round(s.wy * TS);
+  var frame = (Math.floor(t * 8) % 2 === 0) ? RUNNER_A : RUNNER_B;
+  stamp(g, W, H, frame, WALK_PAL, Math.round(W * 0.22), gy - 8 + wyC);
+}
+
+/* ---------- the isle palm and its weather variants ---------- */
+var PALMS = {
+  "palm":         { sky: ["#7ec8e3", "#a8d8ea", "#d8f0f8"], sun: [0.80, 0.18, "#fcfc54", 0.075], water: ["#1a6a8a", "#2a9aba", "#7ad0e8"], wind: 1.0, wspd: 1.0, clouds: 3, cspd: 1.0, cloudC: "#ffffff", sand: "#e8d8a0", trunk: "#8a5a20", frond: "#1e9e4c" },
+  "palm-night":   { sky: ["#060818", "#0c1430", "#14224a"], moon: true, stars: true, water: ["#081826", "#0e2a3e", "#3a6a8a"], wind: 0.7, wspd: 0.8, clouds: 2, cspd: 0.6, cloudC: "#1a2440", sand: "#8a7a52", trunk: "#4a3416", frond: "#14532a" },
+  "palm-sunrise": { sky: ["#2a2a5e", "#c85a7a", "#f8a85c"], sun: [0.30, -1, "#ffb84d", 0.095], water: ["#3a2a5e", "#8a4a6a", "#f8a85c"], wind: 0.8, wspd: 0.9, clouds: 3, cspd: 0.8, cloudC: "#e8a8a0", sand: "#d8b088", trunk: "#6e4520", frond: "#1a7a3c" },
+  "palm-sunset":  { sky: ["#2a1a4a", "#8a2a5e", "#f87a3c"], sun: [0.66, -1, "#ff8c3a", 0.115], water: ["#2a1a3e", "#6a2a4e", "#f87a3c"], wind: 0.9, wspd: 1.0, clouds: 3, cspd: 0.9, cloudC: "#c86a6a", sand: "#c89868", trunk: "#5e3a1a", frond: "#176b34" },
+  "palm-cloudy":  { sky: ["#5a6a72", "#7a8a92", "#9aa8ae"], sun: null, water: ["#2a4a55", "#3a6a72", "#8ababa"], wind: 1.3, wspd: 1.4, clouds: 6, cspd: 1.6, cloudC: "#aebbc0", sand: "#cfc0a0", trunk: "#75552c", frond: "#1e8a44" },
+  "palm-rain":    { sky: ["#3a4a55", "#55656e", "#75858e"], sun: null, water: ["#223f4a", "#2f5a66", "#7a9aa2"], wind: 1.5, wspd: 1.7, clouds: 5, cspd: 1.8, cloudC: "#5f7078", sand: "#b8a888", trunk: "#644824", frond: "#1a7a3a", rain: true },
+  "palm-storm":   { sky: ["#141a22", "#232c36", "#333f4a"], sun: null, water: ["#101c24", "#1a2e3a", "#4a6a7a"], wind: 2.2, wspd: 2.6, clouds: 5, cspd: 2.4, cloudC: "#171e26", sand: "#9a8c6c", trunk: "#4e3818", frond: "#12512a", lightning: true },
+  "palm-rainbow": { sky: ["#6ab4d8", "#9ad0ea", "#c8ecf8"], sun: [0.16, 0.16, "#fcfc54", 0.06], water: ["#1a6a8a", "#2a9aba", "#7ad0e8"], wind: 0.8, wspd: 0.9, clouds: 3, cspd: 0.8, cloudC: "#ffffff", sand: "#e8d8a0", trunk: "#8a5a20", frond: "#1e9e4c", rainbow: true },
+  "palm-mist":    { sky: ["#a8b4b8", "#bcc4c6", "#ccd2d2"], sun: null, water: ["#6a7e82", "#7e9296", "#aebfc2"], wind: 0.4, wspd: 0.5, clouds: 2, cspd: 0.4, cloudC: "#d4dcdc", sand: "#d8d0bc", trunk: "#8a7452", frond: "#5a8a64", mist: true }
+};
+function drawPalm(g, W, H, st, t, P){
+  var horizon = Math.round(H * 0.64), x, y, i;
+  for(y = 0; y < horizon; y++){
+    var f = y / Math.max(1, horizon - 1);
+    g[y * W] = P.sky[0];
+    var c = f < 0.5 ? P.sky[0] : P.sky[1];
+    if(f >= 0.82) c = P.sky[2];
+    for(x = 0; x < W; x++) g[y * W + x] = c;
+  }
+  if(P.stars){
+    for(i = 0; i < 260; i++){
+      var sx = Math.floor(H2(i * 3.7) * W), sy = Math.floor(H2(i * 9.1) * horizon * 0.92);
+      if(H2(i * 1.3 + Math.floor(t * 1.6)) > 0.35) put(g, W, H, sx, sy, "#dfe8f4");
+    }
+  }
+  if(P.sun){
+    var scx = Math.round(W * P.sun[0]);
+    var scy = P.sun[1] < 0 ? horizon - Math.round(H * P.sun[3]) + 2 : Math.round(H * P.sun[1]);
+    circle(g, W, H, scx, scy, Math.max(2, Math.round(H * P.sun[3])), P.sun[2]);
+    circle(g, W, H, scx, scy, Math.max(1, Math.round(H * P.sun[3] * 0.62)), "#fff6c8");
+  }
+  if(P.moon){
+    circle(g, W, H, Math.round(W * 0.82), Math.round(H * 0.16), Math.max(2, Math.round(H * 0.07)), "#e8ecf2");
+    circle(g, W, H, Math.round(W * 0.82) + Math.max(1, Math.round(H * 0.03)), Math.round(H * 0.16) - 1, Math.max(1, Math.round(H * 0.055)), P.sky[1]);
+  }
+  if(P.rainbow){
+    var rcx = Math.round(W * 0.74), rb = ["#d86a5e", "#e89a4e", "#ecd06a", "#6ab46a", "#5e8ad8"];
+    for(var b2 = 0; b2 < 5; b2++){
+      var rr = H * (0.52 + b2 * 0.045);
+      for(var a2 = Math.PI * 1.02; a2 < Math.PI * 1.98; a2 += 0.012)
+        put(g, W, H, Math.round(rcx + rr * Math.cos(a2)), Math.round(horizon + rr * Math.sin(a2) * 0.62), rb[b2]);
+    }
+  }
+  var cw = W + 30;
+  for(i = 0; i < P.clouds; i++){
+    var ccx = Math.round(((t * P.cspd * (1.6 + i * 0.7) + i * W * 0.37) % cw) - 15);
+    var ccy = Math.round(H * 0.10 + (i % 3) * H * 0.085);
+    cloud(g, W, H, ccx, ccy, Math.max(0.7, W / 60), P.cloudC);
+  }
+  for(y = horizon; y < H; y++){
+    var wf = (y - horizon) / Math.max(1, H - horizon - 1);
+    var wc = wf < 0.34 ? P.water[0] : (wf < 0.75 ? P.water[1] : P.water[1]);
+    for(x = 0; x < W; x++) g[y * W + x] = wc;
+  }
+  /* sun or moon glitter path on the water */
+  if(P.sun || P.moon){
+    var gx = Math.round(W * (P.sun ? P.sun[0] : 0.82));
+    for(y = horizon + 1; y < H; y++){
+      var gw = 1 + Math.round((y - horizon) * 0.35);
+      for(x = gx - gw; x <= gx + gw; x++)
+        if(H2(x * 3.3 + y * 17.7 + Math.floor(t * 2.5) * 41) > 0.62) put(g, W, H, x, y, P.water[2]);
+    }
+  }
+  /* general shimmer, drifting */
+  for(y = horizon + 1; y < H; y++)
+    for(x = 0; x < W; x++)
+      if(H2(x * 1.9 + y * 23.3 + Math.floor(t * 2.2) * 67) > 0.955) put(g, W, H, x, y, P.water[2]);
+  /* island */
+  var ix = Math.round(W * 0.52), irx = Math.round(W * 0.155), iry = Math.max(2, Math.round(H * 0.05));
+  ellipse(g, W, H, ix, horizon + 1, irx, iry, P.sand);
+  ellipse(g, W, H, ix, horizon - 1, Math.round(irx * 0.55), Math.max(1, Math.round(iry * 0.6)), P.frond);
+  /* shimmer rings running around the island */
+  for(var ring = 0; ring < 2; ring++){
+    var phase = ((t * 0.45 + ring * 0.5) % 1);
+    var rrx = irx + 2 + phase * W * 0.05, rry = iry + 1 + phase * H * 0.03;
+    for(var a3 = 0; a3 < Math.PI * 2; a3 += 0.05){
+      if(H2(Math.floor(a3 * 9) + Math.floor(t * 3)) > 0.4)
+        put(g, W, H, Math.round(ix + rrx * Math.cos(a3)), Math.round(horizon + 1 + rry * Math.sin(a3)), P.water[2]);
+    }
+  }
+  /* palm: a windswept trunk leaning away from the wind, crown at the top */
+  var baseX = ix, baseY = horizon - 1;
+  var lean = -W * 0.055 * (0.8 + P.wind * 0.2);
+  var crownX = Math.round(baseX + lean), crownY = Math.round(horizon - H * 0.42);
+  for(var s3 = 0; s3 <= 1.0001; s3 += 0.06){
+    var tx2 = Math.round(baseX + lean * s3 * s3), ty2 = Math.round(baseY + (crownY - baseY) * s3);
+    put(g, W, H, tx2, ty2, P.trunk); put(g, W, H, tx2 + 1, ty2, P.trunk);
+  }
+  put(g, W, H, crownX, crownY + 1, "#6e4520"); put(g, W, H, crownX + 1, crownY + 1, "#6e4520");
+  var fronds = 6;
+  for(i = 0; i < fronds; i++){
+    var fa = Math.PI * (0.08 + 0.84 * i / (fronds - 1)); /* fan across the top */
+    var fl2 = W * (0.115 + 0.035 * Math.sin(i * 2.3));
+    var swayX = Math.sin(t * P.wspd * 1.6 + i * 1.3) * P.wind * W * 0.009;
+    var swayY = Math.cos(t * P.wspd * 1.25 + i * 0.9) * P.wind * H * 0.007;
+    var tipX = crownX + Math.cos(fa) * fl2 + swayX;
+    var tipY = crownY - Math.sin(fa) * fl2 * 0.55 + fl2 * 0.22 + swayY;
+    var ctlX = crownX + Math.cos(fa) * fl2 * 0.5;
+    var ctlY = crownY - Math.sin(fa) * fl2 * 0.78 + swayY * 0.5;
+    for(var q = 0; q <= 1.0001; q += 0.09){
+      var qx = (1 - q) * (1 - q) * crownX + 2 * (1 - q) * q * ctlX + q * q * tipX;
+      var qy = (1 - q) * (1 - q) * crownY + 2 * (1 - q) * q * ctlY + q * q * tipY;
+      put(g, W, H, Math.round(qx), Math.round(qy), P.frond);
+    }
+  }
+  if(P.rain){
+    var drops = W;
+    for(i = 0; i < drops; i++){
+      var dx = Math.floor(H2(i * 13.7) * W);
+      var dy = Math.floor((H2(i * 7.3) * H + t * H * 1.35 * (0.8 + H2(i * 3.1) * 0.4)) % H);
+      put(g, W, H, dx, dy, "#a8c8d8"); put(g, W, H, dx - 1, dy + 1, "#a8c8d8");
+    }
+  }
+  if(P.mist){
+    for(var mb = 0; mb < 3; mb++){
+      var byy = horizon - 2 - mb * Math.round(H * 0.13) + Math.round(Math.sin(t * 0.3 + mb * 1.7) * 1.5);
+      for(y = byy; y < byy + 3 && y >= 0 && y < H; y++)
+        for(x = 0; x < W; x++)
+          if(H2(x * 5.1 + y * 31.7 + Math.floor(t * 2)) > 0.22) put(g, W, H, x, y, "#dfe6e6");
+    }
+  }
+  if(P.lightning){
+    if(t > st.nextFlash){ st.flashStart = t; st.nextFlash = t + 4 + H2(t * 7.7) * 6; }
+    var ft = t - st.flashStart;
+    if(ft < 0.09 || (ft > 0.16 && ft < 0.30)){
+      for(y = 0; y < horizon; y++) for(x = 0; x < W; x++) g[y * W + x] = "#c8d4de";
+      var bx = Math.round(W * (0.2 + H2(Math.floor(st.flashStart * 10)) * 0.5)), byy2 = Math.round(H * 0.10);
+      var seg = (horizon - byy2) / 6;
+      for(var bs = 0; bs < 6; bs++){
+        var nx = bx + Math.round((H2(bs * 3.3 + st.flashStart) - 0.5) * W * 0.035);
+        line(g, W, H, bx, Math.round(byy2 + bs * seg), nx, Math.round(byy2 + (bs + 1) * seg), "#ffffff", 0);
+        bx = nx;
+      }
+    }
+  }
+}
+
+/* ---------- flap pix: a picture made of flaps (the sunset sample) ---------- */
+function drawPix(g, W, H, t){
+  var horizon = Math.round(H * 0.61), x, y;
+  var stops = [[0.00, [35, 44, 85]], [0.30, [74, 58, 110]], [0.55, [163, 74, 107]], [0.78, [224, 122, 74]], [1.00, [242, 166, 90]]];
+  function mix(f){
+    for(var i = 1; i < stops.length; i++){
+      if(f <= stops[i][0]){
+        var f0 = stops[i - 1], f1 = stops[i], u = (f - f0[0]) / (f1[0] - f0[0]);
+        u = Math.round(u * 6) / 6; /* banded, flap-like steps */
+        var r = Math.round(f0[1][0] + (f1[1][0] - f0[1][0]) * u);
+        var gg = Math.round(f0[1][1] + (f1[1][1] - f0[1][1]) * u);
+        var bb = Math.round(f0[1][2] + (f1[1][2] - f0[1][2]) * u);
+        return "rgb(" + r + "," + gg + "," + bb + ")";
+      }
+    }
+    return "rgb(242,166,90)";
+  }
+  for(y = 0; y < horizon; y++){ var c = mix(y / horizon); for(x = 0; x < W; x++) g[y * W + x] = c; }
+  var scx = Math.round(W * 0.31), sr = Math.max(3, Math.round(H * 0.115)), scy = horizon - Math.round(sr * 0.22);
+  var rings = ["#e8873f", "#f49a4a", "#f9b45e", "#ffd98a", "#ffedbb"];
+  for(var r2 = 4; r2 >= 0; r2--) circle(g, W, H, scx, scy, Math.max(1, Math.round(sr * (0.45 + r2 * 0.15))), rings[4 - r2]);
+  ellipse(g, W, H, Math.round(W * 0.60), Math.round(H * 0.16), Math.round(W * 0.075), Math.max(1, Math.round(H * 0.022)), "#3a3468");
+  ellipse(g, W, H, Math.round(W * 0.80), Math.round(H * 0.26), Math.round(W * 0.055), Math.max(1, Math.round(H * 0.018)), "#453a72");
+  ellipse(g, W, H, Math.round(W * 0.13), Math.round(H * 0.30), Math.round(W * 0.045), Math.max(1, Math.round(H * 0.015)), "#4c3a74");
+  for(y = horizon; y < H; y++){
+    var f2 = (y - horizon) / Math.max(1, H - horizon);
+    var base = f2 < 0.5 ? "#1c2f55" : "#142544";
+    for(x = 0; x < W; x++) g[y * W + x] = base;
+    var wob = Math.sin(y * 0.9 + Math.floor(t * 2) * 0.7) * W * 0.006;
+    var hw = Math.max(1, Math.round(sr * 0.8 * (1 - f2 * 0.35)));
+    for(x = Math.round(scx - hw + wob); x <= Math.round(scx + hw + wob); x++)
+      if(H2(x * 2.9 + y * 13.7 + Math.floor(t * 2) * 29) > 0.42) put(g, W, H, x, y, f2 < 0.4 ? "#ffca7a" : "#e89a4a");
+    for(x = 0; x < W; x++)
+      if(H2(x * 4.1 + y * 29.3 + Math.floor(t * 2) * 53) > 0.972) put(g, W, H, x, y, "#ffe9b0");
+  }
+  rect(g, W, H, 0, horizon, W, 1, "#ffd9a0");
+  /* island with a palm silhouette, right of centre */
+  var ix = Math.round(W * 0.70);
+  ellipse(g, W, H, ix, horizon + 1, Math.round(W * 0.085), Math.max(1, Math.round(H * 0.028)), "#0d0f18");
+  var tx3 = ix - Math.round(W * 0.01), ty3 = horizon - Math.round(H * 0.15);
+  line(g, W, H, ix, horizon, tx3, ty3, "#0d0f18", 1);
+  for(var fi = 0; fi < 5; fi++){
+    var fa2 = Math.PI * (0.15 + 0.7 * fi / 4);
+    line(g, W, H, tx3, ty3, Math.round(tx3 + Math.cos(fa2) * W * 0.045), Math.round(ty3 - Math.sin(fa2) * H * 0.045 + H * 0.03), "#0d0f18", 0);
+  }
+  /* sailboat, left */
+  var bx2 = Math.round(W * 0.15), by2 = horizon + Math.round(H * 0.035);
+  rect(g, W, H, bx2 - Math.round(W * 0.02), by2, Math.round(W * 0.04), Math.max(1, Math.round(H * 0.014)), "#0d0f18");
+  line(g, W, H, bx2, by2, bx2, by2 - Math.round(H * 0.10), "#0d0f18", 0);
+  for(var sy2 = 0; sy2 < Math.round(H * 0.085); sy2++)
+    rect(g, W, H, bx2 + 1, by2 - Math.round(H * 0.095) + sy2, Math.max(1, Math.round((sy2 / Math.max(1, H * 0.085)) * W * 0.016)), 1, "#f4f1e6");
+}
+
+/* ---------- state and frame dispatch ---------- */
+function createState(){
+  return {
+    t: 0,
+    walk: { mx: -16, shellX: 0, shellV: 0 },
+    lv: null,
+    flashStart: -9, nextFlash: 5
+  };
+}
+function frame(st, scene, opts, W, H, dt){
+  st.t += dt;
+  var t = st.t;
+  if(!st.walk) st.walk = { mx: -16, shellX: 0, shellV: 0 };
+  if(st.walk.shellX === 0) st.walk.shellX = W * 0.55;
+  var g;
+  if(scene === "menorah"){ g = grid(W, H, DARK); drawMenorah(g, W, H, t, (opts && opts.night) || 8); }
+  else if(scene === "star"){ g = grid(W, H, DARK); drawStar(g, W, H, t); }
+  else if(scene === "dreidel"){ g = grid(W, H, SKY); drawDreidel(g, W, H, t); }
+  else if(scene === "level"){ g = grid(W, H, SKY); drawLevel(g, W, H, st, t, dt); }
+  else if(scene === "pix"){ g = grid(W, H, "#232c55"); drawPix(g, W, H, t); }
+  else if(PALMS[scene]){ g = grid(W, H, PALMS[scene].sky[0]); drawPalm(g, W, H, st, t, PALMS[scene]); }
+  else { g = grid(W, H, SKY); /* walk */
+    var s = st.walk;
+    s.mx += 9 * dt;
+    if(s.shellV > 4){
+      s.shellX += s.shellV * dt;
+      s.shellV *= Math.pow(0.96, dt / 0.11);
+      if(s.shellX > W - 13){ s.shellX = W - 13; s.shellV = 0; }
+    } else if(s.mx + 14 >= s.shellX - 1 && s.mx + 14 < s.shellX + 8 && s.shellX < W - 16){
+      s.shellV = 85;
+    }
+    if(s.mx > W + 16){ s.mx = -16; s.shellX = W * 0.55; s.shellV = 0; }
+    drawWalk(g, W, H, s, t);
+  }
+  return g;
+}
+return { createState: createState, frame: frame };
+})();
+/* === SCENE ENGINE END === */
+
+/* ============ Colour board scenes: preview adapter for the shared engine ============ */
+var CW = 48, CH = 27, builtCW = 0, builtCH = 0;
+var colourEl = document.getElementById("pv-colour");
+var pxEls = [], pxState = [], colourTimer = null, sceneState = null, sceneLast = 0;
+function colourDims(){
+  var fl = (pvB.style || "isle") === "flappix";
+  if(pvB.rows === 14){ CW = fl ? 96 : 64; CH = fl ? 54 : 36; }
+  else { CW = fl ? 64 : 48; CH = fl ? 36 : 27; }
+}
+function pvSceneId(){
+  if((pvB.style || "isle") === "flappix") return "pix";
+  return pvB.scene || "walk";
+}
 function buildColour(){
+  builtCW = CW; builtCH = CH;
   colourEl.innerHTML = ""; pxEls = []; pxState = [];
-  var grid = document.createElement("div"); grid.className = "pvgrid";
+  var grid = document.createElement("div"); grid.className = "pvgrid"; grid.id = "pvgrid";
   grid.style.gridTemplateColumns = "repeat(" + CW + ", var(--pv-px))";
-  for(var i=0;i<CW*CH;i++){
-    var d = document.createElement("div"); d.className = "px"; d.style.background = SKY;
-    grid.appendChild(d); pxEls.push(d); pxState.push(SKY);
+  for(var i = 0; i < CW * CH; i++){
+    var d = document.createElement("div"); d.className = "px";
+    grid.appendChild(d); pxEls.push(d); pxState.push("");
   }
   colourEl.appendChild(grid);
-  builtCW = CW; builtCH = CH;
-  if(!anim) anim = freshScene();
+  sceneState = SceneEngine.createState();
 }
-function field(bg){
-  var vf = new Array(VW * VH);
-  for(var i = 0; i < vf.length; i++) vf[i] = bg;
-  return vf;
-}
-function vput(vf, cx, cy, col){ if(cx >= 0 && cx < VW && cy >= 0 && cy < VH) vf[cy * VW + cx] = col; }
-function vrect(vf, x0, y0, w, h, col){
-  for(var yy = y0; yy < y0 + h; yy++) for(var xx = x0; xx < x0 + w; xx++) vput(vf, xx, yy, col);
-}
-function vcircle(vf, cx, cy, r, col){
-  for(var yy = cy - r; yy <= cy + r; yy++) for(var xx = cx - r; xx <= cx + r; xx++)
-    if((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) <= r * r) vput(vf, xx, yy, col);
-}
-function vellipse(vf, cx, cy, rx, ry, col){
-  for(var yy = cy - ry; yy <= cy + ry; yy++) for(var xx = cx - rx; xx <= cx + rx; xx++){
-    var dx = (xx - cx) / rx, dy = (yy - cy) / ry;
-    if(dx * dx + dy * dy <= 1) vput(vf, xx, yy, col);
-  }
-}
-function vline(vf, x0, y0, x1, y1, col, r){
-  var steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
-  for(var s2 = 0; s2 <= steps; s2++){
-    var px = Math.round(x0 + (x1 - x0) * s2 / steps), py = Math.round(y0 + (y1 - y0) * s2 / steps);
-    for(var yy = -r; yy <= r; yy++) for(var xx = -r; xx <= r; xx++) vput(vf, px + xx, py + yy, col);
-  }
-}
-function stamp(vf, map, colors, x0, y0){
-  for(var yy = 0; yy < map.length; yy++){
-    var rowStr = map[yy];
-    for(var xx = 0; xx < rowStr.length; xx++){
-      var col = colors[rowStr[xx]];
-      if(col) vput(vf, x0 + xx, y0 + yy, col);
-    }
-  }
-}
-function hash2(a, b){ var x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); }
-/* Shared backdrop for the outdoor scenes: sky, sun, birds, hills, ground */
-function buildBackdrop(t){
-  var vf = field(SKY);
-  var x, y;
-  vcircle(vf, 172, 14, 7, SUN); vcircle(vf, 172, 14, 4, SUN_IN);
-  [18, 27].forEach(function(by, bi){
-    var bx = Math.floor(((t * 0.5 + bi * 70) % (VW + 24)) - 12);
-    vput(vf, bx, by, BIRD); vput(vf, bx - 2, by - 1, BIRD); vput(vf, bx + 2, by - 1, BIRD);
-  });
-  function hill(x0, x1, peak){
-    var mid = (x0 + x1) / 2, half = (x1 - x0) / 2;
-    for(x = x0; x <= x1; x++){
-      var q = (x - mid) / half;
-      var h = Math.max(0, Math.round(peak * (1 - q * q)));
-      for(y = 0; y < h; y++) vput(vf, x, VGY - 1 - y, x > mid ? HILL_DARK : HILL);
-    }
-  }
-  hill(12, 52, 12); hill(116, 164, 8);
-  for(x = 0; x < VW; x++){
-    vput(vf, x, VGY, GROUND_TOP);
-    for(y = VGY + 1; y < VH; y++) vput(vf, x, y, ((x * 7 + y * 13) % 9 === 0) ? GROUND_DARK : GROUND);
-  }
-  function cloud(cx, cy){
-    vellipse(vf, cx, cy, 16, 4, CLOUD); vellipse(vf, cx - 8, cy + 1, 10, 3, CLOUD);
-    vellipse(vf, cx + 8, cy + 1, 11, 3, CLOUD); vellipse(vf, cx, cy - 3, 9, 3, CLOUD);
-  }
-  var drift = t * 0.12;
-  function wrapX(base){ return ((base - drift) % (VW + 48) + (VW + 48)) % (VW + 48) - 24; }
-  cloud(Math.floor(wrapX(28)), 12);
-  cloud(Math.floor(wrapX(120)), 22);
-  return vf;
-}
-function drawWalk(){
-  var s = anim, t = s.t;
-  var vf = buildBackdrop(t);
-  var hop = (t - s.shellKickT) < 3 && s.shellKickT >= 0 ? -3 : 0;
-  stamp(vf, SHELL_MAP, SHELL_COLORS, Math.round(s.shellX), VGY - 7 + hop);
-  stamp(vf, Math.floor(t / 2) % 2 === 0 ? WALK_A : WALK_B, WALK_COLORS, Math.round(s.mx), VGY - 16);
-  return vf;
-}
-/* Menorah: nine branches on a dark ground, gold arms, the shamash taller
-   in the middle. Night n lights the shamash plus the n candles placed
-   from the right; the rest are drawn unlit. Flames flicker per frame. */
-function drawMenorah(){
-  var vf = field(DARK);
-  var t = anim.t;
+function paintScene(){
+  if(!sceneState) sceneState = SceneEngine.createState();
+  var now = performance.now();
+  var dt = sceneLast ? Math.min(0.25, (now - sceneLast) / 1000) : 0.11;
+  sceneLast = now;
   var night = (pvB.night >= 1 && pvB.night <= 8) ? Math.floor(pvB.night) : 8;
-  var cx = 96, topY = 38, shamY = 28, baseY = 90;
-  var i, bx;
-  /* arms: a rising curve from the central stem to each branch */
-  for(i = 0; i < 9; i++){
-    if(i === 4) continue;
-    bx = cx + (i - 4) * 16;
-    for(var s2 = 0; s2 <= 24; s2++){
-      var f = s2 / 24;
-      var px = Math.round(cx + (bx - cx) * f);
-      var py = Math.round(76 - (76 - (topY + 6)) * Math.pow(f, 1.6));
-      vrect(vf, px - 1, py - 1, 3, 3, GOLD);
-    }
-    vrect(vf, bx - 1, topY + 2, 3, 6, GOLD); /* branch neck */
-  }
-  /* central stem and stepped base */
-  vrect(vf, cx - 1, shamY + 2, 3, baseY - shamY, GOLD);
-  vrect(vf, cx - 9, baseY, 19, 3, GOLD);
-  vrect(vf, cx - 14, baseY + 3, 29, 3, GOLD);
-  vrect(vf, cx - 19, baseY + 6, 39, 2, GOLD);
-  vrect(vf, cx - 19, baseY + 6, 39, 1, GOLD_LT);
-  /* candles, cups and flames: night n lights the shamash plus the n
-     candles placed from the right (order 8,7,6,5,3,2,1,0) */
-  var placeOrder = [8, 7, 6, 5, 3, 2, 1, 0];
-  var litSet = { 4: true };
-  for(var oi = 0; oi < night; oi++) litSet[placeOrder[oi]] = true;
-  for(i = 0; i < 9; i++){
-    bx = cx + (i - 4) * 16;
-    var cTop = (i === 4) ? shamY : topY;
-    vrect(vf, bx - 2, cTop, 5, 2, GOLD_LT); /* cup */
-    vrect(vf, bx - 1, cTop - 7, 3, 7, CANDLE); /* candle */
-    vput(vf, bx, cTop - 8, EYE); /* wick */
-    var lit = !!litSet[i];
-    if(lit){
-      var fl = Math.floor(t / 2);
-      var hgt = 4 + Math.floor(hash2(i, fl) * 3); /* 4..6 */
-      var lean = Math.floor(hash2(i, fl + 40) * 3) - 1;
-      for(var fy = 0; fy < hgt; fy++){
-        var wdt = fy === hgt - 1 ? 1 : (fy === 0 ? 2 : 3);
-        var fx = bx + (fy >= hgt - 2 ? lean : 0);
-        vrect(vf, fx - Math.floor(wdt / 2), cTop - 9 - fy, wdt, 1, fy < 2 ? FLAME_O : FLAME_Y);
-      }
-      vput(vf, bx, cTop - 10, FLAME_C);
-      vput(vf, bx, cTop - 11, FLAME_C);
+  var g = SceneEngine.frame(sceneState, pvSceneId(), { night: night }, CW, CH, dt);
+  var changed = 0, shim = [], i;
+  for(i = 0; i < g.length; i++){
+    if(g[i] !== pxState[i]){
+      pxState[i] = g[i];
+      pxEls[i].style.background = g[i];
+      changed++;
+      if(Math.random() < 0.3 && shim.length < 24) shim.push(pxEls[i]);
     }
   }
-  return vf;
-}
-/* Dreidel: spinning on the ground line; its body squeezes as it turns and
-   the face cycles nun, gimmel, hey, shin. */
-function drawDreidel(){
-  var vf = buildBackdrop(anim.t);
-  var t = anim.t;
-  var cx = 96, tipY = VGY - 1;
-  var phase = t * 0.22;
-  var squeeze = 0.45 + 0.55 * Math.abs(Math.cos(phase));
-  var bodyW = Math.max(10, Math.round(30 * squeeze));
-  var bodyH = 25, tipH = 10;
-  var bob = Math.round(Math.sin(t * 0.3) * 1);
-  var bodyTop = tipY - tipH - bodyH + bob;
-  var x0 = cx - Math.floor(bodyW / 2);
-  /* handle and knob */
-  vrect(vf, cx - 3, bodyTop - 6 + bob, 6, 6, GOLD);
-  vrect(vf, cx - 5, bodyTop - 8 + bob, 10, 2, GOLD_LT);
-  /* body with gold trim */
-  vrect(vf, x0, bodyTop, bodyW, bodyH, OVERALL);
-  vrect(vf, x0, bodyTop, bodyW, 2, GOLD_LT);
-  vrect(vf, x0, bodyTop + bodyH - 2, bodyW, 2, GOLD_LT);
-  /* tip: triangle down to the ground line */
-  for(var yy = 0; yy < tipH; yy++){
-    var w2 = Math.max(1, Math.round(bodyW * 0.6 * (1 - yy / tipH)));
-    vrect(vf, cx - Math.floor(w2 / 2), bodyTop + bodyH + yy, w2, 1, GOLD);
-  }
-  /* the letter facing the viewer, when the face is wide enough to hold
-     it; strokes drawn 3 thick on a 2 stride so they survive sampling */
-  if(bodyW >= 20){
-    var glyph = GLYPHS[DREIDEL_LETTERS[Math.floor(t / 7) % 4]];
-    var gx = cx - 7, gy = bodyTop + 3;
-    for(var ry = 0; ry < glyph.length; ry++)
-      for(var rx = 0; rx < glyph[ry].length; rx++)
-        if(glyph[ry][rx] === "1") vrect(vf, gx + rx * 2, gy + ry * 2, 3, 3, CLOUD);
-  }
-  return vf;
-}
-/* Star of David: two gold triangles on a dark ground, with a highlight
-   travelling from point to point. */
-function drawStar(){
-  var vf = field(DARK);
-  var cx = 96, cy = 55, R = 37, k;
-  var pts = [];
-  for(k = 0; k < 6; k++){
-    var a = -Math.PI / 2 + k * Math.PI / 3;
-    pts.push([Math.round(cx + R * Math.cos(a)), Math.round(cy + R * Math.sin(a))]);
-  }
-  function tri(p, q, r){ vline(vf, p[0], p[1], q[0], q[1], GOLD, 1); vline(vf, q[0], q[1], r[0], r[1], GOLD, 1); vline(vf, r[0], r[1], p[0], p[1], GOLD, 1); }
-  tri(pts[0], pts[2], pts[4]);
-  tri(pts[1], pts[3], pts[5]);
-  var idx = Math.floor(anim.t / 6) % 6;
-  vcircle(vf, pts[idx][0], pts[idx][1], 4, SUN_IN);
-  vcircle(vf, pts[idx][0], pts[idx][1], 2, FLAME_C);
-  var idx2 = (idx + 1) % 6;
-  vcircle(vf, pts[idx2][0], pts[idx2][1], 2, GOLD_LT);
-  return vf;
-}
-function drawScene(){
-  var sc = pvB.scene || "walk";
-  var vf = sc === "menorah" ? drawMenorah()
-         : sc === "dreidel" ? drawDreidel()
-         : sc === "star" ? drawStar()
-         : drawWalk();
-  commitField(vf, (sc === "menorah" || sc === "star") ? DARK : SKY);
-}
-/* Sample the virtual field down to the grid by plurality vote per block
-   among non-background colours, so small features (flames, glyphs, the
-   walker's cap) survive at the chunkier grid; changing tiles shimmer. */
-function commitField(vf, bg){
-  var bw = VW / CW, bh = VH / CH;
-  for(var gy = 0; gy < CH; gy++){
-    for(var gx = 0; gx < CW; gx++){
-      var counts = {}, best = bg, bestN = 0;
-      for(var byy = 0; byy < bh; byy++){
-        for(var bxx = 0; bxx < bw; bxx++){
-          var c = vf[(gy * bh + byy) * VW + gx * bw + bxx];
-          if(c === bg) continue;
-          var n = (counts[c] || 0) + 1; counts[c] = n;
-          if(n > bestN){ best = c; bestN = n; }
-        }
-      }
-      var col2 = best;
-      var idx = gy * CW + gx;
-      if(col2 !== pxState[idx]){
-        pxState[idx] = col2;
-        pxEls[idx].style.background = col2;
-        if(col2 !== bg && Math.random() < 0.3){
-          pxEls[idx].classList.remove("shimmer"); void pxEls[idx].offsetWidth; pxEls[idx].classList.add("shimmer");
-        }
-      }
-    }
+  if(changed <= 300 && shim.length){
+    shim.forEach(function(el){ el.classList.remove("shimmer"); });
+    void colourEl.offsetWidth;
+    shim.forEach(function(el){ el.classList.add("shimmer"); });
   }
 }
-function stepScene(){
-  var s = anim; s.t++;
-  if((pvB.scene || "walk") === "walk"){
-    s.mx += 1.8;
-    /* kick when the walker's front reaches a resting shell */
-    if(s.shellV <= 0.05 && s.mx + 14 >= s.shellX - 1 && s.mx + 14 < s.shellX + 6 && s.shellX < VW - 16){
-      s.shellV = 8.8; s.shellKickT = s.t;
-    }
-    if(s.shellV > 0.05){
-      s.shellX += s.shellV; s.shellV *= 0.96;
-      if(s.shellX > VW - 14){ s.shellX = VW - 14; s.shellV = 0; }
-    }
-    if(s.mx > VW + 16){ var keep = s.t; anim = freshScene(); anim.t = keep; }
-  }
-  drawScene();
-}
+function stepScene(){ paintScene(); }
 function showColour(){
   colourDims();
   document.getElementById("pv-rows").style.display = "none";
@@ -1877,7 +2759,7 @@ function showColour(){
   colourEl.style.display = "block";
   pvFitColour();
   if(builtCW !== CW || builtCH !== CH || !pxEls.length) buildColour();
-  drawScene();
+  paintScene();
   if(!colourTimer) colourTimer = setInterval(stepScene, 110);
 }
 function stopColour(){
