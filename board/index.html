@@ -246,6 +246,16 @@
   .st-projekt .j-cell{ display:flex; align-items:center; white-space:nowrap; }
   .st-projekt .j-cell .a{ font-weight:700; }
   .st-projekt .j-cell .b{ color:#5a5e8c; }
+
+  .clockbox{ display:flex; align-items:center; gap:.55em; font-size: calc(var(--tile-w) * 1.02); }
+  .lamp{ display:block; width:.34em; height:.34em; border-radius:50%; flex:none;
+    box-shadow: inset 0 0 3px rgba(0,0,0,.55), 0 0 .22em currentColor; }
+  .lamp.ok{ background:#46b96a; color:#46b96a; }
+  .lamp.delayed{ background:#e8a33d; color:#e8a33d; }
+  .lamp.down{ background:#d8402e; color:#d8402e; }
+  #board{ position:relative; }
+  #lampwrap{ position:absolute; top: calc(var(--pad-y, 2vh) * 0.30); right: var(--pad-x, 2vw);
+    z-index:6; pointer-events:none; font-size: calc(var(--tile-w, 18px) * 1.02); }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -254,13 +264,14 @@
 <main id="board" aria-label="Departures board">
   <header>
     <div class="title" id="board-title">THE ISLE <span class="dot">·</span> DEPARTURES</div>
-    <div class="clock" id="clock">--:--</div>
+    <div class="clockbox"><span id="lamp" class="lamp ok" hidden></span><div class="clock" id="clock">--:--</div></div>
   </header>
   <div class="colheads" id="colheads"></div>
   <div id="rows"></div>
   <div id="colour" aria-label="Colour board picture"></div>
   <div id="pixcap" aria-label="Next departure"></div>
   <div id="styled" aria-label="Styled board"></div>
+  <div id="lampwrap" hidden></div>
 </main>
 <div id="sound-hint">Tap anywhere for sound</div>
 <div id="chrome">
@@ -317,7 +328,7 @@ var SET_FILES = {
 function pad2(n){ return String(n).padStart(2,"0"); }
 
 /* ============ Demo library: seed + merge (keep in step with settings) ============ */
-var SEED_VERSION = 7;
+var SEED_VERSION = 9;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -524,6 +535,379 @@ function demoBoards(){
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-tides", name: "Tides", type: "departures", kind: "custom", customTitle: "TIDES", rows: 5,
+      flights: [],
+      lines: [
+        {text:"LOW 7 14 AM \u00b7 -1 0 FT", black:false},
+        {text:"HIGH 2 05 PM \u00b7 2 3 FT", black:false},
+        {text:"LOW 6 09 PM \u00b7 1 6 FT", black:false},
+        {text:"HIGH 12 16 AM \u00b7 3 9 FT", black:false},
+        {text:"NEXT: LOW 8 04 AM TOMORROW", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-shabbat", name: "Shabbat", type: "departures", kind: "custom", customTitle: "SHABBAT", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SHABBAT SHALOM", black:false},
+        {text:"PARSHAT VAYISHLACH", black:false},
+        {text:"LIGHT CANDLES FRI 5 15 PM", black:false},
+        {text:"SUNSET \u00b7 SHKIA \u00b7 FRI 5 33 PM", black:false},
+        {text:"SHABBAT ENDS SAT 6 11 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-today", name: "Today at the House", type: "departures", kind: "custom", customTitle: "TODAY AT THE HOUSE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"8 00 AM \u00b7 YOGA ON THE DOCK", black:false},
+        {text:"10 30 AM \u00b7 BOAT OUT FROM THE DOCK", black:false},
+        {text:"1 00 PM \u00b7 LUNCH ON THE PORCH", black:false},
+        {text:"5 33 PM \u00b7 SUNSET AT THE BEACH", black:false},
+        {text:"7 00 PM \u00b7 DINNER \u00b7 SEE MENU BOARD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-holidays", name: "Holidays", type: "departures", kind: "custom", customTitle: "NEXT CHAG", rows: 5,
+      flights: [],
+      lines: [
+        {text:"NEXT HOLIDAY \u00b7 CHANUKAH", black:false},
+        {text:"FIRST CANDLE FRI DEC 4 AT SUNSET", black:false},
+        {text:"25 KISLEV \u00b7 2 TEVET 5787", black:false},
+        {text:"8 NIGHTS OF LIGHT", black:false},
+        {text:"IN 8 DAYS", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-dinner", name: "Dinner Tonight", type: "departures", kind: "custom", customTitle: "DINNER TONIGHT", rows: 14,
+      flights: [],
+      lines: [
+        {text:"7 00 PM \u00b7 THE PORCH", black:false},
+        {text:"STARTER \u00b7 BURRATA \u00b7 ISLAND TOMATO", black:false},
+        {text:"MAIN \u00b7 GRILLED SNAPPER \u00b7 CITRUS", black:false},
+        {text:"SIDE \u00b7 CHARRED CORN \u00b7 HERBS", black:false},
+        {text:"DESSERT \u00b7 KEY LIME PIE", black:false},
+        {text:"POUR \u00b7 SANCERRE 2022 \u00b7 OPEN", black:false},
+        {text:"86 \u00b7 NO STONE CRAB TONIGHT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-beach", name: "Beach Today", type: "departures", kind: "custom", customTitle: "BEACH TODAY", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SHELLING: GOOD \u00b7 GO EARLY", black:false},
+        {text:"WALK THE BARS 6 57 \u00b7 9 57 AM", black:false},
+        {text:"LOW WATER -0 5 FT AT 8 27 AM", black:false},
+        {text:"RED TIDE: NO RECENT SAMPLE", black:false},
+        {text:"WATER 73 F \u00b7 WIND NW 21 MPH", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-calendar", name: "Calendar", type: "departures", kind: "custom", customTitle: "NEXT UP", rows: 5,
+      flights: [],
+      lines: [
+        {text:"TODAY \u00b7 4 00 PM", black:false},
+        {text:"GUESTS LAND \u00b7 TPA PICKUP", black:false},
+        {text:"FRI \u00b7 10 00 AM", black:false},
+        {text:"BOAT SERVICE \u00b7 MARINA", black:false},
+        {text:"NOTHING SCHEDULED AFTER SUN", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-marine", name: "Marine", type: "departures", kind: "custom", customTitle: "MARINE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SMALL CRAFT ADVISORY TO TONIGHT", black:false},
+        {text:"TODAY \u00b7 WNW 19-22 KT \u00b7 SEAS 5 FT", black:false},
+        {text:"TONIGHT \u00b7 WNW 13-20 KT \u00b7 SEAS 4-5 FT", black:false},
+        {text:"FRI \u00b7 WNW 12-14 KT \u00b7 SEAS 3 FT", black:false},
+        {text:"VERDICT: STAY IN THE BAY TODAY", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-now-playing", name: "Now Playing", type: "departures", kind: "custom", customTitle: "NOW PLAYING", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SONOS \u00b7 GREAT ROOM", black:false},
+        {text:"SONG \u00b7 BLUE IN GREEN", black:false},
+        {text:"ARTIST \u00b7 MILES DAVIS", black:false},
+        {text:"ALBUM \u00b7 KIND OF BLUE \u00b7 1959", black:false},
+        {text:"NEXT \u00b7 POOL SPEAKERS AT 6 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-moon", name: "Moon", type: "departures", kind: "custom", customTitle: "MOON", rows: 5,
+      flights: [],
+      lines: [
+        {text:"WANING GIBBOUS \u00b7 94 LIT", black:false},
+        {text:"MOONRISE \u00b7 7 33 PM", black:false},
+        {text:"MOONSET \u00b7 9 10 AM", black:false},
+        {text:"LAST LIGHT \u00b7 6 01 PM", black:false},
+        {text:"NEXT FULL MOON \u00b7 DEC 24", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-markets", name: "Markets", type: "departures", kind: "custom", customTitle: "MARKETS", rows: 14,
+      flights: [],
+      lines: [
+        {text:"VOO \u00b7 632 10 \u00b7 UP 0 8", black:false},
+        {text:"AAPL \u00b7 271 40 \u00b7 DOWN 0 3", black:false},
+        {text:"MSFT \u00b7 512 05 \u00b7 UP 1 1", black:false},
+        {text:"GOLD \u00b7 4120 \u00b7 UP 0 4", black:false},
+        {text:"MARKETS CLOSED \u00b7 BACK MON 9 30 AM", black:false},
+        {text:"FIGURES ARE SAMPLES", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-sports", name: "Sports", type: "departures", kind: "custom", customTitle: "SPORTS", rows: 14,
+      flights: [],
+      lines: [
+        {text:"SCORES \u00b7 FINAL", black:false},
+        {text:"DOLPHINS 24 \u00b7 BILLS 17 \u00b7 FINAL", black:false},
+        {text:"HEAT 108 \u00b7 CELTICS 102 \u00b7 FINAL", black:false},
+        {text:"LIGHTNING 3 \u00b7 PANTHERS 2 \u00b7 OT", black:false},
+        {text:"NEXT: DOLPHINS SUN 1 00 PM", black:false},
+        {text:"FIGURES ARE SAMPLES", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-countdown", name: "Countdown", type: "departures", kind: "custom", customTitle: "COUNTDOWN", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GUESTS ARRIVE \u00b7 DEC 20", black:false},
+        {text:"24 DAYS TO GO", black:false},
+        {text:"CHANUKAH \u00b7 8 DAYS", black:false},
+        {text:"SEE THE HOLIDAYS BOARD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-world-clock", name: "World Clock", type: "departures", kind: "custom", customTitle: "WORLD CLOCK", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THE ISLE \u00b7 12 34 PM", black:false},
+        {text:"NEW YORK \u00b7 12 34 PM", black:false},
+        {text:"LONDON \u00b7 5 34 PM", black:false},
+        {text:"JERUSALEM \u00b7 7 34 PM", black:false},
+        {text:"WORD: IT IS HALF PAST TWELVE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-omer", name: "Omer", type: "departures", kind: "custom", customTitle: "OMER", rows: 5,
+      flights: [],
+      lines: [
+        {text:"COUNTING THE OMER", black:false},
+        {text:"TODAY IS 13 DAYS", black:false},
+        {text:"WHICH IS 1 WEEK AND 6 DAYS", black:false},
+        {text:"COUNT AFTER NIGHTFALL", black:false},
+        {text:"49 DAYS: PESACH TO SHAVUOT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-hebrew-date", name: "Hebrew Date", type: "departures", kind: "custom", customTitle: "HEBREW DATE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THURSDAY \u00b7 NOVEMBER 26 \u00b7 2026", black:false},
+        {text:"16 KISLEV 5787", black:false},
+        {text:"HEBREW DAY TURNS AT SUNSET 5 33 PM", black:false},
+        {text:"THIS WEEK: PARSHAT VAYISHLACH", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-remembrance", name: "Remembrance", type: "departures", kind: "custom", customTitle: "REMEMBRANCE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"YAHRZEIT THIS WEEK", black:false},
+        {text:"FOR A LOVED ONE \u00b7 SAMPLE", black:false},
+        {text:"CANDLE AT SUNDOWN", black:false},
+        {text:"EVENING BEFORE THE DAY", black:false},
+        {text:"LIGHT FROM SUNDOWN \u00b7 24 HOURS", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-quote", name: "Quote & Verse", type: "departures", kind: "custom", customTitle: "QUOTE & VERSE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"QUOTE OF THE DAY", black:false},
+        {text:"THE SEA \u00b7 ONCE IT CASTS ITS SPELL", black:false},
+        {text:"HOLDS ONE IN ITS NET OF WONDER", black:false},
+        {text:"FOREVER \u00b7 J COUSTEAU", black:false},
+        {text:"WORD: PLETHORA \u00b7 IT MEANS A LOT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-storm", name: "Storm Watch", type: "departures", kind: "custom", customTitle: "STORM WATCH", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GULF OF MEXICO \u00b7 QUIET", black:false},
+        {text:"NO ACTIVE STORM \u00b7 SAMPLE", black:false},
+        {text:"HURRICANE SEASON TO NOV 30", black:false},
+        {text:"NEXT NHC UPDATE \u00b7 AS ISSUED", black:false},
+        {text:"HOUSE PLAN \u00b7 OWNER TEXT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-welcome", name: "Guests Welcome", type: "departures", kind: "custom", customTitle: "WELCOME", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GUEST FAMILY \u00b7 TO DEC 1", black:false},
+        {text:"WI-FI AND HOUSE NOTES: ASK ANY OF US", black:false},
+        {text:"BOAT LEAVES DOCK AT 10 30 AM", black:false},
+        {text:"SUNSET TONIGHT 5 33 PM \u00b7 BEACH", black:false},
+        {text:"HAPPY ANNIVERSARY \u00b7 SAMPLE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-overhead", name: "Overhead", type: "departures", kind: "custom", customTitle: "OVERHEAD", rows: 14,
+      flights: [],
+      lines: [
+        {text:"NO TRAFFIC OVERHEAD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-tracked", name: "Tracked Flights", type: "departures", rows: 14,
+      flights: [
+        {time:"08:05", destination:"THE ISLE", flight:"IS 808", gate:"7", remarks:"BOARDING", black:false},
+        {time:"09:40", destination:"MIAMI", flight:"AA 2241", gate:"C3", remarks:"ON TIME", black:false},
+        {time:"11:15", destination:"CHARLOTTE", flight:"AA 1024", gate:"C5", remarks:"ON TIME", black:false},
+        {time:"13:30", destination:"LONDON", flight:"BA 211", gate:"E9", remarks:"ON TIME", black:false},
+        {time:"15:45", destination:"DALLAS", flight:"AA 1201", gate:"C7", remarks:"ON TIME", black:false},
+        {time:"17:20", destination:"HOUSTON", flight:"WN 3048", gate:"A3", remarks:"ON TIME", black:false}
+      ],
+      lines: [],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
     }
   ];
 }
@@ -701,14 +1085,14 @@ function buildRows(){
   rowsEl.innerHTML = ""; tileGrid = [];
   var count = boardRows(), i;
   if(isTextBoard()){
-    var lines = board.lines || [];
+    var lines = effLines();
     for(i = 0; i < count; i++){
       var ln = lines[i] || { text:"", black:false };
       buildOneRow([{ key:"line", width: TEXT_COLS }], !!ln.black, null);
     }
     return;
   }
-  var fl = board.flights || [];
+  var fl = effFlights();
   for(i = 0; i < count; i++){
     var f = fl[i] || null;
     buildOneRow(COLS, !!(f && f.black), f);
@@ -1673,7 +2057,7 @@ function renderBoard(cascade){
   var jobs = []; /* {tile, from, to, steps, delay, silent} */
   var count = boardRows(), r;
   if(text){
-    var lines = board.lines || [];
+    var lines = effLines();
     for(r = 0; r < count; r++){
       var ln = lines[r] || { text:"", black:false };
       var full = cleanRaw(ln.text);
@@ -1692,7 +2076,7 @@ function renderBoard(cascade){
       }
     }
   } else {
-    var fl = board.flights || [];
+    var fl = effFlights();
     for(r = 0; r < count; r++){
       var f = fl[r] || null;
       var silent = !f || !!f.black; /* blank and black rows make no clack of their own */
@@ -1714,11 +2098,16 @@ function renderBoard(cascade){
   if(cascade && totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
   var quiet = inQuietHours();
   jobs.forEach(function(j){
+    /* Generation guard: a newer render supersedes this tile's older
+       jobs, so overlapping cascades can never strand a tile mid-flip. */
+    var gen = (j.tile._flipGen = (j.tile._flipGen || 0) + 1);
     if(j.steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
     var thinning = Math.min(0.92, 0.25 + totalSteps / 260); /* dense cascades: fewer, softer ticks */
     setTimeout(function(){
+      if(j.tile._flipGen !== gen) return;
       var pos = ringIdx(j.from), remaining = j.steps;
       var iv = setInterval(function(){
+        if(j.tile._flipGen !== gen){ clearInterval(iv); return; }
         pos = (pos + 1) % RING.length;
         var ch = RING[pos];
         j.tile.textContent = ch;
@@ -1733,6 +2122,7 @@ function renderBoard(cascade){
       }, STEP_MS);
     }, j.delay);
   });
+  renderLamp();
 }
 
 /* ============ Board styles: renderers ============ */
@@ -1754,11 +2144,11 @@ function clearStyledTimers(){
 }
 function stRows(){
   if(isTextBoard()){
-    return (board.lines || []).map(function(l){
+    return effLines().map(function(l){
       return { time: "", destination: String(l.text || "").toUpperCase(), flight: "", gate: "", remarks: "", black: !!l.black };
     });
   }
-  return (board.flights || []).map(function(f){
+  return effFlights().map(function(f){
     return { time: f.time || "", destination: String(f.destination || "").toUpperCase(), flight: f.flight || "", gate: f.gate || "", remarks: String(f.remarks || "").toUpperCase(), black: !!f.black };
   });
 }
@@ -2198,7 +2588,7 @@ function buildPatapata(W, H, cascade){
 /* ---------- H Dator ---------- */
 function datorHouse(){
   var out = { TIDE: "HIGH 18:42", WIND: "SE 12 KT", SUNSET: "17:31" };
-  (board.lines || []).forEach(function(l){
+  effLines().forEach(function(l){
     var s = cleanRaw(l.text || "");
     ["TIDE", "WIND", "SUNSET"].forEach(function(k){
       var i = s.indexOf(k);
@@ -2209,6 +2599,11 @@ function datorHouse(){
       }
     });
   });
+  /* Live values sit above the stored lines and the sample fallbacks. */
+  var lw = LIVE.weather;
+  if(lw){ out.WIND = lw.windDir + " " + lw.windKt + " KT"; out.SUNSET = fmtH24(lw.sunset); }
+  var nt = LIVE.isleTides && LIVE.isleTides.next;
+  if(nt) out.TIDE = (nt.type === "H" ? "HIGH " : "LOW ") + fmtH24(nt.mins);
   return out;
 }
 function dTiles(parent, text, tw, th, fs, jobs, delayBase, gap){
@@ -2542,6 +2937,652 @@ fitBoard();
 window.addEventListener("resize", fitBoard);
 
 /* ============ Clock, wiring, live updates ============ */
+
+
+/* ============ Live data layer ============
+   Browser-side feeders over free sources only: no keys, no server, so
+   the layer works on the public site today and inside the television
+   renderer later. It fetches on load and refreshes every 10 minutes.
+   Every failure is silent: the board keeps its stored lines and
+   remarks. Nothing is drawn on the board to mark live data; the
+   display stays clean.
+   NOAA stands behind the weather and the water, one roof:
+   - Weather for The Isle (Land O'Lakes area, Pasco County, Florida,
+     28.2189, -82.4576; coordinates only, no street address anywhere):
+     the National Weather Service API, api.weather.gov. A points
+     lookup gives the forecast (today's high and low, period wind) and
+     the nearest observation stations; the latest observation gives
+     current temperature, conditions, wind and humidity. Sunrise and
+     sunset are computed locally from the coordinates with the NOAA
+     solar algorithm, checked against the published times.
+   - Tides for The Isle: NOAA CO-OPS tide predictions, station
+     8726917, Anclote Key, southern end. Verified against NOAA's
+     station list: the reference station (type R) for the Anclote /
+     Tarpon Springs reach, on the Gulf side a short way offshore from
+     The Isle. Datum MLLW, high/low intervals, station local time.
+   - North Shore: NOAA station 1612668, Haleiwa, Waialua Bay (also
+     verified in the station list), same predictions product; NDBC
+     buoy 51201, Waimea Bay, realtime text for swell height, dominant
+     period, swell direction and water temperature; Haleiwa wind from
+     the NWS (Honolulu gridpoint stations, forecast wind as fallback)
+     and Haleiwa sunset computed locally like The Isle's.
+   Markets, live now on a free feed:
+   - The Markets board reads Yahoo's keyless chart feed
+     (query2.finance.yahoo.com/v8/finance/chart) from the browser.
+     Symbols come from the board's own lines wherever a line begins
+     with a ticker; a board with no symbols of its own falls back to
+     the house set SPX and DJI (index form) plus AAPL, MSFT and NVDA.
+     While live figures show, the board's samples labelling line is
+     replaced by a delayed labelling line, because free feeds are
+     delayed; when the feed is unreachable the board falls back to its
+     stored lines with the samples labelling intact.
+   - Alpaca slot (the settled server-side future, unchanged): the
+     Markets board's eventual higher grade source is Alpaca Markets'
+     IEX feed, which needs the account's API key pair. A secret key
+     must never be embedded in these public pages, so nothing here
+     calls Alpaca and no key appears anywhere in this build. When a
+     server-side feeder on Lighthouse, holding the key, publishes
+     market state, it fills this same LIVE.markets map and supersedes
+     the Yahoo lines.
+   Aircraft, on the free OpenSky feed:
+   - One OpenSky Network fetch per cycle over a Southeast region box
+     (latitude 23.5 to 32.5, longitude -90.0 to -77.0: Florida and its
+     approaches, wide enough to catch Tampa traffic in and out). It
+     feeds two boards that were made for live data: the Overhead board
+     (the same states filtered to the house box over Pasco County and
+     the Tampa Bay approaches, 27.85 to 28.55 N, 82.95 to 82.25 W,
+     airborne only) and the Tracked Flights board's remark matching.
+     Anonymous tier; the 10 minute cycle stays inside its rate
+     limits. OpenSky asks users of its data to credit The OpenSky
+     Network (opensky-network.org): the credit lives in this note and
+     in the build record, never on the board itself.
+   - The tracked-flights principle: the traditional board is a
+     composed experience, by design. Live matching NEVER touches the
+     traditional departures and arrivals boards or any board's
+     composed rows; their flights and remarks stay exactly as written,
+     permanently. Live data belongs to the boards made for it. Only
+     the Tracked Flights demo board (id board-tracked) has its
+     remarks updated, and only for a row whose flight callsign, in
+     the board's spoken form (AA 2241, WN 3048), maps to a callsign
+     in the feed (AAL2241, SWA3048). Unmatched rows keep their
+     composed remark exactly. The house flight IS 808 has no feed
+     designator and always stays composed. */
+var LIVE = { weather: null, isleTides: null, nsTides: null, nsWx: null,
+             buoy: null, region: null, sky: null, markets: null, feeds: {}, sig: "" };
+var ISLE_LAT = 28.2189, ISLE_LON = -82.4576;
+var NOAA_API = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+var NWS_API = "https://api.weather.gov";
+var COMPASS16 = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+function compass16(deg){ if(deg == null || isNaN(deg)) return ""; return COMPASS16[Math.round(deg / 22.5) % 16]; }
+function liveGetOnce(url){
+  try{
+    var ctl = ("AbortController" in window) ? new AbortController() : null;
+    var to = ctl ? setTimeout(function(){ ctl.abort(); }, 9000) : null;
+    return fetch(url, ctl ? { signal: ctl.signal } : {}).then(function(r){
+      if(to) clearTimeout(to);
+      return (r && r.ok) ? r.text() : null;
+    }).catch(function(){ if(to) clearTimeout(to); return null; });
+  }catch(e){ return Promise.resolve(null); }
+}
+function liveGet(url){
+  /* One retry after a short pause: a feed counts as down only when
+     both attempts fail on the cycle. */
+  return liveGetOnce(url).then(function(t){
+    if(t != null) return t;
+    return new Promise(function(res){ setTimeout(res, 1200); }).then(function(){ return liveGetOnce(url); });
+  });
+}
+function liveGetJson(url){
+  return liveGet(url).then(function(t){
+    if(!t) return null;
+    try{ return JSON.parse(t); }catch(e){ return null; }
+  });
+}
+function tzDateStr(tz, addDays){
+  var d = new Date(Date.now() + (addDays || 0) * 86400000);
+  try{
+    var y = "", m = "", dd = "";
+    new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })
+      .formatToParts(d).forEach(function(p){
+        if(p.type === "year") y = p.value;
+        if(p.type === "month") m = p.value;
+        if(p.type === "day") dd = p.value;
+      });
+    if(y) return y + "-" + m + "-" + dd;
+  }catch(e){}
+  return d.toISOString().slice(0, 10);
+}
+function tzNowMins(tz){
+  try{
+    var h = 0, m = 0;
+    new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false, hour: "2-digit", minute: "2-digit" })
+      .formatToParts(new Date()).forEach(function(p){
+        if(p.type === "hour") h = +p.value;
+        if(p.type === "minute") m = +p.value;
+      });
+    return (h % 24) * 60 + m;
+  }catch(e){ var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+}
+function fmtH12(mins){ /* house line style: "5 33 PM" */
+  var h = Math.floor(mins / 60), m = mins % 60, ap = h >= 12 ? "PM" : "AM", h12 = h % 12;
+  if(h12 === 0) h12 = 12;
+  return h12 + " " + pad2(m) + " " + ap;
+}
+function fmtH24(mins){ return Math.floor(mins / 60) + ":" + pad2(mins % 60); }
+function heightTxt(v){ return (Math.round(v * 10) / 10).toFixed(1).replace(".", " "); }
+
+/* Sunrise and sunset, computed locally (NOAA solar algorithm). */
+function sunMinutesUTC(lat, lon, y, m, d){
+  var doy = Math.floor((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 86400000);
+  var lngHour = lon / 15;
+  function calc(isRise){
+    var t = doy + ((isRise ? 6 : 18) - lngHour) / 24;
+    var M = (0.9856 * t) - 3.289;
+    var L = (M + 1.916 * Math.sin(M * Math.PI / 180) + 0.020 * Math.sin(2 * M * Math.PI / 180) + 282.634) % 360;
+    if(L < 0) L += 360;
+    var RA = Math.atan(0.91764 * Math.tan(L * Math.PI / 180)) * 180 / Math.PI;
+    RA = (RA + (Math.floor(L / 90) * 90 - Math.floor(RA / 90) * 90)) / 15;
+    var sinDec = 0.39782 * Math.sin(L * Math.PI / 180);
+    var cosDec = Math.cos(Math.asin(sinDec));
+    var cosH = (Math.cos(90.833 * Math.PI / 180) - sinDec * Math.sin(lat * Math.PI / 180)) /
+               (cosDec * Math.cos(lat * Math.PI / 180));
+    if(cosH > 1 || cosH < -1) return null;
+    var H = (isRise ? 360 - Math.acos(cosH) * 180 / Math.PI : Math.acos(cosH) * 180 / Math.PI) / 15;
+    var UT = (H + RA - 0.06571 * t - 6.622 - lngHour) % 24;
+    if(UT < 0) UT += 24;
+    return UT * 60;
+  }
+  return { rise: calc(true), set: calc(false) };
+}
+function sunToTz(utcMin, y, m, d, tz){
+  if(utcMin == null) return null;
+  var h = 0, mi = 0;
+  new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false, hour: "2-digit", minute: "2-digit" })
+    .formatToParts(new Date(Date.UTC(y, m - 1, d) + utcMin * 60000)).forEach(function(p){
+      if(p.type === "hour") h = +p.value;
+      if(p.type === "minute") mi = +p.value;
+    });
+  return (h % 24) * 60 + mi;
+}
+function sunTimesFor(lat, lon, tz){
+  var y = 0, m = 0, d = 0;
+  new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })
+    .formatToParts(new Date()).forEach(function(p){
+      if(p.type === "year") y = +p.value;
+      if(p.type === "month") m = +p.value;
+      if(p.type === "day") d = +p.value;
+    });
+  var s = sunMinutesUTC(lat, lon, y, m, d);
+  return { rise: sunToTz(s.rise, y, m, d, tz), set: sunToTz(s.set, y, m, d, tz) };
+}
+
+/* ---- NOAA tides ---- */
+function parseTides(j, tz){
+  if(!j || !j.predictions || !j.predictions.length) return null;
+  var today = tzDateStr(tz, 0), tomorrow = tzDateStr(tz, 1), nowM = tzNowMins(tz);
+  var evs = j.predictions.map(function(p){
+    var hm = String(p.t).slice(11, 16).split(":");
+    return { date: String(p.t).slice(0, 10), mins: (+hm[0]) * 60 + (+hm[1]),
+             type: p.type, v: parseFloat(p.v) };
+  });
+  var todays = evs.filter(function(e){ return e.date === today; });
+  var tomorrowFirst = null, next = null;
+  evs.forEach(function(e){
+    if(e.date === tomorrow && !tomorrowFirst) tomorrowFirst = e;
+    if(!next && (e.date > today || (e.date === today && e.mins > nowM))) next = e;
+  });
+  return { today: todays, tomorrowFirst: tomorrowFirst, next: next };
+}
+function fetchTides(station, tz){
+  var b = tzDateStr(tz, -1).replace(/-/g, ""), e = tzDateStr(tz, 1).replace(/-/g, "");
+  var url = NOAA_API + "?product=predictions&application=isle_board&begin_date=" + b +
+            "&end_date=" + e + "&datum=MLLW&station=" + station +
+            "&time_zone=lst_ldt&units=english&interval=hilo&format=json";
+  return liveGetJson(url).then(function(j){ return parseTides(j, tz); });
+}
+
+/* ---- NWS weather ---- */
+function nwsCond(text){
+  var t = String(text || "").toUpperCase().replace("SLIGHT CHANCE", "CHANCE");
+  if(t.length <= 18) return t;
+  var words = t.split(" "), out = "";
+  for(var i = 0; i < words.length; i++){
+    if(out && (out + " " + words[i]).length > 18) break;
+    out = out ? out + " " + words[i] : words[i];
+  }
+  return out || t.slice(0, 18);
+}
+function parseNwsWind(p){
+  var nums = String((p && p.windSpeed) || "").match(/\d+/g);
+  var mph = null;
+  if(nums && nums.length){
+    var sum = 0; nums.forEach(function(n){ sum += +n; });
+    mph = sum / nums.length;
+  }
+  return { dir: String((p && p.windDirection) || ""), kt: mph == null ? null : Math.round(mph * 0.868976) };
+}
+function fetchNwsBundle(lat, lon){
+  return liveGetJson(NWS_API + "/points/" + lat + "," + lon).then(function(p){
+    if(!p || !p.properties || !p.properties.forecast || !p.properties.observationStations) return null;
+    return Promise.all([liveGetJson(p.properties.forecast), liveGetJson(p.properties.observationStations)])
+      .then(function(res){
+        var bundle = { forecast: res[0], obs: null };
+        var ids = [];
+        if(res[1] && res[1].features)
+          res[1].features.slice(0, 3).forEach(function(f){ ids.push(f.properties.stationIdentifier); });
+        var chain = Promise.resolve(null);
+        ids.forEach(function(id){
+          chain = chain.then(function(cur){
+            if(cur && cur.properties && cur.properties.temperature && cur.properties.temperature.value != null) return cur;
+            return liveGetJson(NWS_API + "/stations/" + id + "/observations/latest");
+          });
+        });
+        return chain.then(function(obs){ bundle.obs = obs; return bundle; });
+      });
+  });
+}
+function nwsRead(bundle){
+  if(!bundle) return null;
+  var w = { tempF: null, cond: null, windDir: "", windKt: null, humidity: null, highF: null, lowF: null };
+  var periods = bundle.forecast && bundle.forecast.properties && bundle.forecast.properties.periods;
+  if(periods && periods.length){
+    var p0 = periods[0], p1 = periods[1];
+    if(p0.isDaytime){ w.highF = p0.temperature; if(p1) w.lowF = p1.temperature; }
+    else { w.lowF = p0.temperature; if(p1) w.highF = p1.temperature; }
+    w.cond = nwsCond(p0.shortForecast);
+    var fw = parseNwsWind(p0);
+    if(fw.dir) w.windDir = fw.dir;
+    w.windKt = fw.kt;
+    w.tempF = p0.temperature;
+  }
+  var o = bundle.obs && bundle.obs.properties;
+  if(o){
+    if(o.temperature && o.temperature.value != null) w.tempF = Math.round(o.temperature.value * 9 / 5 + 32);
+    if(o.textDescription) w.cond = nwsCond(o.textDescription);
+    if(o.windDirection && o.windDirection.value != null) w.windDir = compass16(o.windDirection.value);
+    if(o.windSpeed && o.windSpeed.value != null) w.windKt = Math.round(o.windSpeed.value * 0.539957);
+    if(o.relativeHumidity && o.relativeHumidity.value != null) w.humidity = Math.round(o.relativeHumidity.value);
+  }
+  return w;
+}
+function fetchWeather(){
+  return fetchNwsBundle(ISLE_LAT, ISLE_LON).then(function(bundle){
+    var w = nwsRead(bundle);
+    if(!w || w.tempF == null || !w.cond){ feedMark("weather", false); return; }
+    var sun = sunTimesFor(ISLE_LAT, ISLE_LON, "America/New_York");
+    w.sunrise = sun.rise; w.sunset = sun.set;
+    LIVE.weather = w;
+    var ots = bundle && bundle.obs && bundle.obs.properties ? bundle.obs.properties.timestamp : null;
+    feedMark("weather", true, !!(ots && (Date.now() - Date.parse(ots)) > 2 * 3600 * 1000));
+  });
+}
+function fetchNsWx(){
+  return fetchNwsBundle(21.5983, -158.1083).then(function(bundle){
+    var w = nwsRead(bundle);
+    if(!w){ feedMark("nsWx", false); return; }
+    /* The sunset is computed locally, so it lands even when the
+       stations report no wind; the wind lines simply stay stored. */
+    LIVE.nsWx = { windDir: w.windDir, windKt: w.windKt,
+                  sunset: sunTimesFor(21.5983, -158.1083, "Pacific/Honolulu").set };
+    var ots2 = bundle && bundle.obs && bundle.obs.properties ? bundle.obs.properties.timestamp : null;
+    feedMark("nsWx", true, !!(ots2 && (Date.now() - Date.parse(ots2)) > 2 * 3600 * 1000));
+  });
+}
+
+/* ---- NDBC buoy 51201, Waimea Bay ---- */
+function fetchBuoy(){
+  return liveGet("https://www.ndbc.noaa.gov/data/realtime2/51201.txt").then(function(txt){
+    if(!txt){ feedMark("buoy", false); return; }
+    var rows = txt.split("\n");
+    for(var i = 0; i < rows.length; i++){
+      var s = rows[i].trim();
+      if(!s || s.charAt(0) === "#") continue;
+      var c = s.split(/\s+/);
+      if(c.length < 15) continue;
+      var wvht = parseFloat(c[8]);
+      if(isNaN(wvht)) continue; /* keep scanning for a row with a wave report */
+      var dpd = parseFloat(c[9]), mwd = parseFloat(c[11]),
+          wdir = parseFloat(c[5]), wspd = parseFloat(c[6]), wtmp = parseFloat(c[14]);
+      LIVE.buoy = {
+        ft: Math.round(wvht * 3.28084),
+        period: isNaN(dpd) ? null : Math.round(dpd),
+        dir: compass16(mwd),
+        windDir: compass16(wdir),
+        windKt: isNaN(wspd) ? null : Math.round(wspd * 1.94384),
+        wtmpF: isNaN(wtmp) ? null : Math.round(wtmp * 9 / 5 + 32)
+      };
+      var bts = Date.UTC(2000 + (+c[0]), (+c[1]) - 1, +c[2], +c[3], +c[4]);
+      feedMark("buoy", true, (Date.now() - bts) > 3 * 3600 * 1000);
+      return;
+    }
+    /* The buoy answered but no row carries a wave report: the data
+       is stale for our purpose, so the feed reads delayed. */
+    feedMark("buoy", true, true);
+  });
+}
+
+/* ---- OpenSky: one Southeast region fetch feeding Overhead and Tracked ---- */
+var REGION_BOX = { lamin: 23.5, lamax: 32.5, lomin: -90.0, lomax: -77.0 };
+var HOUSE_BOX = { lamin: 27.85, lamax: 28.55, lomin: -82.95, lomax: -82.25 };
+function stateAltFt(s){
+  var altM = (s[7] != null) ? s[7] : s[13];
+  return altM == null ? null : Math.max(0, Math.round(altM * 3.28084 / 10) * 10);
+}
+function fetchRegion(){
+  var url = "https://opensky-network.org/api/states/all?lamin=" + REGION_BOX.lamin +
+            "&lomin=" + REGION_BOX.lomin + "&lamax=" + REGION_BOX.lamax + "&lomax=" + REGION_BOX.lomax;
+  return liveGetJson(url).then(function(j){
+    if(!j || !("states" in j)){ feedMark("region", false); return; }
+    var states = j.states || [];
+    var map = {};
+    states.forEach(function(s){
+      if(!s) return;
+      var cs = String(s[1] || "").trim().toUpperCase();
+      if(cs) map[cs] = { onGround: !!s[8], altFt: stateAltFt(s) };
+    });
+    LIVE.region = map;
+    var out = [];
+    states.forEach(function(s){
+      if(!s || s[8]) return;
+      var lat = s[6], lon = s[5];
+      if(lat == null || lon == null) return;
+      if(lat < HOUSE_BOX.lamin || lat > HOUSE_BOX.lamax || lon < HOUSE_BOX.lomin || lon > HOUSE_BOX.lomax) return;
+      var altFt = stateAltFt(s);
+      if(altFt == null) return;
+      out.push({ cs: String(s[1] || "").trim() || String(s[0] || "").toUpperCase(),
+                 altFt: altFt,
+                 hdg: (s[10] == null || isNaN(s[10])) ? null : Math.round(s[10]) });
+    });
+    out.sort(function(a, b){ return a.altFt - b.altFt; });
+    LIVE.sky = out;
+    feedMark("region", true);
+  });
+}
+var CARRIER_ICAO = { AA:"AAL", DL:"DAL", UA:"UAL", WN:"SWA", B6:"JBU", AS:"ASA", F9:"FFT",
+  NK:"NKS", BA:"BAW", VS:"VIR", HA:"HAL", TG:"THA", LH:"DLH", AF:"AFR", KL:"KLM", AC:"ACA",
+  EK:"UAE", QR:"QTR", SQ:"SIA", CX:"CPA", NH:"ANA", JL:"JAL", KE:"KAL", TK:"THY", IB:"IBE",
+  EI:"EIN", AY:"FIN", LX:"SWR", AM:"AMX", CM:"CMP", AV:"AVA", LA:"LAN", WS:"WJA", PD:"POE" };
+function callsignOf(flight){
+  var m = String(flight || "").toUpperCase().replace(/\s+/g, " ").trim().match(/^([A-Z0-9]{2,3}) (\d{1,4}[A-Z]?)$/);
+  if(!m) return null;
+  var prefix = CARRIER_ICAO[m[1]] || (m[1].length === 3 ? m[1] : null);
+  return prefix ? prefix + m[2] : null;
+}
+function trackedFlights(b){
+  var fl = (b.flights || []).map(function(f){
+    var c = {}; for(var k in f) c[k] = f[k]; return c;
+  });
+  if(!LIVE.region) return fl;
+  fl.forEach(function(f){
+    var cs = callsignOf(f.flight);
+    if(!cs) return;
+    var st = LIVE.region[cs];
+    if(!st && cs.length > 1) { /* feed callsigns sometimes carry a suffix letter */
+      for(var key in LIVE.region)
+        if(key.length === cs.length + 1 && key.indexOf(cs) === 0 && /[A-Z]/.test(key.charAt(cs.length))) { st = LIVE.region[key]; break; }
+    }
+    if(!st) return;
+    if(st.onGround) f.remarks = "ON GROUND";
+    else f.remarks = "AIRBORNE" + (st.altFt != null && st.altFt >= 1000 ? " " + Math.round(st.altFt / 1000) + "K" : "");
+  });
+  return fl;
+}
+function effFlights(){
+  if(board && board.id === "board-tracked") return trackedFlights(board);
+  return board.flights || [];
+}
+
+/* ---- Markets: Yahoo chart feed (Alpaca slot: see the layer note) ---- */
+var MARKET_DEFAULTS = ["SPX", "DJI", "AAPL", "MSFT", "NVDA"];
+var MARKET_YAHOO = { SPX: "^GSPC", DJI: "^DJI", IXIC: "^IXIC", RUT: "^RUT" };
+function boardMarketSymbols(b){
+  var out = [];
+  (b.lines || []).forEach(function(l){
+    var t = String(l.text || ""), m = t.trim().toUpperCase().match(/^([A-Z]{1,5})\b/);
+    if(m && m[1] !== "MARKETS" && m[1] !== "FIGURES" && /\d/.test(t) && out.indexOf(m[1]) < 0) out.push(m[1]);
+  });
+  return out;
+}
+function marketSymbolsFromBoards(){
+  var out = [];
+  function add(s){ if(out.indexOf(s) < 0) out.push(s); }
+  Object.keys(config.boards || {}).forEach(function(id){
+    var b = config.boards[id];
+    if(b && String(b.customTitle || "").toUpperCase() === "MARKETS") boardMarketSymbols(b).forEach(add);
+  });
+  MARKET_DEFAULTS.forEach(add);
+  return out;
+}
+function priceTxt(v){ return (Math.round(v * 100) / 100).toFixed(2).replace(".", " "); }
+function fetchMarkets(){
+  var map = {};
+  var jobs = marketSymbolsFromBoards().map(function(sym){
+    var url = "https://query2.finance.yahoo.com/v8/finance/chart/" +
+              encodeURIComponent(MARKET_YAHOO[sym] || sym) + "?interval=1d&range=1d";
+    return liveGetJson(url).then(function(j){
+      var meta = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
+      if(!meta || meta.regularMarketPrice == null) return;
+      var pct = (meta.regularMarketChangePercent != null) ? meta.regularMarketChangePercent
+        : (meta.chartPreviousClose ? (meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100 : 0);
+      var dir = pct > 0.001 ? "UP" : (pct < -0.001 ? "DOWN" : "FLAT");
+      var pctTxt = (Math.round(Math.abs(pct) * 10) / 10).toFixed(1).replace(".", " ");
+      map[sym] = sym + " · " + priceTxt(meta.regularMarketPrice) + " · " + (dir === "FLAT" ? "FLAT" : dir + " " + pctTxt);
+    });
+  });
+  return Promise.all(jobs).then(function(){ if(Object.keys(map).length) LIVE.markets = map; feedMark("markets", Object.keys(map).length > 0); });
+}
+
+/* ---- Line builders ---- */
+function liveWeatherLines(){
+  var w = LIVE.weather; if(!w) return null;
+  var lines = ["THE ISLE · " + w.cond + " · " + w.tempF + " F"];
+  if(w.highF != null && w.lowF != null)
+    lines.push("HIGH " + w.highF + " F · LOW " + w.lowF + " F");
+  if(w.windKt != null)
+    lines.push("WIND · " + w.windDir + " " + w.windKt + " KT" + (w.humidity != null ? " · HUMIDITY " + w.humidity : ""));
+  else if(w.humidity != null)
+    lines.push("HUMIDITY " + w.humidity);
+  var nt = LIVE.isleTides && LIVE.isleTides.next;
+  if(nt) lines.push("TIDE · " + (nt.type === "H" ? "HIGH " : "LOW ") + fmtH12(nt.mins) + " · " + heightTxt(nt.v) + " FT");
+  lines.push("SUNRISE " + fmtH12(w.sunrise) + " · SUNSET " + fmtH12(w.sunset));
+  return lines.map(function(t){ return { text: t, black: false }; });
+}
+function liveTideLines(){
+  var t = LIVE.isleTides; if(!t || !t.today.length) return null;
+  var lines = t.today.slice(0, 4).map(function(e){
+    return (e.type === "H" ? "HIGH " : "LOW ") + fmtH12(e.mins) + " · " + heightTxt(e.v) + " FT";
+  });
+  if(t.tomorrowFirst)
+    lines.push("NEXT: " + (t.tomorrowFirst.type === "H" ? "HIGH " : "LOW ") + fmtH12(t.tomorrowFirst.mins) + " TOMORROW");
+  return lines.map(function(x){ return { text: x, black: false }; });
+}
+function liveNorthShoreLines(stored){
+  var out = (stored || []).map(function(l){ return { text: l.text || "", black: !!l.black }; });
+  while(out.length < 13) out.push({ text: "", black: false });
+  var any = false;
+  function set(i, txt){ out[i] = { text: txt, black: false }; any = true; }
+  var t = LIVE.nsTides, i, e;
+  if(t && t.today.length){
+    for(i = 0; i < 3 && i < t.today.length; i++){
+      e = t.today[i];
+      set(1 + i, "TIDE " + (e.type === "H" ? "HIGH " : "LOW ") + fmtH12(e.mins) + " · " + heightTxt(e.v) + " FT");
+    }
+  }
+  var b = LIVE.buoy;
+  if(b){
+    set(5, "SWELL " + b.dir + " " + b.ft + " FT" + (b.period ? " AT " + b.period + " SEC" : ""));
+    set(6, "SETS TO " + Math.round(b.ft * 1.5) + " FT FACES");
+    set(10, "WAIMEA BAY · SWELL " + b.dir + " " + b.ft + " FT");
+    set(11, "SUNSET BEACH · " + b.dir + " " + b.ft + " FT");
+    if(b.wtmpF != null) set(8, "WATER " + b.wtmpF + " F");
+  }
+  var wx = LIVE.nsWx;
+  if(wx && wx.windKt != null){
+    set(7, "WIND " + wx.windDir + " " + wx.windKt + " KT" + (wx.windKt <= 10 ? " · LIGHT" : ""));
+    set(12, "SUNSET " + fmtH12(wx.sunset));
+  } else if(wx){
+    set(12, "SUNSET " + fmtH12(wx.sunset));
+    if(b && b.windKt != null) set(7, "WIND " + b.windDir + " " + b.windKt + " KT");
+  } else if(b && b.windKt != null){
+    set(7, "WIND " + b.windDir + " " + b.windKt + " KT");
+  }
+  return any ? out.slice(0, 13) : null;
+}
+function liveOverheadLines(){
+  if(!LIVE.region) return null;
+  if(!LIVE.sky || !LIVE.sky.length) return [{ text: "NO TRAFFIC OVERHEAD", black: false }];
+  return LIVE.sky.slice(0, boardRows()).map(function(a){
+    return { text: a.cs + " · " + a.altFt + " FT" + (a.hdg == null ? "" : " · HDG " + ("00" + a.hdg).slice(-3)),
+             black: false };
+  });
+}
+function liveMarketLines(b){
+  if(!LIVE.markets) return null;
+  var stored = b.lines || [];
+  var own = boardMarketSymbols(b);
+  var any = false, labelled = false;
+  var out = stored.map(function(l){
+    var t = String(l.text || "").trim().toUpperCase();
+    var m = t.match(/^([A-Z]{1,5})\b/);
+    if(m && LIVE.markets[m[1]]){ any = true; return { text: LIVE.markets[m[1]], black: !!l.black }; }
+    if(/^FIGURES ARE SAMPLES/.test(t)){ labelled = true; return { text: "\u0002", black: false }; }
+    return { text: l.text, black: !!l.black };
+  });
+  if(any){
+    out = out.map(function(l){
+      return l.text === "\u0002" ? { text: "FIGURES ARE DELAYED · FREE FEED", black: false } : l;
+    });
+    if(!labelled) out.push({ text: "FIGURES ARE DELAYED · FREE FEED", black: false });
+    return out;
+  }
+  if(own.length) return null; /* the board has symbols but the feed gave none: stored lines stand */
+  var lines = [];
+  MARKET_DEFAULTS.forEach(function(s){ if(LIVE.markets[s]) lines.push({ text: LIVE.markets[s], black: false }); });
+  if(!lines.length) return null;
+  lines.push({ text: "FIGURES ARE DELAYED · FREE FEED", black: false });
+  return lines;
+}
+function liveLinesFor(b){
+  if(!b || b.type === "colour") return null;
+  var k = b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
+  if(k === "weather") return liveWeatherLines();
+  if(k !== "custom") return null;
+  var t = String(b.customTitle || "").toUpperCase();
+  if(t === "NORTH SHORE") return liveNorthShoreLines(b.lines || []);
+  if(t === "TIDES") return liveTideLines();
+  if(t === "OVERHEAD") return liveOverheadLines();
+  if(t === "MARKETS") return liveMarketLines(b);
+  return null;
+}
+function effLines(){ return liveLinesFor(board) || board.lines || []; }
+function liveSignature(){
+  var parts = [];
+  var ll = liveLinesFor(board);
+  if(ll) parts.push(ll.map(function(l){ return (l.black ? "#" : "") + l.text; }).join("|"));
+  if(board && board.id === "board-tracked")
+    parts.push(trackedFlights(board).map(function(f){ return f.remarks; }).join("|"));
+  var h = datorHouse();
+  parts.push(h.TIDE + "/" + h.WIND + "/" + h.SUNSET);
+  return parts.join("~");
+}
+function liveActive(){
+  if(liveLinesFor(board)) return true;
+  if(board && board.id === "board-tracked" && LIVE.region) return true;
+  var h = datorHouse();
+  return h.TIDE !== "HIGH 18:42" || h.WIND !== "SE 12 KT" || h.SUNSET !== "17:31";
+}
+
+/* ---- Feed health and the service lamp ----
+   Every fetcher marks its feed each cycle: whether it answered, when
+   it last answered, and whether the data itself is stale for its kind
+   (an NWS observation over two hours old, a buoy observation over
+   three). The header lamp reads the feeds behind the board showing:
+   green when every feed answered on the latest cycle, amber when a
+   feed is delayed (last answer older than two cycles, or stale data),
+   red when a feed was unreachable on the latest cycle after the
+   layer's retry. Content is never a fault: an empty sky, a closed
+   market and a calm sea all keep the lamp green. Composed boards,
+   which draw on no feed, show no lamp at all. */
+var CYCLE_MS = 10 * 60 * 1000;
+function feedMark(key, ok, stale){
+  var f = LIVE.feeds[key] || (LIVE.feeds[key] = { ran: false, okCycle: false, lastOk: 0, stale: false });
+  f.ran = true; f.okCycle = !!ok; f.stale = !!stale;
+  if(ok) f.lastOk = Date.now();
+}
+function feedState(key){
+  var f = LIVE.feeds[key];
+  if(!f || !f.ran) return "wait";
+  if(!f.okCycle) return "down";
+  if(f.stale) return "delayed";
+  if(f.lastOk && (Date.now() - f.lastOk) > 2 * CYCLE_MS) return "delayed";
+  return "ok";
+}
+function boardFeeds(b){
+  if(!b || b.type === "colour") return null;
+  var feeds = [];
+  var k = b.kind || "departures";
+  if(k === "weather") feeds = ["weather", "tides"];
+  else if(k === "custom"){
+    var t = String(b.customTitle || "").toUpperCase();
+    if(t === "TIDES") feeds = ["tides"];
+    else if(t === "NORTH SHORE") feeds = ["nsTides", "buoy", "nsWx"];
+    else if(t === "OVERHEAD") feeds = ["region"];
+    else if(t === "MARKETS") feeds = ["markets"];
+  }
+  if(b.id === "board-tracked") feeds = ["region"];
+  if((b.style || "isle") === "dator"){
+    if(feeds.indexOf("weather") < 0) feeds.push("weather");
+    if(feeds.indexOf("tides") < 0) feeds.push("tides");
+  }
+  return feeds.length ? feeds : null;
+}
+function lampState(b){
+  var feeds = boardFeeds(b);
+  if(!feeds) return null;
+  var worst = "ok";
+  feeds.forEach(function(key){
+    var s = feedState(key);
+    if(s === "down") worst = "down";
+    else if(s !== "ok" && worst !== "down") worst = "delayed";
+  });
+  return worst;
+}
+function renderLamp(){
+  var lamp = document.getElementById("lamp");
+  var wrap = document.getElementById("lampwrap");
+  if(!lamp || !wrap) return;
+  var st = lampState(board);
+  if(!st){ lamp.hidden = true; wrap.hidden = true; return; }
+  lamp.className = "lamp " + st;
+  lamp.hidden = false;
+  if(boardStyle() !== "isle" && board.type !== "colour"){
+    wrap.hidden = false;
+    if(lamp.parentNode !== wrap) wrap.appendChild(lamp);
+  } else {
+    wrap.hidden = true;
+    var box = document.querySelector(".clockbox");
+    if(box && lamp.parentNode !== box) box.insertBefore(lamp, box.firstChild);
+  }
+}
+function refreshLive(){
+  Promise.all([
+    fetchWeather(),
+    fetchTides("8726917", "America/New_York").then(function(t){ if(t) LIVE.isleTides = t; feedMark("tides", !!t); }),
+    fetchTides("1612668", "Pacific/Honolulu").then(function(t){ if(t) LIVE.nsTides = t; feedMark("nsTides", !!t); }),
+    fetchNsWx(),
+    fetchBuoy(),
+    fetchRegion(),
+    fetchMarkets()
+  ]).then(function(){
+    var sig = liveSignature();
+    var changed = sig !== LIVE.sig;
+    LIVE.sig = sig;
+    if(changed && liveActive()) renderBoard(true);
+    renderLamp();
+  });
+}
+refreshLive();
+setInterval(refreshLive, 10 * 60 * 1000);
 function tickClock(){
   var d = new Date();
   var t = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");

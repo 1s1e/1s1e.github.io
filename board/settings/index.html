@@ -222,6 +222,19 @@
   .pvst-projekt .j-cell{ display:flex; align-items:center; white-space:nowrap; }
   .pvst-projekt .j-cell .a{ font-weight:700; }
   .pvst-projekt .j-cell .b{ color:#5a5e8c; }
+
+  .pv-clockbox{ display:inline-flex; align-items:center; gap:.5em; }
+  .pvlamp{ display:block; width:.62em; height:.62em; border-radius:50%; flex:none;
+    box-shadow: inset 0 0 2px rgba(0,0,0,.55), 0 0 .3em currentColor; }
+  .pvlamp.ok{ background:#46b96a; color:#46b96a; }
+  .pvlamp.delayed{ background:#e8a33d; color:#e8a33d; }
+  .pvlamp.down{ background:#d8402e; color:#d8402e; }
+  #pv-feeds{ margin-top: 10px; font-size: 13px; color: #9a958a; }
+  .pv-feed{ display:flex; gap: 14px; padding: 3px 2px; border-top: 1px solid #26241f; }
+  .pv-feed span:first-child{ flex: 1 1 auto; }
+  .pv-feed-state{ font-weight: 700; letter-spacing: .08em; }
+  .pv-feed-state.ok{ color:#46b96a; } .pv-feed-state.delayed{ color:#e8a33d; }
+  .pv-feed-state.down{ color:#d8402e; } .pv-feed-state.wait{ color:#9a958a; }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -233,7 +246,7 @@
   <div id="preview-wrap">
     <div id="preview">
       <div id="pv-board">
-        <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span id="pv-clock">--:--</span></div>
+        <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span class="pv-clockbox"><span id="pv-lamp" class="pvlamp ok" hidden></span><span id="pv-clock">--:--</span></span></div>
         <div id="pv-colheads"></div>
         <div id="pv-rows"></div>
         <div id="pv-colour"></div>
@@ -242,6 +255,7 @@
       </div>
     </div>
     <div id="pv-foot"><span>Staged preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
+    <div id="pv-feeds" hidden></div>
   </div>
 
   <h2>Board library</h2>
@@ -508,7 +522,7 @@ function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
 
 /* ============ Demo library: seed + merge (keep in step with display page) ============ */
-var SEED_VERSION = 7;
+var SEED_VERSION = 9;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -712,6 +726,379 @@ function demoBoards(){
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
                   levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-tides", name: "Tides", type: "departures", kind: "custom", customTitle: "TIDES", rows: 5,
+      flights: [],
+      lines: [
+        {text:"LOW 7 14 AM \u00b7 -1 0 FT", black:false},
+        {text:"HIGH 2 05 PM \u00b7 2 3 FT", black:false},
+        {text:"LOW 6 09 PM \u00b7 1 6 FT", black:false},
+        {text:"HIGH 12 16 AM \u00b7 3 9 FT", black:false},
+        {text:"NEXT: LOW 8 04 AM TOMORROW", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-shabbat", name: "Shabbat", type: "departures", kind: "custom", customTitle: "SHABBAT", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SHABBAT SHALOM", black:false},
+        {text:"PARSHAT VAYISHLACH", black:false},
+        {text:"LIGHT CANDLES FRI 5 15 PM", black:false},
+        {text:"SUNSET \u00b7 SHKIA \u00b7 FRI 5 33 PM", black:false},
+        {text:"SHABBAT ENDS SAT 6 11 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-today", name: "Today at the House", type: "departures", kind: "custom", customTitle: "TODAY AT THE HOUSE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"8 00 AM \u00b7 YOGA ON THE DOCK", black:false},
+        {text:"10 30 AM \u00b7 BOAT OUT FROM THE DOCK", black:false},
+        {text:"1 00 PM \u00b7 LUNCH ON THE PORCH", black:false},
+        {text:"5 33 PM \u00b7 SUNSET AT THE BEACH", black:false},
+        {text:"7 00 PM \u00b7 DINNER \u00b7 SEE MENU BOARD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-holidays", name: "Holidays", type: "departures", kind: "custom", customTitle: "NEXT CHAG", rows: 5,
+      flights: [],
+      lines: [
+        {text:"NEXT HOLIDAY \u00b7 CHANUKAH", black:false},
+        {text:"FIRST CANDLE FRI DEC 4 AT SUNSET", black:false},
+        {text:"25 KISLEV \u00b7 2 TEVET 5787", black:false},
+        {text:"8 NIGHTS OF LIGHT", black:false},
+        {text:"IN 8 DAYS", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-dinner", name: "Dinner Tonight", type: "departures", kind: "custom", customTitle: "DINNER TONIGHT", rows: 14,
+      flights: [],
+      lines: [
+        {text:"7 00 PM \u00b7 THE PORCH", black:false},
+        {text:"STARTER \u00b7 BURRATA \u00b7 ISLAND TOMATO", black:false},
+        {text:"MAIN \u00b7 GRILLED SNAPPER \u00b7 CITRUS", black:false},
+        {text:"SIDE \u00b7 CHARRED CORN \u00b7 HERBS", black:false},
+        {text:"DESSERT \u00b7 KEY LIME PIE", black:false},
+        {text:"POUR \u00b7 SANCERRE 2022 \u00b7 OPEN", black:false},
+        {text:"86 \u00b7 NO STONE CRAB TONIGHT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-beach", name: "Beach Today", type: "departures", kind: "custom", customTitle: "BEACH TODAY", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SHELLING: GOOD \u00b7 GO EARLY", black:false},
+        {text:"WALK THE BARS 6 57 \u00b7 9 57 AM", black:false},
+        {text:"LOW WATER -0 5 FT AT 8 27 AM", black:false},
+        {text:"RED TIDE: NO RECENT SAMPLE", black:false},
+        {text:"WATER 73 F \u00b7 WIND NW 21 MPH", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-calendar", name: "Calendar", type: "departures", kind: "custom", customTitle: "NEXT UP", rows: 5,
+      flights: [],
+      lines: [
+        {text:"TODAY \u00b7 4 00 PM", black:false},
+        {text:"GUESTS LAND \u00b7 TPA PICKUP", black:false},
+        {text:"FRI \u00b7 10 00 AM", black:false},
+        {text:"BOAT SERVICE \u00b7 MARINA", black:false},
+        {text:"NOTHING SCHEDULED AFTER SUN", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-marine", name: "Marine", type: "departures", kind: "custom", customTitle: "MARINE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SMALL CRAFT ADVISORY TO TONIGHT", black:false},
+        {text:"TODAY \u00b7 WNW 19-22 KT \u00b7 SEAS 5 FT", black:false},
+        {text:"TONIGHT \u00b7 WNW 13-20 KT \u00b7 SEAS 4-5 FT", black:false},
+        {text:"FRI \u00b7 WNW 12-14 KT \u00b7 SEAS 3 FT", black:false},
+        {text:"VERDICT: STAY IN THE BAY TODAY", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-now-playing", name: "Now Playing", type: "departures", kind: "custom", customTitle: "NOW PLAYING", rows: 5,
+      flights: [],
+      lines: [
+        {text:"SONOS \u00b7 GREAT ROOM", black:false},
+        {text:"SONG \u00b7 BLUE IN GREEN", black:false},
+        {text:"ARTIST \u00b7 MILES DAVIS", black:false},
+        {text:"ALBUM \u00b7 KIND OF BLUE \u00b7 1959", black:false},
+        {text:"NEXT \u00b7 POOL SPEAKERS AT 6 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-moon", name: "Moon", type: "departures", kind: "custom", customTitle: "MOON", rows: 5,
+      flights: [],
+      lines: [
+        {text:"WANING GIBBOUS \u00b7 94 LIT", black:false},
+        {text:"MOONRISE \u00b7 7 33 PM", black:false},
+        {text:"MOONSET \u00b7 9 10 AM", black:false},
+        {text:"LAST LIGHT \u00b7 6 01 PM", black:false},
+        {text:"NEXT FULL MOON \u00b7 DEC 24", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-markets", name: "Markets", type: "departures", kind: "custom", customTitle: "MARKETS", rows: 14,
+      flights: [],
+      lines: [
+        {text:"VOO \u00b7 632 10 \u00b7 UP 0 8", black:false},
+        {text:"AAPL \u00b7 271 40 \u00b7 DOWN 0 3", black:false},
+        {text:"MSFT \u00b7 512 05 \u00b7 UP 1 1", black:false},
+        {text:"GOLD \u00b7 4120 \u00b7 UP 0 4", black:false},
+        {text:"MARKETS CLOSED \u00b7 BACK MON 9 30 AM", black:false},
+        {text:"FIGURES ARE SAMPLES", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-sports", name: "Sports", type: "departures", kind: "custom", customTitle: "SPORTS", rows: 14,
+      flights: [],
+      lines: [
+        {text:"SCORES \u00b7 FINAL", black:false},
+        {text:"DOLPHINS 24 \u00b7 BILLS 17 \u00b7 FINAL", black:false},
+        {text:"HEAT 108 \u00b7 CELTICS 102 \u00b7 FINAL", black:false},
+        {text:"LIGHTNING 3 \u00b7 PANTHERS 2 \u00b7 OT", black:false},
+        {text:"NEXT: DOLPHINS SUN 1 00 PM", black:false},
+        {text:"FIGURES ARE SAMPLES", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-countdown", name: "Countdown", type: "departures", kind: "custom", customTitle: "COUNTDOWN", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GUESTS ARRIVE \u00b7 DEC 20", black:false},
+        {text:"24 DAYS TO GO", black:false},
+        {text:"CHANUKAH \u00b7 8 DAYS", black:false},
+        {text:"SEE THE HOLIDAYS BOARD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-world-clock", name: "World Clock", type: "departures", kind: "custom", customTitle: "WORLD CLOCK", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THE ISLE \u00b7 12 34 PM", black:false},
+        {text:"NEW YORK \u00b7 12 34 PM", black:false},
+        {text:"LONDON \u00b7 5 34 PM", black:false},
+        {text:"JERUSALEM \u00b7 7 34 PM", black:false},
+        {text:"WORD: IT IS HALF PAST TWELVE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-omer", name: "Omer", type: "departures", kind: "custom", customTitle: "OMER", rows: 5,
+      flights: [],
+      lines: [
+        {text:"COUNTING THE OMER", black:false},
+        {text:"TODAY IS 13 DAYS", black:false},
+        {text:"WHICH IS 1 WEEK AND 6 DAYS", black:false},
+        {text:"COUNT AFTER NIGHTFALL", black:false},
+        {text:"49 DAYS: PESACH TO SHAVUOT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-hebrew-date", name: "Hebrew Date", type: "departures", kind: "custom", customTitle: "HEBREW DATE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THURSDAY \u00b7 NOVEMBER 26 \u00b7 2026", black:false},
+        {text:"16 KISLEV 5787", black:false},
+        {text:"HEBREW DAY TURNS AT SUNSET 5 33 PM", black:false},
+        {text:"THIS WEEK: PARSHAT VAYISHLACH", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-remembrance", name: "Remembrance", type: "departures", kind: "custom", customTitle: "REMEMBRANCE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"YAHRZEIT THIS WEEK", black:false},
+        {text:"FOR A LOVED ONE \u00b7 SAMPLE", black:false},
+        {text:"CANDLE AT SUNDOWN", black:false},
+        {text:"EVENING BEFORE THE DAY", black:false},
+        {text:"LIGHT FROM SUNDOWN \u00b7 24 HOURS", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-quote", name: "Quote & Verse", type: "departures", kind: "custom", customTitle: "QUOTE & VERSE", rows: 5,
+      flights: [],
+      lines: [
+        {text:"QUOTE OF THE DAY", black:false},
+        {text:"THE SEA \u00b7 ONCE IT CASTS ITS SPELL", black:false},
+        {text:"HOLDS ONE IN ITS NET OF WONDER", black:false},
+        {text:"FOREVER \u00b7 J COUSTEAU", black:false},
+        {text:"WORD: PLETHORA \u00b7 IT MEANS A LOT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-storm", name: "Storm Watch", type: "departures", kind: "custom", customTitle: "STORM WATCH", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GULF OF MEXICO \u00b7 QUIET", black:false},
+        {text:"NO ACTIVE STORM \u00b7 SAMPLE", black:false},
+        {text:"HURRICANE SEASON TO NOV 30", black:false},
+        {text:"NEXT NHC UPDATE \u00b7 AS ISSUED", black:false},
+        {text:"HOUSE PLAN \u00b7 OWNER TEXT", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-welcome", name: "Guests Welcome", type: "departures", kind: "custom", customTitle: "WELCOME", rows: 5,
+      flights: [],
+      lines: [
+        {text:"GUEST FAMILY \u00b7 TO DEC 1", black:false},
+        {text:"WI-FI AND HOUSE NOTES: ASK ANY OF US", black:false},
+        {text:"BOAT LEAVES DOCK AT 10 30 AM", black:false},
+        {text:"SUNSET TONIGHT 5 33 PM \u00b7 BEACH", black:false},
+        {text:"HAPPY ANNIVERSARY \u00b7 SAMPLE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-overhead", name: "Overhead", type: "departures", kind: "custom", customTitle: "OVERHEAD", rows: 14,
+      flights: [],
+      lines: [
+        {text:"NO TRAFFIC OVERHEAD", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-tracked", name: "Tracked Flights", type: "departures", rows: 14,
+      flights: [
+        {time:"08:05", destination:"THE ISLE", flight:"IS 808", gate:"7", remarks:"BOARDING", black:false},
+        {time:"09:40", destination:"MIAMI", flight:"AA 2241", gate:"C3", remarks:"ON TIME", black:false},
+        {time:"11:15", destination:"CHARLOTTE", flight:"AA 1024", gate:"C5", remarks:"ON TIME", black:false},
+        {time:"13:30", destination:"LONDON", flight:"BA 211", gate:"E9", remarks:"ON TIME", black:false},
+        {time:"15:45", destination:"DALLAS", flight:"AA 1201", gate:"C7", remarks:"ON TIME", black:false},
+        {time:"17:20", destination:"HOUSTON", flight:"WN 3048", gate:"A3", remarks:"ON TIME", black:false}
+      ],
+      lines: [],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
@@ -1476,6 +1863,599 @@ document.getElementById("btn-test-all").addEventListener("click", function(){
    It is a viewer, not an editor; its one control is its own sound. */
 var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
 function ringIdx(ch){ var i = RING.indexOf(ch); return i < 0 ? 0 : i; }
+
+/* ============ Live data layer (preview mirror) ============
+   The settings preview shows the same live lines and remarks the
+   display page shows: the same free sources, the same fetch on load
+   and 10 minute refresh, the same silent fallback to stored content.
+   No settings controls are added; only the preview's data source
+   changes. Sources and verification are recorded in full in the
+   display page's live layer note: NOAA (NWS weather, CO-OPS tides,
+   NDBC buoy), Yahoo's keyless chart feed for Markets with the Alpaca
+   slot kept as the server-side future, and OpenSky for the Overhead
+   board and the Tracked Flights board only. The tracked-flights
+   principle holds here too: the traditional board is a composed
+   experience; composed rows are never touched; live matching applies
+   only to the Tracked Flights board, which was made for it. */
+var PV_LIVE = { weather: null, isleTides: null, nsTides: null, nsWx: null,
+             buoy: null, region: null, sky: null, markets: null, feeds: {}, sig: "" };
+var PV_ISLE_LAT = 28.2189, PV_ISLE_LON = -82.4576;
+var PV_NOAA_API = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+var PV_NWS_API = "https://api.weather.gov";
+var PV_COMPASS16 = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+function pvCompass16(deg){ if(deg == null || isNaN(deg)) return ""; return PV_COMPASS16[Math.round(deg / 22.5) % 16]; }
+function pvLiveGetOnce(url){
+  try{
+    var ctl = ("AbortController" in window) ? new AbortController() : null;
+    var to = ctl ? setTimeout(function(){ ctl.abort(); }, 9000) : null;
+    return fetch(url, ctl ? { signal: ctl.signal } : {}).then(function(r){
+      if(to) clearTimeout(to);
+      return (r && r.ok) ? r.text() : null;
+    }).catch(function(){ if(to) clearTimeout(to); return null; });
+  }catch(e){ return Promise.resolve(null); }
+}
+function pvLiveGet(url){
+  return pvLiveGetOnce(url).then(function(t){
+    if(t != null) return t;
+    return new Promise(function(res){ setTimeout(res, 1200); }).then(function(){ return pvLiveGetOnce(url); });
+  });
+}
+function pvLiveGetJson(url){
+  return pvLiveGet(url).then(function(t){
+    if(!t) return null;
+    try{ return JSON.parse(t); }catch(e){ return null; }
+  });
+}
+function pvTzDateStr(tz, addDays){
+  var d = new Date(Date.now() + (addDays || 0) * 86400000);
+  try{
+    var y = "", m = "", dd = "";
+    new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })
+      .formatToParts(d).forEach(function(p){
+        if(p.type === "year") y = p.value;
+        if(p.type === "month") m = p.value;
+        if(p.type === "day") dd = p.value;
+      });
+    if(y) return y + "-" + m + "-" + dd;
+  }catch(e){}
+  return d.toISOString().slice(0, 10);
+}
+function pvTzNowMins(tz){
+  try{
+    var h = 0, m = 0;
+    new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false, hour: "2-digit", minute: "2-digit" })
+      .formatToParts(new Date()).forEach(function(p){
+        if(p.type === "hour") h = +p.value;
+        if(p.type === "minute") m = +p.value;
+      });
+    return (h % 24) * 60 + m;
+  }catch(e){ var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+}
+function pvFmtH12(mins){ /* house line style: "5 33 PM" */
+  var h = Math.floor(mins / 60), m = mins % 60, ap = h >= 12 ? "PM" : "AM", h12 = h % 12;
+  if(h12 === 0) h12 = 12;
+  return h12 + " " + pad2(m) + " " + ap;
+}
+function pvFmtH24(mins){ return Math.floor(mins / 60) + ":" + pad2(mins % 60); }
+function pvHeightTxt(v){ return (Math.round(v * 10) / 10).toFixed(1).replace(".", " "); }
+
+/* Sunrise and sunset, computed locally (NOAA solar algorithm). */
+function pvSunMinutesUTC(lat, lon, y, m, d){
+  var doy = Math.floor((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 86400000);
+  var lngHour = lon / 15;
+  function calc(isRise){
+    var t = doy + ((isRise ? 6 : 18) - lngHour) / 24;
+    var M = (0.9856 * t) - 3.289;
+    var L = (M + 1.916 * Math.sin(M * Math.PI / 180) + 0.020 * Math.sin(2 * M * Math.PI / 180) + 282.634) % 360;
+    if(L < 0) L += 360;
+    var RA = Math.atan(0.91764 * Math.tan(L * Math.PI / 180)) * 180 / Math.PI;
+    RA = (RA + (Math.floor(L / 90) * 90 - Math.floor(RA / 90) * 90)) / 15;
+    var sinDec = 0.39782 * Math.sin(L * Math.PI / 180);
+    var cosDec = Math.cos(Math.asin(sinDec));
+    var cosH = (Math.cos(90.833 * Math.PI / 180) - sinDec * Math.sin(lat * Math.PI / 180)) /
+               (cosDec * Math.cos(lat * Math.PI / 180));
+    if(cosH > 1 || cosH < -1) return null;
+    var H = (isRise ? 360 - Math.acos(cosH) * 180 / Math.PI : Math.acos(cosH) * 180 / Math.PI) / 15;
+    var UT = (H + RA - 0.06571 * t - 6.622 - lngHour) % 24;
+    if(UT < 0) UT += 24;
+    return UT * 60;
+  }
+  return { rise: calc(true), set: calc(false) };
+}
+function pvSunToTz(utcMin, y, m, d, tz){
+  if(utcMin == null) return null;
+  var h = 0, mi = 0;
+  new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false, hour: "2-digit", minute: "2-digit" })
+    .formatToParts(new Date(Date.UTC(y, m - 1, d) + utcMin * 60000)).forEach(function(p){
+      if(p.type === "hour") h = +p.value;
+      if(p.type === "minute") mi = +p.value;
+    });
+  return (h % 24) * 60 + mi;
+}
+function pvSunTimesFor(lat, lon, tz){
+  var y = 0, m = 0, d = 0;
+  new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })
+    .formatToParts(new Date()).forEach(function(p){
+      if(p.type === "year") y = +p.value;
+      if(p.type === "month") m = +p.value;
+      if(p.type === "day") d = +p.value;
+    });
+  var s = pvSunMinutesUTC(lat, lon, y, m, d);
+  return { rise: pvSunToTz(s.rise, y, m, d, tz), set: pvSunToTz(s.set, y, m, d, tz) };
+}
+
+/* ---- NOAA tides ---- */
+function pvParseTides(j, tz){
+  if(!j || !j.predictions || !j.predictions.length) return null;
+  var today = pvTzDateStr(tz, 0), tomorrow = pvTzDateStr(tz, 1), nowM = pvTzNowMins(tz);
+  var evs = j.predictions.map(function(p){
+    var hm = String(p.t).slice(11, 16).split(":");
+    return { date: String(p.t).slice(0, 10), mins: (+hm[0]) * 60 + (+hm[1]),
+             type: p.type, v: parseFloat(p.v) };
+  });
+  var todays = evs.filter(function(e){ return e.date === today; });
+  var tomorrowFirst = null, next = null;
+  evs.forEach(function(e){
+    if(e.date === tomorrow && !tomorrowFirst) tomorrowFirst = e;
+    if(!next && (e.date > today || (e.date === today && e.mins > nowM))) next = e;
+  });
+  return { today: todays, tomorrowFirst: tomorrowFirst, next: next };
+}
+function pvFetchTides(station, tz){
+  var b = pvTzDateStr(tz, -1).replace(/-/g, ""), e = pvTzDateStr(tz, 1).replace(/-/g, "");
+  var url = PV_NOAA_API + "?product=predictions&application=isle_board&begin_date=" + b +
+            "&end_date=" + e + "&datum=MLLW&station=" + station +
+            "&time_zone=lst_ldt&units=english&interval=hilo&format=json";
+  return pvLiveGetJson(url).then(function(j){ return pvParseTides(j, tz); });
+}
+
+/* ---- NWS weather ---- */
+function pvNwsCond(text){
+  var t = String(text || "").toUpperCase().replace("SLIGHT CHANCE", "CHANCE");
+  if(t.length <= 18) return t;
+  var words = t.split(" "), out = "";
+  for(var i = 0; i < words.length; i++){
+    if(out && (out + " " + words[i]).length > 18) break;
+    out = out ? out + " " + words[i] : words[i];
+  }
+  return out || t.slice(0, 18);
+}
+function pvParseNwsWind(p){
+  var nums = String((p && p.windSpeed) || "").match(/\d+/g);
+  var mph = null;
+  if(nums && nums.length){
+    var sum = 0; nums.forEach(function(n){ sum += +n; });
+    mph = sum / nums.length;
+  }
+  return { dir: String((p && p.windDirection) || ""), kt: mph == null ? null : Math.round(mph * 0.868976) };
+}
+function pvFetchNwsBundle(lat, lon){
+  return pvLiveGetJson(PV_NWS_API + "/points/" + lat + "," + lon).then(function(p){
+    if(!p || !p.properties || !p.properties.forecast || !p.properties.observationStations) return null;
+    return Promise.all([pvLiveGetJson(p.properties.forecast), pvLiveGetJson(p.properties.observationStations)])
+      .then(function(res){
+        var bundle = { forecast: res[0], obs: null };
+        var ids = [];
+        if(res[1] && res[1].features)
+          res[1].features.slice(0, 3).forEach(function(f){ ids.push(f.properties.stationIdentifier); });
+        var chain = Promise.resolve(null);
+        ids.forEach(function(id){
+          chain = chain.then(function(cur){
+            if(cur && cur.properties && cur.properties.temperature && cur.properties.temperature.value != null) return cur;
+            return pvLiveGetJson(PV_NWS_API + "/stations/" + id + "/observations/latest");
+          });
+        });
+        return chain.then(function(obs){ bundle.obs = obs; return bundle; });
+      });
+  });
+}
+function pvNwsRead(bundle){
+  if(!bundle) return null;
+  var w = { tempF: null, cond: null, windDir: "", windKt: null, humidity: null, highF: null, lowF: null };
+  var periods = bundle.forecast && bundle.forecast.properties && bundle.forecast.properties.periods;
+  if(periods && periods.length){
+    var p0 = periods[0], p1 = periods[1];
+    if(p0.isDaytime){ w.highF = p0.temperature; if(p1) w.lowF = p1.temperature; }
+    else { w.lowF = p0.temperature; if(p1) w.highF = p1.temperature; }
+    w.cond = pvNwsCond(p0.shortForecast);
+    var fw = pvParseNwsWind(p0);
+    if(fw.dir) w.windDir = fw.dir;
+    w.windKt = fw.kt;
+    w.tempF = p0.temperature;
+  }
+  var o = bundle.obs && bundle.obs.properties;
+  if(o){
+    if(o.temperature && o.temperature.value != null) w.tempF = Math.round(o.temperature.value * 9 / 5 + 32);
+    if(o.textDescription) w.cond = pvNwsCond(o.textDescription);
+    if(o.windDirection && o.windDirection.value != null) w.windDir = pvCompass16(o.windDirection.value);
+    if(o.windSpeed && o.windSpeed.value != null) w.windKt = Math.round(o.windSpeed.value * 0.539957);
+    if(o.relativeHumidity && o.relativeHumidity.value != null) w.humidity = Math.round(o.relativeHumidity.value);
+  }
+  return w;
+}
+function pvFetchWeather(){
+  return pvFetchNwsBundle(PV_ISLE_LAT, PV_ISLE_LON).then(function(bundle){
+    var w = pvNwsRead(bundle);
+    if(!w || w.tempF == null || !w.cond){ pvFeedMark("weather", false); return; }
+    var sun = pvSunTimesFor(PV_ISLE_LAT, PV_ISLE_LON, "America/New_York");
+    w.sunrise = sun.rise; w.sunset = sun.set;
+    PV_LIVE.weather = w;
+    var ots = bundle && bundle.obs && bundle.obs.properties ? bundle.obs.properties.timestamp : null;
+    pvFeedMark("weather", true, !!(ots && (Date.now() - Date.parse(ots)) > 2 * 3600 * 1000));
+  });
+}
+function pvFetchNsWx(){
+  return pvFetchNwsBundle(21.5983, -158.1083).then(function(bundle){
+    var w = pvNwsRead(bundle);
+    if(!w){ pvFeedMark("nsWx", false); return; }
+    /* The sunset is computed locally, so it lands even when the
+       stations report no wind; the wind lines simply stay stored. */
+    PV_LIVE.nsWx = { windDir: w.windDir, windKt: w.windKt,
+                  sunset: pvSunTimesFor(21.5983, -158.1083, "Pacific/Honolulu").set };
+    var ots2 = bundle && bundle.obs && bundle.obs.properties ? bundle.obs.properties.timestamp : null;
+    pvFeedMark("nsWx", true, !!(ots2 && (Date.now() - Date.parse(ots2)) > 2 * 3600 * 1000));
+  });
+}
+
+/* ---- NDBC buoy 51201, Waimea Bay ---- */
+function pvFetchBuoy(){
+  return pvLiveGet("https://www.ndbc.noaa.gov/data/realtime2/51201.txt").then(function(txt){
+    if(!txt){ pvFeedMark("buoy", false); return; }
+    var rows = txt.split("\n");
+    for(var i = 0; i < rows.length; i++){
+      var s = rows[i].trim();
+      if(!s || s.charAt(0) === "#") continue;
+      var c = s.split(/\s+/);
+      if(c.length < 15) continue;
+      var wvht = parseFloat(c[8]);
+      if(isNaN(wvht)) continue; /* keep scanning for a row with a wave report */
+      var dpd = parseFloat(c[9]), mwd = parseFloat(c[11]),
+          wdir = parseFloat(c[5]), wspd = parseFloat(c[6]), wtmp = parseFloat(c[14]);
+      PV_LIVE.buoy = {
+        ft: Math.round(wvht * 3.28084),
+        period: isNaN(dpd) ? null : Math.round(dpd),
+        dir: pvCompass16(mwd),
+        windDir: pvCompass16(wdir),
+        windKt: isNaN(wspd) ? null : Math.round(wspd * 1.94384),
+        wtmpF: isNaN(wtmp) ? null : Math.round(wtmp * 9 / 5 + 32)
+      };
+      var bts = Date.UTC(2000 + (+c[0]), (+c[1]) - 1, +c[2], +c[3], +c[4]);
+      pvFeedMark("buoy", true, (Date.now() - bts) > 3 * 3600 * 1000);
+      return;
+    }
+    pvFeedMark("buoy", true, true);
+  });
+}
+
+/* ---- OpenSky: one Southeast region fetch feeding Overhead and Tracked ---- */
+var PV_REGION_BOX = { lamin: 23.5, lamax: 32.5, lomin: -90.0, lomax: -77.0 };
+var PV_HOUSE_BOX = { lamin: 27.85, lamax: 28.55, lomin: -82.95, lomax: -82.25 };
+function pvStateAltFt(s){
+  var altM = (s[7] != null) ? s[7] : s[13];
+  return altM == null ? null : Math.max(0, Math.round(altM * 3.28084 / 10) * 10);
+}
+function pvFetchRegion(){
+  var url = "https://opensky-network.org/api/states/all?lamin=" + PV_REGION_BOX.lamin +
+            "&lomin=" + PV_REGION_BOX.lomin + "&lamax=" + PV_REGION_BOX.lamax + "&lomax=" + PV_REGION_BOX.lomax;
+  return pvLiveGetJson(url).then(function(j){
+    if(!j || !("states" in j)){ pvFeedMark("region", false); return; }
+    var states = j.states || [];
+    var map = {};
+    states.forEach(function(s){
+      if(!s) return;
+      var cs = String(s[1] || "").trim().toUpperCase();
+      if(cs) map[cs] = { onGround: !!s[8], altFt: pvStateAltFt(s) };
+    });
+    PV_LIVE.region = map;
+    var out = [];
+    states.forEach(function(s){
+      if(!s || s[8]) return;
+      var lat = s[6], lon = s[5];
+      if(lat == null || lon == null) return;
+      if(lat < PV_HOUSE_BOX.lamin || lat > PV_HOUSE_BOX.lamax || lon < PV_HOUSE_BOX.lomin || lon > PV_HOUSE_BOX.lomax) return;
+      var altFt = pvStateAltFt(s);
+      if(altFt == null) return;
+      out.push({ cs: String(s[1] || "").trim() || String(s[0] || "").toUpperCase(),
+                 altFt: altFt,
+                 hdg: (s[10] == null || isNaN(s[10])) ? null : Math.round(s[10]) });
+    });
+    out.sort(function(a, b){ return a.altFt - b.altFt; });
+    PV_LIVE.sky = out;
+    pvFeedMark("region", true);
+  });
+}
+var PV_CARRIER_ICAO = { AA:"AAL", DL:"DAL", UA:"UAL", WN:"SWA", B6:"JBU", AS:"ASA", F9:"FFT",
+  NK:"NKS", BA:"BAW", VS:"VIR", HA:"HAL", TG:"THA", LH:"DLH", AF:"AFR", KL:"KLM", AC:"ACA",
+  EK:"UAE", QR:"QTR", SQ:"SIA", CX:"CPA", NH:"ANA", JL:"JAL", KE:"KAL", TK:"THY", IB:"IBE",
+  EI:"EIN", AY:"FIN", LX:"SWR", AM:"AMX", CM:"CMP", AV:"AVA", LA:"LAN", WS:"WJA", PD:"POE" };
+function pvCallsignOf(flight){
+  var m = String(flight || "").toUpperCase().replace(/\s+/g, " ").trim().match(/^([A-Z0-9]{2,3}) (\d{1,4}[A-Z]?)$/);
+  if(!m) return null;
+  var prefix = PV_CARRIER_ICAO[m[1]] || (m[1].length === 3 ? m[1] : null);
+  return prefix ? prefix + m[2] : null;
+}
+function pvTrackedFlights(b){
+  var fl = (b.flights || []).map(function(f){
+    var c = {}; for(var k in f) c[k] = f[k]; return c;
+  });
+  if(!PV_LIVE.region) return fl;
+  fl.forEach(function(f){
+    var cs = pvCallsignOf(f.flight);
+    if(!cs) return;
+    var st = PV_LIVE.region[cs];
+    if(!st && cs.length > 1) { /* feed callsigns sometimes carry a suffix letter */
+      for(var key in PV_LIVE.region)
+        if(key.length === cs.length + 1 && key.indexOf(cs) === 0 && /[A-Z]/.test(key.charAt(cs.length))) { st = PV_LIVE.region[key]; break; }
+    }
+    if(!st) return;
+    if(st.onGround) f.remarks = "ON GROUND";
+    else f.remarks = "AIRBORNE" + (st.altFt != null && st.altFt >= 1000 ? " " + Math.round(st.altFt / 1000) + "K" : "");
+  });
+  return fl;
+}
+function pvEffFlights(b){
+  if(b && b.id === "board-tracked") return pvTrackedFlights(b);
+  return (b && b.flights) || [];
+}
+
+/* ---- Markets: Yahoo chart feed (Alpaca slot: see the layer note) ---- */
+var PV_MARKET_DEFAULTS = ["SPX", "DJI", "AAPL", "MSFT", "NVDA"];
+var PV_MARKET_YAHOO = { SPX: "^GSPC", DJI: "^DJI", IXIC: "^IXIC", RUT: "^RUT" };
+function pvBoardMarketSymbols(b){
+  var out = [];
+  (b.lines || []).forEach(function(l){
+    var t = String(l.text || ""), m = t.trim().toUpperCase().match(/^([A-Z]{1,5})\b/);
+    if(m && m[1] !== "MARKETS" && m[1] !== "FIGURES" && /\d/.test(t) && out.indexOf(m[1]) < 0) out.push(m[1]);
+  });
+  return out;
+}
+function pvMarketSymbolsFromBoards(){
+  var out = [];
+  function add(s){ if(out.indexOf(s) < 0) out.push(s); }
+  Object.keys(work.boards || {}).forEach(function(id){
+    var b = work.boards[id];
+    if(b && String(b.customTitle || "").toUpperCase() === "MARKETS") pvBoardMarketSymbols(b).forEach(add);
+  });
+  PV_MARKET_DEFAULTS.forEach(add);
+  return out;
+}
+function pvPriceTxt(v){ return (Math.round(v * 100) / 100).toFixed(2).replace(".", " "); }
+function pvFetchMarkets(){
+  var map = {};
+  var jobs = pvMarketSymbolsFromBoards().map(function(sym){
+    var url = "https://query2.finance.yahoo.com/v8/finance/chart/" +
+              encodeURIComponent(PV_MARKET_YAHOO[sym] || sym) + "?interval=1d&range=1d";
+    return pvLiveGetJson(url).then(function(j){
+      var meta = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
+      if(!meta || meta.regularMarketPrice == null) return;
+      var pct = (meta.regularMarketChangePercent != null) ? meta.regularMarketChangePercent
+        : (meta.chartPreviousClose ? (meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100 : 0);
+      var dir = pct > 0.001 ? "UP" : (pct < -0.001 ? "DOWN" : "FLAT");
+      var pctTxt = (Math.round(Math.abs(pct) * 10) / 10).toFixed(1).replace(".", " ");
+      map[sym] = sym + " · " + pvPriceTxt(meta.regularMarketPrice) + " · " + (dir === "FLAT" ? "FLAT" : dir + " " + pctTxt);
+    });
+  });
+  return Promise.all(jobs).then(function(){ if(Object.keys(map).length) PV_LIVE.markets = map; pvFeedMark("markets", Object.keys(map).length > 0); });
+}
+
+/* ---- Line builders ---- */
+function pvLiveWeatherLines(){
+  var w = PV_LIVE.weather; if(!w) return null;
+  var lines = ["THE ISLE · " + w.cond + " · " + w.tempF + " F"];
+  if(w.highF != null && w.lowF != null)
+    lines.push("HIGH " + w.highF + " F · LOW " + w.lowF + " F");
+  if(w.windKt != null)
+    lines.push("WIND · " + w.windDir + " " + w.windKt + " KT" + (w.humidity != null ? " · HUMIDITY " + w.humidity : ""));
+  else if(w.humidity != null)
+    lines.push("HUMIDITY " + w.humidity);
+  var nt = PV_LIVE.isleTides && PV_LIVE.isleTides.next;
+  if(nt) lines.push("TIDE · " + (nt.type === "H" ? "HIGH " : "LOW ") + pvFmtH12(nt.mins) + " · " + pvHeightTxt(nt.v) + " FT");
+  lines.push("SUNRISE " + pvFmtH12(w.sunrise) + " · SUNSET " + pvFmtH12(w.sunset));
+  return lines.map(function(t){ return { text: t, black: false }; });
+}
+function pvLiveTideLines(){
+  var t = PV_LIVE.isleTides; if(!t || !t.today.length) return null;
+  var lines = t.today.slice(0, 4).map(function(e){
+    return (e.type === "H" ? "HIGH " : "LOW ") + pvFmtH12(e.mins) + " · " + pvHeightTxt(e.v) + " FT";
+  });
+  if(t.tomorrowFirst)
+    lines.push("NEXT: " + (t.tomorrowFirst.type === "H" ? "HIGH " : "LOW ") + pvFmtH12(t.tomorrowFirst.mins) + " TOMORROW");
+  return lines.map(function(x){ return { text: x, black: false }; });
+}
+function pvLiveNorthShoreLines(stored){
+  var out = (stored || []).map(function(l){ return { text: l.text || "", black: !!l.black }; });
+  while(out.length < 13) out.push({ text: "", black: false });
+  var any = false;
+  function set(i, txt){ out[i] = { text: txt, black: false }; any = true; }
+  var t = PV_LIVE.nsTides, i, e;
+  if(t && t.today.length){
+    for(i = 0; i < 3 && i < t.today.length; i++){
+      e = t.today[i];
+      set(1 + i, "TIDE " + (e.type === "H" ? "HIGH " : "LOW ") + pvFmtH12(e.mins) + " · " + pvHeightTxt(e.v) + " FT");
+    }
+  }
+  var b = PV_LIVE.buoy;
+  if(b){
+    set(5, "SWELL " + b.dir + " " + b.ft + " FT" + (b.period ? " AT " + b.period + " SEC" : ""));
+    set(6, "SETS TO " + Math.round(b.ft * 1.5) + " FT FACES");
+    set(10, "WAIMEA BAY · SWELL " + b.dir + " " + b.ft + " FT");
+    set(11, "SUNSET BEACH · " + b.dir + " " + b.ft + " FT");
+    if(b.wtmpF != null) set(8, "WATER " + b.wtmpF + " F");
+  }
+  var wx = PV_LIVE.nsWx;
+  if(wx && wx.windKt != null){
+    set(7, "WIND " + wx.windDir + " " + wx.windKt + " KT" + (wx.windKt <= 10 ? " · LIGHT" : ""));
+    set(12, "SUNSET " + pvFmtH12(wx.sunset));
+  } else if(wx){
+    set(12, "SUNSET " + pvFmtH12(wx.sunset));
+    if(b && b.windKt != null) set(7, "WIND " + b.windDir + " " + b.windKt + " KT");
+  } else if(b && b.windKt != null){
+    set(7, "WIND " + b.windDir + " " + b.windKt + " KT");
+  }
+  return any ? out.slice(0, 13) : null;
+}
+function pvLiveOverheadLines(b){
+  if(!PV_LIVE.region) return null;
+  if(!PV_LIVE.sky || !PV_LIVE.sky.length) return [{ text: "NO TRAFFIC OVERHEAD", black: false }];
+  return PV_LIVE.sky.slice(0, (b.rows === 5 || b.rows === 14) ? b.rows : 14).map(function(a){
+    return { text: a.cs + " · " + a.altFt + " FT" + (a.hdg == null ? "" : " · HDG " + ("00" + a.hdg).slice(-3)),
+             black: false };
+  });
+}
+function pvLiveMarketLines(b){
+  if(!PV_LIVE.markets) return null;
+  var stored = b.lines || [];
+  var own = pvBoardMarketSymbols(b);
+  var any = false, labelled = false;
+  var out = stored.map(function(l){
+    var t = String(l.text || "").trim().toUpperCase();
+    var m = t.match(/^([A-Z]{1,5})\b/);
+    if(m && PV_LIVE.markets[m[1]]){ any = true; return { text: PV_LIVE.markets[m[1]], black: !!l.black }; }
+    if(/^FIGURES ARE SAMPLES/.test(t)){ labelled = true; return { text: "\u0002", black: false }; }
+    return { text: l.text, black: !!l.black };
+  });
+  if(any){
+    out = out.map(function(l){
+      return l.text === "\u0002" ? { text: "FIGURES ARE DELAYED · FREE FEED", black: false } : l;
+    });
+    if(!labelled) out.push({ text: "FIGURES ARE DELAYED · FREE FEED", black: false });
+    return out;
+  }
+  if(own.length) return null; /* the board has symbols but the feed gave none: stored lines stand */
+  var lines = [];
+  PV_MARKET_DEFAULTS.forEach(function(s){ if(PV_LIVE.markets[s]) lines.push({ text: PV_LIVE.markets[s], black: false }); });
+  if(!lines.length) return null;
+  lines.push({ text: "FIGURES ARE DELAYED · FREE FEED", black: false });
+  return lines;
+}
+function pvLiveLinesFor(b){
+  if(!b || b.type === "colour") return null;
+  var k = b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
+  if(k === "weather") return pvLiveWeatherLines();
+  if(k !== "custom") return null;
+  var t = String(b.customTitle || "").toUpperCase();
+  if(t === "NORTH SHORE") return pvLiveNorthShoreLines(b.lines || []);
+  if(t === "TIDES") return pvLiveTideLines();
+  if(t === "OVERHEAD") return pvLiveOverheadLines(b);
+  if(t === "MARKETS") return pvLiveMarketLines(b);
+  return null;
+}
+function pvEffLines(b){ return pvLiveLinesFor(b) || b.lines || []; }
+function pvLiveSignature(){
+  var b = board();
+  var parts = [];
+  var ll = pvLiveLinesFor(b);
+  if(ll) parts.push(ll.map(function(l){ return (l.black ? "#" : "") + l.text; }).join("|"));
+  if(b && b.id === "board-tracked")
+    parts.push(pvTrackedFlights(b).map(function(f){ return f.remarks; }).join("|"));
+  var h = pvDatorHouse(b);
+  parts.push(h.TIDE + "/" + h.WIND + "/" + h.SUNSET);
+  return parts.join("~");
+}
+function pvLiveActive(){
+  var b = board();
+  if(pvLiveLinesFor(b)) return true;
+  if(b && b.id === "board-tracked" && PV_LIVE.region) return true;
+  var h = pvDatorHouse(b);
+  return h.TIDE !== "HIGH 18:42" || h.WIND !== "SE 12 KT" || h.SUNSET !== "17:31";
+}
+
+/* ---- Feed health, the preview lamp and the worded status list ---- */
+var PV_CYCLE_MS = 10 * 60 * 1000;
+var PV_FEED_NAMES = { weather: "Weather · NOAA", tides: "Tides · Anclote Key", nsTides: "Tides · Haleiwa",
+  nsWx: "Haleiwa weather · NOAA", buoy: "Waimea buoy · NDBC", region: "Aircraft · OpenSky", markets: "Markets · Yahoo" };
+function pvFeedMark(key, ok, stale){
+  var f = PV_LIVE.feeds[key] || (PV_LIVE.feeds[key] = { ran: false, okCycle: false, lastOk: 0, stale: false });
+  f.ran = true; f.okCycle = !!ok; f.stale = !!stale;
+  if(ok) f.lastOk = Date.now();
+}
+function pvFeedState(key){
+  var f = PV_LIVE.feeds[key];
+  if(!f || !f.ran) return "wait";
+  if(!f.okCycle) return "down";
+  if(f.stale) return "delayed";
+  if(f.lastOk && (Date.now() - f.lastOk) > 2 * PV_CYCLE_MS) return "delayed";
+  return "ok";
+}
+function pvBoardFeeds(b){
+  if(!b || b.type === "colour") return null;
+  var feeds = [];
+  var k = b.kind || "departures";
+  if(k === "weather") feeds = ["weather", "tides"];
+  else if(k === "custom"){
+    var t = String(b.customTitle || "").toUpperCase();
+    if(t === "TIDES") feeds = ["tides"];
+    else if(t === "NORTH SHORE") feeds = ["nsTides", "buoy", "nsWx"];
+    else if(t === "OVERHEAD") feeds = ["region"];
+    else if(t === "MARKETS") feeds = ["markets"];
+  }
+  if(b.id === "board-tracked") feeds = ["region"];
+  if((b.style || "isle") === "dator"){
+    if(feeds.indexOf("weather") < 0) feeds.push("weather");
+    if(feeds.indexOf("tides") < 0) feeds.push("tides");
+  }
+  return feeds.length ? feeds : null;
+}
+function pvLampState(b){
+  var feeds = pvBoardFeeds(b);
+  if(!feeds) return null;
+  var worst = "ok";
+  feeds.forEach(function(key){
+    var s = pvFeedState(key);
+    if(s === "down") worst = "down";
+    else if(s !== "ok" && worst !== "down") worst = "delayed";
+  });
+  return worst;
+}
+function pvRenderLamp(){
+  var lamp = document.getElementById("pv-lamp");
+  if(!lamp) return;
+  var st = pvLampState(board());
+  if(!st){ lamp.hidden = true; return; }
+  lamp.className = "pvlamp " + st;
+  lamp.hidden = false;
+}
+function pvFeedTime(ms){
+  var d = new Date(ms), h = d.getHours(), m = d.getMinutes();
+  var ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+  return h + ":" + (m < 10 ? "0" : "") + m + " " + ap;
+}
+function pvRenderFeeds(){
+  var box = document.getElementById("pv-feeds");
+  if(!box) return;
+  var b = board();
+  var feeds = pvBoardFeeds(b);
+  if(!feeds){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  box.innerHTML = feeds.map(function(key){
+    var f = PV_LIVE.feeds[key];
+    var st = pvFeedState(key);
+    var word = st === "ok" ? "OK" : st === "down" ? "DOWN" : st === "wait" ? "WAITING" : "DELAYED";
+    var when = (f && f.lastOk) ? "last answered " + pvFeedTime(f.lastOk) : "not answered yet";
+    return '<div class="pv-feed"><span>' + PV_FEED_NAMES[key] + '</span>' +
+      '<span class="pv-feed-state ' + st + '">' + word + '</span>' +
+      '<span>' + when + '</span></div>';
+  }).join("");
+}
+function pvRefreshLive(){
+  Promise.all([
+    pvFetchWeather(),
+    pvFetchTides("8726917", "America/New_York").then(function(t){ if(t) PV_LIVE.isleTides = t; pvFeedMark("tides", !!t); }),
+    pvFetchTides("1612668", "Pacific/Honolulu").then(function(t){ if(t) PV_LIVE.nsTides = t; pvFeedMark("nsTides", !!t); }),
+    pvFetchNsWx(),
+    pvFetchBuoy(),
+    pvFetchRegion(),
+    pvFetchMarkets()
+  ]).then(function(){
+    var sig = pvLiveSignature();
+    var changed = sig !== PV_LIVE.sig;
+    PV_LIVE.sig = sig;
+    if(changed && pvLiveActive()) pvQueueRender();
+    pvRenderLamp(); pvRenderFeeds();
+  });
+}
+pvRefreshLive();
+setInterval(pvRefreshLive, 10 * 60 * 1000);
 function pvEsc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 function pvCleanRaw(text){
   text = String(text == null ? "" : text).toUpperCase();
@@ -1626,7 +2606,7 @@ function pvRender(cascade){
   if(key !== pvKey){ pvBuildRows(b, text, rows); pvKey = key; }
   var jobs = [], r, k;
   if(text){
-    var lines = b.lines || [];
+    var lines = pvEffLines(b);
     for(r = 0; r < rows; r++){
       var ln = lines[r] || { text: "", black: false };
       var target = ln.black ? "" : pvCleanRaw(ln.text);
@@ -1635,7 +2615,7 @@ function pvRender(cascade){
         jobs.push({ tile: pvGrid[r][0][k], to: target[k], delay: r * 40 + k * 14 });
     }
   } else {
-    var fl = b.flights || [];
+    var fl = pvEffFlights(b);
     for(r = 0; r < rows; r++){
       var f = fl[r] || null;
       PV_COLS.forEach(function(c, ci){
@@ -1651,14 +2631,19 @@ function pvRender(cascade){
   }
   var anySteps = false;
   jobs.forEach(function(j){
+    /* Generation guard: a newer render supersedes this tile's older
+       jobs, so overlapping cascades can never strand a tile mid-flip. */
+    var gen = (j.tile._pvGen = (j.tile._pvGen || 0) + 1);
     var from = j.tile.dataset.ch || " ";
     var steps = (ringIdx(j.to) - ringIdx(from) + RING.length) % RING.length;
     if(!cascade) steps = 0;
     if(steps > 0) anySteps = true;
     if(steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
     setTimeout(function(){
+      if(j.tile._pvGen !== gen) return;
       var pos = ringIdx(from), remaining = steps;
       var iv = setInterval(function(){
+        if(j.tile._pvGen !== gen){ clearInterval(iv); return; }
         pos = (pos + 1) % RING.length;
         j.tile.textContent = RING[pos];
         if(--remaining <= 0){
@@ -1670,6 +2655,7 @@ function pvRender(cascade){
     }, j.delay);
   });
   if(cascade && anySteps && pvSoundOn) pvPlayCascade();
+  pvRenderLamp(); pvRenderFeeds();
 }
 function pvPlayCascade(){
   loadSetBuffers(board().clackSet, function(bufs){
@@ -1716,11 +2702,11 @@ function pvStEl(tag, cls, parent, text){
 }
 function pvStRows(b){
   if(pvIsText(b)){
-    return (b.lines || []).map(function(l){
+    return pvEffLines(b).map(function(l){
       return { time: "", destination: String(l.text || "").toUpperCase(), flight: "", gate: "", remarks: "", black: !!l.black };
     });
   }
-  return (b.flights || []).map(function(f){
+  return pvEffFlights(b).map(function(f){
     return { time: f.time || "", destination: String(f.destination || "").toUpperCase(), flight: f.flight || "", gate: f.gate || "", remarks: String(f.remarks || "").toUpperCase(), black: !!f.black };
   });
 }
@@ -1980,7 +2966,7 @@ function pvBuildPatapata(b, W, H){
 /* Dator miniature */
 function pvDatorHouse(b){
   var out = { TIDE: "HIGH 18:42", WIND: "SE 12 KT", SUNSET: "17:31" };
-  (b.lines || []).forEach(function(l){
+  (pvEffLines(b)).forEach(function(l){
     var s = pvCleanRaw(l.text || "");
     ["TIDE", "WIND", "SUNSET"].forEach(function(k){
       var i = s.indexOf(k);
@@ -1991,6 +2977,11 @@ function pvDatorHouse(b){
       }
     });
   });
+  /* Live values sit above the stored lines and the sample fallbacks. */
+  var lw = PV_LIVE.weather;
+  if(lw){ out.WIND = lw.windDir + " " + lw.windKt + " KT"; out.SUNSET = pvFmtH24(lw.sunset); }
+  var nt = PV_LIVE.isleTides && PV_LIVE.isleTides.next;
+  if(nt) out.TIDE = (nt.type === "H" ? "HIGH " : "LOW ") + pvFmtH24(nt.mins);
   return out;
 }
 function pvBuildDator(b, W, H){
