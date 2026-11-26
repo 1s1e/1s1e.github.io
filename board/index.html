@@ -425,7 +425,11 @@ function stagedBoard(){
     if(res.changed){
       try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(res.cfg)); }catch(e){}
     }
-    return res.cfg.boards[res.cfg.liveBoardId] || null;
+    /* The staged config names the board being edited (demoBoardId, written
+       by settings on every staged save): a demo shows THAT board, not
+       whichever board happens to be live. Staged configs saved before the
+       field existed fall back to the live board. */
+    return res.cfg.boards[res.cfg.demoBoardId] || res.cfg.boards[res.cfg.liveBoardId] || null;
   }catch(e){}
   return null;
 }
@@ -981,15 +985,41 @@ function playBuf(buf, bus, when, rate, gainMul){
   activeVoices++;
   src.start(when);
 }
-var IMPACT_LEAD = 0.045; /* impact sits ~45 ms into each slice */
+var IMPACT_LEAD = 0.045; /* the design point: a slice's impact sounds 45 ms after its start */
+/* Each buffer's loudest point (its impact) is measured once, when first
+   played. The pragotron slices carry their impact at the design 45 ms,
+   but slices cut from whole-board hall recordings peak wherever the
+   loudest flap in the slice happens to sit (measured spread: the peak
+   lands anywhere from 2 ms to 170 ms into the slice). Scheduling starts
+   each buffer early or late by the difference, so every set's impact
+   lands at the same point of the tile's fall: the fall's end. */
+var peakCache = (typeof WeakMap === "function") ? new WeakMap() : null;
+function peakOf(buf){
+  if(!buf) return IMPACT_LEAD;
+  if(peakCache){
+    var hit = peakCache.get(buf);
+    if(hit !== undefined) return hit;
+  }
+  var d = buf.getChannelData(0), mi = 0, mv = 0;
+  for(var i = 0; i < d.length; i++){ var a = Math.abs(d[i]); if(a > mv){ mv = a; mi = i; } }
+  var t = mi / buf.sampleRate;
+  if(peakCache) peakCache.set(buf, t);
+  return t;
+}
+function impactWhen(buf){
+  /* start the buffer so its measured impact sounds at tick + 90 ms:
+     the 45 ms lead plus the impact's own 45 ms design offset */
+  return AC.currentTime + Math.max(0.005, 2 * IMPACT_LEAD - peakOf(buf));
+}
 function playStep(colFrac){
   if(!AC || !buffersReady || !stepBufs.length) return;
   var buf = nextFrom("step", stepBufs);
-  playBuf(buf, clackBus, AC.currentTime + IMPACT_LEAD, 0.97 + Math.random()*0.06, 0.85 + Math.random()*0.3);
+  playBuf(buf, clackBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.85 + Math.random()*0.3);
 }
 function playFlap(){
   if(!AC || !buffersReady || !flapBufs.length) return;
-  playBuf(nextFrom("flap", flapBufs), eventBus, AC.currentTime + IMPACT_LEAD, 0.97 + Math.random()*0.06, 0.9 + Math.random()*0.25);
+  var buf = nextFrom("flap", flapBufs);
+  playBuf(buf, eventBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.9 + Math.random()*0.25);
 }
 function duck(ms){
   if(!AC) return;
@@ -1000,18 +1030,47 @@ function duck(ms){
   }, ms + 60);
 }
 
-/* Ambience bed: one looping element under everything, never paused once on */
+/* Ambience bed: one looping element under everything, never paused
+   once on. It starts and stops the way the ambience design specifies:
+   a 3 second fade-in and a 2 second fade-out, on the bed's own gain
+   node, so the ambience bus keeps carrying the level and duck settings
+   untouched and a change of bed crossfades instead of cutting. */
+var bedGain = null;
+function retireBed(){
+  var el = bedEl, g = bedGain;
+  bedEl = null; bedGain = null;
+  if(!el) return;
+  if(g && AC){
+    var t = AC.currentTime;
+    try{
+      g.gain.cancelScheduledValues(t);
+      g.gain.setValueAtTime(g.gain.value, t);
+      g.gain.linearRampToValueAtTime(0, t + 2); /* 2 s fade-out */
+    }catch(e){}
+    setTimeout(function(){
+      try{ el.pause(); }catch(e){}
+      try{ el.remove(); }catch(e){}
+      try{ g.disconnect(); }catch(e){}
+    }, 2100);
+  } else {
+    try{ el.pause(); }catch(e){}
+    try{ el.remove(); }catch(e){}
+  }
+}
 function setupBed(){
   var bedFile = null;
   BEDS.forEach(function(b){ if(b[0] === board.ambience.bed) bedFile = b[2]; });
+  retireBed();
   if(!bedFile) return;
-  if(bedEl){ bedEl.pause(); bedEl.remove(); bedEl = null; }
   if(!board.ambience.on || inQuietHours()) { applyLevels(); return; }
   bedEl = new Audio("assets/audio/beds/" + bedFile);
   bedEl.loop = true; bedEl.crossOrigin = "anonymous";
   try{
     var src = AC.createMediaElementSource(bedEl);
-    src.connect(ambBus);
+    bedGain = AC.createGain();
+    bedGain.gain.value = 0;
+    bedGain.gain.linearRampToValueAtTime(1, AC.currentTime + 3); /* 3 s fade-in */
+    src.connect(bedGain); bedGain.connect(ambBus);
   }catch(e){ bedEl.volume = 0.4; }
   bedEl.play().catch(function(){});
   applyLevels();
@@ -1052,21 +1111,43 @@ function playAnnouncement(scriptId){
     var a = new Audio(paFileFor(scriptId));
     a.crossOrigin = "anonymous";
     try{ var s = AC.createMediaElementSource(a); s.connect(paBus); }catch(e){ a.volume = 0.9; }
-    a.onended = function(){ paPlaying = false; };
-    a.onerror = function(){ paPlaying = false; };
-    a.play().catch(function(){ paPlaying = false; });
+    a.onended = paDone;
+    a.onerror = paDone;
+    a.play().catch(paDone);
   });
 }
+/* The configured interval is the pause BETWEEN announcements, so the
+   next one is scheduled from the moment this one ends. (Scheduling
+   from the start instead made the pause shrink by the announcement's
+   own length, and vanish entirely whenever a render ran longer than
+   the interval.) */
+function paDone(){
+  if(!paPlaying) return;
+  paPlaying = false;
+  var ann = board.announcements || {};
+  var lo = +ann.minSec || 420, hi = +ann.maxSec || 1200;
+  var span = Math.max(0, hi - lo);
+  nextPaAt = Date.now() + (lo + Math.random()*span) * 1000;
+}
 var nextPaAt = Date.now() + 20000, paIdx = 0;
+var wasQuiet = inQuietHours();
 setInterval(function(){
+  /* Quiet hours begin and end on their own clock: when the board
+     crosses into them the bed fades out, and when they end the bed
+     fades back in, without waiting for a board change or a publish. */
+  var qNow = inQuietHours();
+  if(AC && qNow !== wasQuiet){
+    if(qNow) retireBed();
+    else if(board.ambience.on) setupBed();
+  }
+  wasQuiet = qNow;
   if(!AC || DEMO) return;
   if(!board.announcements.on || inQuietHours() || paPlaying) return;
   if(Date.now() < nextPaAt) return;
   var rot = board.announcements.rotation && board.announcements.rotation.length
     ? board.announcements.rotation : SCRIPTS.map(function(s){ return s[0]; });
   playAnnouncement(rot[paIdx % rot.length]); paIdx++;
-  var span = Math.max(5, board.announcements.maxSec - board.announcements.minSec);
-  nextPaAt = Date.now() + (board.announcements.minSec + Math.random()*span) * 1000;
+  /* nextPaAt is set by paDone() when this announcement ends */
 }, 1000);
 
 /* ============ Quiet hours ============ */

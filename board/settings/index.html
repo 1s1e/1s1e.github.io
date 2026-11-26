@@ -7,7 +7,7 @@
 <style>
   :root{ --amber:#e8a33d; --panel:#141416; --line:#2a2b30; --ink:#f2ede1; --mut:#9a978c; }
   *{ box-sizing:border-box; }
-  body{ margin:0; background:#0a0a0b; color:var(--ink);
+  body{ margin:0; background:#0a0a0b; color:var(--ink); overflow-x: clip;
         font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
   .wrap{ max-width: 860px; margin: 0 auto; padding: 20px 16px 90px; }
   h1{ font-size: 20px; letter-spacing:.22em; text-transform: uppercase; margin: 6px 0 2px; }
@@ -16,6 +16,8 @@
       margin: 28px 0 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
   .sub{ color: var(--mut); font-size: 13px; margin-bottom: 14px; }
   .card{ background: var(--panel); border:1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .board-actions{ display:flex; gap:8px; flex-wrap: wrap; margin-top: 10px; }
+  .board-actions button{ flex: 1; min-width: 96px; }
   .board-row{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
   .board-row .name{ font-weight:700; font-size: 16px; }
   .badge{ background: var(--amber); color:#111; font-size: 11px; font-weight:700;
@@ -87,23 +89,35 @@
   .mini-note{ font-size:10px; color: var(--amber); margin-top:3px; max-width: 96px; }
   .line-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
   .line-row input[type="text"]{ flex:1; width:auto; min-width:0; }
-  /* ---- sticky miniature board preview: the demo surface ---- */
-  #preview-wrap{ position: sticky; top: 0; z-index: 55; background:#0a0a0b; padding: 8px 0; }
-  #preview{ position: relative; background:#000; border:1px solid var(--line); border-radius: 10px;
-            padding: 10px 12px; overflow: hidden; }
+  /* ---- sticky miniature board preview: the demo surface ----
+     A full width opaque black band locked to the top of the page, holding
+     a true 16:9 frame (the television's shape) with the board inside it
+     fitted exactly as the display page fits it to the television. */
+  #preview-wrap{ position: sticky; top: 0; z-index: 60; background:#000;
+                 width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+                 padding: 10px 0 12px; border-bottom: 1px solid var(--line); }
+  #preview{ position: relative; background:#000; margin: 0 auto; overflow: hidden;
+            display:flex; align-items:center; justify-content:center; border-radius: 4px; }
+  #pv-board{ padding: var(--pv-pad-y, 3px) var(--pv-pad-x, 4px); }
   #pv-head{ display:flex; justify-content: space-between; align-items: baseline; color: var(--ink);
-            font-weight: 700; letter-spacing: .18em; font-size: 13px; text-transform: uppercase; margin-bottom: 6px; }
-  #pv-head .dot{ color: var(--amber); }
-  #pv-colheads{ display:flex; color: var(--mut); font-size: 9px; letter-spacing: .22em; margin-bottom: 4px; }
+            font-weight: 700; letter-spacing: .34em; line-height: 1.1; white-space: nowrap;
+            font-size: calc(var(--pv-tile, 10px) * 1.02); text-transform: uppercase;
+            padding-bottom: calc(var(--pv-tile, 10px) * 0.32); border-bottom: 1px solid #101011;
+            margin-bottom: calc(var(--pv-tile, 10px) * 0.34); }
+  #pv-head .dot{ color: var(--amber); letter-spacing: 0; }
+  #pv-clock{ letter-spacing: .18em; font-variant-numeric: tabular-nums; }
+  #pv-colheads{ display:flex; color:#8f8c82; font-size: calc(var(--pv-tile, 10px) * 0.44);
+                line-height: 1.1; letter-spacing: .3em; font-weight: 600; text-transform: uppercase;
+                padding-bottom: calc(var(--pv-tile, 10px) * 0.22); }
   #pv-colheads .pv-cell{ align-items: flex-end; }
-  .pv-row{ display:flex; margin-bottom: var(--pv-rowgap, 2px); }
-  .pv-row:last-child{ margin-bottom: 0; }
+  .pv-row{ display:flex; padding: var(--pv-rowpad, 1px) 0; }
   .pv-cell{ display:flex; gap: var(--pv-gap, 1px); flex: none; }
-  .pv-spacer{ width: calc(var(--pv-tile, 8px) * 0.9); flex: none; }
+  .pv-spacer{ width: calc(var(--pv-tile, 8px) * 1.15); flex: none; }
   .pv-tile{ width: var(--pv-tile, 8px); height: calc(var(--pv-tile, 8px) * 1.42); flex: none;
             background: linear-gradient(#26262a 0 49%, #101012 50% 51%, #1b1b1f 51% 100%);
             color: var(--ink); display:flex; align-items:center; justify-content:center;
-            font-weight:700; font-size: calc(var(--pv-tile, 8px) * 0.62); border-radius: 2px; }
+            font-weight:700; font-size: calc(var(--pv-tile, 8px) * 0.94);
+            border-radius: calc(var(--pv-tile, 8px) * 0.09); }
   .pv-tile.hot{ color: var(--amber); }
   .pv-tile.land{ animation: pvland 120ms ease-out; }
   @keyframes pvland{ 0%{ transform: scale(1.07); } 100%{ transform: scale(1); } }
@@ -112,7 +126,7 @@
   .pvgrid .px{ border-radius: 2px; width: var(--pv-px, 10px); height: var(--pv-px, 10px); }
   .pvgrid .px.shimmer{ animation: pxflip 170ms ease-out; }
   @keyframes pxflip{ 0%{ transform: perspective(220px) rotateX(0deg); } 50%{ transform: perspective(220px) rotateX(-42deg); filter: brightness(1.35); } 100%{ transform: perspective(220px) rotateX(0deg); } }
-  #pv-foot{ display:flex; justify-content: space-between; align-items: center; margin-top: 8px;
+  #pv-foot{ display:flex; justify-content: space-between; align-items: center; margin: 8px auto 0;
             color: var(--mut); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
   #pv-sound{ min-height: 30px; padding: 4px 10px; font-size: 11px; }
   #btn-test-all.playing{ background:#1e1f23; color: var(--amber); border-color: var(--amber); }
@@ -126,17 +140,28 @@
 
   <div id="preview-wrap">
     <div id="preview">
-      <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span id="pv-clock">--:--</span></div>
-      <div id="pv-colheads"></div>
-      <div id="pv-rows"></div>
-      <div id="pv-colour"></div>
-      <div id="pv-foot"><span>Staged preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
+      <div id="pv-board">
+        <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span id="pv-clock">--:--</span></div>
+        <div id="pv-colheads"></div>
+        <div id="pv-rows"></div>
+        <div id="pv-colour"></div>
+      </div>
     </div>
+    <div id="pv-foot"><span>Staged preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
   </div>
 
   <h2>Board library</h2>
-  <div id="library"></div>
-  <button id="btn-new-board" type="button">+ New board (copy of the one being edited)</button>
+  <div class="card" id="library-card">
+    <label for="sel-board">Board</label>
+    <select id="sel-board"></select>
+    <div class="board-actions">
+      <button id="btn-make-live" type="button">Make live</button>
+      <button id="btn-rename" type="button">Rename</button>
+      <button id="btn-delete" type="button" class="danger">Delete</button>
+      <button id="btn-new-board" type="button">+ New board</button>
+    </div>
+    <div class="hint">Choosing a board loads it into the editor below. New board copies the one being edited.</div>
+  </div>
 
   <h2>Editing: <span id="editing-name"></span></h2>
 
@@ -587,9 +612,13 @@ try{
   }
 }catch(e){}
 if(!work) work = clone(live);
-var editingId = work.liveBoardId;
+var editingId = (work.demoBoardId && work.boards[work.demoBoardId]) ? work.demoBoardId : work.liveBoardId;
 function board(){ return work.boards[editingId]; }
 function saveStaged(){
+  /* The staged config names the board being edited (demoBoardId) on every
+     save, so the display's demo mode can show THAT board. Without it the
+     demo could only guess, and it guessed the live board. */
+  work.demoBoardId = editingId;
   try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(work)); stagedExists = true; }catch(e){}
   renderStatus();
   pvQueueRender();
@@ -611,38 +640,43 @@ function fillSelect(id, pairs){
 fillSelect("sel-clack", SETS); fillSelect("sel-bed", BEDS); fillSelect("sel-voice", VOICES);
 fillSelect("sel-solo", SCRIPTS.concat(LIVE_PA.map(function(l){ return [l[0], l[1]]; })));
 
-/* ---- library ---- */
+/* ---- library: one drop-down, one compact action row ----
+   Choosing a board in the menu loads it into the editor, exactly as
+   tapping Edit on its card did; the actions act on the chosen board. */
 function renderLibrary(){
-  var lib = document.getElementById("library"); lib.innerHTML = "";
+  var sel = document.getElementById("sel-board");
+  sel.innerHTML = "";
   Object.keys(work.boards).forEach(function(id){
     var b = work.boards[id];
-    var card = document.createElement("div"); card.className = "card";
-    var row = document.createElement("div"); row.className = "board-row";
-    var nm = document.createElement("span"); nm.className = "name"; nm.textContent = b.name; row.appendChild(nm);
-    if(b.type === "colour"){ var bt = document.createElement("span"); bt.className = "badge type"; bt.textContent = "Colour"; row.appendChild(bt); }
-    if(id === work.liveBoardId){ var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "Live"; row.appendChild(bd); }
-    if(id === editingId){ var bd2 = document.createElement("span"); bd2.className = "badge editing"; bd2.textContent = "Editing"; row.appendChild(bd2); }
-    function mkBtn(label, cls, fn){
-      var btn = document.createElement("button"); btn.type = "button"; btn.textContent = label;
-      if(cls) btn.className = cls; btn.addEventListener("click", fn); return btn;
-    }
-    row.appendChild(mkBtn("Edit", "", function(){ editingId = id; renderAll(); }));
-    row.appendChild(mkBtn("Make live", "", function(){ work.liveBoardId = id; saveStaged(); renderAll(); }));
-    row.appendChild(mkBtn("Rename", "", function(){
-      var n = prompt("Name for this board:", b.name);
-      if(n && n.trim()){ b.name = n.trim(); saveStaged(); renderAll(); }
-    }));
-    row.appendChild(mkBtn("Delete", "danger", function(){
-      if(Object.keys(work.boards).length <= 1){ alert("This is the only board. Create another first."); return; }
-      if(!confirm("Delete board \"" + b.name + "\"?")) return;
-      delete work.boards[id];
-      if(work.liveBoardId === id) work.liveBoardId = Object.keys(work.boards)[0];
-      if(editingId === id) editingId = work.liveBoardId;
-      saveStaged(); renderAll();
-    }));
-    card.appendChild(row); lib.appendChild(card);
+    var opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = b.name + (b.type === "colour" ? " · Colour" : "") + (id === work.liveBoardId ? " · LIVE" : "");
+    sel.appendChild(opt);
   });
+  sel.value = editingId;
+  document.getElementById("btn-make-live").disabled = editingId === work.liveBoardId;
 }
+document.getElementById("sel-board").addEventListener("change", function(e){
+  editingId = e.target.value; renderAll();
+});
+document.getElementById("btn-make-live").addEventListener("click", function(){
+  work.liveBoardId = editingId; saveStaged(); renderAll();
+});
+document.getElementById("btn-rename").addEventListener("click", function(){
+  var b = board();
+  var n = prompt("Name for this board:", b.name);
+  if(n && n.trim()){ b.name = n.trim(); saveStaged(); renderAll(); }
+});
+document.getElementById("btn-delete").addEventListener("click", function(){
+  var id = editingId, b = board();
+  if(Object.keys(work.boards).length <= 1){ alert("This is the only board. Create another first."); return; }
+  if(!confirm("Delete board \"" + b.name + "\"?")) return;
+  delete work.boards[id];
+  if(work.liveBoardId === id) work.liveBoardId = Object.keys(work.boards)[0];
+  if(work.demoBoardId === id) delete work.demoBoardId;
+  editingId = work.liveBoardId;
+  saveStaged(); renderAll();
+});
 document.getElementById("btn-new-board").addEventListener("click", function(){
   var src = board();
   var copy = clone(src);
@@ -786,10 +820,48 @@ function bindEditor(){
   if(isText) renderLines(); else if(!isColour) renderFlights();
   pvRender(true);
 }
+/* Sample lines seeded when a board is switched to a text kind while it
+   has no lines of its own: the demo board's lines for weather and news,
+   a set in the same style for art, one placeholder line for custom.
+   Lines the user has typed are never touched: seeding happens only
+   when every existing line is blank, so switching back and forth can
+   neither duplicate lines nor destroy them. */
+var ART_SAMPLE_LINES = [
+  "SAMPLE EXHIBITION · REPLACE IN SETTINGS",
+  "GALLERY ONE · SAMPLE LINE",
+  "GALLERY TWO · SAMPLE LINE",
+  "SCULPTURE COURT · SAMPLE LINE",
+  "NEW WORKS · SAMPLE LINE",
+  "PORTRAITS · SAMPLE LINE",
+  "LANDSCAPES · SAMPLE LINE",
+  "PHOTOGRAPHY · SAMPLE LINE",
+  "TEXTILES · SAMPLE LINE",
+  "CERAMICS · SAMPLE LINE",
+  "WORKS ON PAPER · SAMPLE LINE",
+  "THE READING ROOM · SAMPLE LINE",
+  "EVENING VIEWING · SAMPLE LINE",
+  "NOTICES · SAMPLE LINE"
+];
+function seedLinesForKind(b){
+  var k = b.kind;
+  if(k !== "weather" && k !== "news" && k !== "art" && k !== "custom") return;
+  var hasText = (b.lines || []).some(function(l){ return l && String(l.text || "").trim(); });
+  if(hasText) return;
+  var texts;
+  if(k === "custom") texts = ["SAMPLE LINE · REPLACE IN SETTINGS"];
+  else if(k === "art") texts = ART_SAMPLE_LINES;
+  else {
+    var demo = null;
+    demoBoards().forEach(function(d){ if(d.kind === k) demo = d; });
+    texts = demo ? demo.lines.map(function(l){ return l.text; }) : [];
+  }
+  b.lines = texts.map(function(t){ return { text: t, black: false }; });
+}
 document.getElementById("sel-kind").addEventListener("change", function(e){
   var b = board(); b.kind = e.target.value;
   if(b.kind === "arrivals") b.shows = "arrivals";
   else if(b.kind === "departures") b.shows = "departures";
+  seedLinesForKind(b);
   saveStaged(); bindEditor();
 });
 document.getElementById("inp-custom-title").addEventListener("input", function(e){
@@ -900,6 +972,7 @@ function toggleLayer(layer, id, starter){
 /* ---- the bed layer: one stream, owned by the Play toggle or by a
    five-second level test ---- */
 var bedLayer = { audio: null, gain: null, owner: null, timer: null };
+var bedFadeUntil = 0; /* while a fade-in runs, duck updates wait for it */
 function bedTargetGain(){
   var ducked = !!(layers.ann || layers.clack);
   return levelOf("bed") * (ducked ? DUCK : 1);
@@ -908,7 +981,19 @@ function updateDuck(){
   if(!bedLayer.audio) return;
   var target = bedTargetGain();
   if(bedLayer.gain && testAC){
-    try{ bedLayer.gain.gain.setTargetAtTime(target, testAC.currentTime, 0.12); }catch(e){}
+    var t = testAC.currentTime;
+    if(t < bedFadeUntil){
+      /* A duck that begins or ends during the fade-in bends the fade:
+         re-aim the same ramp, ending at the same moment, at the level
+         that now applies (ducked or full). */
+      try{
+        bedLayer.gain.gain.cancelScheduledValues(t);
+        bedLayer.gain.gain.setValueAtTime(bedLayer.gain.gain.value, t);
+        bedLayer.gain.gain.linearRampToValueAtTime(target, bedFadeUntil);
+      }catch(e){}
+      return;
+    }
+    try{ bedLayer.gain.gain.setTargetAtTime(target, t, 0.12); }catch(e){}
   } else {
     try{ bedLayer.audio.volume = Math.min(1, target); }catch(e){}
   }
@@ -919,19 +1004,41 @@ function bedStart(owner){
   var a = new Audio(AUDIO + "beds/" + bedFile()); a.loop = true;
   var g = null;
   if(ac){
-    g = ac.createGain(); g.gain.value = levelOf("bed"); g.connect(ac.destination);
+    /* 3 second fade-in on the bed's own gain, the ambience design's
+       figure; duck updates are held until it completes, then applied. */
+    g = ac.createGain(); g.gain.value = 0; g.connect(ac.destination);
+    bedFadeUntil = ac.currentTime + 3;
+    g.gain.linearRampToValueAtTime(bedTargetGain(), bedFadeUntil);
+    setTimeout(function(){ updateDuck(); }, 3200);
     try{ var src = ac.createMediaElementSource(a); src.connect(g); }
     catch(e){ a.volume = Math.min(1, levelOf("bed")); }
   } else a.volume = Math.min(1, levelOf("bed"));
   bedLayer.audio = a; bedLayer.gain = g; bedLayer.owner = owner;
-  a.play().catch(function(){ bedStop(); });
+  a.play().catch(function(){ if(bedLayer.audio === a) bedStop(); });
   updateDuck();
 }
 function bedStop(keepBtn){
   if(bedLayer.timer){ clearTimeout(bedLayer.timer); bedLayer.timer = null; }
-  if(bedLayer.audio){ try{ bedLayer.audio.pause(); }catch(e){} }
-  if(bedLayer.gain){ try{ bedLayer.gain.disconnect(); }catch(e){} }
+  var a = bedLayer.audio, g = bedLayer.gain;
   bedLayer.audio = null; bedLayer.gain = null; bedLayer.owner = null;
+  bedFadeUntil = 0;
+  if(a){
+    if(g && testAC){
+      /* 2 second fade-out on the bed's own gain, then stop the element */
+      var t = testAC.currentTime;
+      try{
+        g.gain.cancelScheduledValues(t);
+        g.gain.setValueAtTime(g.gain.value, t);
+        g.gain.linearRampToValueAtTime(0, t + 2);
+      }catch(e){}
+      setTimeout(function(){
+        try{ a.pause(); }catch(e){}
+        try{ g.disconnect(); }catch(e){}
+      }, 2100);
+    } else {
+      try{ a.pause(); }catch(e){}
+    }
+  }
   if(!keepBtn) resetLayerButtons("bed");
 }
 function bedToggle(){
@@ -992,6 +1099,27 @@ function loadSetBuffers(setName, cb){
   files.steps.forEach(function(i){ grab(AUDIO + "sets/" + setName + "/step-" + pad2(i) + ".mp3", out.steps); });
   files.flaps.forEach(function(i){ grab(AUDIO + "sets/" + setName + "/flap-" + pad2(i) + ".mp3", out.flaps); });
 }
+/* Each buffer's loudest point (its impact) is measured once, as on the
+   display page: slices cut from whole-board hall recordings peak
+   anywhere from 2 ms to 170 ms in, so each source is started early or
+   late by the difference and every impact lands on its scheduled tick,
+   the same point the display page aims at. */
+var peakCache = (typeof WeakMap === "function") ? new WeakMap() : null;
+function peakOf(buf){
+  if(!buf) return 0.045;
+  if(peakCache){
+    var hit = peakCache.get(buf);
+    if(hit !== undefined) return hit;
+  }
+  var d = buf.getChannelData(0), mi = 0, mv = 0;
+  for(var i = 0; i < d.length; i++){ var a = Math.abs(d[i]); if(a > mv){ mv = a; mi = i; } }
+  var t = mi / buf.sampleRate;
+  if(peakCache) peakCache.set(buf, t);
+  return t;
+}
+function startAligned(src, tick){
+  src.start(Math.max(tick - 0.04, tick + 0.045 - peakOf(src.buffer)));
+}
 function playCascade(sess, setName, level){
   loadSetBuffers(setName, function(bufs){
     if(layers[sess.layer] !== sess || !bufs || !bufs.steps.length) return;
@@ -1002,12 +1130,12 @@ function playCascade(sess, setName, level){
       src = ac.createBufferSource();
       src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
       src.playbackRate.value = 0.97 + Math.random() * 0.06;
-      src.connect(g); src.start(t + i * 0.055 + Math.random() * 0.02); sess.sources.push(src);
+      src.connect(g); startAligned(src, t + i * 0.055 + Math.random() * 0.02); sess.sources.push(src);
     }
     if(bufs.flaps.length){
       src = ac.createBufferSource();
       src.buffer = bufs.flaps[Math.floor(Math.random() * bufs.flaps.length)];
-      src.connect(g); src.start(t + 16 * 0.055 + 0.06); sess.sources.push(src);
+      src.connect(g); startAligned(src, t + 16 * 0.055 + 0.06); sess.sources.push(src);
     }
     sess.finishIn(16 * 55 + 1000);
   });
@@ -1138,7 +1266,6 @@ var PV_COLS = [
   {key:"gate", label:"GATE", width:4},
   {key:"remarks", label:"REMARKS", width:12}
 ];
-var PV_TEXT_COLS = 46;
 var pvB = null, pvGrid = [], pvKey = "", pvSoundOn = false, pvQueued = false;
 function pvKind(b){ return b.kind || (b.shows === "arrivals" ? "arrivals" : "departures"); }
 function pvIsText(b){ var k = pvKind(b); return k === "weather" || k === "news" || k === "art" || k === "custom"; }
@@ -1150,25 +1277,67 @@ function pvTitle(b){
   if(k === "custom") return 'THE ISLE <span class="dot">·</span> ' + pvEsc(String(b.customTitle || "CUSTOM").toUpperCase());
   return 'THE ISLE <span class="dot">·</span> ' + k.toUpperCase();
 }
-function pvFit(rows){
+/* The preview frame is a true 16:9, the television's shape, sized as
+   large as the band allows: full viewport width, its height capped at
+   about 45 percent of the viewport height. Inside the frame the board is
+   fitted with the display page's own fit logic (fitBoard and fitColour in
+   board/index.html, shared here in adapted form rather than approximated
+   anew): the frame plays the part of the television viewport, with the
+   same insets (2 percent of width at the sides, 2.5 percent of height at
+   top and bottom), the same fixed 1.42 tile aspect, the same header
+   allowance and 1.53 row pitch, the display's fullscreen board pads, and
+   the same spread of leftover height into the row padding, so a board of
+   any row count fills the frame exactly as it fills the television,
+   blank rows and all. A five flight board therefore stands in the frame
+   at the television's own proportions, never as a short strip. */
+var PV_INSET_X = 0.02, PV_INSET_Y = 0.025; /* the display's INSET_X / INSET_Y */
+var pvCols = 46; /* tiles across a text line at the current fit; the display's TEXT_COLS */
+function pvFrame(){
+  var iw = window.innerWidth, ih = window.innerHeight;
+  var maxH = Math.floor(ih * 0.45);
+  var w = Math.max(220, Math.min(iw - 20, Math.floor(maxH * 16 / 9)));
+  var h = Math.round(w * 9 / 16);
+  var frame = document.getElementById("preview");
+  frame.style.width = w + "px"; frame.style.height = h + "px";
+  document.getElementById("pv-foot").style.width = w + "px";
+  return { w: w, h: h };
+}
+function pvFit(rows, text){
+  var fr = pvFrame();
+  var iw = fr.w, ih = fr.h;
+  var units = 43 + 38 * 0.14 + 4 * 1.15; /* the display's fitBoard units across */
+  var boardW = iw * (1 - 2 * PV_INSET_X), boardH = ih * (1 - 2 * PV_INSET_Y);
+  var padX = iw * 0.006, padY = ih * 0.008; /* the display's boardPads, fullscreen */
+  var HEADER_ETC = text ? 1.85 : 2.52, PITCH = 1.53; /* the display's fitBoard metrics */
+  var wByWidth = (boardW - 2 * padX) / units;
+  var wByHeight = (boardH - 2 * padY - 2) / (HEADER_ETC + rows * PITCH);
+  var w = Math.max(2, Math.min(wByWidth, wByHeight * 0.998));
+  var rowsAvail = boardH - 2 * padY - 2 - HEADER_ETC * w;
+  var leftover = Math.max(0, rowsAvail - rows * PITCH * w);
+  var rowPad = w * 0.055 + leftover / (rows * 2);
   var wrap = document.getElementById("preview");
-  var availW = wrap.clientWidth - 24;
-  var tw = availW / 52;
-  var maxRowsH = Math.max(40, window.innerHeight * 0.33 - 118);
-  var twH = maxRowsH / (rows * 1.548);
-  tw = Math.max(3, Math.min(tw, twH));
-  wrap.style.setProperty("--pv-tile", tw + "px");
-  wrap.style.setProperty("--pv-gap", (tw * 0.14) + "px");
-  wrap.style.setProperty("--pv-rowgap", Math.max(1, tw * 0.13) + "px");
+  wrap.style.setProperty("--pv-tile", w + "px");
+  wrap.style.setProperty("--pv-gap", (w * 0.14) + "px");
+  wrap.style.setProperty("--pv-rowpad", rowPad + "px");
+  wrap.style.setProperty("--pv-pad-x", padX + "px");
+  wrap.style.setProperty("--pv-pad-y", padY + "px");
+  pvCols = Math.max(8, Math.floor(((boardW - 2 * padX) / w + 0.14) / 1.14)); /* the display's colsFit */
 }
 function pvFitColour(){
+  var fr = pvFrame();
+  var iw = fr.w, ih = fr.h;
+  var boardW = iw * (1 - 2 * PV_INSET_X), boardH = ih * (1 - 2 * PV_INSET_Y);
+  var padX = iw * 0.006, padY = ih * 0.008; /* the display's boardPads, fullscreen */
+  var tw = Math.min(84, Math.max(18, iw * 0.0205)); /* the display's fitColour header driver */
+  var headBlock = 2.52 * tw + 2;
+  var gapTotalW = (CW - 1) * 2, gapTotalH = (CH - 1) * 2;
+  var px = Math.floor(Math.min((boardW - 2 * padX - gapTotalW) / CW,
+                               (boardH - 2 * padY - headBlock - gapTotalH) / CH));
   var wrap = document.getElementById("preview");
-  var availW = wrap.clientWidth - 24;
-  var px = (availW - (CW - 1) * 2) / CW;
-  var maxH = Math.max(90, window.innerHeight * 0.33 - 118);
-  var pxH = (maxH - (CH - 1) * 2) / CH;
-  px = Math.max(3, Math.min(px, pxH));
-  wrap.style.setProperty("--pv-px", px + "px");
+  wrap.style.setProperty("--pv-px", Math.max(2, px) + "px");
+  wrap.style.setProperty("--pv-tile", tw + "px"); /* header scale only; the tile rows are hidden */
+  wrap.style.setProperty("--pv-pad-x", padX + "px");
+  wrap.style.setProperty("--pv-pad-y", padY + "px");
 }
 function pvBuildHeads(b){
   var head = document.getElementById("pv-colheads");
@@ -1192,7 +1361,7 @@ function pvBuildRows(b, text, rows){
     if(text){
       var cell = document.createElement("div"); cell.className = "pv-cell";
       var tiles = [];
-      for(var k = 0; k < PV_TEXT_COLS; k++){
+      for(var k = 0; k < pvCols; k++){
         var t = document.createElement("div"); t.className = "pv-tile"; t.textContent = " "; t.dataset.ch = " ";
         cell.appendChild(t); tiles.push(t);
       }
@@ -1221,17 +1390,17 @@ function pvRender(cascade){
   var text = pvIsText(b);
   document.getElementById("pv-colheads").style.display = text ? "none" : "";
   var rows = (b.rows === 5 || b.rows === 14) ? b.rows : 14;
-  var key = (text ? "text" : pvKind(b)) + ":" + rows;
+  pvFit(rows, text);
+  var key = (text ? "text" : pvKind(b)) + ":" + rows + ":" + (text ? pvCols : "");
   if(key !== pvKey){ pvBuildRows(b, text, rows); pvKey = key; }
-  pvFit(rows);
   var jobs = [], r, k;
   if(text){
     var lines = b.lines || [];
     for(r = 0; r < rows; r++){
       var ln = lines[r] || { text: "", black: false };
       var target = ln.black ? "" : pvCleanRaw(ln.text);
-      target = (target + " ".repeat(PV_TEXT_COLS)).slice(0, PV_TEXT_COLS);
-      for(k = 0; k < PV_TEXT_COLS; k++)
+      target = (target + " ".repeat(pvCols)).slice(0, pvCols);
+      for(k = 0; k < pvCols; k++)
         jobs.push({ tile: pvGrid[r][0][k], to: target[k], delay: r * 40 + k * 14 });
     }
   } else {
@@ -1281,7 +1450,7 @@ function pvPlayCascade(){
       src = ac.createBufferSource();
       src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
       src.playbackRate.value = 0.97 + Math.random() * 0.06;
-      src.connect(g); src.start(t + i * 0.055 + Math.random() * 0.02);
+      src.connect(g); startAligned(src, t + i * 0.055 + Math.random() * 0.02);
     }
     setTimeout(function(){ try{ g.disconnect(); }catch(e){} }, 2500);
   });
@@ -1700,7 +1869,8 @@ document.getElementById("btn-discard").addEventListener("click", function(){
   if(!confirm("Discard all staged changes and return to the live configuration?")) return;
   try{ localStorage.removeItem("isle-board-demo-v1"); }catch(e){}
   stagedExists = false;
-  work = clone(live); editingId = work.liveBoardId;
+  work = clone(live);
+  editingId = (work.demoBoardId && work.boards[work.demoBoardId]) ? work.demoBoardId : work.liveBoardId;
   renderAll();
 });
 function renderAll(){ renderLibrary(); bindEditor(); renderStatus(); }
