@@ -79,12 +79,60 @@
   .slider-row .test-btn{ min-height: 38px; padding: 7px 12px; }
   .test-btn.playing{ background: var(--amber); border-color: var(--amber); color:#141414; }
   .note-text{ font-size: 15px; line-height: 1.5; }
+  tr.black-line td input, .line-row.black-line input[type="text"]{ opacity:.45; }
+  tr.not-shown td input{ opacity:.4; }
+  td.blk{ white-space: nowrap; }
+  .black-toggle{ display:flex; align-items:center; gap:6px; font-size:11px; letter-spacing:.1em;
+                 text-transform: uppercase; color: var(--mut); cursor: pointer; margin: 0; }
+  .mini-note{ font-size:10px; color: var(--amber); margin-top:3px; max-width: 96px; }
+  .line-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+  .line-row input[type="text"]{ flex:1; width:auto; min-width:0; }
+  /* ---- sticky miniature board preview: the demo surface ---- */
+  #preview-wrap{ position: sticky; top: 0; z-index: 55; background:#0a0a0b; padding: 8px 0; }
+  #preview{ position: relative; background:#000; border:1px solid var(--line); border-radius: 10px;
+            padding: 10px 12px; overflow: hidden; }
+  #pv-head{ display:flex; justify-content: space-between; align-items: baseline; color: var(--ink);
+            font-weight: 700; letter-spacing: .18em; font-size: 13px; text-transform: uppercase; margin-bottom: 6px; }
+  #pv-head .dot{ color: var(--amber); }
+  #pv-colheads{ display:flex; color: var(--mut); font-size: 9px; letter-spacing: .22em; margin-bottom: 4px; }
+  #pv-colheads .pv-cell{ align-items: flex-end; }
+  .pv-row{ display:flex; margin-bottom: var(--pv-rowgap, 2px); }
+  .pv-row:last-child{ margin-bottom: 0; }
+  .pv-cell{ display:flex; gap: var(--pv-gap, 1px); flex: none; }
+  .pv-spacer{ width: calc(var(--pv-tile, 8px) * 0.9); flex: none; }
+  .pv-tile{ width: var(--pv-tile, 8px); height: calc(var(--pv-tile, 8px) * 1.42); flex: none;
+            background: linear-gradient(#26262a 0 49%, #101012 50% 51%, #1b1b1f 51% 100%);
+            color: var(--ink); display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size: calc(var(--pv-tile, 8px) * 0.62); border-radius: 2px; }
+  .pv-tile.hot{ color: var(--amber); }
+  .pv-tile.land{ animation: pvland 120ms ease-out; }
+  @keyframes pvland{ 0%{ transform: scale(1.07); } 100%{ transform: scale(1); } }
+  #pv-colour{ display:none; }
+  .pvgrid{ display:grid; gap: 2px; margin: 0 auto; width: fit-content; }
+  .pvgrid .px{ border-radius: 2px; width: var(--pv-px, 10px); height: var(--pv-px, 10px); }
+  .pvgrid .px.shimmer{ animation: pxflip 170ms ease-out; }
+  @keyframes pxflip{ 0%{ transform: perspective(220px) rotateX(0deg); } 50%{ transform: perspective(220px) rotateX(-42deg); filter: brightness(1.35); } 100%{ transform: perspective(220px) rotateX(0deg); } }
+  #pv-foot{ display:flex; justify-content: space-between; align-items: center; margin-top: 8px;
+            color: var(--mut); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+  #pv-sound{ min-height: 30px; padding: 4px 10px; font-size: 11px; }
+  #btn-test-all.playing{ background:#1e1f23; color: var(--amber); border-color: var(--amber); }
+
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>THE ISLE <span class="dot">·</span> FLIGHT BOARD</h1>
-  <div class="sub">Settings. Everything you change here is staged first. Demo it on this device, then push it live to the board.</div>
+  <div class="sub">Settings. Everything you change is staged and shows in the board above. Demo it full-screen on this device, then publish when you are ready.</div>
+
+  <div id="preview-wrap">
+    <div id="preview">
+      <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span id="pv-clock">--:--</span></div>
+      <div id="pv-colheads"></div>
+      <div id="pv-rows"></div>
+      <div id="pv-colour"></div>
+      <div id="pv-foot"><span>Staged preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
+    </div>
+  </div>
 
   <h2>Board library</h2>
   <div id="library"></div>
@@ -92,27 +140,83 @@
 
   <h2>Editing: <span id="editing-name"></span></h2>
 
-  <div class="card" id="shows-card">
-    <label for="sel-shows">Board shows</label>
-    <select id="sel-shows">
+  <div class="card" id="kind-card">
+    <label for="sel-kind">Board kind</label>
+    <select id="sel-kind">
       <option value="departures">Departures</option>
       <option value="arrivals">Arrivals</option>
+      <option value="weather">Weather</option>
+      <option value="news">News</option>
+      <option value="art">Art</option>
+      <option value="custom">Custom</option>
     </select>
-    <div class="hint">Arrivals boards read THE ISLE · ARRIVALS at the top, and the DESTINATION column becomes FROM.</div>
+    <div id="custom-title-row" style="display:none;">
+      <label for="inp-custom-title">Custom title</label>
+      <input type="text" id="inp-custom-title" placeholder="e.g. Regatta">
+    </div>
+    <div class="hint">Departures and Arrivals boards list flights; arrivals boards read THE ISLE · ARRIVALS at the top and the DESTINATION column becomes FROM. Weather, News, Art and Custom boards show lines of text across the full board, under the header THE ISLE · followed by the kind, or your custom title.</div>
+  </div>
+
+  <div class="card" id="size-card">
+    <label for="sel-rows">Board size</label>
+    <select id="sel-rows">
+      <option value="5">5 flights</option>
+      <option value="14">14 flights</option>
+    </select>
+    <div class="hint">The board renders exactly this many rows: extra flights are kept in the editor but not shown, and blank flap rows complete the board when fewer are listed. On a colour board the size chooses the picture canvas: 14 is the large, fine canvas and 5 is the standard, chunkier one. On a text board it is the number of lines.</div>
   </div>
 
   <div class="card" id="flights-card">
     <label>Flights</label>
     <table>
-      <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th></th></tr></thead>
+      <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th>Black</th><th></th></tr></thead>
       <tbody id="flights-body"></tbody>
     </table>
     <button id="btn-add-flight" type="button" style="margin-top:10px;">+ Add flight</button>
+    <div class="hint" id="flights-note"></div>
+  </div>
+
+  <div class="card" id="lines-card" style="display:none;">
+    <label>Lines</label>
+    <div id="lines-body"></div>
+    <div class="hint">One line per row, up to the board size. A line marked as a black line shows as a full row of blank flaps. Lines are samples until live feeds arrive with the server.</div>
+    <div class="hint" id="lines-note"></div>
   </div>
 
   <div class="card" id="colour-note" style="display:none;">
     <label>Colour board</label>
-    <div class="note-text">Colour board: the picture scene is built in; sound layers still apply if you turn them on.</div>
+    <div class="note-text">Colour board: pick a scene below; sound layers still apply if you turn them on.</div>
+  </div>
+
+  <div class="card" id="scene-card" style="display:none;">
+    <label for="sel-scene">Scene</label>
+    <select id="sel-scene">
+      <option value="walk">Walk</option>
+      <option value="menorah">Menorah</option>
+      <option value="dreidel">Dreidel</option>
+      <option value="star">Star of David</option>
+    </select>
+    <div id="night-row" style="display:none;">
+      <label for="sel-night">Night</label>
+      <select id="sel-night">
+        <option value="1">Night 1</option>
+        <option value="2">Night 2</option>
+        <option value="3">Night 3</option>
+        <option value="4">Night 4</option>
+        <option value="5">Night 5</option>
+        <option value="6">Night 6</option>
+        <option value="7">Night 7</option>
+        <option value="8">Night 8</option>
+      </select>
+      <div class="hint">That many candles are lit, plus the shamash in the middle. The rest are drawn unlit.</div>
+    </div>
+    <div class="hint">Every scene is drawn for both colour canvases, the large fine one and the standard chunky one.</div>
+  </div>
+
+  <div class="card">
+    <label>Sound</label>
+    <button type="button" id="btn-test-all" class="primary" style="width:100%;">Test all together</button>
+    <div class="hint">Bed, cascade and an announcement together, mixed as the live board plays them.</div>
   </div>
 
   <div class="card">
@@ -156,41 +260,28 @@
   </div>
 
   <div class="card">
-    <label for="sel-voice">Announcement voice</label>
-    <div class="selrow">
-      <select id="sel-voice"></select>
-      <button type="button" class="test-btn" id="btn-test-voice" data-test="voice" data-label="Test">Test</button>
-    </div>
-    <label for="sel-signal">Signal before announcements</label>
-    <div class="selrow">
-      <select id="sel-signal">
-        <option value="dong">International double dong</option>
-        <option value="cdg">CDG motif (modelled)</option>
-        <option value="none">None</option>
-      </select>
-      <button type="button" class="test-btn" id="btn-test-signal" data-test="signal" data-label="Test">Test</button>
-    </div>
-    <div class="switch-row"><span class="lab">Scheduled announcements on the board</span>
+    <label>Announcements on their own</label>
+    <label for="sel-signal">Signal</label>
+    <select id="sel-signal">
+      <option value="dong">International double dong</option>
+      <option value="cdg">CDG motif (modelled)</option>
+      <option value="none">None</option>
+    </select>
+    <label for="sel-solo">Announcement</label>
+    <select id="sel-solo"></select>
+    <label for="sel-voice">Voice</label>
+    <select id="sel-voice"></select>
+    <button id="btn-solo" type="button" class="primary" style="margin-top:12px; width:100%;">Play</button>
+    <div class="hint">The signal, then the announcement in the voice chosen. The three live recordings play in their own voices.</div>
+  </div>
+
+  <div class="card">
+    <div class="switch-row"><span class="lab">Scheduled announcements</span>
       <span class="switch"><input type="checkbox" id="sw-pa"><span class="track"></span></span></div>
     <div class="grid2">
       <div><label for="num-min">At most every (minutes)</label><input type="number" id="num-min" min="1" max="120"></div>
       <div><label for="num-max">At least every (minutes)</label><input type="number" id="num-max" min="1" max="240"></div>
     </div>
-    <div class="hint">Scheduled calls rotate through: The Isle boarding, Honolulu, Bora Bora, Phuket, The Isle final call.</div>
-  </div>
-
-  <div class="card">
-    <label for="sel-solo">Hear an announcement on its own</label>
-    <div class="selrow">
-      <select id="sel-solo"></select>
-      <button type="button" class="test-btn" id="btn-test-solo" data-test="solo-test" data-label="Test">Test</button>
-    </div>
-    <div class="hint">Test and Play both play the signal, then the announcement in the voice chosen above. The three live recordings play in their own voices.</div>
-    <button id="btn-solo" type="button" class="primary" style="margin-top:12px;">Play announcement</button>
-    <button id="btn-solo-stop" type="button" style="margin-top:12px;">Stop</button>
-  </div>
-
-  <div class="card">
     <div class="switch-row"><span class="lab">Quiet hours</span>
       <span class="switch"><input type="checkbox" id="sw-quiet"><span class="track"></span></span></div>
     <div class="grid2">
@@ -205,7 +296,7 @@
   <div id="status" class="clean"></div>
   <div class="btns">
     <button id="btn-demo" type="button">Demo on this device</button>
-    <button id="btn-push" type="button" class="primary">Push live</button>
+    <button id="btn-push" type="button" class="primary">Publish to live board</button>
     <button id="btn-discard" type="button" class="danger">Discard</button>
   </div>
 </div></div>
@@ -248,7 +339,7 @@ function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
 
 /* ============ Demo library: seed + merge (keep in step with display page) ============ */
-var SEED_VERSION = 3;
+var SEED_VERSION = 6;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -266,7 +357,7 @@ function nineFlights(){
 function demoBoards(){
   return [
     {
-      id: "board-terminal-one", name: "Terminal One", type: "departures", shows: "departures",
+      id: "board-terminal-one", name: "Terminal One", type: "departures", kind: "departures", shows: "departures", rows: 14,
       flights: nineFlights(),
       clackSet: "pragotron",
       ambience: { on:true, bed:"rdu",
@@ -276,7 +367,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", shows: "departures",
+      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", kind: "departures", shows: "departures", rows: 14,
       flights: [
         {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
         {time:"08:40", destination:"FRANKFURT", flight:"LH 903",  gate:"14", remarks:"ON TIME"},
@@ -296,7 +387,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", shows: "departures",
+      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", kind: "departures", shows: "departures", rows: 5,
       flights: [
         {time:"17:40", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"ON TIME"},
         {time:"18:25", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
@@ -312,7 +403,7 @@ function demoBoards(){
       quietHours: { on:true, start:"22:00", end:"07:00" }
     },
     {
-      id: "board-arrivals", name: "Arrivals", type: "departures", shows: "arrivals",
+      id: "board-arrivals", name: "Arrivals", type: "departures", kind: "arrivals", shows: "arrivals", rows: 5,
       flights: [
         {time:"07:55", destination:"MIAMI",     flight:"IS 809",  gate:"7",  remarks:"LANDED"},
         {time:"08:10", destination:"MIAMI",     flight:"AA 2240", gate:"C3", remarks:"LANDED"},
@@ -328,7 +419,95 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-colour", name: "Colour Board", type: "colour",
+      id: "board-weather", name: "Weather", type: "departures", kind: "weather", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THE ISLE \u00b7 CLEAR \u00b7 84 F", black:false},
+        {text:"WIND \u00b7 SE 8 KT", black:false},
+        {text:"TIDE \u00b7 HIGH 6 42 PM", black:false},
+        {text:"SUNSET \u00b7 5 31 PM", black:false},
+        {text:"TOMORROW \u00b7 SUN \u00b7 85 F", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-news", name: "News", type: "departures", kind: "news", rows: 14,
+      flights: [],
+      lines: [
+        {text:"SAMPLE HEADLINE \u00b7 REPLACE IN SETTINGS", black:false},
+        {text:"WORLD \u00b7 SAMPLE LINE", black:false},
+        {text:"MARKETS \u00b7 SAMPLE LINE", black:false},
+        {text:"WEATHER \u00b7 SAMPLE LINE", black:false},
+        {text:"SPORT \u00b7 SAMPLE LINE", black:false},
+        {text:"TRAVEL \u00b7 SAMPLE LINE", black:false},
+        {text:"LOCAL \u00b7 SAMPLE LINE", black:false},
+        {text:"SCIENCE \u00b7 SAMPLE LINE", black:false},
+        {text:"ARTS \u00b7 SAMPLE LINE", black:false},
+        {text:"BUSINESS \u00b7 SAMPLE LINE", black:false},
+        {text:"TECH \u00b7 SAMPLE LINE", black:false},
+        {text:"FOOD \u00b7 SAMPLE LINE", black:false},
+        {text:"EVENTS \u00b7 SAMPLE LINE", black:false},
+        {text:"NOTICES \u00b7 SAMPLE LINE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.55, announcements:0.85, clack:0.75 } },
+      voice: "isabella", signal: "dong",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-north-shore", name: "North Shore", type: "departures", kind: "custom", customTitle: "NORTH SHORE", rows: 14,
+      flights: [],
+      lines: [
+        {text:"PIPELINE · EHUKAI BEACH", black:false},
+        {text:"TIDE HIGH 5 12 AM · 2 1 FT", black:false},
+        {text:"TIDE LOW 11 40 AM · 0 4 FT", black:false},
+        {text:"TIDE HIGH 5 58 PM · 1 9 FT", black:false},
+        {text:"", black:true},
+        {text:"SWELL NW 8 FT AT 14 SEC", black:false},
+        {text:"SETS TO 12 FT FACES", black:false},
+        {text:"WIND ENE 10 KT · LIGHT", black:false},
+        {text:"WATER 79 F", black:false},
+        {text:"", black:true},
+        {text:"WAIMEA BAY · SWELL NW 10 FT", black:false},
+        {text:"SUNSET BEACH · NW 8 FT", black:false},
+        {text:"SUNSET 5 48 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-colour", name: "Colour Board", type: "colour", rows: 14, scene: "walk",
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-menorah", name: "Menorah", type: "colour", rows: 14, scene: "menorah", night: 8,
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-dreidel", name: "Dreidel", type: "colour", rows: 5, scene: "dreidel",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -344,8 +523,9 @@ function mergeSeeds(cfg){
   if(!cfg.boards || typeof cfg.boards !== "object") cfg.boards = {};
   var wasEmpty = Object.keys(cfg.boards).length === 0;
   var changed = false;
+  var demos = demoBoards();
   if((cfg.seedVersion || 0) < SEED_VERSION){
-    demoBoards().forEach(function(sb){
+    demos.forEach(function(sb){
       var nameTaken = Object.keys(cfg.boards).some(function(id){ return cfg.boards[id].name === sb.name; });
       if(nameTaken) return;
       if(cfg.boards[sb.id]){ sb.id = sb.id + "-seed"; }
@@ -353,9 +533,25 @@ function mergeSeeds(cfg){
     });
     cfg.seedVersion = SEED_VERSION; changed = true;
   }
+  /* Field fill-ins for boards stored before rows/kind existed: a board whose
+     name matches a demo board takes that demo's row count; anything else
+     defaults to 14. User boards and their edits are never overwritten. */
   Object.keys(cfg.boards).forEach(function(id){
     var b = cfg.boards[id];
-    if(b && !b.type){ b.type = "departures"; changed = true; }
+    if(!b) return;
+    if(!b.type){ b.type = "departures"; changed = true; }
+    if(b.rows !== 5 && b.rows !== 14){
+      var demo = null;
+      demos.forEach(function(d){ if(d.name === b.name) demo = d; });
+      b.rows = demo && demo.rows ? demo.rows : 14; changed = true;
+    }
+    if(b.type !== "colour" && !b.kind){
+      b.kind = b.shows === "arrivals" ? "arrivals" : "departures"; changed = true;
+    }
+    if(b.type === "colour" && !b.scene){ b.scene = "walk"; changed = true; }
+    if(b.type === "colour" && !(b.night >= 1 && b.night <= 8)){ b.night = 8; changed = true; }
+    if(!b.flights){ b.flights = []; changed = true; }
+    if(!b.lines){ b.lines = []; changed = true; }
   });
   if(!cfg.liveBoardId || !cfg.boards[cfg.liveBoardId]){
     cfg.liveBoardId = (wasEmpty && cfg.boards["board-terminal-one"])
@@ -396,13 +592,14 @@ function board(){ return work.boards[editingId]; }
 function saveStaged(){
   try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(work)); stagedExists = true; }catch(e){}
   renderStatus();
+  pvQueueRender();
 }
 function renderStatus(){
   var el = document.getElementById("status");
   var dirty = stagedExists && JSON.stringify(work) !== JSON.stringify(live);
-  if(dirty){ el.textContent = "Staged changes are waiting. Demo them, then push live."; el.className = ""; }
+  if(dirty){ el.textContent = "Staged changes are showing in the board above. Nothing is live until you publish."; el.className = ""; }
   else if(stagedExists){ el.textContent = "Staged copy matches the live board."; el.className = "clean"; }
-  else { el.textContent = "No staged changes. You are looking at the live configuration."; el.className = "clean"; }
+  else { el.textContent = "No staged changes. The board above matches the live board."; el.className = "clean"; }
   document.getElementById("btn-discard").disabled = !stagedExists;
 }
 
@@ -456,10 +653,33 @@ document.getElementById("btn-new-board").addEventListener("click", function(){
 });
 
 /* ---- editor ---- */
+function rowsOf(b){ return (b.rows === 5 || b.rows === 14) ? b.rows : 14; }
+function kindOf(b){
+  if(b.type === "colour") return "colour";
+  return b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
+}
+function blackToggle(on, label, fn){
+  var lab = document.createElement("label"); lab.className = "black-toggle";
+  var sw = document.createElement("span"); sw.className = "switch";
+  var inp = document.createElement("input"); inp.type = "checkbox"; inp.checked = !!on;
+  var track = document.createElement("span"); track.className = "track";
+  sw.appendChild(inp); sw.appendChild(track);
+  inp.addEventListener("change", function(){ fn(inp.checked); });
+  lab.appendChild(sw);
+  var txt = document.createElement("span"); txt.textContent = label; lab.appendChild(txt);
+  return lab;
+}
+
 function renderFlights(){
+  var b = board();
+  var limit = rowsOf(b);
   var tb = document.getElementById("flights-body"); tb.innerHTML = "";
-  board().flights.forEach(function(f, idx){
+  b.flights.forEach(function(f, idx){
     var tr = document.createElement("tr");
+    var cls = [];
+    if(f.black) cls.push("black-line");
+    if(idx >= limit) cls.push("not-shown");
+    tr.className = cls.join(" ");
     ["time","destination","flight","gate","remarks"].forEach(function(key){
       var td = document.createElement("td");
       var inp = document.createElement("input"); inp.type = "text"; inp.value = f[key] || "";
@@ -467,12 +687,61 @@ function renderFlights(){
       inp.addEventListener("input", function(){ board().flights[idx][key] = inp.value; saveStaged(); });
       td.appendChild(inp); tr.appendChild(td);
     });
+    var tdb = document.createElement("td"); tdb.className = "blk";
+    tdb.appendChild(blackToggle(!!f.black, "Black", function(on){
+      board().flights[idx].black = on; saveStaged(); renderFlights();
+    }));
+    tr.appendChild(tdb);
     var td = document.createElement("td"); td.className = "del";
-    var del = document.createElement("button"); del.type = "button"; del.textContent = "×"; del.className = "danger";
+    var del = document.createElement("button"); del.type = "button"; del.textContent = "\u00d7"; del.className = "danger";
     del.addEventListener("click", function(){ board().flights.splice(idx, 1); saveStaged(); renderFlights(); });
-    td.appendChild(del); tr.appendChild(td);
+    td.appendChild(del);
+    if(idx >= limit){
+      var note = document.createElement("div"); note.className = "mini-note";
+      note.textContent = "Not shown on a " + limit + " flight board";
+      td.appendChild(note);
+    }
+    tr.appendChild(td);
     tb.appendChild(tr);
   });
+  var noteEl = document.getElementById("flights-note");
+  if(b.flights.length > limit)
+    noteEl.textContent = "Only the first " + limit + " flights are shown on this board. The rest stay here, kept in order.";
+  else if(b.flights.length < limit){
+    var n = limit - b.flights.length;
+    noteEl.textContent = n + " blank row" + (n === 1 ? "" : "s") + " will complete the board.";
+  } else noteEl.textContent = "";
+}
+function renderLines(){
+  var b = board();
+  var limit = rowsOf(b);
+  if(!b.lines) b.lines = [];
+  while(b.lines.length < limit) b.lines.push({ text:"", black:false });
+  var wrap = document.getElementById("lines-body"); wrap.innerHTML = "";
+  for(var i = 0; i < limit; i++){
+    (function(idx){
+      var ln = b.lines[idx];
+      var row = document.createElement("div");
+      row.className = "line-row" + (ln.black ? " black-line" : "");
+      var inp = document.createElement("input"); inp.type = "text"; inp.value = ln.text || "";
+      inp.placeholder = "Line " + (idx + 1);
+      inp.addEventListener("input", function(){ ln.text = inp.value; saveStaged(); updateLinesNote(); });
+      row.appendChild(inp);
+      row.appendChild(blackToggle(!!ln.black, "Black line", function(on){
+        ln.black = on; saveStaged(); renderLines();
+      }));
+      wrap.appendChild(row);
+    })(i);
+  }
+  updateLinesNote();
+}
+function updateLinesNote(){
+  var b = board(); if(!b.lines) return;
+  var over = [];
+  b.lines.forEach(function(ln, i){ if(!ln.black && String(ln.text || "").length > 46) over.push(i + 1); });
+  document.getElementById("lines-note").textContent = over.length
+    ? "Line" + (over.length > 1 ? "s " : " ") + over.join(", ") + " run past the board's width and will be shortened to fit."
+    : "";
 }
 document.getElementById("btn-add-flight").addEventListener("click", function(){
   board().flights.push({time:"", destination:"", flight:"", gate:"", remarks:"ON TIME"});
@@ -480,12 +749,24 @@ document.getElementById("btn-add-flight").addEventListener("click", function(){
 });
 function bindEditor(){
   var b = board();
+  if(boundBoardId !== null && boundBoardId !== b.id) stopAllTestLayers(); /* leaving a board stops its tests, bed included */
+  boundBoardId = b.id;
   document.getElementById("editing-name").textContent = b.name;
   var isColour = b.type === "colour";
-  document.getElementById("shows-card").style.display = isColour ? "none" : "";
-  document.getElementById("sel-shows").value = b.shows === "arrivals" ? "arrivals" : "departures";
-  document.getElementById("flights-card").style.display = isColour ? "none" : "";
+  var kind = kindOf(b);
+  var isText = !isColour && kind !== "departures" && kind !== "arrivals";
+  document.getElementById("kind-card").style.display = isColour ? "none" : "";
+  document.getElementById("sel-kind").value = isColour ? "departures" : kind;
+  document.getElementById("custom-title-row").style.display = kind === "custom" ? "" : "none";
+  document.getElementById("inp-custom-title").value = b.customTitle || "";
+  document.getElementById("sel-rows").value = String(rowsOf(b));
+  document.getElementById("flights-card").style.display = (!isColour && !isText) ? "" : "none";
+  document.getElementById("lines-card").style.display = isText ? "" : "none";
   document.getElementById("colour-note").style.display = isColour ? "" : "none";
+  document.getElementById("scene-card").style.display = isColour ? "" : "none";
+  document.getElementById("sel-scene").value = b.scene || "walk";
+  document.getElementById("night-row").style.display = (isColour && (b.scene || "walk") === "menorah") ? "" : "none";
+  document.getElementById("sel-night").value = String((b.night >= 1 && b.night <= 8) ? Math.floor(b.night) : 8);
   document.getElementById("sel-clack").value = b.clackSet;
   document.getElementById("sw-amb").checked = !!b.ambience.on;
   document.getElementById("sel-bed").value = b.ambience.bed;
@@ -502,9 +783,27 @@ function bindEditor(){
   document.getElementById("sw-quiet").checked = !!b.quietHours.on;
   document.getElementById("time-start").value = b.quietHours.start;
   document.getElementById("time-end").value = b.quietHours.end;
-  renderFlights();
+  if(isText) renderLines(); else if(!isColour) renderFlights();
+  pvRender(true);
 }
-document.getElementById("sel-shows").addEventListener("change", function(e){ board().shows = e.target.value; saveStaged(); });
+document.getElementById("sel-kind").addEventListener("change", function(e){
+  var b = board(); b.kind = e.target.value;
+  if(b.kind === "arrivals") b.shows = "arrivals";
+  else if(b.kind === "departures") b.shows = "departures";
+  saveStaged(); bindEditor();
+});
+document.getElementById("inp-custom-title").addEventListener("input", function(e){
+  board().customTitle = e.target.value; saveStaged();
+});
+document.getElementById("sel-rows").addEventListener("change", function(e){
+  board().rows = +e.target.value; saveStaged(); bindEditor();
+});
+document.getElementById("sel-scene").addEventListener("change", function(e){
+  board().scene = e.target.value; saveStaged(); bindEditor();
+});
+document.getElementById("sel-night").addEventListener("change", function(e){
+  board().night = +e.target.value; saveStaged();
+});
 document.getElementById("sel-clack").addEventListener("change", function(e){ board().clackSet = e.target.value; saveStaged(); });
 document.getElementById("sw-amb").addEventListener("change", function(e){ board().ambience.on = e.target.checked; saveStaged(); });
 document.getElementById("sel-bed").addEventListener("change", function(e){ board().ambience.bed = e.target.value; saveStaged(); });
@@ -512,6 +811,7 @@ document.getElementById("sel-bed").addEventListener("change", function(e){ board
   document.getElementById("rng-" + k).addEventListener("input", function(e){
     board().ambience.levels[k] = e.target.value / 100;
     document.getElementById("val-" + k).textContent = e.target.value + "%";
+    if(k === "bed") updateDuck(); /* a running bed test follows its slider, duck included */
     saveStaged();
   });
 });
@@ -529,31 +829,42 @@ document.getElementById("time-start").addEventListener("change", function(e){ bo
 document.getElementById("time-end").addEventListener("change", function(e){ board().quietHours.end = e.target.value || "07:00"; saveStaged(); });
 
 /* ---- per-option test player ----
-   Every Test button plays its own sound on its own, at the level set by the
-   relevant slider, independent of the ambience switch and of the live board.
-   Starting any test stops whatever test (or solo play) is still running;
-   pressing the running test's button again stops it. */
+   Tests layer like the live board, in three independent layers:
+   - bed: the Play toggle's looping terminal bed. It keeps playing while
+     other tests run; it is stopped only by its own toggle or by leaving
+     the board being edited.
+   - announcements: the announcement, voice, signal and solo tests.
+     Starting one stops the previous announcement test, never the bed.
+   - clack: the cascade and events tests. Starting one stops the
+     previous cascade test, never the bed.
+   While an announcement or a cascade plays over the bed, the bed ducks
+   to 40 percent of its set level, the depth the live board uses under
+   an announcement, and comes back up when that layer ends. Every test
+   plays at the level set by the relevant slider, independent of the
+   ambience switch and of the live board. */
 var testAC = null;
 function testCtx(){
   if(!testAC){ try{ testAC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
   if(testAC && testAC.state === "suspended") testAC.resume();
   return testAC;
 }
-var testSession = null;
-function resetTestButtons(){
-  document.querySelectorAll(".test-btn").forEach(function(btn){
-    btn.textContent = btn.dataset.label; btn.classList.remove("playing");
-  });
-}
-function stopTests(){
-  if(testSession){ var s = testSession; testSession = null; try{ s.teardown(); }catch(e){} }
-  resetTestButtons();
-}
-function startSession(id){
-  stopTests();
+var DUCK = 0.4; /* the live board's duck depth under announcements and cascades */
+var layers = { ann: null, clack: null };
+var boundBoardId = null;
+var LAYER_BTNS = {
+  bed: ["bed", "level-bed"],
+  ann: ["level-announcements"],
+  clack: ["clack-set", "level-clack", "level-events"]
+};
+function setBtn(id, playing){
   var btn = document.querySelector('.test-btn[data-test="' + id + '"]');
-  if(btn){ btn.textContent = "Stop"; btn.classList.add("playing"); }
-  var sess = { id: id, audios: [], sources: [], timers: [], gains: [] };
+  if(btn){ btn.textContent = playing ? "Stop" : btn.dataset.label; btn.classList.toggle("playing", !!playing); }
+}
+function resetLayerButtons(layer){
+  (LAYER_BTNS[layer] || []).forEach(function(id){ setBtn(id, false); });
+}
+function makeSession(layer, id){
+  var sess = { layer: layer, id: id, audios: [], sources: [], timers: [], gains: [] };
   sess.teardown = function(){
     sess.timers.forEach(function(t){ clearTimeout(t); });
     sess.audios.forEach(function(a){ try{ a.pause(); }catch(e){} });
@@ -561,15 +872,95 @@ function startSession(id){
     sess.gains.forEach(function(g){ try{ g.disconnect(); }catch(e){} });
   };
   sess.finishIn = function(ms){
-    sess.timers.push(setTimeout(function(){ if(testSession === sess) stopTests(); }, ms));
+    sess.timers.push(setTimeout(function(){ if(layers[layer] === sess) stopLayer(layer); }, ms));
   };
-  testSession = sess;
   return sess;
 }
-function toggleTest(id, starter){
-  if(testSession && testSession.id === id){ stopTests(); return; }
-  stopSolo();
-  starter(startSession(id));
+function stopLayer(layer){
+  var sess = layers[layer];
+  if(sess){ layers[layer] = null; try{ sess.teardown(); }catch(e){} }
+  resetLayerButtons(layer);
+  if(layer === "ann") syncSoloBtn();
+  updateDuck();
+  if(sess && sess.onDone){ try{ sess.onDone(); }catch(e){} }
+}
+function startLayer(layer, id, starter){
+  stopLayer(layer);
+  var sess = makeSession(layer, id);
+  layers[layer] = sess;
+  setBtn(id, true);
+  if(layer === "ann") syncSoloBtn();
+  updateDuck();
+  starter(sess);
+}
+function toggleLayer(layer, id, starter){
+  if(layers[layer] && layers[layer].id === id){ stopLayer(layer); return; }
+  startLayer(layer, id, starter);
+}
+/* ---- the bed layer: one stream, owned by the Play toggle or by a
+   five-second level test ---- */
+var bedLayer = { audio: null, gain: null, owner: null, timer: null };
+function bedTargetGain(){
+  var ducked = !!(layers.ann || layers.clack);
+  return levelOf("bed") * (ducked ? DUCK : 1);
+}
+function updateDuck(){
+  if(!bedLayer.audio) return;
+  var target = bedTargetGain();
+  if(bedLayer.gain && testAC){
+    try{ bedLayer.gain.gain.setTargetAtTime(target, testAC.currentTime, 0.12); }catch(e){}
+  } else {
+    try{ bedLayer.audio.volume = Math.min(1, target); }catch(e){}
+  }
+}
+function bedStart(owner){
+  bedStop(true);
+  var ac = testCtx();
+  var a = new Audio(AUDIO + "beds/" + bedFile()); a.loop = true;
+  var g = null;
+  if(ac){
+    g = ac.createGain(); g.gain.value = levelOf("bed"); g.connect(ac.destination);
+    try{ var src = ac.createMediaElementSource(a); src.connect(g); }
+    catch(e){ a.volume = Math.min(1, levelOf("bed")); }
+  } else a.volume = Math.min(1, levelOf("bed"));
+  bedLayer.audio = a; bedLayer.gain = g; bedLayer.owner = owner;
+  a.play().catch(function(){ bedStop(); });
+  updateDuck();
+}
+function bedStop(keepBtn){
+  if(bedLayer.timer){ clearTimeout(bedLayer.timer); bedLayer.timer = null; }
+  if(bedLayer.audio){ try{ bedLayer.audio.pause(); }catch(e){} }
+  if(bedLayer.gain){ try{ bedLayer.gain.disconnect(); }catch(e){} }
+  bedLayer.audio = null; bedLayer.gain = null; bedLayer.owner = null;
+  if(!keepBtn) resetLayerButtons("bed");
+}
+function bedToggle(){
+  if(bedLayer.owner === "toggle"){ bedStop(); return; }
+  if(bedLayer.audio){ /* a level test is running the bed: take ownership of it */
+    allOwnsBed = false;
+    bedLayer.owner = "toggle";
+    if(bedLayer.timer){ clearTimeout(bedLayer.timer); bedLayer.timer = null; }
+    setBtn("level-bed", false); setBtn("bed", true);
+    return;
+  }
+  bedStart("toggle");
+  setBtn("bed", true);
+}
+function bedLevelTest(){
+  if(bedLayer.owner === "toggle"){
+    /* the toggle's bed is already playing at exactly this slider's level;
+       just show the test running */
+    setBtn("level-bed", true);
+    setTimeout(function(){ if(bedLayer.owner === "toggle") setBtn("level-bed", false); }, 5000);
+    return;
+  }
+  if(bedLayer.owner !== "test") bedStart("test");
+  if(bedLayer.timer) clearTimeout(bedLayer.timer);
+  setBtn("level-bed", true);
+  bedLayer.timer = setTimeout(function(){ if(bedLayer.owner === "test") bedStop(); }, 5000);
+}
+function stopAllTestLayers(){
+  stopLayer("ann"); stopLayer("clack"); bedStop();
 }
 function playElement(sess, url, gainVal, loop){
   var ac = testCtx();
@@ -581,7 +972,7 @@ function playElement(sess, url, gainVal, loop){
     catch(e){ a.volume = Math.min(1, gainVal); }
   } else a.volume = Math.min(1, gainVal);
   sess.audios.push(a);
-  a.play().catch(function(){ if(testSession === sess) stopTests(); });
+  a.play().catch(function(){ if(layers[sess.layer] === sess) stopLayer(sess.layer); });
   return a;
 }
 var setBufCache = {};
@@ -603,7 +994,7 @@ function loadSetBuffers(setName, cb){
 }
 function playCascade(sess, setName, level){
   loadSetBuffers(setName, function(bufs){
-    if(testSession !== sess || !bufs || !bufs.steps.length) return;
+    if(layers[sess.layer] !== sess || !bufs || !bufs.steps.length) return;
     var ac = testCtx(); if(!ac) return;
     var g = ac.createGain(); g.gain.value = level; g.connect(ac.destination); sess.gains.push(g);
     var t = ac.currentTime + 0.05, i, src;
@@ -642,7 +1033,7 @@ function playSignal(sess, kind, level, done){
   }
   if(kind === "cdg") [1318.5, 1046.5, 783.99, 1046.5].forEach(function(f, i){ toneFn(f, t + i * 0.22, 0.5, 0.22); });
   else { toneFn(830.61, t, 0.7, 0.25); toneFn(622.25, t + 0.28, 0.9, 0.25); }
-  if(done) sess.timers.push(setTimeout(function(){ if(testSession === sess) done(); }, signalDuration(kind) * 1000));
+  if(done) sess.timers.push(setTimeout(function(){ if(layers[sess.layer] === sess) done(); }, signalDuration(kind) * 1000));
 }
 function paFileFor(scriptId){
   for(var i = 0; i < LIVE_PA.length; i++) if(LIVE_PA[i][0] === scriptId) return LIVE_PA[i][2];
@@ -651,9 +1042,9 @@ function paFileFor(scriptId){
 function playPa(sess, withSignal){
   var level = board().ambience.levels.announcements;
   var go = function(){
-    if(testSession !== sess) return;
+    if(layers[sess.layer] !== sess) return;
     var a = playElement(sess, AUDIO + "pa/" + paFileFor(document.getElementById("sel-solo").value), level, false);
-    a.onended = function(){ if(testSession === sess) stopTests(); };
+    a.onended = function(){ if(layers[sess.layer] === sess) stopLayer(sess.layer); };
     sess.finishIn(90000); /* safety stop */
   };
   if(withSignal && board().signal !== "none") playSignal(sess, board().signal, level, go);
@@ -668,77 +1059,628 @@ function bedFile(){
 document.querySelectorAll(".test-btn").forEach(function(btn){
   btn.addEventListener("click", function(){
     var id = btn.dataset.test;
-    toggleTest(id, function(sess){
-      if(id === "clack-set" || id === "level-clack"){
-        playCascade(sess, board().clackSet, levelOf("clack"));
-      } else if(id === "bed"){
-        playElement(sess, AUDIO + "beds/" + bedFile(), levelOf("bed"), true);
-      } else if(id === "level-bed"){
-        playElement(sess, AUDIO + "beds/" + bedFile(), levelOf("bed"), true);
-        sess.finishIn(5000);
-      } else if(id === "level-events"){
+    if(id === "bed"){ bedToggle(); return; }
+    if(id === "level-bed"){ bedLevelTest(); return; }
+    if(id === "clack-set" || id === "level-clack"){
+      toggleLayer("clack", id, function(sess){ playCascade(sess, board().clackSet, levelOf("clack")); });
+    } else if(id === "level-events"){
+      toggleLayer("clack", id, function(sess){
         /* no footsteps/suitcase sample is in the library; the ngruber cascade wash stands in */
         var a = playElement(sess, AUDIO + "bed-ngruber.mp3", levelOf("events"), false);
-        a.onended = function(){ if(testSession === sess) stopTests(); };
+        a.onended = function(){ if(layers.clack === sess) stopLayer("clack"); };
         sess.finishIn(6000);
-      } else if(id === "level-announcements" || id === "voice"){
-        playPa(sess, false);
-      } else if(id === "signal"){
-        playSignal(sess, board().signal, levelOf("announcements"), null);
-        sess.finishIn(signalDuration(board().signal) * 1000 + 400);
-      } else if(id === "solo-test"){
-        playPa(sess, true);
-      }
-    });
+      });
+    } else if(id === "level-announcements"){
+      toggleLayer("ann", id, function(sess){ playPa(sess, false); });
+    }
   });
 });
 
-/* ---- solo audition (kept; shares the stage with the test player) ---- */
-var soloAC = null, soloAudio = null;
-function stopSolo(){
-  if(soloAudio){ try{ soloAudio.pause(); soloAudio.currentTime = 0; }catch(e){} }
-}
-function soloCtx(){
-  if(!soloAC){ try{ soloAC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
-  if(soloAC && soloAC.state === "suspended") soloAC.resume();
-  return soloAC;
-}
-function soloTone(freq, t0, dur, gain, dest){
-  var o = soloAC.createOscillator(), g = soloAC.createGain();
-  o.type = "sine"; o.frequency.value = freq;
-  g.gain.setValueAtTime(0, t0);
-  g.gain.linearRampToValueAtTime(gain, t0 + 0.02);
-  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  o.connect(g); g.connect(dest); o.start(t0); o.stop(t0 + dur + 0.05);
-}
-function soloSignal(kind){
-  var ac = soloCtx(); if(!ac || kind === "none") return Promise.resolve();
-  var master = ac.createGain(); master.gain.value = board().ambience.levels.announcements; master.connect(ac.destination);
-  var t = ac.currentTime + 0.05, dur;
-  if(kind === "cdg"){
-    [1318.5, 1046.5, 783.99, 1046.5].forEach(function(f, i){ soloTone(f, t + i*0.22, 0.5, 0.22, master); });
-    dur = 4 * 0.22 + 0.55;
-  }else{
-    soloTone(830.61, t, 0.7, 0.25, master); soloTone(622.25, t + 0.28, 0.9, 0.25, master);
-    dur = 1.35;
-  }
-  return new Promise(function(res){ setTimeout(res, dur * 1000); });
+/* ---- announcements on their own: one Play in the announcement layer,
+   so it plays over a running bed test and ducks it, like the tests ---- */
+function syncSoloBtn(){
+  var btn = document.getElementById("btn-solo");
+  if(btn) btn.textContent = (layers.ann && layers.ann.id === "solo") ? "Stop" : "Play";
 }
 document.getElementById("btn-solo").addEventListener("click", function(){
-  stopTests();
-  var id = document.getElementById("sel-solo").value;
-  var file = null;
-  LIVE_PA.forEach(function(l){ if(l[0] === id) file = l[2]; });
-  if(!file) file = id + "--" + board().voice + ".mp3";
-  soloSignal(board().signal).then(function(){
-    if(soloAudio){ soloAudio.pause(); }
-    soloAudio = new Audio(AUDIO + "pa/" + file);
-    soloAudio.play().catch(function(){});
+  if(layers.ann && layers.ann.id === "solo"){ stopLayer("ann"); return; }
+  startLayer("ann", "solo", function(sess){ playPa(sess, true); });
+});
+
+/* ---- Test all together: the live board's mix in one tap. The bed at
+   its level, a full cascade in the selected set, and the signal plus
+   the selected announcement in the selected voice over the ducked bed.
+   Pressing it again (or the announcement ending) stops all three. ---- */
+var allTogether = false, allOwnsBed = false;
+function setAllBtn(){
+  var btn = document.getElementById("btn-test-all");
+  btn.textContent = allTogether ? "Stop all" : "Test all together";
+  btn.classList.toggle("playing", allTogether);
+}
+function testAllStop(){
+  if(!allTogether) return;
+  allTogether = false;
+  stopLayer("ann"); stopLayer("clack");
+  if(allOwnsBed){ allOwnsBed = false; bedStop(); }
+  setAllBtn();
+}
+document.getElementById("btn-test-all").addEventListener("click", function(){
+  if(allTogether){ testAllStop(); return; }
+  allTogether = true; setAllBtn();
+  allOwnsBed = !bedLayer.audio;
+  if(allOwnsBed) bedStart("all");
+  startLayer("clack", "all-cascade", function(sess){ playCascade(sess, board().clackSet, levelOf("clack")); });
+  startLayer("ann", "all-pa", function(sess){
+    sess.onDone = function(){ testAllStop(); };
+    playPa(sess, true);
   });
 });
-document.getElementById("btn-solo-stop").addEventListener("click", function(){
-  stopTests(); stopSolo();
+
+/* ---- miniature board preview: the demo surface ----
+   Renders the staged board (the same staged data Demo on this device
+   uses) at the top of the page, locked in place while the controls
+   scroll under it. Every staged edit re-renders it with its cascade.
+   It is a viewer, not an editor; its one control is its own sound. */
+var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
+function ringIdx(ch){ var i = RING.indexOf(ch); return i < 0 ? 0 : i; }
+function pvEsc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function pvCleanRaw(text){
+  text = String(text == null ? "" : text).toUpperCase();
+  var out = "";
+  for(var i = 0; i < text.length; i++) out += RING.indexOf(text[i]) >= 0 ? text[i] : " ";
+  return out;
+}
+function pvClean(text, len){ var out = pvCleanRaw(text); return (out + " ".repeat(len)).slice(0, len); }
+var PV_COLS = [
+  {key:"time", label:"TIME", width:5},
+  {key:"destination", label:"DESTINATION", width:14},
+  {key:"flight", label:"FLIGHT", width:8},
+  {key:"gate", label:"GATE", width:4},
+  {key:"remarks", label:"REMARKS", width:12}
+];
+var PV_TEXT_COLS = 46;
+var pvB = null, pvGrid = [], pvKey = "", pvSoundOn = false, pvQueued = false;
+function pvKind(b){ return b.kind || (b.shows === "arrivals" ? "arrivals" : "departures"); }
+function pvIsText(b){ var k = pvKind(b); return k === "weather" || k === "news" || k === "art" || k === "custom"; }
+function pvTitle(b){
+  var k = b.type === "colour" ? "colour" : pvKind(b);
+  if(k === "colour") return 'THE ISLE <span class="dot">·</span> COLOUR BOARD';
+  if(k === "arrivals") return 'THE ISLE <span class="dot">·</span> ARRIVALS';
+  if(k === "departures") return 'THE ISLE <span class="dot">·</span> DEPARTURES';
+  if(k === "custom") return 'THE ISLE <span class="dot">·</span> ' + pvEsc(String(b.customTitle || "CUSTOM").toUpperCase());
+  return 'THE ISLE <span class="dot">·</span> ' + k.toUpperCase();
+}
+function pvFit(rows){
+  var wrap = document.getElementById("preview");
+  var availW = wrap.clientWidth - 24;
+  var tw = availW / 52;
+  var maxRowsH = Math.max(40, window.innerHeight * 0.33 - 118);
+  var twH = maxRowsH / (rows * 1.548);
+  tw = Math.max(3, Math.min(tw, twH));
+  wrap.style.setProperty("--pv-tile", tw + "px");
+  wrap.style.setProperty("--pv-gap", (tw * 0.14) + "px");
+  wrap.style.setProperty("--pv-rowgap", Math.max(1, tw * 0.13) + "px");
+}
+function pvFitColour(){
+  var wrap = document.getElementById("preview");
+  var availW = wrap.clientWidth - 24;
+  var px = (availW - (CW - 1) * 2) / CW;
+  var maxH = Math.max(90, window.innerHeight * 0.33 - 118);
+  var pxH = (maxH - (CH - 1) * 2) / CH;
+  px = Math.max(3, Math.min(px, pxH));
+  wrap.style.setProperty("--pv-px", px + "px");
+}
+function pvBuildHeads(b){
+  var head = document.getElementById("pv-colheads");
+  head.innerHTML = "";
+  PV_COLS.forEach(function(c, i){
+    if(i){ var s = document.createElement("div"); s.className = "pv-spacer"; head.appendChild(s); }
+    var cell = document.createElement("div"); cell.className = "pv-cell";
+    cell.style.width = "calc(var(--pv-tile) * " + c.width + " + var(--pv-gap) * " + (c.width - 1) + ")";
+    var sp = document.createElement("span");
+    sp.textContent = (i === 1 && pvKind(b) === "arrivals") ? "FROM" : c.label;
+    cell.appendChild(sp); head.appendChild(cell);
+  });
+}
+function pvBuildRows(b, text, rows){
+  var host = document.getElementById("pv-rows");
+  host.innerHTML = ""; pvGrid = [];
+  pvBuildHeads(b);
+  for(var r = 0; r < rows; r++){
+    var rowEl = document.createElement("div"); rowEl.className = "pv-row";
+    var gridRow = [];
+    if(text){
+      var cell = document.createElement("div"); cell.className = "pv-cell";
+      var tiles = [];
+      for(var k = 0; k < PV_TEXT_COLS; k++){
+        var t = document.createElement("div"); t.className = "pv-tile"; t.textContent = " "; t.dataset.ch = " ";
+        cell.appendChild(t); tiles.push(t);
+      }
+      rowEl.appendChild(cell); gridRow.push(tiles);
+    } else {
+      PV_COLS.forEach(function(c, ci){
+        if(ci){ var s = document.createElement("div"); s.className = "pv-spacer"; rowEl.appendChild(s); }
+        var cell2 = document.createElement("div"); cell2.className = "pv-cell";
+        var tiles2 = [];
+        for(var k2 = 0; k2 < c.width; k2++){
+          var t2 = document.createElement("div"); t2.className = "pv-tile"; t2.textContent = " "; t2.dataset.ch = " ";
+          cell2.appendChild(t2); tiles2.push(t2);
+        }
+        rowEl.appendChild(cell2); gridRow.push(tiles2);
+      });
+    }
+    host.appendChild(rowEl); pvGrid.push(gridRow);
+  }
+}
+function pvRender(cascade){
+  var b = board(); pvB = b;
+  document.getElementById("pv-title").innerHTML = pvTitle(b);
+  if(b.type === "colour"){ showColour(); return; }
+  stopColour();
+  document.getElementById("pv-rows").style.display = "";
+  var text = pvIsText(b);
+  document.getElementById("pv-colheads").style.display = text ? "none" : "";
+  var rows = (b.rows === 5 || b.rows === 14) ? b.rows : 14;
+  var key = (text ? "text" : pvKind(b)) + ":" + rows;
+  if(key !== pvKey){ pvBuildRows(b, text, rows); pvKey = key; }
+  pvFit(rows);
+  var jobs = [], r, k;
+  if(text){
+    var lines = b.lines || [];
+    for(r = 0; r < rows; r++){
+      var ln = lines[r] || { text: "", black: false };
+      var target = ln.black ? "" : pvCleanRaw(ln.text);
+      target = (target + " ".repeat(PV_TEXT_COLS)).slice(0, PV_TEXT_COLS);
+      for(k = 0; k < PV_TEXT_COLS; k++)
+        jobs.push({ tile: pvGrid[r][0][k], to: target[k], delay: r * 40 + k * 14 });
+    }
+  } else {
+    var fl = b.flights || [];
+    for(r = 0; r < rows; r++){
+      var f = fl[r] || null;
+      PV_COLS.forEach(function(c, ci){
+        var target2 = (!f || f.black) ? "" : pvClean(f[c.key], c.width);
+        target2 = (target2 + " ".repeat(c.width)).slice(0, c.width);
+        for(var k2 = 0; k2 < c.width; k2++){
+          var tile = pvGrid[r][ci][k2];
+          if(ci === 4) tile.classList.toggle("hot", !!(f && !f.black && /FINAL|DELAY|CANCEL/.test(f.remarks || "")));
+          jobs.push({ tile: tile, to: target2[k2], delay: r * 40 + ci * 60 + k2 * 14 });
+        }
+      });
+    }
+  }
+  var anySteps = false;
+  jobs.forEach(function(j){
+    var from = j.tile.dataset.ch || " ";
+    var steps = (ringIdx(j.to) - ringIdx(from) + RING.length) % RING.length;
+    if(!cascade) steps = 0;
+    if(steps > 0) anySteps = true;
+    if(steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
+    setTimeout(function(){
+      var pos = ringIdx(from), remaining = steps;
+      var iv = setInterval(function(){
+        pos = (pos + 1) % RING.length;
+        j.tile.textContent = RING[pos];
+        if(--remaining <= 0){
+          clearInterval(iv);
+          j.tile.dataset.ch = j.to;
+          j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
+        }
+      }, 85);
+    }, j.delay);
+  });
+  if(cascade && anySteps && pvSoundOn) pvPlayCascade();
+}
+function pvPlayCascade(){
+  loadSetBuffers(board().clackSet, function(bufs){
+    if(!bufs || !bufs.steps.length || !pvSoundOn) return;
+    var ac = testCtx(); if(!ac) return;
+    var g = ac.createGain(); g.gain.value = levelOf("clack"); g.connect(ac.destination);
+    var t = ac.currentTime + 0.05, i, src;
+    for(i = 0; i < 14; i++){
+      src = ac.createBufferSource();
+      src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+      src.playbackRate.value = 0.97 + Math.random() * 0.06;
+      src.connect(g); src.start(t + i * 0.055 + Math.random() * 0.02);
+    }
+    setTimeout(function(){ try{ g.disconnect(); }catch(e){} }, 2500);
+  });
+}
+function pvQueueRender(){
+  if(pvQueued) return; pvQueued = true;
+  setTimeout(function(){ pvQueued = false; pvRender(true); }, 80);
+}
+document.getElementById("pv-sound").addEventListener("click", function(){
+  pvSoundOn = !pvSoundOn;
+  this.textContent = pvSoundOn ? "Preview sound: on" : "Preview sound: off";
+  if(pvSoundOn) pvRender(true);
 });
+setInterval(function(){
+  var d = new Date();
+  document.getElementById("pv-clock").textContent =
+    (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+}, 1000);
+window.addEventListener("resize", function(){ pvRender(false); });
+
+/* ============ Colour board scenes ============ */
+/* Every scene is drawn into a virtual 192x108 pixel field and sampled
+   down to whichever grid the board size selects (5: 48x27 chunky tiles,
+   14: 64x36 finer tiles), so each scene is the same picture at both
+   sizes. Scenes: walk, menorah, dreidel, star. Silent by default. */
+var VW = 192, VH = 108, VGY = 88; /* virtual field; ground line at VGY */
+var CW = 48, CH = 27, builtCW = 0, builtCH = 0;
+var SKY = "#5c94fc", CLOUD = "#fcfcfc", HILL = "#00a800", HILL_DARK = "#008000",
+    SUN = "#ffd94d", SUN_IN = "#ffe98a", BIRD = "#1c2f4a",
+    GROUND_TOP = "#d97b29", GROUND = "#a34d0d", GROUND_DARK = "#7c3806",
+    CAP = "#e7402e", SKIN = "#ffc7a1", EYE = "#202020", OVERALL = "#2b4bd8",
+    SHOE = "#8a4b08", SHELL = "#00a800", SHELL_LT = "#7ec850",
+    DARK = "#0d1120", GOLD = "#d9a441", GOLD_LT = "#f2c14e", CANDLE = "#f2ede1",
+    FLAME_O = "#ff9d2e", FLAME_Y = "#ffd94d", FLAME_C = "#fff3b0";
+var WALK_COLORS = { r: CAP, s: SKIN, e: EYE, b: OVERALL, h: SHOE };
+var WALK_A = [
+  "....rrrrrr....",
+  "...rrrrrrrrrr.",
+  "...ssssssss...",
+  "...seessees...",
+  "....ssssss....",
+  ".....ssss.....",
+  "..rrbbbbbbbr..",
+  ".rrrbbbbbbbrr.",
+  "....bbbbbb....",
+  "....bbbbbb....",
+  "....bb...bb...",
+  "...bb.....bb..",
+  "...bb......bb.",
+  "..bb........bb",
+  "..hh........hh",
+  ".hhh........hh"
+];
+var WALK_B = [
+  "....rrrrrr....",
+  "...rrrrrrrrrr.",
+  "...ssssssss...",
+  "...seessees...",
+  "....ssssss....",
+  ".....ssss.....",
+  "..rrbbbbbbbr..",
+  ".rrrbbbbbbbrr.",
+  "....bbbbbb....",
+  "....bbbbbb....",
+  "....bb...bb...",
+  "..bb......bb..",
+  ".bb........bb.",
+  "bb..........bb",
+  "hh..........hh",
+  "hhh.........hh"
+];
+var SHELL_COLORS = { l: SHELL_LT, w: "#fcfcfc", g: SHELL };
+var SHELL_MAP = [
+  "...llllll...",
+  ".llwwwwwwll.",
+  ".lggggggggl.",
+  "lggggggggggl",
+  "lggggggggggl",
+  ".gggggggggg.",
+  "..gggggggg.."
+];
+/* Simple pixel glyphs for the dreidel faces, 7 wide x 9 tall */
+var GLYPHS = {
+  nun: [
+    "0111110",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100100",
+    "0101000",
+    "0110000",
+    "0100000",
+    "0100000"
+  ],
+  gimmel: [
+    "0111110",
+    "0000010",
+    "0000010",
+    "0000110",
+    "0001010",
+    "0010010",
+    "0100010",
+    "0100010",
+    "0100010"
+  ],
+  hey: [
+    "0111110",
+    "0000010",
+    "0000010",
+    "0111110",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100010"
+  ],
+  shin: [
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0011100",
+    "0001000",
+    "0011100"
+  ]
+};
+var DREIDEL_LETTERS = ["nun", "gimmel", "hey", "shin"];
+var colourEl = document.getElementById("pv-colour");
+var pxEls = [], pxState = [], colourTimer = null, anim = null;
+function colourDims(){
+  if(pvB.rows === 14){ CW = 64; CH = 36; } else { CW = 48; CH = 27; }
+}
+function freshScene(){ return { t:0, mx:-24, shellX:80, shellV:0, shellKickT:-99 }; }
+function buildColour(){
+  colourEl.innerHTML = ""; pxEls = []; pxState = [];
+  var grid = document.createElement("div"); grid.className = "pvgrid";
+  grid.style.gridTemplateColumns = "repeat(" + CW + ", var(--pv-px))";
+  for(var i=0;i<CW*CH;i++){
+    var d = document.createElement("div"); d.className = "px"; d.style.background = SKY;
+    grid.appendChild(d); pxEls.push(d); pxState.push(SKY);
+  }
+  colourEl.appendChild(grid);
+  builtCW = CW; builtCH = CH;
+  if(!anim) anim = freshScene();
+}
+function field(bg){
+  var vf = new Array(VW * VH);
+  for(var i = 0; i < vf.length; i++) vf[i] = bg;
+  return vf;
+}
+function vput(vf, cx, cy, col){ if(cx >= 0 && cx < VW && cy >= 0 && cy < VH) vf[cy * VW + cx] = col; }
+function vrect(vf, x0, y0, w, h, col){
+  for(var yy = y0; yy < y0 + h; yy++) for(var xx = x0; xx < x0 + w; xx++) vput(vf, xx, yy, col);
+}
+function vcircle(vf, cx, cy, r, col){
+  for(var yy = cy - r; yy <= cy + r; yy++) for(var xx = cx - r; xx <= cx + r; xx++)
+    if((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) <= r * r) vput(vf, xx, yy, col);
+}
+function vellipse(vf, cx, cy, rx, ry, col){
+  for(var yy = cy - ry; yy <= cy + ry; yy++) for(var xx = cx - rx; xx <= cx + rx; xx++){
+    var dx = (xx - cx) / rx, dy = (yy - cy) / ry;
+    if(dx * dx + dy * dy <= 1) vput(vf, xx, yy, col);
+  }
+}
+function vline(vf, x0, y0, x1, y1, col, r){
+  var steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+  for(var s2 = 0; s2 <= steps; s2++){
+    var px = Math.round(x0 + (x1 - x0) * s2 / steps), py = Math.round(y0 + (y1 - y0) * s2 / steps);
+    for(var yy = -r; yy <= r; yy++) for(var xx = -r; xx <= r; xx++) vput(vf, px + xx, py + yy, col);
+  }
+}
+function stamp(vf, map, colors, x0, y0){
+  for(var yy = 0; yy < map.length; yy++){
+    var rowStr = map[yy];
+    for(var xx = 0; xx < rowStr.length; xx++){
+      var col = colors[rowStr[xx]];
+      if(col) vput(vf, x0 + xx, y0 + yy, col);
+    }
+  }
+}
+function hash2(a, b){ var x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); }
+/* Shared backdrop for the outdoor scenes: sky, sun, birds, hills, ground */
+function buildBackdrop(t){
+  var vf = field(SKY);
+  var x, y;
+  vcircle(vf, 172, 14, 7, SUN); vcircle(vf, 172, 14, 4, SUN_IN);
+  [18, 27].forEach(function(by, bi){
+    var bx = Math.floor(((t * 0.5 + bi * 70) % (VW + 24)) - 12);
+    vput(vf, bx, by, BIRD); vput(vf, bx - 2, by - 1, BIRD); vput(vf, bx + 2, by - 1, BIRD);
+  });
+  function hill(x0, x1, peak){
+    var mid = (x0 + x1) / 2, half = (x1 - x0) / 2;
+    for(x = x0; x <= x1; x++){
+      var q = (x - mid) / half;
+      var h = Math.max(0, Math.round(peak * (1 - q * q)));
+      for(y = 0; y < h; y++) vput(vf, x, VGY - 1 - y, x > mid ? HILL_DARK : HILL);
+    }
+  }
+  hill(12, 52, 12); hill(116, 164, 8);
+  for(x = 0; x < VW; x++){
+    vput(vf, x, VGY, GROUND_TOP);
+    for(y = VGY + 1; y < VH; y++) vput(vf, x, y, ((x * 7 + y * 13) % 9 === 0) ? GROUND_DARK : GROUND);
+  }
+  function cloud(cx, cy){
+    vellipse(vf, cx, cy, 16, 4, CLOUD); vellipse(vf, cx - 8, cy + 1, 10, 3, CLOUD);
+    vellipse(vf, cx + 8, cy + 1, 11, 3, CLOUD); vellipse(vf, cx, cy - 3, 9, 3, CLOUD);
+  }
+  var drift = t * 0.12;
+  function wrapX(base){ return ((base - drift) % (VW + 48) + (VW + 48)) % (VW + 48) - 24; }
+  cloud(Math.floor(wrapX(28)), 12);
+  cloud(Math.floor(wrapX(120)), 22);
+  return vf;
+}
+function drawWalk(){
+  var s = anim, t = s.t;
+  var vf = buildBackdrop(t);
+  var hop = (t - s.shellKickT) < 3 && s.shellKickT >= 0 ? -3 : 0;
+  stamp(vf, SHELL_MAP, SHELL_COLORS, Math.round(s.shellX), VGY - 7 + hop);
+  stamp(vf, Math.floor(t / 2) % 2 === 0 ? WALK_A : WALK_B, WALK_COLORS, Math.round(s.mx), VGY - 16);
+  return vf;
+}
+/* Menorah: nine branches on a dark ground, gold arms, the shamash taller
+   in the middle. Night n lights the shamash plus the n candles placed
+   from the right; the rest are drawn unlit. Flames flicker per frame. */
+function drawMenorah(){
+  var vf = field(DARK);
+  var t = anim.t;
+  var night = (pvB.night >= 1 && pvB.night <= 8) ? Math.floor(pvB.night) : 8;
+  var cx = 96, topY = 38, shamY = 28, baseY = 90;
+  var i, bx;
+  /* arms: a rising curve from the central stem to each branch */
+  for(i = 0; i < 9; i++){
+    if(i === 4) continue;
+    bx = cx + (i - 4) * 16;
+    for(var s2 = 0; s2 <= 24; s2++){
+      var f = s2 / 24;
+      var px = Math.round(cx + (bx - cx) * f);
+      var py = Math.round(76 - (76 - (topY + 6)) * Math.pow(f, 1.6));
+      vrect(vf, px - 1, py - 1, 3, 3, GOLD);
+    }
+    vrect(vf, bx - 1, topY + 2, 3, 6, GOLD); /* branch neck */
+  }
+  /* central stem and stepped base */
+  vrect(vf, cx - 1, shamY + 2, 3, baseY - shamY, GOLD);
+  vrect(vf, cx - 9, baseY, 19, 3, GOLD);
+  vrect(vf, cx - 14, baseY + 3, 29, 3, GOLD);
+  vrect(vf, cx - 19, baseY + 6, 39, 2, GOLD);
+  vrect(vf, cx - 19, baseY + 6, 39, 1, GOLD_LT);
+  /* candles, cups and flames: night n lights the shamash plus the n
+     candles placed from the right (order 8,7,6,5,3,2,1,0) */
+  var placeOrder = [8, 7, 6, 5, 3, 2, 1, 0];
+  var litSet = { 4: true };
+  for(var oi = 0; oi < night; oi++) litSet[placeOrder[oi]] = true;
+  for(i = 0; i < 9; i++){
+    bx = cx + (i - 4) * 16;
+    var cTop = (i === 4) ? shamY : topY;
+    vrect(vf, bx - 2, cTop, 5, 2, GOLD_LT); /* cup */
+    vrect(vf, bx - 1, cTop - 7, 3, 7, CANDLE); /* candle */
+    vput(vf, bx, cTop - 8, EYE); /* wick */
+    var lit = !!litSet[i];
+    if(lit){
+      var fl = Math.floor(t / 2);
+      var hgt = 4 + Math.floor(hash2(i, fl) * 3); /* 4..6 */
+      var lean = Math.floor(hash2(i, fl + 40) * 3) - 1;
+      for(var fy = 0; fy < hgt; fy++){
+        var wdt = fy === hgt - 1 ? 1 : (fy === 0 ? 2 : 3);
+        var fx = bx + (fy >= hgt - 2 ? lean : 0);
+        vrect(vf, fx - Math.floor(wdt / 2), cTop - 9 - fy, wdt, 1, fy < 2 ? FLAME_O : FLAME_Y);
+      }
+      vput(vf, bx, cTop - 10, FLAME_C);
+      vput(vf, bx, cTop - 11, FLAME_C);
+    }
+  }
+  return vf;
+}
+/* Dreidel: spinning on the ground line; its body squeezes as it turns and
+   the face cycles nun, gimmel, hey, shin. */
+function drawDreidel(){
+  var vf = buildBackdrop(anim.t);
+  var t = anim.t;
+  var cx = 96, tipY = VGY - 1;
+  var phase = t * 0.22;
+  var squeeze = 0.45 + 0.55 * Math.abs(Math.cos(phase));
+  var bodyW = Math.max(10, Math.round(30 * squeeze));
+  var bodyH = 25, tipH = 10;
+  var bob = Math.round(Math.sin(t * 0.3) * 1);
+  var bodyTop = tipY - tipH - bodyH + bob;
+  var x0 = cx - Math.floor(bodyW / 2);
+  /* handle and knob */
+  vrect(vf, cx - 3, bodyTop - 6 + bob, 6, 6, GOLD);
+  vrect(vf, cx - 5, bodyTop - 8 + bob, 10, 2, GOLD_LT);
+  /* body with gold trim */
+  vrect(vf, x0, bodyTop, bodyW, bodyH, OVERALL);
+  vrect(vf, x0, bodyTop, bodyW, 2, GOLD_LT);
+  vrect(vf, x0, bodyTop + bodyH - 2, bodyW, 2, GOLD_LT);
+  /* tip: triangle down to the ground line */
+  for(var yy = 0; yy < tipH; yy++){
+    var w2 = Math.max(1, Math.round(bodyW * 0.6 * (1 - yy / tipH)));
+    vrect(vf, cx - Math.floor(w2 / 2), bodyTop + bodyH + yy, w2, 1, GOLD);
+  }
+  /* the letter facing the viewer, when the face is wide enough to hold
+     it; strokes drawn 3 thick on a 2 stride so they survive sampling */
+  if(bodyW >= 20){
+    var glyph = GLYPHS[DREIDEL_LETTERS[Math.floor(t / 7) % 4]];
+    var gx = cx - 7, gy = bodyTop + 3;
+    for(var ry = 0; ry < glyph.length; ry++)
+      for(var rx = 0; rx < glyph[ry].length; rx++)
+        if(glyph[ry][rx] === "1") vrect(vf, gx + rx * 2, gy + ry * 2, 3, 3, CLOUD);
+  }
+  return vf;
+}
+/* Star of David: two gold triangles on a dark ground, with a highlight
+   travelling from point to point. */
+function drawStar(){
+  var vf = field(DARK);
+  var cx = 96, cy = 55, R = 37, k;
+  var pts = [];
+  for(k = 0; k < 6; k++){
+    var a = -Math.PI / 2 + k * Math.PI / 3;
+    pts.push([Math.round(cx + R * Math.cos(a)), Math.round(cy + R * Math.sin(a))]);
+  }
+  function tri(p, q, r){ vline(vf, p[0], p[1], q[0], q[1], GOLD, 1); vline(vf, q[0], q[1], r[0], r[1], GOLD, 1); vline(vf, r[0], r[1], p[0], p[1], GOLD, 1); }
+  tri(pts[0], pts[2], pts[4]);
+  tri(pts[1], pts[3], pts[5]);
+  var idx = Math.floor(anim.t / 6) % 6;
+  vcircle(vf, pts[idx][0], pts[idx][1], 4, SUN_IN);
+  vcircle(vf, pts[idx][0], pts[idx][1], 2, FLAME_C);
+  var idx2 = (idx + 1) % 6;
+  vcircle(vf, pts[idx2][0], pts[idx2][1], 2, GOLD_LT);
+  return vf;
+}
+function drawScene(){
+  var sc = pvB.scene || "walk";
+  var vf = sc === "menorah" ? drawMenorah()
+         : sc === "dreidel" ? drawDreidel()
+         : sc === "star" ? drawStar()
+         : drawWalk();
+  commitField(vf, (sc === "menorah" || sc === "star") ? DARK : SKY);
+}
+/* Sample the virtual field down to the grid by plurality vote per block
+   among non-background colours, so small features (flames, glyphs, the
+   walker's cap) survive at the chunkier grid; changing tiles shimmer. */
+function commitField(vf, bg){
+  var bw = VW / CW, bh = VH / CH;
+  for(var gy = 0; gy < CH; gy++){
+    for(var gx = 0; gx < CW; gx++){
+      var counts = {}, best = bg, bestN = 0;
+      for(var byy = 0; byy < bh; byy++){
+        for(var bxx = 0; bxx < bw; bxx++){
+          var c = vf[(gy * bh + byy) * VW + gx * bw + bxx];
+          if(c === bg) continue;
+          var n = (counts[c] || 0) + 1; counts[c] = n;
+          if(n > bestN){ best = c; bestN = n; }
+        }
+      }
+      var col2 = best;
+      var idx = gy * CW + gx;
+      if(col2 !== pxState[idx]){
+        pxState[idx] = col2;
+        pxEls[idx].style.background = col2;
+        if(col2 !== bg && Math.random() < 0.3){
+          pxEls[idx].classList.remove("shimmer"); void pxEls[idx].offsetWidth; pxEls[idx].classList.add("shimmer");
+        }
+      }
+    }
+  }
+}
+function stepScene(){
+  var s = anim; s.t++;
+  if((pvB.scene || "walk") === "walk"){
+    s.mx += 1.8;
+    /* kick when the walker's front reaches a resting shell */
+    if(s.shellV <= 0.05 && s.mx + 14 >= s.shellX - 1 && s.mx + 14 < s.shellX + 6 && s.shellX < VW - 16){
+      s.shellV = 8.8; s.shellKickT = s.t;
+    }
+    if(s.shellV > 0.05){
+      s.shellX += s.shellV; s.shellV *= 0.96;
+      if(s.shellX > VW - 14){ s.shellX = VW - 14; s.shellV = 0; }
+    }
+    if(s.mx > VW + 16){ var keep = s.t; anim = freshScene(); anim.t = keep; }
+  }
+  drawScene();
+}
+function showColour(){
+  colourDims();
+  document.getElementById("pv-rows").style.display = "none";
+  document.getElementById("pv-colheads").style.display = "none";
+  colourEl.style.display = "block";
+  pvFitColour();
+  if(builtCW !== CW || builtCH !== CH || !pxEls.length) buildColour();
+  drawScene();
+  if(!colourTimer) colourTimer = setInterval(stepScene, 110);
+}
+function stopColour(){
+  if(colourTimer){ clearInterval(colourTimer); colourTimer = null; }
+  colourEl.style.display = "none";
+}
 
 /* ---- workflow bar ---- */
 document.getElementById("btn-demo").addEventListener("click", function(){

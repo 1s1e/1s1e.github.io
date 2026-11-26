@@ -105,22 +105,23 @@
     font-size: 13px; padding: 6px 16px 6px 19px; border-radius: 4px; display:none; z-index: 40;
   }
   #chrome{
-    position: fixed; right: 18px; bottom: 16px; display:flex; gap:10px; align-items:center; z-index: 40;
+    position: fixed; right: 2vw; bottom: 16px; display:flex; gap:10px; align-items:center; z-index: 40;
   }
   #chrome button{
     background: rgba(20,20,22,.85); color:#cfccc2; border:1px solid #33343a;
     font: 600 12px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing:.14em;
-    padding: 10px 14px; border-radius: 6px; cursor: pointer; text-transform: uppercase;
+    height: 34px; padding: 0 14px; border-radius: 6px; cursor: pointer; text-transform: uppercase;
   }
   #chrome button:hover{ color:#fff; border-color:#55565e; }
   #sound-hint{
-    position: fixed; left: 18px; bottom: 16px; z-index: 40;
+    position: fixed; left: 2vw; bottom: 16px; height: 34px; z-index: 40;
+    display:flex; align-items:center;
     color:#7d7a70; font-size: 12px; letter-spacing:.18em; text-transform: uppercase;
   }
   @media (max-width: 760px){
-    #chrome{ bottom: 46px; }
-    #chrome button{ padding: 8px 10px; font-size: 11px; }
-    #sound-hint{ font-size: 10px; }
+    #chrome{ gap: 6px; }
+    #chrome button{ height: 30px; padding: 0 8px; font-size: 10px; letter-spacing: .1em; }
+    #sound-hint{ height: 30px; font-size: 9px; letter-spacing: .1em; }
   }
 </style>
 </head>
@@ -179,7 +180,7 @@ var SET_FILES = {
 function pad2(n){ return String(n).padStart(2,"0"); }
 
 /* ============ Demo library: seed + merge (keep in step with settings) ============ */
-var SEED_VERSION = 3;
+var SEED_VERSION = 6;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -197,7 +198,7 @@ function nineFlights(){
 function demoBoards(){
   return [
     {
-      id: "board-terminal-one", name: "Terminal One", type: "departures", shows: "departures",
+      id: "board-terminal-one", name: "Terminal One", type: "departures", kind: "departures", shows: "departures", rows: 14,
       flights: nineFlights(),
       clackSet: "pragotron",
       ambience: { on:true, bed:"rdu",
@@ -207,7 +208,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", shows: "departures",
+      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", kind: "departures", shows: "departures", rows: 14,
       flights: [
         {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
         {time:"08:40", destination:"FRANKFURT", flight:"LH 903",  gate:"14", remarks:"ON TIME"},
@@ -227,7 +228,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", shows: "departures",
+      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", kind: "departures", shows: "departures", rows: 5,
       flights: [
         {time:"17:40", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"ON TIME"},
         {time:"18:25", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
@@ -243,7 +244,7 @@ function demoBoards(){
       quietHours: { on:true, start:"22:00", end:"07:00" }
     },
     {
-      id: "board-arrivals", name: "Arrivals", type: "departures", shows: "arrivals",
+      id: "board-arrivals", name: "Arrivals", type: "departures", kind: "arrivals", shows: "arrivals", rows: 5,
       flights: [
         {time:"07:55", destination:"MIAMI",     flight:"IS 809",  gate:"7",  remarks:"LANDED"},
         {time:"08:10", destination:"MIAMI",     flight:"AA 2240", gate:"C3", remarks:"LANDED"},
@@ -259,7 +260,95 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-colour", name: "Colour Board", type: "colour",
+      id: "board-weather", name: "Weather", type: "departures", kind: "weather", rows: 5,
+      flights: [],
+      lines: [
+        {text:"THE ISLE \u00b7 CLEAR \u00b7 84 F", black:false},
+        {text:"WIND \u00b7 SE 8 KT", black:false},
+        {text:"TIDE \u00b7 HIGH 6 42 PM", black:false},
+        {text:"SUNSET \u00b7 5 31 PM", black:false},
+        {text:"TOMORROW \u00b7 SUN \u00b7 85 F", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.35, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-news", name: "News", type: "departures", kind: "news", rows: 14,
+      flights: [],
+      lines: [
+        {text:"SAMPLE HEADLINE \u00b7 REPLACE IN SETTINGS", black:false},
+        {text:"WORLD \u00b7 SAMPLE LINE", black:false},
+        {text:"MARKETS \u00b7 SAMPLE LINE", black:false},
+        {text:"WEATHER \u00b7 SAMPLE LINE", black:false},
+        {text:"SPORT \u00b7 SAMPLE LINE", black:false},
+        {text:"TRAVEL \u00b7 SAMPLE LINE", black:false},
+        {text:"LOCAL \u00b7 SAMPLE LINE", black:false},
+        {text:"SCIENCE \u00b7 SAMPLE LINE", black:false},
+        {text:"ARTS \u00b7 SAMPLE LINE", black:false},
+        {text:"BUSINESS \u00b7 SAMPLE LINE", black:false},
+        {text:"TECH \u00b7 SAMPLE LINE", black:false},
+        {text:"FOOD \u00b7 SAMPLE LINE", black:false},
+        {text:"EVENTS \u00b7 SAMPLE LINE", black:false},
+        {text:"NOTICES \u00b7 SAMPLE LINE", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"manchester",
+                  levels:{ bed:0.4, events:0.55, announcements:0.85, clack:0.75 } },
+      voice: "isabella", signal: "dong",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-north-shore", name: "North Shore", type: "departures", kind: "custom", customTitle: "NORTH SHORE", rows: 14,
+      flights: [],
+      lines: [
+        {text:"PIPELINE · EHUKAI BEACH", black:false},
+        {text:"TIDE HIGH 5 12 AM · 2 1 FT", black:false},
+        {text:"TIDE LOW 11 40 AM · 0 4 FT", black:false},
+        {text:"TIDE HIGH 5 58 PM · 1 9 FT", black:false},
+        {text:"", black:true},
+        {text:"SWELL NW 8 FT AT 14 SEC", black:false},
+        {text:"SETS TO 12 FT FACES", black:false},
+        {text:"WIND ENE 10 KT · LIGHT", black:false},
+        {text:"WATER 79 F", black:false},
+        {text:"", black:true},
+        {text:"WAIMEA BAY · SWELL NW 10 FT", black:false},
+        {text:"SUNSET BEACH · NW 8 FT", black:false},
+        {text:"SUNSET 5 48 PM", black:false}
+      ],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"kualalumpur",
+                  levels:{ bed:0.3, events:0.5, announcements:0.85, clack:0.7 } },
+      voice: "aria", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-colour", name: "Colour Board", type: "colour", rows: 14, scene: "walk",
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-menorah", name: "Menorah", type: "colour", rows: 14, scene: "menorah", night: 8,
+      flights: [],
+      clackSet: "pragotron",
+      ambience: { on:false, bed:"manchester",
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0 } },
+      voice: "isabella", signal: "none",
+      announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-dreidel", name: "Dreidel", type: "colour", rows: 5, scene: "dreidel",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -277,8 +366,9 @@ function mergeSeeds(cfg){
   if(!cfg.boards || typeof cfg.boards !== "object") cfg.boards = {};
   var wasEmpty = Object.keys(cfg.boards).length === 0;
   var changed = false;
+  var demos = demoBoards();
   if((cfg.seedVersion || 0) < SEED_VERSION){
-    demoBoards().forEach(function(sb){
+    demos.forEach(function(sb){
       var nameTaken = Object.keys(cfg.boards).some(function(id){ return cfg.boards[id].name === sb.name; });
       if(nameTaken) return;
       if(cfg.boards[sb.id]){ sb.id = sb.id + "-seed"; }
@@ -286,9 +376,25 @@ function mergeSeeds(cfg){
     });
     cfg.seedVersion = SEED_VERSION; changed = true;
   }
+  /* Field fill-ins for boards stored before rows/kind existed: a board whose
+     name matches a demo board takes that demo's row count; anything else
+     defaults to 14. User boards and their edits are never overwritten. */
   Object.keys(cfg.boards).forEach(function(id){
     var b = cfg.boards[id];
-    if(b && !b.type){ b.type = "departures"; changed = true; }
+    if(!b) return;
+    if(!b.type){ b.type = "departures"; changed = true; }
+    if(b.rows !== 5 && b.rows !== 14){
+      var demo = null;
+      demos.forEach(function(d){ if(d.name === b.name) demo = d; });
+      b.rows = demo && demo.rows ? demo.rows : 14; changed = true;
+    }
+    if(b.type !== "colour" && !b.kind){
+      b.kind = b.shows === "arrivals" ? "arrivals" : "departures"; changed = true;
+    }
+    if(b.type === "colour" && !b.scene){ b.scene = "walk"; changed = true; }
+    if(b.type === "colour" && !(b.night >= 1 && b.night <= 8)){ b.night = 8; changed = true; }
+    if(!b.flights){ b.flights = []; changed = true; }
+    if(!b.lines){ b.lines = []; changed = true; }
   });
   if(!cfg.liveBoardId || !cfg.boards[cfg.liveBoardId]){
     cfg.liveBoardId = (wasEmpty && cfg.boards["board-terminal-one"])
@@ -334,6 +440,12 @@ if(!board) board = config.boards[config.liveBoardId] || demoBoards()[0];
 /* ============ Flap machinery ============ */
 var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
 function ringIdx(ch){ var i = RING.indexOf(ch); return i < 0 ? 0 : i; }
+function cleanRaw(text){
+  text = String(text == null ? "" : text).toUpperCase();
+  var out = "";
+  for(var i=0;i<text.length;i++) out += RING.indexOf(text[i]) >= 0 ? text[i] : " ";
+  return out;
+}
 function clean(text, len){
   text = String(text == null ? "" : text).toUpperCase();
   var out = "";
@@ -360,51 +472,185 @@ var headSpans = [];
     headEl.appendChild(cell);
   });
 })();
+function boardKind(){
+  if(board.type === "colour") return "colour";
+  return board.kind || (board.shows === "arrivals" ? "arrivals" : "departures");
+}
+function isTextBoard(){
+  var k = boardKind();
+  return k === "weather" || k === "news" || k === "art" || k === "custom";
+}
+function boardRows(){ return (board.rows === 5 || board.rows === 14) ? board.rows : 14; }
+function escHtml(s){
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 function headerTitle(){
-  if(board.type === "colour") return 'THE ISLE <span class="dot">·</span> COLOUR BOARD';
-  return 'THE ISLE <span class="dot">·</span> ' + (board.shows === "arrivals" ? "ARRIVALS" : "DEPARTURES");
+  var k = boardKind();
+  if(k === "colour") return 'THE ISLE <span class="dot">\u00b7</span> COLOUR BOARD';
+  if(k === "arrivals") return 'THE ISLE <span class="dot">\u00b7</span> ARRIVALS';
+  if(k === "departures") return 'THE ISLE <span class="dot">\u00b7</span> DEPARTURES';
+  if(k === "custom") return 'THE ISLE <span class="dot">\u00b7</span> ' + escHtml(String(board.customTitle || "CUSTOM").toUpperCase());
+  return 'THE ISLE <span class="dot">\u00b7</span> ' + k.toUpperCase();
 }
 function applyHeadings(){
   document.getElementById("board-title").innerHTML = headerTitle();
-  if(headSpans[1]) headSpans[1].textContent = board.shows === "arrivals" ? "FROM" : "DESTINATION";
+  if(headSpans[1]) headSpans[1].textContent = boardKind() === "arrivals" ? "FROM" : "DESTINATION";
 }
 var tileGrid = []; /* [row][col] -> [tile elements] */
 var rowsBuilt = false;
-var fitTotalRows = 0; /* total rows incl. blank flap rows, computed by fitBoard */
-function buildRows(flights){
-  rowsEl.innerHTML = ""; tileGrid = [];
-  var all = flights.slice();
-  var total = Math.max(flights.length, fitTotalRows || 0);
-  var BLANK = {time:"", destination:"", flight:"", gate:"", remarks:""};
-  for(var b = flights.length; b < total; b++) all.push(BLANK); /* real boards show blank rows */
-  all.forEach(function(f){
-    var rowEl = document.createElement("div"); rowEl.className = "row";
-    var gridRow = [];
-    COLS.forEach(function(c, ci){
-      if(ci){ var s = document.createElement("div"); s.className = "spacer"; rowEl.appendChild(s); }
-      var cell = document.createElement("div"); cell.className = "cell " + c.key;
-      var tiles = [];
-      for(var k=0;k<c.width;k++){
-        var t = document.createElement("div"); t.className = "tile"; t.textContent = " ";
-        t.dataset.ch = " ";
-        if(c.key === "remarks" && /FINAL|DELAY|CANCEL/.test(f.remarks||"")) t.classList.add("hot");
-        cell.appendChild(t); tiles.push(t);
-      }
-      rowEl.appendChild(cell); gridRow.push(tiles);
-    });
-    rowsEl.appendChild(rowEl); tileGrid.push(gridRow);
+var TEXT_COLS = 46; /* tiles across a text-board line, computed by fitBoard */
+function buildOneRow(colsDef, black, flight){
+  var rowEl = document.createElement("div"); rowEl.className = "row";
+  var gridRow = [];
+  colsDef.forEach(function(c, ci){
+    if(ci){ var s = document.createElement("div"); s.className = "spacer"; rowEl.appendChild(s); }
+    var cell = document.createElement("div"); cell.className = "cell " + c.key;
+    var tiles = [];
+    for(var k=0;k<c.width;k++){
+      var t = document.createElement("div"); t.className = "tile"; t.textContent = " ";
+      t.dataset.ch = " ";
+      if(!black && c.key === "remarks" && flight && /FINAL|DELAY|CANCEL/.test(flight.remarks || "")) t.classList.add("hot");
+      cell.appendChild(t); tiles.push(t);
+    }
+    rowEl.appendChild(cell); gridRow.push(tiles);
   });
+  rowsEl.appendChild(rowEl); tileGrid.push(gridRow);
+}
+/* Exactly boardRows() rows: flights beyond the count are not built, fewer
+   flights are padded with blank flap rows, and a black row is all blank. */
+function buildRows(){
+  rowsEl.innerHTML = ""; tileGrid = [];
+  var count = boardRows(), i;
+  if(isTextBoard()){
+    var lines = board.lines || [];
+    for(i = 0; i < count; i++){
+      var ln = lines[i] || { text:"", black:false };
+      buildOneRow([{ key:"line", width: TEXT_COLS }], !!ln.black, null);
+    }
+    return;
+  }
+  var fl = board.flights || [];
+  for(i = 0; i < count; i++){
+    var f = fl[i] || null;
+    buildOneRow(COLS, !!(f && f.black), f);
+  }
 }
 
-/* ============ Colour board scene ============ */
-var CW = 48, CH = 27, GROUND_Y = 22;
-var SKY = "#5c94fc", CLOUD = "#fcfcfc", HILL = "#00a800",
+/* ============ Colour board scenes ============ */
+/* Every scene is drawn into a virtual 192x108 pixel field and sampled
+   down to whichever grid the board size selects (5: 48x27 chunky tiles,
+   14: 64x36 finer tiles), so each scene is the same picture at both
+   sizes. Scenes: walk, menorah, dreidel, star. Silent by default. */
+var VW = 192, VH = 108, VGY = 88; /* virtual field; ground line at VGY */
+var CW = 48, CH = 27, builtCW = 0, builtCH = 0;
+var SKY = "#5c94fc", CLOUD = "#fcfcfc", HILL = "#00a800", HILL_DARK = "#008000",
+    SUN = "#ffd94d", SUN_IN = "#ffe98a", BIRD = "#1c2f4a",
     GROUND_TOP = "#d97b29", GROUND = "#a34d0d", GROUND_DARK = "#7c3806",
     CAP = "#e7402e", SKIN = "#ffc7a1", EYE = "#202020", OVERALL = "#2b4bd8",
-    SHOE = "#8a4b08", SHELL = "#00a800", SHELL_LT = "#7ec850";
+    SHOE = "#8a4b08", SHELL = "#00a800", SHELL_LT = "#7ec850",
+    DARK = "#0d1120", GOLD = "#d9a441", GOLD_LT = "#f2c14e", CANDLE = "#f2ede1",
+    FLAME_O = "#ff9d2e", FLAME_Y = "#ffd94d", FLAME_C = "#fff3b0";
+var WALK_COLORS = { r: CAP, s: SKIN, e: EYE, b: OVERALL, h: SHOE };
+var WALK_A = [
+  "....rrrrrr....",
+  "...rrrrrrrrrr.",
+  "...ssssssss...",
+  "...seessees...",
+  "....ssssss....",
+  ".....ssss.....",
+  "..rrbbbbbbbr..",
+  ".rrrbbbbbbbrr.",
+  "....bbbbbb....",
+  "....bbbbbb....",
+  "....bb...bb...",
+  "...bb.....bb..",
+  "...bb......bb.",
+  "..bb........bb",
+  "..hh........hh",
+  ".hhh........hh"
+];
+var WALK_B = [
+  "....rrrrrr....",
+  "...rrrrrrrrrr.",
+  "...ssssssss...",
+  "...seessees...",
+  "....ssssss....",
+  ".....ssss.....",
+  "..rrbbbbbbbr..",
+  ".rrrbbbbbbbrr.",
+  "....bbbbbb....",
+  "....bbbbbb....",
+  "....bb...bb...",
+  "..bb......bb..",
+  ".bb........bb.",
+  "bb..........bb",
+  "hh..........hh",
+  "hhh.........hh"
+];
+var SHELL_COLORS = { l: SHELL_LT, w: "#fcfcfc", g: SHELL };
+var SHELL_MAP = [
+  "...llllll...",
+  ".llwwwwwwll.",
+  ".lggggggggl.",
+  "lggggggggggl",
+  "lggggggggggl",
+  ".gggggggggg.",
+  "..gggggggg.."
+];
+/* Simple pixel glyphs for the dreidel faces, 7 wide x 9 tall */
+var GLYPHS = {
+  nun: [
+    "0111110",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100100",
+    "0101000",
+    "0110000",
+    "0100000",
+    "0100000"
+  ],
+  gimmel: [
+    "0111110",
+    "0000010",
+    "0000010",
+    "0000110",
+    "0001010",
+    "0010010",
+    "0100010",
+    "0100010",
+    "0100010"
+  ],
+  hey: [
+    "0111110",
+    "0000010",
+    "0000010",
+    "0111110",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100010",
+    "0100010"
+  ],
+  shin: [
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0101010",
+    "0011100",
+    "0001000",
+    "0011100"
+  ]
+};
+var DREIDEL_LETTERS = ["nun", "gimmel", "hey", "shin"];
 var colourEl = document.getElementById("colour");
-var pxEls = [], pxState = [], colourTimer = null, scene = null;
-function freshScene(){ return { t:0, mx:-6, shellX:20, shellV:0, shellKickT:-99 }; }
+var pxEls = [], pxState = [], colourTimer = null, anim = null;
+function colourDims(){
+  if(board.rows === 14){ CW = 64; CH = 36; } else { CW = 48; CH = 27; }
+}
+function freshScene(){ return { t:0, mx:-24, shellX:80, shellV:0, shellKickT:-99 }; }
 function buildColour(){
   colourEl.innerHTML = ""; pxEls = []; pxState = [];
   var grid = document.createElement("div"); grid.className = "pxgrid";
@@ -414,84 +660,253 @@ function buildColour(){
     grid.appendChild(d); pxEls.push(d); pxState.push(SKY);
   }
   colourEl.appendChild(grid);
-  scene = freshScene();
+  builtCW = CW; builtCH = CH;
+  if(!anim) anim = freshScene();
 }
-function drawScene(){
-  var s = scene, t = s.t;
-  var frame = new Array(CW*CH);
-  var x, y, i;
-  for(i=0;i<frame.length;i++) frame[i] = SKY;
-  function put(cx, cy, col){ if(cx >= 0 && cx < CW && cy >= 0 && cy < CH) frame[cy*CW + cx] = col; }
-  /* hills */
+function field(bg){
+  var vf = new Array(VW * VH);
+  for(var i = 0; i < vf.length; i++) vf[i] = bg;
+  return vf;
+}
+function vput(vf, cx, cy, col){ if(cx >= 0 && cx < VW && cy >= 0 && cy < VH) vf[cy * VW + cx] = col; }
+function vrect(vf, x0, y0, w, h, col){
+  for(var yy = y0; yy < y0 + h; yy++) for(var xx = x0; xx < x0 + w; xx++) vput(vf, xx, yy, col);
+}
+function vcircle(vf, cx, cy, r, col){
+  for(var yy = cy - r; yy <= cy + r; yy++) for(var xx = cx - r; xx <= cx + r; xx++)
+    if((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) <= r * r) vput(vf, xx, yy, col);
+}
+function vellipse(vf, cx, cy, rx, ry, col){
+  for(var yy = cy - ry; yy <= cy + ry; yy++) for(var xx = cx - rx; xx <= cx + rx; xx++){
+    var dx = (xx - cx) / rx, dy = (yy - cy) / ry;
+    if(dx * dx + dy * dy <= 1) vput(vf, xx, yy, col);
+  }
+}
+function vline(vf, x0, y0, x1, y1, col, r){
+  var steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+  for(var s2 = 0; s2 <= steps; s2++){
+    var px = Math.round(x0 + (x1 - x0) * s2 / steps), py = Math.round(y0 + (y1 - y0) * s2 / steps);
+    for(var yy = -r; yy <= r; yy++) for(var xx = -r; xx <= r; xx++) vput(vf, px + xx, py + yy, col);
+  }
+}
+function stamp(vf, map, colors, x0, y0){
+  for(var yy = 0; yy < map.length; yy++){
+    var rowStr = map[yy];
+    for(var xx = 0; xx < rowStr.length; xx++){
+      var col = colors[rowStr[xx]];
+      if(col) vput(vf, x0 + xx, y0 + yy, col);
+    }
+  }
+}
+function hash2(a, b){ var x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); }
+/* Shared backdrop for the outdoor scenes: sky, sun, birds, hills, ground */
+function buildBackdrop(t){
+  var vf = field(SKY);
+  var x, y;
+  vcircle(vf, 172, 14, 7, SUN); vcircle(vf, 172, 14, 4, SUN_IN);
+  [18, 27].forEach(function(by, bi){
+    var bx = Math.floor(((t * 0.5 + bi * 70) % (VW + 24)) - 12);
+    vput(vf, bx, by, BIRD); vput(vf, bx - 2, by - 1, BIRD); vput(vf, bx + 2, by - 1, BIRD);
+  });
   function hill(x0, x1, peak){
     var mid = (x0 + x1) / 2, half = (x1 - x0) / 2;
     for(x = x0; x <= x1; x++){
-      var h = Math.max(0, Math.round(peak * (1 - Math.abs(x - mid) / half)));
-      for(y = 0; y < h; y++) put(x, GROUND_Y - 1 - y, HILL);
+      var q = (x - mid) / half;
+      var h = Math.max(0, Math.round(peak * (1 - q * q)));
+      for(y = 0; y < h; y++) vput(vf, x, VGY - 1 - y, x > mid ? HILL_DARK : HILL);
     }
   }
-  hill(3, 13, 3); hill(29, 41, 2);
-  /* ground */
-  for(x = 0; x < CW; x++){
-    put(x, GROUND_Y, GROUND_TOP);
-    for(y = GROUND_Y + 1; y < CH; y++) put(x, y, ((x*7 + y*13) % 9 === 0) ? GROUND_DARK : GROUND);
+  hill(12, 52, 12); hill(116, 164, 8);
+  for(x = 0; x < VW; x++){
+    vput(vf, x, VGY, GROUND_TOP);
+    for(y = VGY + 1; y < VH; y++) vput(vf, x, y, ((x * 7 + y * 13) % 9 === 0) ? GROUND_DARK : GROUND);
   }
-  /* clouds, drifting slowly left */
   function cloud(cx, cy){
-    var r, c;
-    var shape = [[1,2,3,4],[0,1,2,3,4,5],[1,2,3,4]];
-    for(r = 0; r < 3; r++) for(c = 0; c < shape[r].length; c++) put(cx + shape[r][c], cy + r, CLOUD);
+    vellipse(vf, cx, cy, 16, 4, CLOUD); vellipse(vf, cx - 8, cy + 1, 10, 3, CLOUD);
+    vellipse(vf, cx + 8, cy + 1, 11, 3, CLOUD); vellipse(vf, cx, cy - 3, 9, 3, CLOUD);
   }
-  var drift = Math.floor(t / 10);
-  cloud(((6 - drift) % (CW + 10) + (CW + 10)) % (CW + 10) - 5, 3);
-  cloud(((30 - drift) % (CW + 10) + (CW + 10)) % (CW + 10) - 5, 6);
-  /* shell */
-  var hop = (t - s.shellKickT) < 3 && s.shellKickT >= 0 ? -1 : 0;
-  var sx = Math.round(s.shellX);
-  put(sx, GROUND_Y - 2 + hop, SHELL_LT); put(sx + 1, GROUND_Y - 2 + hop, SHELL_LT);
-  put(sx, GROUND_Y - 1 + hop, SHELL);    put(sx + 1, GROUND_Y - 1 + hop, SHELL);
-  /* walker: 3 wide, 5 tall, feet on the ground line */
-  var mx = Math.round(s.mx), top = GROUND_Y - 5;
-  var stride = Math.floor(t / 2) % 2 === 0;
-  var sprite = [
-    [CAP, CAP, CAP],
-    [SKIN, SKIN, EYE],
-    [CAP, OVERALL, CAP],
-    stride ? [OVERALL, null, OVERALL] : [null, OVERALL, null],
-    stride ? [SHOE, null, SHOE] : [null, SHOE, null]
-  ];
-  for(y = 0; y < 5; y++) for(x = 0; x < 3; x++)
-    if(sprite[y][x]) put(mx + x, top + y, sprite[y][x]);
-  /* commit, with a light flip shimmer on changing picture tiles */
-  for(i = 0; i < frame.length; i++){
-    if(frame[i] !== pxState[i]){
-      pxState[i] = frame[i];
-      pxEls[i].style.background = frame[i];
-      if(frame[i] !== SKY && Math.random() < 0.3){
-        pxEls[i].classList.remove("shimmer"); void pxEls[i].offsetWidth; pxEls[i].classList.add("shimmer");
+  var drift = t * 0.12;
+  function wrapX(base){ return ((base - drift) % (VW + 48) + (VW + 48)) % (VW + 48) - 24; }
+  cloud(Math.floor(wrapX(28)), 12);
+  cloud(Math.floor(wrapX(120)), 22);
+  return vf;
+}
+function drawWalk(){
+  var s = anim, t = s.t;
+  var vf = buildBackdrop(t);
+  var hop = (t - s.shellKickT) < 3 && s.shellKickT >= 0 ? -3 : 0;
+  stamp(vf, SHELL_MAP, SHELL_COLORS, Math.round(s.shellX), VGY - 7 + hop);
+  stamp(vf, Math.floor(t / 2) % 2 === 0 ? WALK_A : WALK_B, WALK_COLORS, Math.round(s.mx), VGY - 16);
+  return vf;
+}
+/* Menorah: nine branches on a dark ground, gold arms, the shamash taller
+   in the middle. Night n lights the shamash plus the n candles placed
+   from the right; the rest are drawn unlit. Flames flicker per frame. */
+function drawMenorah(){
+  var vf = field(DARK);
+  var t = anim.t;
+  var night = (board.night >= 1 && board.night <= 8) ? Math.floor(board.night) : 8;
+  var cx = 96, topY = 38, shamY = 28, baseY = 90;
+  var i, bx;
+  /* arms: a rising curve from the central stem to each branch */
+  for(i = 0; i < 9; i++){
+    if(i === 4) continue;
+    bx = cx + (i - 4) * 16;
+    for(var s2 = 0; s2 <= 24; s2++){
+      var f = s2 / 24;
+      var px = Math.round(cx + (bx - cx) * f);
+      var py = Math.round(76 - (76 - (topY + 6)) * Math.pow(f, 1.6));
+      vrect(vf, px - 1, py - 1, 3, 3, GOLD);
+    }
+    vrect(vf, bx - 1, topY + 2, 3, 6, GOLD); /* branch neck */
+  }
+  /* central stem and stepped base */
+  vrect(vf, cx - 1, shamY + 2, 3, baseY - shamY, GOLD);
+  vrect(vf, cx - 9, baseY, 19, 3, GOLD);
+  vrect(vf, cx - 14, baseY + 3, 29, 3, GOLD);
+  vrect(vf, cx - 19, baseY + 6, 39, 2, GOLD);
+  vrect(vf, cx - 19, baseY + 6, 39, 1, GOLD_LT);
+  /* candles, cups and flames: night n lights the shamash plus the n
+     candles placed from the right (order 8,7,6,5,3,2,1,0) */
+  var placeOrder = [8, 7, 6, 5, 3, 2, 1, 0];
+  var litSet = { 4: true };
+  for(var oi = 0; oi < night; oi++) litSet[placeOrder[oi]] = true;
+  for(i = 0; i < 9; i++){
+    bx = cx + (i - 4) * 16;
+    var cTop = (i === 4) ? shamY : topY;
+    vrect(vf, bx - 2, cTop, 5, 2, GOLD_LT); /* cup */
+    vrect(vf, bx - 1, cTop - 7, 3, 7, CANDLE); /* candle */
+    vput(vf, bx, cTop - 8, EYE); /* wick */
+    var lit = !!litSet[i];
+    if(lit){
+      var fl = Math.floor(t / 2);
+      var hgt = 4 + Math.floor(hash2(i, fl) * 3); /* 4..6 */
+      var lean = Math.floor(hash2(i, fl + 40) * 3) - 1;
+      for(var fy = 0; fy < hgt; fy++){
+        var wdt = fy === hgt - 1 ? 1 : (fy === 0 ? 2 : 3);
+        var fx = bx + (fy >= hgt - 2 ? lean : 0);
+        vrect(vf, fx - Math.floor(wdt / 2), cTop - 9 - fy, wdt, 1, fy < 2 ? FLAME_O : FLAME_Y);
+      }
+      vput(vf, bx, cTop - 10, FLAME_C);
+      vput(vf, bx, cTop - 11, FLAME_C);
+    }
+  }
+  return vf;
+}
+/* Dreidel: spinning on the ground line; its body squeezes as it turns and
+   the face cycles nun, gimmel, hey, shin. */
+function drawDreidel(){
+  var vf = buildBackdrop(anim.t);
+  var t = anim.t;
+  var cx = 96, tipY = VGY - 1;
+  var phase = t * 0.22;
+  var squeeze = 0.45 + 0.55 * Math.abs(Math.cos(phase));
+  var bodyW = Math.max(10, Math.round(30 * squeeze));
+  var bodyH = 25, tipH = 10;
+  var bob = Math.round(Math.sin(t * 0.3) * 1);
+  var bodyTop = tipY - tipH - bodyH + bob;
+  var x0 = cx - Math.floor(bodyW / 2);
+  /* handle and knob */
+  vrect(vf, cx - 3, bodyTop - 6 + bob, 6, 6, GOLD);
+  vrect(vf, cx - 5, bodyTop - 8 + bob, 10, 2, GOLD_LT);
+  /* body with gold trim */
+  vrect(vf, x0, bodyTop, bodyW, bodyH, OVERALL);
+  vrect(vf, x0, bodyTop, bodyW, 2, GOLD_LT);
+  vrect(vf, x0, bodyTop + bodyH - 2, bodyW, 2, GOLD_LT);
+  /* tip: triangle down to the ground line */
+  for(var yy = 0; yy < tipH; yy++){
+    var w2 = Math.max(1, Math.round(bodyW * 0.6 * (1 - yy / tipH)));
+    vrect(vf, cx - Math.floor(w2 / 2), bodyTop + bodyH + yy, w2, 1, GOLD);
+  }
+  /* the letter facing the viewer, when the face is wide enough to hold
+     it; strokes drawn 3 thick on a 2 stride so they survive sampling */
+  if(bodyW >= 20){
+    var glyph = GLYPHS[DREIDEL_LETTERS[Math.floor(t / 7) % 4]];
+    var gx = cx - 7, gy = bodyTop + 3;
+    for(var ry = 0; ry < glyph.length; ry++)
+      for(var rx = 0; rx < glyph[ry].length; rx++)
+        if(glyph[ry][rx] === "1") vrect(vf, gx + rx * 2, gy + ry * 2, 3, 3, CLOUD);
+  }
+  return vf;
+}
+/* Star of David: two gold triangles on a dark ground, with a highlight
+   travelling from point to point. */
+function drawStar(){
+  var vf = field(DARK);
+  var cx = 96, cy = 55, R = 37, k;
+  var pts = [];
+  for(k = 0; k < 6; k++){
+    var a = -Math.PI / 2 + k * Math.PI / 3;
+    pts.push([Math.round(cx + R * Math.cos(a)), Math.round(cy + R * Math.sin(a))]);
+  }
+  function tri(p, q, r){ vline(vf, p[0], p[1], q[0], q[1], GOLD, 1); vline(vf, q[0], q[1], r[0], r[1], GOLD, 1); vline(vf, r[0], r[1], p[0], p[1], GOLD, 1); }
+  tri(pts[0], pts[2], pts[4]);
+  tri(pts[1], pts[3], pts[5]);
+  var idx = Math.floor(anim.t / 6) % 6;
+  vcircle(vf, pts[idx][0], pts[idx][1], 4, SUN_IN);
+  vcircle(vf, pts[idx][0], pts[idx][1], 2, FLAME_C);
+  var idx2 = (idx + 1) % 6;
+  vcircle(vf, pts[idx2][0], pts[idx2][1], 2, GOLD_LT);
+  return vf;
+}
+function drawScene(){
+  var sc = board.scene || "walk";
+  var vf = sc === "menorah" ? drawMenorah()
+         : sc === "dreidel" ? drawDreidel()
+         : sc === "star" ? drawStar()
+         : drawWalk();
+  commitField(vf, (sc === "menorah" || sc === "star") ? DARK : SKY);
+}
+/* Sample the virtual field down to the grid by plurality vote per block
+   among non-background colours, so small features (flames, glyphs, the
+   walker's cap) survive at the chunkier grid; changing tiles shimmer. */
+function commitField(vf, bg){
+  var bw = VW / CW, bh = VH / CH;
+  for(var gy = 0; gy < CH; gy++){
+    for(var gx = 0; gx < CW; gx++){
+      var counts = {}, best = bg, bestN = 0;
+      for(var byy = 0; byy < bh; byy++){
+        for(var bxx = 0; bxx < bw; bxx++){
+          var c = vf[(gy * bh + byy) * VW + gx * bw + bxx];
+          if(c === bg) continue;
+          var n = (counts[c] || 0) + 1; counts[c] = n;
+          if(n > bestN){ best = c; bestN = n; }
+        }
+      }
+      var col2 = best;
+      var idx = gy * CW + gx;
+      if(col2 !== pxState[idx]){
+        pxState[idx] = col2;
+        pxEls[idx].style.background = col2;
+        if(col2 !== bg && Math.random() < 0.3){
+          pxEls[idx].classList.remove("shimmer"); void pxEls[idx].offsetWidth; pxEls[idx].classList.add("shimmer");
+        }
       }
     }
   }
 }
 function stepScene(){
-  var s = scene; s.t++;
-  s.mx += 0.45;
-  /* kick when the walker's front reaches a resting shell */
-  if(s.shellV <= 0.05 && s.mx + 3 >= s.shellX - 0.4 && s.mx + 3 < s.shellX + 2 && s.shellX < CW - 4){
-    s.shellV = 2.2; s.shellKickT = s.t;
+  var s = anim; s.t++;
+  if((board.scene || "walk") === "walk"){
+    s.mx += 1.8;
+    /* kick when the walker's front reaches a resting shell */
+    if(s.shellV <= 0.05 && s.mx + 14 >= s.shellX - 1 && s.mx + 14 < s.shellX + 6 && s.shellX < VW - 16){
+      s.shellV = 8.8; s.shellKickT = s.t;
+    }
+    if(s.shellV > 0.05){
+      s.shellX += s.shellV; s.shellV *= 0.96;
+      if(s.shellX > VW - 14){ s.shellX = VW - 14; s.shellV = 0; }
+    }
+    if(s.mx > VW + 16){ var keep = s.t; anim = freshScene(); anim.t = keep; }
   }
-  if(s.shellV > 0.05){
-    s.shellX += s.shellV; s.shellV *= 0.96;
-    if(s.shellX > CW - 3){ s.shellX = CW - 3; s.shellV = 0; }
-  }
-  if(s.mx > CW + 4){ var keep = s.t; scene = freshScene(); scene.t = keep; }
   drawScene();
 }
 function showColour(){
+  colourDims();
   headEl.style.display = "none"; rowsEl.style.display = "none";
   colourEl.style.display = "block";
   applyHeadings();
-  if(!pxEls.length) buildColour();
+  if(builtCW !== CW || builtCH !== CH || !pxEls.length) buildColour();
   drawScene();
   if(!colourTimer) colourTimer = setInterval(stepScene, 110);
 }
@@ -669,22 +1084,50 @@ function renderBoard(cascade){
   if(board.type === "colour"){ showColour(); return; }
   stopColour();
   applyHeadings();
-  buildRows(board.flights);
+  var text = isTextBoard();
+  headEl.style.display = text ? "none" : "";
+  buildRows();
   rowsBuilt = true;
-  var jobs = []; /* {tile, from, to, delay} */
-  board.flights.forEach(function(f, r){
-    COLS.forEach(function(c, ci){
-      var target = clean(f[c.key], c.width);
-      for(var k=0;k<c.width;k++){
-        var tile = tileGrid[r][ci][k];
-        var from = tile.dataset.ch || " ";
-        var steps = (ringIdx(target[k]) - ringIdx(from) + RING.length) % RING.length;
-        if(!cascade) steps = 0;
-        jobs.push({ tile: tile, from: from, to: target[k], steps: steps,
-                    delay: r*55 + ci*130 + k*26 + Math.random()*22 });
+  var jobs = []; /* {tile, from, to, steps, delay, silent} */
+  var count = boardRows(), r;
+  if(text){
+    var lines = board.lines || [];
+    for(r = 0; r < count; r++){
+      var ln = lines[r] || { text:"", black:false };
+      var full = cleanRaw(ln.text);
+      if(!ln.black && full.length > TEXT_COLS)
+        console.warn("Flight Board: line " + (r + 1) + " is " + full.length +
+                     " tiles wide; truncated to " + TEXT_COLS + " to fit the grid.");
+      var targetLine = ln.black ? "" : full;
+      targetLine = (targetLine + " ".repeat(TEXT_COLS)).slice(0, TEXT_COLS);
+      for(var k = 0; k < TEXT_COLS; k++){
+        var tt = tileGrid[r][0][k];
+        var fromL = tt.dataset.ch || " ";
+        var stepsL = (ringIdx(targetLine[k]) - ringIdx(fromL) + RING.length) % RING.length;
+        if(!cascade) stepsL = 0;
+        jobs.push({ tile: tt, from: fromL, to: targetLine[k], steps: stepsL,
+                    delay: r * 55 + k * 26 + Math.random() * 22, silent: !!ln.black });
       }
-    });
-  });
+    }
+  } else {
+    var fl = board.flights || [];
+    for(r = 0; r < count; r++){
+      var f = fl[r] || null;
+      var silent = !f || !!f.black; /* blank and black rows make no clack of their own */
+      COLS.forEach(function(c, ci){
+        var target = (!f || f.black) ? "" : clean(f[c.key], c.width);
+        target = (target + " ".repeat(c.width)).slice(0, c.width);
+        for(var k2 = 0; k2 < c.width; k2++){
+          var tile = tileGrid[r][ci][k2];
+          var from = tile.dataset.ch || " ";
+          var steps = (ringIdx(target[k2]) - ringIdx(from) + RING.length) % RING.length;
+          if(!cascade) steps = 0;
+          jobs.push({ tile: tile, from: from, to: target[k2], steps: steps,
+                      delay: r * 55 + ci * 130 + k2 * 26 + Math.random() * 22, silent: silent });
+        }
+      });
+    }
+  }
   var totalSteps = 0; jobs.forEach(function(j){ totalSteps += j.steps; });
   if(cascade && totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
   var quiet = inQuietHours();
@@ -698,12 +1141,12 @@ function renderBoard(cascade){
         var ch = RING[pos];
         j.tile.textContent = ch;
         j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
-        if(!quiet && Math.random() > thinning) playStep();
+        if(!quiet && !j.silent && Math.random() > thinning) playStep();
         if(--remaining <= 0){
           clearInterval(iv);
           j.tile.dataset.ch = j.to;
           j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-          if(!quiet) playFlap();
+          if(!quiet && !j.silent) playFlap();
         }
       }, STEP_MS);
     }, j.delay);
@@ -722,6 +1165,7 @@ function boardPads(fs, iw, ih){
   return { x: fs ? iw * 0.006 : iw * 0.012, y: fs ? ih * 0.008 : ih * 0.014 };
 }
 function fitColour(){
+  colourDims();
   var root = document.documentElement;
   var iw = window.innerWidth, ih = window.innerHeight;
   var fs = !!document.fullscreenElement;
@@ -742,7 +1186,7 @@ function fitBoard(){
   var fs = !!document.fullscreenElement;
   var iw = window.innerWidth, ih = window.innerHeight;
   var units = 43 + 38 * 0.14 + 4 * 1.15; /* tiles + in-cell gaps + spacers, in tile widths */
-  var flights = Math.max(1, board.flights.length);
+  var rows = boardRows();
   var boardW = iw * (1 - 2 * INSET_X);
   var boardH = ih * (1 - 2 * INSET_Y);
   var pad = boardPads(fs, iw, ih);
@@ -750,23 +1194,26 @@ function fitBoard(){
   root.style.setProperty("--pad-y", pad.y + "px");
   /* Vertical metrics in tile-width units. The tile aspect is FIXED at
      1.42 (height / width) by the --tile-h calc and never stretched:
-     tiles grow only in true proportion. Height is filled by spreading
-     the row pitch and by completing the grid with blank flap rows. */
-  var HEADER_ETC = 2.52; /* header block + column headings, in tile widths */
+     tiles grow only in true proportion. The board renders exactly
+     `rows` rows (the chosen board size); leftover height is spread
+     into the row pitch so the board fills the frame inside the insets. */
+  var HEADER_ETC = isTextBoard() ? 1.85 : 2.52; /* header block (+ column headings for flight boards), in tile widths */
   var PITCH = 1.53;      /* row pitch incl. base row padding, in tile widths */
   var wByWidth = (boardW - 2 * pad.x) / units;
-  var wByHeight = (boardH - 2 * pad.y - 2) / (HEADER_ETC + flights * PITCH);
+  var wByHeight = (boardH - 2 * pad.y - 2) / (HEADER_ETC + rows * PITCH);
   var w = Math.max(4, Math.min(wByWidth, wByHeight * 0.998));
   root.style.setProperty("--tile-w", w + "px");
-  var rowsAvail = boardH - 2 * pad.y - 2 - HEADER_ETC * w;
-  var totalRows = Math.max(flights, Math.floor(rowsAvail / (PITCH * w)));
-  var leftover = Math.max(0, rowsAvail - totalRows * PITCH * w);
-  var rowPad = w * 0.055 + leftover / (totalRows * 2);
-  root.style.setProperty("--row-pad", rowPad + "px");
-  if(totalRows !== fitTotalRows){
-    fitTotalRows = totalRows;
-    if(rowsBuilt) renderBoard(false); /* rebuild so blank rows match the fit */
+  /* Tiles that fit across a text-board line at this tile width. Lines
+     longer than this are truncated to the grid, never clipped mid-tile. */
+  var colsFit = Math.max(8, Math.floor(((boardW - 2 * pad.x) / w + 0.14) / 1.14));
+  if(colsFit !== TEXT_COLS){
+    TEXT_COLS = colsFit;
+    if(rowsBuilt && isTextBoard()) renderBoard(false);
   }
+  var rowsAvail = boardH - 2 * pad.y - 2 - HEADER_ETC * w;
+  var leftover = Math.max(0, rowsAvail - rows * PITCH * w);
+  var rowPad = w * 0.055 + leftover / (rows * 2);
+  root.style.setProperty("--row-pad", rowPad + "px");
 }
 document.addEventListener("fullscreenchange", function(){
   document.body.classList.toggle("fullscreen", !!document.fullscreenElement);
@@ -793,7 +1240,7 @@ document.getElementById("btn-full").addEventListener("click", function(ev){
 });
 document.getElementById("btn-cascade").addEventListener("click", function(ev){
   ev.stopPropagation(); initAudio();
-  if(board.type === "colour"){ scene = freshScene(); drawScene(); return; }
+  if(board.type === "colour"){ anim = freshScene(); drawScene(); return; }
   tileGrid.forEach(function(row){ row.forEach(function(cell){ cell.forEach(function(t){ t.dataset.ch = " "; t.textContent = " "; }); }); });
   renderBoard(true);
 });
@@ -805,6 +1252,12 @@ if(!DEMO){
       var nb = config.boards[config.liveBoardId];
       if(!nb) return;
       if(!nb.type) nb.type = "departures";
+      if(nb.rows !== 5 && nb.rows !== 14) nb.rows = 14;
+      if(nb.type !== "colour" && !nb.kind) nb.kind = nb.shows === "arrivals" ? "arrivals" : "departures";
+      if(!nb.flights) nb.flights = [];
+      if(!nb.lines) nb.lines = [];
+      if(nb.type === "colour" && !nb.scene) nb.scene = "walk";
+      if(nb.type === "colour" && !(nb.night >= 1 && nb.night <= 8)) nb.night = 8;
       var setChanged = nb.clackSet !== board.clackSet;
       var bedChanged = nb.ambience.bed !== board.ambience.bed || nb.ambience.on !== board.ambience.on;
       board = nb;
