@@ -16,8 +16,8 @@
   .rule { border-top: 1px solid var(--gold-line); margin: 34px 0 0 0; }
   .back { display: inline-block; margin-top: 22px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); text-decoration: none; }
   .back:hover { color: var(--gold); }
-  .home { display: inline-flex; align-items: center; justify-content: center; color: var(--ivory); background: transparent; border: 1px solid var(--gold-line); border-radius: 6px; padding: 7px 12px; min-height: 44px; text-decoration: none; margin-top: 22px; }
-  .home:hover { color: var(--gold); border-color: var(--gold); }
+  .home { display: inline-flex; align-items: center; justify-content: center; color: var(--ivory); background: none; border: none; box-shadow: none; padding: 0; width: 44px; height: 44px; text-decoration: none; margin-top: 22px; }
+  .home:hover { color: var(--gold); }
   .glance { display: flex; flex-wrap: wrap; gap: 18px 40px; padding: 24px 0 4px 0; }
   .glance .g dt { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ivory-dim); }
   .glance .g dd { margin: 5px 0 0 0; font-family: var(--serif); font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
