@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Isle · Flight Board Settings</title>
+<style>
+  :root{ --amber:#e8a33d; --panel:#141416; --line:#2a2b30; --ink:#f2ede1; --mut:#9a978c; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#0a0a0b; color:var(--ink);
+        font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .wrap{ max-width: 860px; margin: 0 auto; padding: 20px 16px 90px; }
+  h1{ font-size: 20px; letter-spacing:.22em; text-transform: uppercase; margin: 6px 0 2px; }
+  h1 .dot{ color: var(--amber); }
+  h2{ font-size: 13px; letter-spacing:.24em; text-transform: uppercase; color: var(--mut);
+      margin: 28px 0 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .sub{ color: var(--mut); font-size: 13px; margin-bottom: 14px; }
+  .card{ background: var(--panel); border:1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .board-row{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
+  .board-row .name{ font-weight:700; font-size: 16px; }
+  .badge{ background: var(--amber); color:#111; font-size: 11px; font-weight:700;
+          letter-spacing:.12em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+  .badge.editing{ background:#3a3b41; color: var(--ink); }
+  button{ background:#1e1f23; color:var(--ink); border:1px solid #3a3b41; border-radius: 7px;
+          padding: 9px 13px; font-size: 13px; font-weight:600; cursor:pointer; min-height: 40px; }
+  button:hover{ border-color:#5a5b63; }
+  button.primary{ background: var(--amber); border-color: var(--amber); color:#141414; }
+  button.danger{ color:#ff9a8a; }
+  button:disabled{ opacity:.45; cursor: default; }
+  label{ display:block; font-size: 12px; letter-spacing:.14em; text-transform: uppercase;
+         color: var(--mut); margin: 14px 0 6px; }
+  label:first-child{ margin-top: 0; }
+  select, input[type="text"], input[type="number"], input[type="time"]{
+    width: 100%; background:#0d0d0f; color: var(--ink); border:1px solid #3a3b41;
+    border-radius: 7px; padding: 10px; font-size: 15px; min-height: 44px; }
+  input[type="range"]{ width: 100%; accent-color: var(--amber); height: 34px; }
+  .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px){ .grid2{ grid-template-columns: 1fr; } }
+  .switch-row{ display:flex; align-items:center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+  .switch-row .lab{ font-size: 15px; }
+  .switch{ position: relative; width: 54px; height: 32px; flex: none; }
+  .switch input{ opacity:0; width:100%; height:100%; position:absolute; margin:0; cursor:pointer; }
+  .switch .track{ position:absolute; inset:0; background:#33343a; border-radius: 20px; pointer-events:none; transition:.15s; }
+  .switch .track:after{ content:""; position:absolute; width:24px; height:24px; border-radius:50%;
+                        background:#cfccc2; top:4px; left:4px; transition:.15s; }
+  .switch input:checked + .track{ background: var(--amber); }
+  .switch input:checked + .track:after{ left: 26px; background:#141414; }
+  table{ width:100%; border-collapse: collapse; }
+  th{ font-size: 11px; letter-spacing:.16em; text-transform: uppercase; color: var(--mut);
+      text-align:left; padding: 4px 4px 8px; }
+  td{ padding: 3px; }
+  td input{ min-height: 40px; padding: 8px; font-size: 14px; }
+  td.del{ width: 44px; text-align:center; }
+  .bar{ position: fixed; left:0; right:0; bottom:0; background: rgba(12,12,14,.96);
+        border-top: 1px solid var(--line); padding: 12px 16px; z-index: 50; }
+  .bar .inner{ max-width: 860px; margin: 0 auto; }
+  #status{ font-size: 13px; color: var(--amber); margin-bottom: 10px; min-height: 18px; }
+  #status.clean{ color: var(--mut); }
+  .bar .btns{ display:flex; gap: 10px; flex-wrap: wrap; }
+  .bar .btns button{ flex: 1; min-width: 100px; }
+  .slider-val{ color: var(--ink); font-size: 13px; float: right; letter-spacing: 0; }
+  .hint{ color: var(--mut); font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>THE ISLE <span class="dot">·</span> FLIGHT BOARD</h1>
+  <div class="sub">Settings. Everything you change here is staged first. Demo it on this device, then push it live to the board.</div>
+
+  <h2>Board library</h2>
+  <div id="library"></div>
+  <button id="btn-new-board" type="button">+ New board (copy of the one being edited)</button>
+
+  <h2>Editing: <span id="editing-name"></span></h2>
+
+  <div class="card">
+    <label>Flights</label>
+    <table>
+      <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th></th></tr></thead>
+      <tbody id="flights-body"></tbody>
+    </table>
+    <button id="btn-add-flight" type="button" style="margin-top:10px;">+ Add flight</button>
+  </div>
+
+  <div class="card">
+    <label for="sel-clack">Clack set (split-flap sound)</label>
+    <select id="sel-clack"></select>
+    <div class="hint">Pragotron is the default: one module, close and dry. The others are whole boards in their own rooms.</div>
+  </div>
+
+  <div class="card">
+    <div class="switch-row"><span class="lab">Airport sounds (ambience)</span>
+      <span class="switch"><input type="checkbox" id="sw-amb"><span class="track"></span></span></div>
+    <label for="sel-bed">Terminal bed</label>
+    <select id="sel-bed"></select>
+    <label>Bed level <span class="slider-val" id="val-bed"></span></label>
+    <input type="range" id="rng-bed" min="0" max="100">
+    <label>Event sounds level <span class="slider-val" id="val-events"></span></label>
+    <input type="range" id="rng-events" min="0" max="100">
+    <label>Announcements level <span class="slider-val" id="val-announcements"></span></label>
+    <input type="range" id="rng-announcements" min="0" max="100">
+    <label>Clack level <span class="slider-val" id="val-clack"></span></label>
+    <input type="range" id="rng-clack" min="0" max="100">
+  </div>
+
+  <div class="card">
+    <label for="sel-voice">Announcement voice</label>
+    <select id="sel-voice"></select>
+    <label for="sel-signal">Signal before announcements</label>
+    <select id="sel-signal">
+      <option value="dong">International double dong</option>
+      <option value="cdg">CDG motif (modelled)</option>
+      <option value="none">None</option>
+    </select>
+    <div class="switch-row"><span class="lab">Scheduled announcements on the board</span>
+      <span class="switch"><input type="checkbox" id="sw-pa"><span class="track"></span></span></div>
+    <div class="grid2">
+      <div><label for="num-min">At most every (minutes)</label><input type="number" id="num-min" min="1" max="120"></div>
+      <div><label for="num-max">At least every (minutes)</label><input type="number" id="num-max" min="1" max="240"></div>
+    </div>
+    <div class="hint">Scheduled calls rotate through: The Isle boarding, Honolulu, Bora Bora, Phuket, The Isle final call.</div>
+  </div>
+
+  <div class="card">
+    <label for="sel-solo">Hear an announcement on its own</label>
+    <select id="sel-solo"></select>
+    <div class="hint">Plays the signal, then the announcement in the voice chosen above. The three live recordings play in their own voices.</div>
+    <button id="btn-solo" type="button" class="primary" style="margin-top:12px;">Play announcement</button>
+    <button id="btn-solo-stop" type="button" style="margin-top:12px;">Stop</button>
+  </div>
+
+  <div class="card">
+    <div class="switch-row"><span class="lab">Quiet hours</span>
+      <span class="switch"><input type="checkbox" id="sw-quiet"><span class="track"></span></span></div>
+    <div class="grid2">
+      <div><label for="time-start">From</label><input type="time" id="time-start"></div>
+      <div><label for="time-end">Until</label><input type="time" id="time-end"></div>
+    </div>
+    <div class="hint">During quiet hours the board still flips, but softly, and announcements and ambience stay off.</div>
+  </div>
+</div>
+
+<div class="bar"><div class="inner">
+  <div id="status" class="clean"></div>
+  <div class="btns">
+    <button id="btn-demo" type="button">Demo on this device</button>
+    <button id="btn-push" type="button" class="primary">Push live</button>
+    <button id="btn-discard" type="button" class="danger">Discard</button>
+  </div>
+</div></div>
+
+<script>
+"use strict";
+var VOICES = [
+  ["aria","Aria · American (F)"],["helio","Helio · American (M)"],
+  ["isabella","Isabella · British (F)"],["magnus","Magnus · British (M)"],
+  ["sunny","Sunny · Australian (F)"],["conor","Conor · Irish (M)"],
+  ["thai","Thai (F)"],["singaporean","Singaporean (F)"],["japanese","Japanese (F)"]
+];
+var SCRIPTS = [
+  ["the-isle-final","The Isle · final call"],["the-isle-boarding","The Isle · boarding"],
+  ["honolulu","Honolulu · boarding"],["bora-bora","Bora Bora · boarding"],
+  ["phuket","Phuket · final call"],["miami-test","Miami · final call"],
+  ["page-cakes","Page · Cakes to The Isle Lounge"],
+  ["page-party-waiting","Page · your party is waiting"],
+  ["page-mrs-silver","Page · Mrs. Silver to the lounge"]
+];
+var LIVE_PA = [
+  ["live-frankfurt","Live recording · Frankfurt (German/English)","pa-frankfurt.mp3"],
+  ["live-boarding","Live recording · Boarding call (CC0)","pa-boarding-cc0.mp3"],
+  ["live-midway","Live recording · Chicago Midway","pa-midway.mp3"]
+];
+var SETS = [["pragotron","Pragotron module"],["frankfurt","Frankfurt hall"],
+            ["barcelona","Barcelona Sants"],["madeira","Madeira airport"]];
+var BEDS = [["manchester","Manchester Airport"],["kualalumpur","Kuala Lumpur Airport"],
+            ["lanzarote","Lanzarote Airport"],["rdu","Raleigh-Durham Terminal"]];
+var AUDIO = "../assets/audio/";
+
+function defaultBoard(){
+  return {
+    id: "board-departures", name: "Departures",
+    flights: [
+      {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
+      {time:"08:20", destination:"MIAMI",     flight:"AA 2241", gate:"C3", remarks:"FINAL CALL"},
+      {time:"09:15", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
+      {time:"10:40", destination:"BORA BORA", flight:"VT 442",  gate:"4",  remarks:"ON TIME"},
+      {time:"11:30", destination:"PHUKET",    flight:"TG 910",  gate:"9",  remarks:"ON TIME"},
+      {time:"12:05", destination:"SINGAPORE", flight:"SQ 25",   gate:"21", remarks:"ON TIME"},
+      {time:"13:45", destination:"LONDON",    flight:"BA 117",  gate:"15", remarks:"DELAYED"},
+      {time:"15:10", destination:"TOKYO",     flight:"NH 105",  gate:"18", remarks:"ON TIME"},
+      {time:"16:25", destination:"SYDNEY",    flight:"QF 8",    gate:"11", remarks:"ON TIME"}
+    ],
+    clackSet: "pragotron",
+    ambience: { on:false, bed:"manchester",
+                levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0.8 } },
+    voice: "isabella", signal: "dong",
+    announcements: { on:false, minSec:420, maxSec:1200,
+                     rotation:["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"] },
+    quietHours: { on:true, start:"23:00", end:"07:00" }
+  };
+}
+function defaultConfig(){
+  var b = defaultBoard(); var cfg = { liveBoardId: b.id, boards: {} }; cfg.boards[b.id] = b; return cfg;
+}
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function loadLive(){
+  try{
+    var raw = localStorage.getItem("isle-board-config-v1");
+    if(raw){ var cfg = JSON.parse(raw); if(cfg && cfg.boards && cfg.liveBoardId) return cfg; }
+  }catch(e){}
+  var fresh = defaultConfig();
+  try{ localStorage.setItem("isle-board-config-v1", JSON.stringify(fresh)); }catch(e){}
+  return fresh;
+}
+var live = loadLive();
+var work = null, stagedExists = false;
+try{
+  var s = localStorage.getItem("isle-board-demo-v1");
+  if(s){ var sc = JSON.parse(s); if(sc && sc.boards){ work = sc; stagedExists = true; } }
+}catch(e){}
+if(!work) work = clone(live);
+var editingId = work.liveBoardId;
+function board(){ return work.boards[editingId]; }
+function saveStaged(){
+  try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(work)); stagedExists = true; }catch(e){}
+  renderStatus();
+}
+function renderStatus(){
+  var el = document.getElementById("status");
+  var dirty = stagedExists && JSON.stringify(work) !== JSON.stringify(live);
+  if(dirty){ el.textContent = "Staged changes are waiting. Demo them, then push live."; el.className = ""; }
+  else if(stagedExists){ el.textContent = "Staged copy matches the live board."; el.className = "clean"; }
+  else { el.textContent = "No staged changes. You are looking at the live configuration."; el.className = "clean"; }
+  document.getElementById("btn-discard").disabled = !stagedExists;
+}
+
+/* ---- fill static drop-downs ---- */
+function fillSelect(id, pairs){
+  var sel = document.getElementById(id); sel.innerHTML = "";
+  pairs.forEach(function(p){ var o = document.createElement("option"); o.value = p[0]; o.textContent = p[1]; sel.appendChild(o); });
+}
+fillSelect("sel-clack", SETS); fillSelect("sel-bed", BEDS); fillSelect("sel-voice", VOICES);
+fillSelect("sel-solo", SCRIPTS.concat(LIVE_PA.map(function(l){ return [l[0], l[1]]; })));
+
+/* ---- library ---- */
+function renderLibrary(){
+  var lib = document.getElementById("library"); lib.innerHTML = "";
+  Object.keys(work.boards).forEach(function(id){
+    var b = work.boards[id];
+    var card = document.createElement("div"); card.className = "card";
+    var row = document.createElement("div"); row.className = "board-row";
+    var nm = document.createElement("span"); nm.className = "name"; nm.textContent = b.name; row.appendChild(nm);
+    if(id === work.liveBoardId){ var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "Live"; row.appendChild(bd); }
+    if(id === editingId){ var bd2 = document.createElement("span"); bd2.className = "badge editing"; bd2.textContent = "Editing"; row.appendChild(bd2); }
+    function mkBtn(label, cls, fn){
+      var btn = document.createElement("button"); btn.type = "button"; btn.textContent = label;
+      if(cls) btn.className = cls; btn.addEventListener("click", fn); return btn;
+    }
+    row.appendChild(mkBtn("Edit", "", function(){ editingId = id; renderAll(); }));
+    row.appendChild(mkBtn("Make live", "", function(){ work.liveBoardId = id; saveStaged(); renderAll(); }));
+    row.appendChild(mkBtn("Rename", "", function(){
+      var n = prompt("Name for this board:", b.name);
+      if(n && n.trim()){ b.name = n.trim(); saveStaged(); renderAll(); }
+    }));
+    row.appendChild(mkBtn("Delete", "danger", function(){
+      if(Object.keys(work.boards).length <= 1){ alert("This is the only board. Create another first."); return; }
+      if(!confirm("Delete board \"" + b.name + "\"?")) return;
+      delete work.boards[id];
+      if(work.liveBoardId === id) work.liveBoardId = Object.keys(work.boards)[0];
+      if(editingId === id) editingId = work.liveBoardId;
+      saveStaged(); renderAll();
+    }));
+    card.appendChild(row); lib.appendChild(card);
+  });
+}
+document.getElementById("btn-new-board").addEventListener("click", function(){
+  var src = board();
+  var copy = clone(src);
+  copy.id = "board-" + Date.now().toString(36);
+  copy.name = src.name + " copy";
+  work.boards[copy.id] = copy; editingId = copy.id;
+  saveStaged(); renderAll();
+});
+
+/* ---- editor ---- */
+function renderFlights(){
+  var tb = document.getElementById("flights-body"); tb.innerHTML = "";
+  board().flights.forEach(function(f, idx){
+    var tr = document.createElement("tr");
+    ["time","destination","flight","gate","remarks"].forEach(function(key){
+      var td = document.createElement("td");
+      var inp = document.createElement("input"); inp.type = "text"; inp.value = f[key] || "";
+      inp.dataset.idx = idx; inp.dataset.key = key;
+      inp.addEventListener("input", function(){ board().flights[idx][key] = inp.value; saveStaged(); });
+      td.appendChild(inp); tr.appendChild(td);
+    });
+    var td = document.createElement("td"); td.className = "del";
+    var del = document.createElement("button"); del.type = "button"; del.textContent = "×"; del.className = "danger";
+    del.addEventListener("click", function(){ board().flights.splice(idx, 1); saveStaged(); renderFlights(); });
+    td.appendChild(del); tr.appendChild(td);
+    tb.appendChild(tr);
+  });
+}
+document.getElementById("btn-add-flight").addEventListener("click", function(){
+  board().flights.push({time:"", destination:"", flight:"", gate:"", remarks:"ON TIME"});
+  saveStaged(); renderFlights();
+});
+function bindEditor(){
+  var b = board();
+  document.getElementById("editing-name").textContent = b.name;
+  document.getElementById("sel-clack").value = b.clackSet;
+  document.getElementById("sw-amb").checked = !!b.ambience.on;
+  document.getElementById("sel-bed").value = b.ambience.bed;
+  ["bed","events","announcements","clack"].forEach(function(k){
+    var r = document.getElementById("rng-" + k);
+    r.value = Math.round((b.ambience.levels[k] || 0) * 100);
+    document.getElementById("val-" + k).textContent = r.value + "%";
+  });
+  document.getElementById("sel-voice").value = b.voice;
+  document.getElementById("sel-signal").value = b.signal;
+  document.getElementById("sw-pa").checked = !!b.announcements.on;
+  document.getElementById("num-min").value = Math.round(b.announcements.minSec / 60);
+  document.getElementById("num-max").value = Math.round(b.announcements.maxSec / 60);
+  document.getElementById("sw-quiet").checked = !!b.quietHours.on;
+  document.getElementById("time-start").value = b.quietHours.start;
+  document.getElementById("time-end").value = b.quietHours.end;
+  renderFlights();
+}
+document.getElementById("sel-clack").addEventListener("change", function(e){ board().clackSet = e.target.value; saveStaged(); });
+document.getElementById("sw-amb").addEventListener("change", function(e){ board().ambience.on = e.target.checked; saveStaged(); });
+document.getElementById("sel-bed").addEventListener("change", function(e){ board().ambience.bed = e.target.value; saveStaged(); });
+["bed","events","announcements","clack"].forEach(function(k){
+  document.getElementById("rng-" + k).addEventListener("input", function(e){
+    board().ambience.levels[k] = e.target.value / 100;
+    document.getElementById("val-" + k).textContent = e.target.value + "%";
+    saveStaged();
+  });
+});
+document.getElementById("sel-voice").addEventListener("change", function(e){ board().voice = e.target.value; saveStaged(); });
+document.getElementById("sel-signal").addEventListener("change", function(e){ board().signal = e.target.value; saveStaged(); });
+document.getElementById("sw-pa").addEventListener("change", function(e){ board().announcements.on = e.target.checked; saveStaged(); });
+document.getElementById("num-min").addEventListener("change", function(e){
+  board().announcements.minSec = Math.max(60, (+e.target.value || 7) * 60); saveStaged();
+});
+document.getElementById("num-max").addEventListener("change", function(e){
+  board().announcements.maxSec = Math.max(board().announcements.minSec + 60, (+e.target.value || 20) * 60); saveStaged();
+});
+document.getElementById("sw-quiet").addEventListener("change", function(e){ board().quietHours.on = e.target.checked; saveStaged(); });
+document.getElementById("time-start").addEventListener("change", function(e){ board().quietHours.start = e.target.value || "23:00"; saveStaged(); });
+document.getElementById("time-end").addEventListener("change", function(e){ board().quietHours.end = e.target.value || "07:00"; saveStaged(); });
+
+/* ---- solo audition ---- */
+var soloAC = null, soloAudio = null;
+function soloCtx(){
+  if(!soloAC){ try{ soloAC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+  if(soloAC && soloAC.state === "suspended") soloAC.resume();
+  return soloAC;
+}
+function soloTone(freq, t0, dur, gain, dest){
+  var o = soloAC.createOscillator(), g = soloAC.createGain();
+  o.type = "sine"; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(gain, t0 + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(dest); o.start(t0); o.stop(t0 + dur + 0.05);
+}
+function soloSignal(kind){
+  var ac = soloCtx(); if(!ac || kind === "none") return Promise.resolve();
+  var master = ac.createGain(); master.gain.value = board().ambience.levels.announcements; master.connect(ac.destination);
+  var t = ac.currentTime + 0.05, dur;
+  if(kind === "cdg"){
+    [1318.5, 1046.5, 783.99, 1046.5].forEach(function(f, i){ soloTone(f, t + i*0.22, 0.5, 0.22, master); });
+    dur = 4 * 0.22 + 0.55;
+  }else{
+    soloTone(830.61, t, 0.7, 0.25, master); soloTone(622.25, t + 0.28, 0.9, 0.25, master);
+    dur = 1.35;
+  }
+  return new Promise(function(res){ setTimeout(res, dur * 1000); });
+}
+document.getElementById("btn-solo").addEventListener("click", function(){
+  var id = document.getElementById("sel-solo").value;
+  var file = null;
+  LIVE_PA.forEach(function(l){ if(l[0] === id) file = l[2]; });
+  if(!file) file = id + "--" + board().voice + ".mp3";
+  soloSignal(board().signal).then(function(){
+    if(soloAudio){ soloAudio.pause(); }
+    soloAudio = new Audio(AUDIO + "pa/" + file);
+    soloAudio.play().catch(function(){});
+  });
+});
+document.getElementById("btn-solo-stop").addEventListener("click", function(){
+  if(soloAudio){ soloAudio.pause(); soloAudio.currentTime = 0; }
+});
+
+/* ---- workflow bar ---- */
+document.getElementById("btn-demo").addEventListener("click", function(){
+  saveStaged();
+  window.open("../?demo=1", "_blank");
+});
+document.getElementById("btn-push").addEventListener("click", function(){
+  live = clone(work);
+  try{
+    localStorage.setItem("isle-board-config-v1", JSON.stringify(live));
+    localStorage.removeItem("isle-board-demo-v1");
+  }catch(e){}
+  stagedExists = false;
+  renderAll();
+});
+document.getElementById("btn-discard").addEventListener("click", function(){
+  if(!confirm("Discard all staged changes and return to the live configuration?")) return;
+  try{ localStorage.removeItem("isle-board-demo-v1"); }catch(e){}
+  stagedExists = false;
+  work = clone(live); editingId = work.liveBoardId;
+  renderAll();
+});
+function renderAll(){ renderLibrary(); bindEditor(); renderStatus(); }
+renderAll();
+</script>
+</body>
+</html>
