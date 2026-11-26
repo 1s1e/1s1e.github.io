@@ -12,7 +12,7 @@
     --px: 24px;
     --ink: #f2ede1;
     --amber: #e8a33d;
-    --board-bg: #0a0a0b;
+    --board-bg: #000000;
     --tile-bg: #17181a;
   }
   *{ box-sizing: border-box; margin:0; padding:0; }
@@ -25,46 +25,40 @@
   }
   #board{
     background: var(--board-bg);
-    padding: 3.2vh 3.4vw 3.6vh;
-    border-radius: 10px;
-    box-shadow: 0 0 0 1px #1d1e20, 0 30px 80px rgba(0,0,0,.8);
-    max-width: 100vw;
+    padding: var(--pad-y, 2vh) var(--pad-x, 2vw);
   }
   header{
     display:flex; align-items:baseline; justify-content:space-between;
-    padding: 0 0 2.2vh;
-    border-bottom: 2px solid #26272a;
-    margin-bottom: 2.4vh;
+    padding: 0 0 calc(var(--tile-w) * 0.32);
+    border-bottom: 1px solid #101011;
+    margin-bottom: calc(var(--tile-w) * 0.34);
   }
   header .title{
-    font-size: clamp(20px, 2.5vw, 96px);
+    font-size: calc(var(--tile-w) * 1.02); line-height: 1.1;
     font-weight: 700; letter-spacing: .34em; text-transform: uppercase;
     white-space: nowrap;
   }
   header .title .dot{ color: var(--amber); letter-spacing: 0; }
   header .clock{
-    font-size: clamp(20px, 2.5vw, 96px);
+    font-size: calc(var(--tile-w) * 1.02); line-height: 1.1;
     font-weight: 700; letter-spacing: .18em; font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
   @media (max-width: 760px){
     header .title{ font-size: 15px; letter-spacing: .16em; }
     header .clock{ font-size: 15px; letter-spacing: .1em; }
-    #board{ padding: 2vh 2.5vw 2.4vh; }
+    #board{ padding: var(--pad-y, 2vh) var(--pad-x, 2vw); }
     .colheads .cell span{ font-size: 8px; letter-spacing: .12em; }
   }
   .colheads, .row{ display:flex; align-items:center; }
-  .colheads{ padding: 0 0 1.4vh; }
+  .colheads{ padding: 0 0 calc(var(--tile-w) * 0.22); }
   .colheads span{
-    font-size: clamp(9px, 0.95vw, 36px); letter-spacing: .3em;
+    font-size: calc(var(--tile-w) * 0.44); line-height: 1.1; letter-spacing: .3em;
     color:#8f8c82; text-transform: uppercase; font-weight: 600;
   }
   .row{ padding: var(--row-pad, 0.55vh) 0; }
   /* ---- fullscreen: the board fills the frame, and a real board has no footer ---- */
-  body.fullscreen #board{ padding: 1.5vh 1vw; border-radius: 0; box-shadow: none; }
   body.fullscreen #sound-hint, body.fullscreen #chrome{ display: none !important; }
-  body.fullscreen header .title, body.fullscreen header .clock{ font-size: calc(var(--tile-w) * 1.02); }
-  body.fullscreen .colheads span{ font-size: calc(var(--tile-w) * 0.44); }
   .cell{ display:flex; gap: var(--gap); }
   .spacer{ width: calc(var(--tile-w) * 1.15); flex: none; }
   .tile{
@@ -375,9 +369,15 @@ function applyHeadings(){
   if(headSpans[1]) headSpans[1].textContent = board.shows === "arrivals" ? "FROM" : "DESTINATION";
 }
 var tileGrid = []; /* [row][col] -> [tile elements] */
+var rowsBuilt = false;
+var fitTotalRows = 0; /* total rows incl. blank flap rows, computed by fitBoard */
 function buildRows(flights){
   rowsEl.innerHTML = ""; tileGrid = [];
-  flights.forEach(function(f){
+  var all = flights.slice();
+  var total = Math.max(flights.length, fitTotalRows || 0);
+  var BLANK = {time:"", destination:"", flight:"", gate:"", remarks:""};
+  for(var b = flights.length; b < total; b++) all.push(BLANK); /* real boards show blank rows */
+  all.forEach(function(f){
     var rowEl = document.createElement("div"); rowEl.className = "row";
     var gridRow = [];
     COLS.forEach(function(c, ci){
@@ -670,6 +670,7 @@ function renderBoard(cascade){
   stopColour();
   applyHeadings();
   buildRows(board.flights);
+  rowsBuilt = true;
   var jobs = []; /* {tile, from, to, delay} */
   board.flights.forEach(function(f, r){
     COLS.forEach(function(c, ci){
@@ -710,40 +711,61 @@ function renderBoard(cascade){
 }
 
 /* ============ Fit the board to the screen ============ */
+/* Board insets: the board box sits INSIDE the viewport on every side, in
+   windowed and fullscreen modes alike. 2% of width at left/right and 2.5%
+   of height at top/bottom: past the ~1.5%/2% design target, the extra
+   ~0.5% is the allowance for TV overscan (many sets crop 1-3% of the
+   picture in their default picture mode), so the outermost tiles and the
+   header stay on the visible glass even with modest overscan. */
+var INSET_X = 0.02, INSET_Y = 0.025;
+function boardPads(fs, iw, ih){
+  return { x: fs ? iw * 0.006 : iw * 0.012, y: fs ? ih * 0.008 : ih * 0.014 };
+}
 function fitColour(){
+  var root = document.documentElement;
+  var iw = window.innerWidth, ih = window.innerHeight;
   var fs = !!document.fullscreenElement;
+  var pad = boardPads(fs, iw, ih);
+  root.style.setProperty("--pad-x", pad.x + "px");
+  root.style.setProperty("--pad-y", pad.y + "px");
+  var boardW = iw * (1 - 2 * INSET_X), boardH = ih * (1 - 2 * INSET_Y);
+  var tw = Math.min(84, Math.max(18, iw * 0.0205)); /* :root --tile-w clamp, drives header size */
+  var headBlock = 2.52 * tw + 2;
   var gapTotalW = (CW - 1) * 2, gapTotalH = (CH - 1) * 2;
-  var px = Math.floor(Math.min((window.innerWidth * (fs ? 0.975 : 0.96) - gapTotalW) / CW,
-                               (window.innerHeight * (fs ? 0.88 : 0.80) - gapTotalH) / CH));
-  document.documentElement.style.setProperty("--px", Math.max(4, px) + "px");
+  var px = Math.floor(Math.min((boardW - 2 * pad.x - gapTotalW) / CW,
+                               (boardH - 2 * pad.y - headBlock - gapTotalH) / CH));
+  root.style.setProperty("--px", Math.max(4, px) + "px"); /* .px is square: width == height */
 }
 function fitBoard(){
   if(board.type === "colour"){ fitColour(); return; }
   var root = document.documentElement;
+  var fs = !!document.fullscreenElement;
+  var iw = window.innerWidth, ih = window.innerHeight;
   var units = 43 + 38 * 0.14 + 4 * 1.15; /* tiles + in-cell gaps + spacers, in tile widths */
-  var rows = Math.max(1, board.flights.length);
-  var iw = window.innerWidth, ih = window.innerHeight, w;
-  if(document.fullscreenElement){
-    /* Fill the frame: ~1% side margins, ~1.5% top/bottom, no tile cap.
-       Width drives the tile size; height caps it when there are many rows.
-       Leftover height is spread evenly into the row padding so the board
-       fills the frame vertically as far as the grid allows. */
-    var wByWidth = (iw * 0.975) / units;
-    var wByHeight = (ih * 0.91) / (1.85 + rows * 1.42);
-    w = Math.max(4, Math.min(wByWidth, wByHeight));
-    root.style.setProperty("--tile-w", w + "px");
-    var usedH = ih * 0.03            /* board top/bottom padding */
-              + w * 1.30 + ih * 0.046  /* header line + its margins */
-              + w * 0.55 + ih * 0.014  /* column headings */
-              + rows * w * 1.42;       /* the rows themselves */
-    var leftover = Math.max(0, ih - usedH);
-    root.style.setProperty("--row-pad", Math.max(ih * 0.0055, leftover / (rows * 2)) + "px");
-  }else{
-    var availW = iw * (1 - 0.068) - 10; /* board side padding is 3.4vw each side */
-    var availH = (ih * 0.92) / (rows * 1.42 + 3.4); /* rows + header/heads/padding */
-    w = Math.max(4, Math.min(availW / units, availH, 96));
-    root.style.setProperty("--tile-w", w + "px");
-    root.style.removeProperty("--row-pad");
+  var flights = Math.max(1, board.flights.length);
+  var boardW = iw * (1 - 2 * INSET_X);
+  var boardH = ih * (1 - 2 * INSET_Y);
+  var pad = boardPads(fs, iw, ih);
+  root.style.setProperty("--pad-x", pad.x + "px");
+  root.style.setProperty("--pad-y", pad.y + "px");
+  /* Vertical metrics in tile-width units. The tile aspect is FIXED at
+     1.42 (height / width) by the --tile-h calc and never stretched:
+     tiles grow only in true proportion. Height is filled by spreading
+     the row pitch and by completing the grid with blank flap rows. */
+  var HEADER_ETC = 2.52; /* header block + column headings, in tile widths */
+  var PITCH = 1.53;      /* row pitch incl. base row padding, in tile widths */
+  var wByWidth = (boardW - 2 * pad.x) / units;
+  var wByHeight = (boardH - 2 * pad.y - 2) / (HEADER_ETC + flights * PITCH);
+  var w = Math.max(4, Math.min(wByWidth, wByHeight * 0.998));
+  root.style.setProperty("--tile-w", w + "px");
+  var rowsAvail = boardH - 2 * pad.y - 2 - HEADER_ETC * w;
+  var totalRows = Math.max(flights, Math.floor(rowsAvail / (PITCH * w)));
+  var leftover = Math.max(0, rowsAvail - totalRows * PITCH * w);
+  var rowPad = w * 0.055 + leftover / (totalRows * 2);
+  root.style.setProperty("--row-pad", rowPad + "px");
+  if(totalRows !== fitTotalRows){
+    fitTotalRows = totalRows;
+    if(rowsBuilt) renderBoard(false); /* rebuild so blank rows match the fit */
   }
 }
 document.addEventListener("fullscreenchange", function(){
