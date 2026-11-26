@@ -1,124 +1,31 @@
-/* THE ISLE · BUILD SECTION · SHADOW STUDY
-   Section sheet for /build/shadow/, layered after the master
-   style sheet at /assets/the-isle-master.css. Holds this
-   section's own variables, the top bar chrome, the switch's
-   knob glyph exception and the page layout. Shared values live
-   in the master sheet and are never repeated here. */
+/* THE ISLE · SHADOW STUDY · EXCEPTIONS
+   The Shadow Study's exception sheet, linked after the master
+   style sheet at /assets/the-isle-master.css. The master carries
+   the whole site's styling, this page's included; what stands
+   here is only this section's genuine exceptions, and nothing
+   else. */
 
-:root{
-  --word:#C0C0C0;
-  --input-bg:#152130;
-}
-:root[data-theme="light"]{
-  --word:#1d2a3b;
-  --input-bg:#f3eee0;
-}
-
-/* Top bar */
-#topbar{ display:flex; align-items:center; gap:14px; padding:10px 20px; background:var(--field); border-bottom:1px solid var(--gold-line); }
-#topbar .tb-tree{ height:30px; width:auto; display:block; }
-#topbar .tb-word{ font-family:var(--serif); font-weight:500; font-size:15px; letter-spacing:0.34em; color:var(--word); white-space:nowrap; }
-#topbar .tb-div{ width:1px; align-self:stretch; background:var(--gold-line); }
-#topbar .tb-title{ font-family:var(--serif); font-weight:500; font-size:20px; letter-spacing:0.02em; color:var(--ivory); white-space:nowrap; }
-#topbar .tb-spacer{ flex:1; }
-/* Project Home stands in the lineless standard form: no border, no
-   box, no background, the house glyph alone in a 44px tap area. */
-#topbar .tb-back{ text-decoration:none; border:none; background:none; box-shadow:none; padding:0; width:44px; height:44px; flex:none; }
-#topbar .tb-back svg{ width:20px; height:20px; }
-#themesw{ display:flex; align-items:center; gap:8px; }
-#themesw .tw-label{ font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ivory-dim); }
-@media (max-width:760px){
-  #topbar{ flex-wrap:nowrap; gap:10px; padding:8px 14px; }
-  #topbar .tb-tree{ height:24px; }
-  #topbar .tb-word{ font-size:13px; letter-spacing:0.22em; }
-  #topbar .tb-title{ font-size:17px; white-space:nowrap; }
-  #topbar .tb-back{ padding:0; font-size:12px; }
-}
-@media (max-width:560px){
-  #topbar .tb-word{ display:none; }
-  #topbar .tb-div{ display:none; }
-}
-
-/* The switch: the master form, with this section's knob glyph
-   exception layered on it (the knob carries the glyph of the
-   mode in use). */
-#themesw .switch{ flex:none; cursor:pointer; }
-.switch .knob{ display:flex; align-items:center; justify-content:center; }
-.switch .knob .k-glyph{ display:flex; color:#152130; }
-.switch .knob .k-glyph svg{ display:block; }
-.switch .knob .k-moon{ display:none; }
-.switch[data-mode="dark"] .knob .k-sun{ display:none; }
-.switch[data-mode="dark"] .knob .k-moon{ display:flex; }
-
-/* Base layout */
-html, body{ height:100%; }
-#app{ display:flex; flex-direction:column; height:100%; }
-#main{ display:flex; flex:1; min-height:0; }
-#scene{ flex:1 1 auto; min-height:240px; position:relative; overflow:hidden; }
-#scene canvas{ display:block; }
-#controls{ width:308px; flex:0 0 308px; box-sizing:border-box; padding:12px 16px 16px; background:var(--field); border-right:1px solid var(--gold-line); overflow-y:auto; }
-#controls .note{ margin:2px 0 4px 0; font-size:12px; color:var(--ivory-soft); line-height:1.55; }
-#controls .grp{ margin-bottom:16px; }
-#controls .grp:last-child{ margin-bottom:0; }
-#controls .grp + .grp{ border-top:1px solid var(--gold-line); padding-top:14px; }
-#controls .grp > label{ display:block; margin-bottom:8px; }
-.daterow{ display:flex; align-items:center; gap:12px; }
-.daterow input[type="date"]{ flex:1; min-width:0; }
-#controls input[type="range"]{ width:100%; flex:none; display:block; }
-.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.grid2 .wide{ grid-column:1 / -1; }
-.grid2 .btn{ width:100%; }
 /* The grid button exception (guide section 12): this panel's grid
    buttons carry 13px type, letter-spacing 0.05em and 12px
    horizontal padding, so the longest label, Shortest Day, sits
    on one line. Every other part of the button form is the
    master's, unchanged. The exception lives in this sheet only. */
-.grid2 .btn{ font-size:13px; letter-spacing:0.05em; padding:14px 12px; }
+.grid2 .btn { font-size:13px; letter-spacing:0.05em; padding:14px 12px; }
+
 /* The sun buttons' two-line form (guide section 12): Sunrise,
    Solar Noon and Sunset carry their name on the first line and
    their time on the second, by design, at the grid's 13px, so
    the three stand at one uniform height. The time takes the
    quieter tone through opacity, so it follows the button's own
    colour in both modes, on hover and in the on state. */
-.grid2 .sunbtn{ flex-direction:column; gap:3px; }
-.grid2 .sunbtn .sun-name{ display:block; line-height:1.3; }
-.grid2 .sunbtn .sun-time{ display:block; line-height:1.3; font-weight:600; opacity:0.72; }
-.stack{ display:flex; flex-direction:column; gap:8px; }
-.stack .btn{ width:100%; }
-.readoutgrp{ display:flex; flex-direction:column; gap:6px; }
-.paneltop{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--gold-line); }
-#menubtn{ display:none; position:absolute; top:12px; left:12px; z-index:6; }
-#main.panelhidden #controls{ display:none; }
-#main.panelhidden #menubtn{ display:block; }
-#sunfacts{ border-top:1px solid var(--gold-line); margin-top:16px; padding-top:4px; }
-#sunfacts .sec-head{ display:flex; align-items:center; }
-#sunfacts .sec-toggle{ flex:1; display:flex; align-items:center; background:none; border:none; padding:11px 0 8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); text-align:left; }
-#sunfacts .sec-toggle .chev{ margin-left:auto; font-size:11px; color:var(--ivory-dim); transition:transform 0.15s; }
-#sunfacts.closed .sec-toggle .chev{ transform:rotate(-90deg); }
-#sunfacts.closed .sec-body{ display:none; }
-#readout{ line-height:1.55; font-size:13px; color:var(--ivory-soft); }
-#readout .rl{ display:block; }
-#readout b{ color:var(--gold); font-weight:600; }
-@media (max-width:760px){
-  #main{ flex-direction:column; }
-  #scene{ flex:0 0 42vh; min-height:240px; order:-1; }
-  #controls{ width:auto; flex:1 1 auto; border-right:none; border-top:1px solid var(--gold-line); }
-}
+.grid2 .sunbtn { flex-direction:column; gap:3px; }
+.grid2 .sunbtn .sun-name { display:block; line-height:1.3; }
+.grid2 .sunbtn .sun-time { display:block; line-height:1.3; font-weight:600; opacity:0.72; }
+
 /* Light inversion for the on state: the master .btn.on keeps its
    dark form in both modes (Navy ground, ivory text, Panel hover).
    As page chrome it inverts in light by the exact exchange, Navy
    to Ivory, Panel to Light Tint, ivory text to navy. Dark mode is
    untouched. */
-:root[data-theme="light"] .btn.on{ background:#f0e8d5; color:#1d2a3b; }
-:root[data-theme="light"] .btn.on:hover, :root[data-theme="light"] .btn.on:focus-visible{ background:#f3eee0; color:#1d2a3b; }
-label{ font-size:11px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); }
-input[type="date"]{ background:var(--input-bg); color:var(--ivory); border:1px solid var(--gold-line); border-radius:0; padding:5px 7px; font-family:inherit; font-size:13.5px; }
-input[type="range"]{ -webkit-appearance:none; appearance:none; box-sizing:border-box; flex:1 1 220px; height:44px; padding:12px 0; background:transparent; cursor:pointer; }
-input[type="range"]::-webkit-slider-runnable-track{ height:4px; background:var(--gold-line); }
-input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:16px; height:16px; margin-top:-6px; background:var(--gold); border:none; border-radius:0; }
-input[type="range"]::-moz-range-track{ height:4px; background:var(--gold-line); }
-input[type="range"]::-moz-range-thumb{ width:16px; height:16px; background:var(--gold); border:none; border-radius:0; }
-#clock{ font-size:15px; font-weight:600; min-width:52px; }
-.hint{ font-size:11px; color:var(--ivory-dim); }
-.hint-touch{ display:none; }
-@media (pointer:coarse){ .hint-mouse{ display:none; } .hint-touch{ display:inline; } }
+:root[data-theme="light"] .btn.on { background:#f0e8d5; color:#1d2a3b; }
+:root[data-theme="light"] .btn.on:hover, :root[data-theme="light"] .btn.on:focus-visible { background:#f3eee0; color:#1d2a3b; }
