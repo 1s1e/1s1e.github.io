@@ -1,5 +1,9 @@
 # THE ISLE · MASTER CHANGE LOG
 
+## The Lot Viewer and the Shadow Study retired (Nov 26, 2026)
+
+On the user's direction, the Lot Viewer and the Shadow Study are retired: the 3D Model carries both jobs now, the lot in its layers and measurements, the sun and shadow in its Sun pane. The two pages come off the site and their addresses serve the site 404, the settled form for a retired address. The Build index loses its first two entries and the remaining entries renumber: Permits & Documents stands as 01, eyebrow THE RECORD, and the 3D Model as 02, eyebrow THE FORM, their descriptions, links and status lines unchanged. The master style sheet loses the two pages' scoped blocks, and their folder exception sheets go with them. Section 8 of the guide states the two entries in full under their new numbers; section 12's grid button exception and sun button form, which existed only for those pages, come out; and section 1's entry example now sets the 3D Model entry in the retired entry's place, its faults unchanged. The pages stand in the repository's history if they are ever wanted back.
+
 ## Page Silver darkened one step (Nov 26, 2026)
 
 On the user's ruling, Page Silver darkens one step, from #6e6e6e to #686868, RGB 104 104 104, CMYK 0 0 0 59. At #6e6e6e the light accent measured 4.18 to 1 on The Isle Ivory, below the body text floor of 4.5 to 1, while carrying small text site-wide in light mode: volume labels, kickers, report headings and panel labels. The new step is the closest darker value that clears the floor with a working margin, measuring 4.57 to 1 on The Isle Ivory and 4.81 to 1 on Light Tint. The master style sheet's light accent tokens and every use of the colour follow, as do the tokens file, both palettes and the swatch sheet, and section 2 of the guide records the new value and its measured ratios. The Isle Silver #C0C0C0 is unchanged, and dark mode is untouched.

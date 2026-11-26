@@ -40,10 +40,10 @@ then the way the house never speaks.
   island escape. Book your unforgettable stay today!" The wrong
   version boasts, sells and exclaims; the line itself claims nothing
   and sells nothing.
-- An entry, the Lot Viewer. As the house speaks: "The lot in full:
-  its maps, boundaries, flood lines, survey and floor plans, layer
-  upon layer." As it never speaks: "Everything about the lot — every
-  map and boundary, even the tide charts." The wrong version sets an
+- An entry, the 3D Model. As the house speaks: "The house as a
+  model: its form, rooms and grounds, turned and viewed from every
+  side." As it never speaks: "Everything about the house — every
+  room and view, even the tide charts." The wrong version sets an
   em dash, which never appears in the house's words; it is shown
   here once, as the fault itself. It also claims tide charts the
   page does not carry.
@@ -439,14 +439,9 @@ its dark ground. Page chrome always inverts.
   form OPEN plus its measure, and the whole block is the link. A work in
   preparation is shown ghosted, unlinked, in the same form.
 - The entries as settled, stated in full because the instance is the
-  standard: 01, eyebrow THE LAND, title Lot Viewer, to /build/lot/,
-  "The lot in full: its maps, boundaries, flood lines, survey and floor
-  plans, layer upon layer.", OPEN · 18 LAYERS. 02, eyebrow THE LIGHT,
-  title Shadow Study, to /build/shadow/, "Sun and shadow tracked across
-  the house and the lot, through the day and the year.", OPEN · 365
-  DAYS. 03, eyebrow THE RECORD, title Permits & Documents, to
+  standard: 01, eyebrow THE RECORD, title Permits & Documents, to
   /build/permits/, "The county permit record for the house: documents,
-  inspections and reviews, kept current.", OPEN · 20 DOCUMENTS. 04,
+  inspections and reviews, kept current.", OPEN · 20 DOCUMENTS. 02,
   eyebrow THE FORM, title 3D Model, to /build/3d/, "The house as a
   model: its form, rooms and grounds, turned and viewed from every
   side.", OPEN · THE WHOLE HOUSE.
@@ -681,15 +676,6 @@ What is required of anything created:
   700, letter-spacing 0.1em, the labels written in Title Case and set
   in capitals by the form, padding 14px by 22px, a 1px border and a
   44px minimum height.
-- One exception: the panel grid buttons of the Lot Viewer and the
-  Shadow Study carry a smaller size, 10.5px on the Lot Viewer and
-  13px on the Shadow Study, letter-spacing 0.05em and horizontal
-  padding of 12px, so their longest labels sit on one line. Every
-  other part of the form is unchanged. Within that exception, the
-  Shadow Study's three sun buttons, Sunrise, Solar Noon and Sunset,
-  carry their name and their time on two lines by design, the name
-  on the first line and the time on the second, at the grid's 13px,
-  so the three stand at one uniform height.
 - A button carries an icon only where the action has a true symbol of
   its own: the open book for reading, the tray arrow for a download.
   The icon stands at 17px before the words, with a 10px gap. Utility
