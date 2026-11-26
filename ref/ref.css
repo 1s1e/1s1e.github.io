@@ -9,23 +9,27 @@
 
       /* The section's own values, keyed as the master sheet keys
          its modes: dark at :root, light under [data-theme="light"].
-         The navy grounds are constant, because the hero, the stage,
-         the bars and the footer stand on navy in both modes; the
-         constant golds serve those same dark grounds and the
-         ornaments. The soft ink pairs Soft Ink on light with Ivory
-         Dim on dark, as this page has always set its secondary
-         text; the shadows are the covers' and pages' own. */
+         The constant silvers serve the bands that invert and the
+         ornaments, at Page Silver, the step for light grounds, in
+         light; the Reader's bars and stage stand on navy in both
+         modes and keep The Isle Silver in both, by the block at
+         the inversion below. The soft ink pairs Soft Ink on light
+         with Ivory Dim on dark, as this page has always set its
+         secondary text; the shadows are the covers' and pages'
+         own. */
       :root {
         --navy: #1d2a3b;
         --navy-deep: #152130;
-        --gold-const: #c2a15c;
-        --gold-const-bright: #c9ab72;
+        --gold-const: #C0C0C0;
+        --gold-const-bright: #C0C0C0;
         --img-back: #f0e8d5;
         --ink-soft: #a89f88;
         --shadow-cover: 0 22px 44px rgba(29, 42, 59, 0.55), 0 4px 12px rgba(29, 42, 59, 0.4);
         --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.45), 0 2px 6px rgba(29, 42, 59, 0.3);
       }
       :root[data-theme="light"] {
+        --gold-const: #6e6e6e;
+        --gold-const-bright: #6e6e6e;
         --ink-soft: #3c4763;
         --shadow-cover: 0 22px 44px rgba(29, 42, 59, 0.32), 0 4px 12px rgba(29, 42, 59, 0.18);
         --shadow-page: 0 10px 26px rgba(29, 42, 59, 0.16), 0 2px 6px rgba(29, 42, 59, 0.1);
@@ -122,11 +126,11 @@
       .stats {
         display: flex; flex-wrap: wrap; justify-content: center;
         margin: 40px auto 0; max-width: 760px;
-        border-top: 1px solid rgba(201, 171, 114, 0.35);
-        border-bottom: 1px solid rgba(201, 171, 114, 0.35);
+        border-top: 1px solid rgba(192, 192, 192, 0.35);
+        border-bottom: 1px solid rgba(192, 192, 192, 0.35);
       }
       .stat { padding: 16px 30px 14px; }
-      .stat + .stat { border-left: 1px solid rgba(201, 171, 114, 0.22); }
+      .stat + .stat { border-left: 1px solid rgba(192, 192, 192, 0.22); }
       .stat b {
         display: block; font-family: var(--serif); font-weight: 500;
         font-size: 30px; line-height: 1.1; color: #f0e8d5;
@@ -151,7 +155,7 @@
         width: 100%; height: auto;
         background: var(--img-back);
         box-shadow: var(--shadow-cover);
-        outline: 1px solid rgba(201, 171, 114, 0.4);
+        outline: 1px solid rgba(192, 192, 192, 0.4);
         outline-offset: -1px;
         transition: transform 0.35s ease;
       }
@@ -170,7 +174,15 @@
       .trio .t-pages { display: block; font-size: 13.5px; color: #a89f88; margin-top: 3px; }
       .hero-note { margin: 46px auto 0; font-size: 13.5px; color: #a89f88; letter-spacing: 0.04em; }
       .hero-dl { margin: 24px auto 0; display: flex; justify-content: center; }
-      /* The hero download is the master sheet's .btn in its secondary form. */
+      /* The hero download is the master sheet's .btn in its secondary form.
+         In light mode the hero band inverts to ivory (the inversion block
+         below), so the download mirrors its dark form instead of keeping
+         the dark ground colour: transparent, with the light step at its
+         border, which the master sheet's --gold-bright already carries,
+         and at its label, set here. The Option B hero fix, which held
+         the label at The Isle Silver on the navy band, is not needed
+         once the band inverts and is replaced by this rule. */
+      :root[data-theme="light"] .hero-dl .btn { color: #6e6e6e; }
 
       /* ---------- volume sections ---------- */
       .vol { padding: 76px 20px 84px; }
@@ -230,7 +242,7 @@
       .page-fail {
         margin: 14px 0 0; padding: 12px 16px; text-align: center;
         color: #f0e8d5; font-size: 14.5px; line-height: 1.55;
-        border: 1px solid rgba(201, 171, 114, 0.55);
+        border: 1px solid rgba(192, 192, 192, 0.55);
       }
       /* Try Again is the master sheet's .btn in its secondary form;
          kept here, only its spacing from the sentence it follows. */
@@ -354,8 +366,75 @@
         display: block; max-width: none; width: 121.51px; height: auto;
         margin: -0.77px -3.68px -0.11px -4.51px;
       }
-      footer .f-line { width: min(880px, 90%); height: 1px; background: rgba(201, 171, 114, 0.35); margin: 30px auto 0; }
+      footer .f-line { width: min(880px, 90%); height: 1px; background: rgba(192, 192, 192, 0.35); margin: 30px auto 0; }
       footer p { margin: 18px auto 0; max-width: 560px; font-size: 14px; line-height: 1.65; color: #a89f88; }
+
+      /* ---------- light mode: the inversion ----------
+         In light mode the two grounds that otherwise stay navy, the
+         hero band and the footer, invert: ground and ink exchange
+         places and every element on them takes its mirrored
+         counterpart, so the light page is the dark page turned over,
+         not a different page. The hero's ground becomes The Isle
+         Ivory easing to Light Tint, as the dark hero eases from navy
+         to Deep; its wordmark swaps to the navy artwork at the same
+         geometry; its intro and note take Soft Ink, as Ivory Soft
+         and Ivory Dim stand on the dark band; the stats figures take
+         navy, their labels, rules and dividers the light step at the
+         dark band's own alphas; the trio's names take navy and their
+         page lines Soft Ink. The footer's ground becomes Light Tint,
+         its one-image lockup swaps to the colour artwork, navy where
+         the white stands on Deep, its imprint and rule take the light
+         step (the imprint through --gold-const-bright, the rule at
+         the dark rule's own alpha), and its text takes Soft Ink. The
+         Reader's bars and stage keep their navy in both modes, as
+         they do today, and the switch keeps its Deep pill in both. */
+      :root[data-theme="light"] .hero {
+        background: #f0e8d5;
+        background-image: linear-gradient(180deg, #f0e8d5 0%, #f3eee0 100%);
+        color: #1d2a3b;
+      }
+      :root[data-theme="light"] .hero-intro { color: #3c4763; }
+      :root[data-theme="light"] .hero-note { color: #3c4763; }
+      :root[data-theme="light"] .stats {
+        border-top-color: rgba(110, 110, 110, 0.35);
+        border-bottom-color: rgba(110, 110, 110, 0.35);
+      }
+      :root[data-theme="light"] .stat + .stat { border-left-color: rgba(110, 110, 110, 0.22); }
+      :root[data-theme="light"] .stat b { color: #1d2a3b; }
+      :root[data-theme="light"] .trio .t-name { color: #1d2a3b; }
+      :root[data-theme="light"] .trio .t-pages { color: #3c4763; }
+      :root[data-theme="light"] .trio img { outline-color: rgba(110, 110, 110, 0.4); }
+      :root[data-theme="light"] .hero .dl-fail { color: #3c4763; }
+      :root[data-theme="light"] footer { background: #f3eee0; color: #3c4763; }
+      :root[data-theme="light"] footer p:not(.f-imprint) { color: #3c4763; }
+      :root[data-theme="light"] footer .f-line { background: rgba(110, 110, 110, 0.35); }
+      /* The wordmark and lockup swaps: each band carries both artworks
+         and shows the one its ground calls for. The hidden artwork is
+         display none, so dark mode renders exactly as it did. */
+      :root .hero h1 .hero-wordmark.navy { display: none; }
+      :root[data-theme="light"] .hero h1 .hero-wordmark.cream { display: none; }
+      :root[data-theme="light"] .hero h1 .hero-wordmark.navy { display: block; }
+      :root footer .f-title-row .f-one.colour { display: none; }
+      :root[data-theme="light"] footer .f-title-row .f-one.white { display: none; }
+      :root[data-theme="light"] footer .f-title-row .f-one.colour { display: block; }
+      /* The Reader's bars and stage do not invert: the topbar, the
+         full size bar and the stage surround stand on Deep in both
+         modes, as imagery grounds. The accent follows the ground,
+         not the mode, so the chrome standing on them keeps The Isle
+         Silver in light mode too, exactly its dark form; the step
+         governs only the grounds that turn ivory. */
+      :root[data-theme="light"] .reader-topbar { border-bottom-color: #C0C0C0; }
+      :root[data-theme="light"] .back-link { color: #C0C0C0; }
+      :root[data-theme="light"] .back-link:hover, :root[data-theme="light"] .back-link:focus-visible { background: #C0C0C0; }
+      :root[data-theme="light"] .reader-brand span { color: #C0C0C0; }
+      :root[data-theme="light"] .reader-topbar-vol span { color: #C0C0C0; }
+      :root[data-theme="light"] .fullsize-bar { border-bottom-color: #C0C0C0; }
+      :root[data-theme="light"] .fullsize-title span { color: #C0C0C0; }
+      :root[data-theme="light"] .fullsize-close { color: #C0C0C0; }
+      :root[data-theme="light"] .fullsize-close:hover, :root[data-theme="light"] .fullsize-close:focus-visible { background: #C0C0C0; }
+      :root[data-theme="light"] .stage figcaption .cap-page { color: #C0C0C0; }
+      :root[data-theme="light"] .stage img.page:focus-visible { outline-color: #C0C0C0; }
+      :root[data-theme="light"] .progress i { background: #C0C0C0; }
 
       /* ---------- full reader ---------- */
       .reader-section { padding: 76px 20px 84px; background: var(--raise); }
@@ -429,7 +508,7 @@
         font-family: var(--sans); cursor: pointer;
         font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
         color: var(--gold-const-bright); background: transparent;
-        border: 1px solid rgba(201, 171, 114, 0.6); padding: 9px 16px; min-height: 44px;
+        border: 1px solid rgba(192, 192, 192, 0.6); padding: 9px 16px; min-height: 44px;
       }
       .fullsize-close:hover, .fullsize-close:focus-visible { background: var(--gold-const); color: #1d2a3b; }
       .fullsize-scroll {
@@ -466,8 +545,8 @@
       }
       .toc-entry:hover { background: var(--raise); }
       .toc-entry .pg { font-family: var(--serif); color: var(--gold-bright); font-size: 14px; flex: none; }
-      .toc-entry.current { background: rgba(201, 171, 114, 0.22); box-shadow: inset 3px 0 0 var(--gold-const-bright); }
-      :root[data-theme="light"] .toc-entry.current { background: rgba(160, 127, 58, 0.16); box-shadow: none; }
+      .toc-entry.current { background: rgba(192, 192, 192, 0.22); box-shadow: inset 3px 0 0 var(--gold-const-bright); }
+      :root[data-theme="light"] .toc-entry.current { background: rgba(110, 110, 110, 0.16); box-shadow: none; }
 
       /* Stage */
       .stage {
@@ -571,7 +650,7 @@
       .back-link {
         font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
         color: var(--gold-const-bright); text-decoration: none;
-        border: 1px solid rgba(201, 171, 114, 0.6); padding: 9px 15px;
+        border: 1px solid rgba(192, 192, 192, 0.6); padding: 9px 15px;
       }
       .back-link:hover, .back-link:focus-visible { background: var(--gold-const); color: #1d2a3b; }
       .reader-brand {
