@@ -22,7 +22,6 @@
   .gate .btn { margin-top: 16px; }
   .gate .btn:disabled { opacity: 0.5; cursor: wait; }
   .err { color: var(--gold); font-size: 13.5px; margin-top: 14px; min-height: 18px; }
-  .note { font-size: 13px; line-height: 1.55; color: var(--ivory-soft); }
   table.docs { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
   table.docs td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--gold-line); vertical-align: top; line-height: 1.45; }
   td.dn { overflow-wrap: anywhere; }
