@@ -161,21 +161,32 @@ var SCRIPTS = [
 var LIVE_PA = [
   ["live-frankfurt","Live recording · Frankfurt (German/English)","pa-frankfurt.mp3"],
   ["live-boarding","Live recording · Boarding call (CC0)","pa-boarding-cc0.mp3"],
-  ["live-midway","Live recording · Chicago Midway","pa-midway.mp3"]
+  ["live-midway","Live recording · Chicago Midway","pa-midway.mp3"],
+  ["live-bangkok-airasia","Live recording · Bangkok Don Mueang · AirAsia arrival (Thai/English/Chinese)","pa-bangkok-arrival-airasia.mp3"],
+  ["live-bangkok-lion-chiangmai","Live recording · Bangkok Don Mueang · Lion Air arrival, Chiang Mai (Thai/English/Chinese)","pa-bangkok-arrival-lion-chiangmai.mp3"],
+  ["live-bangkok-lion","Live recording · Bangkok Don Mueang · Lion Air arrival (Thai/English/Chinese)","pa-bangkok-arrival-lion.mp3"],
+  ["live-bangkok-tiger","Live recording · Bangkok Don Mueang · Tiger Air arrival (Thai/English/Chinese)","pa-bangkok-arrival-tiger.mp3"],
+  ["live-bangkok-belongings","Live recording · Bangkok Don Mueang · Do not leave belongings (Thai/English/Chinese)","pa-bangkok-belongings.mp3"],
+  ["live-bangkok-powerbank","Live recording · Bangkok Don Mueang · Power bank notice (Thai/English/Chinese)","pa-bangkok-powerbank.mp3"]
 ];
 var SETS = [["pragotron","Pragotron module"],["frankfurt","Frankfurt hall"],
-            ["barcelona","Barcelona Sants"],["madeira","Madeira airport"]];
+            ["barcelona","Barcelona Sants"],["madeira","Madeira airport"],
+            ["philadelphia","Philadelphia big board"]];
 var BEDS = [["manchester","Manchester Airport","ambience-manchester-airport.mp3"],
             ["kualalumpur","Kuala Lumpur Airport","ambience-kualalumpur-calm.mp3"],
             ["lanzarote","Lanzarote Airport","ambience-lanzarote-airport.mp3"],
-            ["rdu","Raleigh-Durham Terminal","ambience-rdu-terminal.mp3"]];
+            ["rdu","Raleigh-Durham Terminal","ambience-rdu-terminal.mp3"],
+            ["zurich","Zurich Airport","ambience-zurich-airport.mp3"],
+            ["schiphol","Schiphol Airport","ambience-schiphol-airport.mp3"],
+            ["heathrow","Heathrow Airport","ambience-heathrow-airport.mp3"]];
 /* Exact sample files on disk per set (pragotron steps are every third slice) */
 function range(n){ var a = []; for(var i=0;i<n;i++) a.push(i); return a; }
 var SET_FILES = {
   pragotron: { steps: [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63], flaps: [0,1,2,3] },
   frankfurt: { steps: range(24), flaps: [0,1,2,3] },
   barcelona: { steps: range(24), flaps: [0,1,2,3] },
-  madeira:   { steps: range(24), flaps: [0,1,2,3] }
+  madeira:   { steps: range(24), flaps: [0,1,2,3] },
+  philadelphia: { steps: range(24), flaps: [0,1,2,3] }
 };
 function pad2(n){ return String(n).padStart(2,"0"); }
 
@@ -923,6 +934,7 @@ function stopColour(){
 
 /* ============ Audio engine ============ */
 var AC = null, clackBus = null, eventBus = null, ambBus = null, paBus = null;
+var evtGain = null; /* soundscape events feed the events bus through this node, so announcements can duck them */
 var stepBufs = [], flapBufs = [], buffersReady = false;
 var bedEl = null, bedBaseGain = 0, duckUntil = 0;
 function initAudio(){
@@ -930,6 +942,7 @@ function initAudio(){
   try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return; }
   clackBus = AC.createGain(); clackBus.connect(AC.destination);
   eventBus = AC.createGain(); eventBus.connect(AC.destination);
+  evtGain = AC.createGain(); evtGain.connect(eventBus);
   ambBus   = AC.createGain(); ambBus.connect(AC.destination);
   paBus    = AC.createGain(); paBus.connect(AC.destination);
   applyLevels();
@@ -1025,8 +1038,12 @@ function duck(ms){
   if(!AC) return;
   duckUntil = Date.now() + ms;
   ambBus.gain.setTargetAtTime(bedBaseGain * 0.4, AC.currentTime, 0.25);
+  if(evtGain) evtGain.gain.setTargetAtTime(0.4, AC.currentTime, 0.25);
   setTimeout(function(){
-    if(AC && Date.now() >= duckUntil) ambBus.gain.setTargetAtTime(bedBaseGain, AC.currentTime, 0.8);
+    if(AC && Date.now() >= duckUntil){
+      ambBus.gain.setTargetAtTime(bedBaseGain, AC.currentTime, 0.8);
+      if(evtGain) evtGain.gain.setTargetAtTime(1, AC.currentTime, 0.8);
+    }
   }, ms + 60);
 }
 
@@ -1076,6 +1093,54 @@ function setupBed(){
   applyLevels();
 }
 
+/* ============ Soundscape events ============ */
+/* Sparse airport life over the bed: a suitcase crossing the floor, a
+   baggage belt moment, a trolley in the distance. The clips are cut
+   from the licensed event and ambience recordings and contain no board
+   clatter. Events belong to the ambience: they exist only while it is
+   on, they are silenced by quiet hours, they duck under announcements
+   (through evtGain, see duck()), and each one fades in and out. The
+   Events level is the events bus level, shared with the flap landings. */
+var EVENT_FILES = [["event-01.mp3",6],["event-02.mp3",5],["event-03.mp3",8],["event-04.mp3",7],
+                   ["event-05.mp3",8],["event-06.mp3",6],["event-07.mp3",7],["event-08.mp3",7]];
+var nextEventAt = Date.now() + 25000, lastEvent = -1, evtNow = null;
+function playEvent(){
+  var i;
+  do { i = Math.floor(Math.random() * EVENT_FILES.length); } while(EVENT_FILES.length > 1 && i === lastEvent);
+  lastEvent = i;
+  var name = EVENT_FILES[i][0], dur = EVENT_FILES[i][1];
+  var a = new Audio("assets/audio/events/" + name);
+  a.crossOrigin = "anonymous";
+  var g = AC.createGain(); g.gain.value = 0;
+  try{ var s = AC.createMediaElementSource(a); s.connect(g); }catch(e){ a.volume = 0; }
+  g.connect(evtGain);
+  var t = AC.currentTime;
+  g.gain.linearRampToValueAtTime(1, t + 0.4);                 /* fade in */
+  g.gain.setValueAtTime(1, t + Math.max(0.4, dur - 0.6));
+  g.gain.linearRampToValueAtTime(0, t + dur);                 /* fade out */
+  evtNow = { a: a, g: g };
+  function clear(){ if(evtNow && evtNow.a === a) evtNow = null; }
+  a.onended = clear; a.onerror = clear;
+  a.play().catch(clear);
+  nextEventAt = Date.now() + (dur + 25 + Math.random() * 45) * 1000;
+}
+function stopEvent(fade){
+  var cur = evtNow; evtNow = null;
+  if(!cur) return;
+  if(fade && AC){
+    var t = AC.currentTime;
+    try{
+      cur.g.gain.cancelScheduledValues(t);
+      cur.g.gain.setValueAtTime(cur.g.gain.value, t);
+      cur.g.gain.linearRampToValueAtTime(0, t + 1.5);         /* 1.5 s fade-out */
+    }catch(e){}
+    setTimeout(function(){ try{ cur.a.pause(); }catch(e){} }, 1600);
+  } else {
+    try{ cur.a.pause(); }catch(e){}
+  }
+  nextEventAt = Date.now() + 20000;
+}
+
 /* ============ Signals and announcements ============ */
 function tone(freq, t0, dur, gain){
   var o = AC.createOscillator(), g = AC.createGain();
@@ -1085,8 +1150,25 @@ function tone(freq, t0, dur, gain){
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   o.connect(g); g.connect(paBus); o.start(t0); o.stop(t0 + dur + 0.05);
 }
+/* Recorded signals: real PA chimes, played as files through the PA bus.
+   Durations measured from the prepared files; the promise also resolves
+   on the element's own ended event, whichever comes first. */
+var SIGNALS_REC = { helsinki: "signal-helsinki-dingdong.mp3", bingbong: "signal-bingbong.mp3" };
+var SIGNAL_DUR = { helsinki: 3.86, bingbong: 2.16 };
 function playSignal(kind){
   if(!AC || kind === "none") return Promise.resolve();
+  if(SIGNALS_REC[kind]){
+    return new Promise(function(res){
+      var a = new Audio("assets/audio/signals/" + SIGNALS_REC[kind]);
+      a.crossOrigin = "anonymous";
+      try{ var s = AC.createMediaElementSource(a); s.connect(paBus); }catch(e){ a.volume = 0.9; }
+      var done = false;
+      function fin(){ if(!done){ done = true; res(); } }
+      a.onended = fin; a.onerror = fin;
+      setTimeout(fin, (SIGNAL_DUR[kind] + 2) * 1000);
+      a.play().catch(fin);
+    });
+  }
   var t = AC.currentTime + 0.05, dur;
   if(kind === "cdg"){ /* modelled multi-note gesture */
     var notes = [1318.5, 1046.5, 783.99, 1046.5];
@@ -1141,6 +1223,13 @@ setInterval(function(){
     else if(board.ambience.on) setupBed();
   }
   wasQuiet = qNow;
+  /* Soundscape events follow the ambience: an event caught by the
+     ambience switching off or by quiet hours beginning fades out, and
+     new events start only while the bed is playing. */
+  if(evtNow && (!board.ambience.on || qNow)) stopEvent(true);
+  if(AC && !DEMO && board.ambience.on && !qNow
+     && board.ambience.levels.events > 0 && !evtNow && Date.now() >= nextEventAt)
+    playEvent();
   if(!AC || DEMO) return;
   if(!board.announcements.on || inQuietHours() || paPlaying) return;
   if(Date.now() < nextPaAt) return;

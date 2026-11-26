@@ -290,6 +290,8 @@
     <select id="sel-signal">
       <option value="dong">International double dong</option>
       <option value="cdg">CDG motif (modelled)</option>
+      <option value="helsinki">Helsinki 1971 ding-dong (recording)</option>
+      <option value="bingbong">Airport bing-bong (recording)</option>
       <option value="none">None</option>
     </select>
     <label for="sel-solo">Announcement</label>
@@ -297,7 +299,7 @@
     <label for="sel-voice">Voice</label>
     <select id="sel-voice"></select>
     <button id="btn-solo" type="button" class="primary" style="margin-top:12px; width:100%;">Play</button>
-    <div class="hint">The signal, then the announcement in the voice chosen. The three live recordings play in their own voices.</div>
+    <div class="hint">The signal, then the announcement in the voice chosen. The live recordings play in their own voices.</div>
   </div>
 
   <div class="card">
@@ -345,20 +347,31 @@ var SCRIPTS = [
 var LIVE_PA = [
   ["live-frankfurt","Live recording · Frankfurt (German/English)","pa-frankfurt.mp3"],
   ["live-boarding","Live recording · Boarding call (CC0)","pa-boarding-cc0.mp3"],
-  ["live-midway","Live recording · Chicago Midway","pa-midway.mp3"]
+  ["live-midway","Live recording · Chicago Midway","pa-midway.mp3"],
+  ["live-bangkok-airasia","Live recording · Bangkok Don Mueang · AirAsia arrival (Thai/English/Chinese)","pa-bangkok-arrival-airasia.mp3"],
+  ["live-bangkok-lion-chiangmai","Live recording · Bangkok Don Mueang · Lion Air arrival, Chiang Mai (Thai/English/Chinese)","pa-bangkok-arrival-lion-chiangmai.mp3"],
+  ["live-bangkok-lion","Live recording · Bangkok Don Mueang · Lion Air arrival (Thai/English/Chinese)","pa-bangkok-arrival-lion.mp3"],
+  ["live-bangkok-tiger","Live recording · Bangkok Don Mueang · Tiger Air arrival (Thai/English/Chinese)","pa-bangkok-arrival-tiger.mp3"],
+  ["live-bangkok-belongings","Live recording · Bangkok Don Mueang · Do not leave belongings (Thai/English/Chinese)","pa-bangkok-belongings.mp3"],
+  ["live-bangkok-powerbank","Live recording · Bangkok Don Mueang · Power bank notice (Thai/English/Chinese)","pa-bangkok-powerbank.mp3"]
 ];
 var SETS = [["pragotron","Pragotron module"],["frankfurt","Frankfurt hall"],
-            ["barcelona","Barcelona Sants"],["madeira","Madeira airport"]];
+            ["barcelona","Barcelona Sants"],["madeira","Madeira airport"],
+            ["philadelphia","Philadelphia big board"]];
 var BEDS = [["manchester","Manchester Airport","ambience-manchester-airport.mp3"],
             ["kualalumpur","Kuala Lumpur Airport","ambience-kualalumpur-calm.mp3"],
             ["lanzarote","Lanzarote Airport","ambience-lanzarote-airport.mp3"],
-            ["rdu","Raleigh-Durham Terminal","ambience-rdu-terminal.mp3"]];
+            ["rdu","Raleigh-Durham Terminal","ambience-rdu-terminal.mp3"],
+            ["zurich","Zurich Airport","ambience-zurich-airport.mp3"],
+            ["schiphol","Schiphol Airport","ambience-schiphol-airport.mp3"],
+            ["heathrow","Heathrow Airport","ambience-heathrow-airport.mp3"]];
 function range(n){ var a = []; for(var i=0;i<n;i++) a.push(i); return a; }
 var SET_FILES = {
   pragotron: { steps: [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63], flaps: [0,1,2,3] },
   frankfurt: { steps: range(24), flaps: [0,1,2,3] },
   barcelona: { steps: range(24), flaps: [0,1,2,3] },
-  madeira:   { steps: range(24), flaps: [0,1,2,3] }
+  madeira:   { steps: range(24), flaps: [0,1,2,3] },
+  philadelphia: { steps: range(24), flaps: [0,1,2,3] }
 };
 function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
@@ -1140,14 +1153,32 @@ function playCascade(sess, setName, level){
     sess.finishIn(16 * 55 + 1000);
   });
 }
+/* Recorded signals: real PA chimes, played as files. Durations measured
+   from the prepared files (same constants as the display page). */
+var SIGNALS_REC = { helsinki: "signal-helsinki-dingdong.mp3", bingbong: "signal-bingbong.mp3" };
+var SIGNAL_DUR = { helsinki: 3.86, bingbong: 2.16 };
+/* Soundscape event clips (same list as the display page): suitcase
+   rolls, baggage belt and X-ray moments, cut from the licensed event
+   and ambience recordings; no board clatter in any of them. */
+var EVENT_FILES = ["event-01.mp3","event-02.mp3","event-03.mp3","event-04.mp3",
+                   "event-05.mp3","event-06.mp3","event-07.mp3","event-08.mp3"];
 function signalDuration(kind){
   if(kind === "cdg") return 4 * 0.22 + 0.55;
   if(kind === "dong") return 1.35;
+  if(SIGNAL_DUR[kind]) return SIGNAL_DUR[kind];
   return 0;
 }
 function playSignal(sess, kind, level, done){
   var ac = testCtx();
   if(!ac || kind === "none"){ if(done) done(); return; }
+  if(SIGNALS_REC[kind]){
+    var a = playElement(sess, AUDIO + "signals/" + SIGNALS_REC[kind], level, false);
+    var fired = false;
+    var fire = function(){ if(!fired){ fired = true; if(done) done(); } };
+    a.onended = fire;
+    sess.timers.push(setTimeout(function(){ if(layers[sess.layer] === sess) fire(); }, (signalDuration(kind) + 2) * 1000));
+    return;
+  }
   var g = ac.createGain(); g.gain.value = level; g.connect(ac.destination); sess.gains.push(g);
   var t = ac.currentTime + 0.05;
   function toneFn(f, t0, dur, gv){
@@ -1193,10 +1224,13 @@ document.querySelectorAll(".test-btn").forEach(function(btn){
       toggleLayer("clack", id, function(sess){ playCascade(sess, board().clackSet, levelOf("clack")); });
     } else if(id === "level-events"){
       toggleLayer("clack", id, function(sess){
-        /* no footsteps/suitcase sample is in the library; the ngruber cascade wash stands in */
-        var a = playElement(sess, AUDIO + "bed-ngruber.mp3", levelOf("events"), false);
+        /* a real soundscape event at the Events level: one of the
+           suitcase, baggage belt and X-ray clips the live board
+           sprinkles over the bed */
+        var f = EVENT_FILES[Math.floor(Math.random() * EVENT_FILES.length)];
+        var a = playElement(sess, AUDIO + "events/" + f, levelOf("events"), false);
         a.onended = function(){ if(layers.clack === sess) stopLayer("clack"); };
-        sess.finishIn(6000);
+        sess.finishIn(12000);
       });
     } else if(id === "level-announcements"){
       toggleLayer("ann", id, function(sess){ playPa(sess, false); });
