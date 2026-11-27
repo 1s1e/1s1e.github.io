@@ -27,10 +27,12 @@
 <body>
 <div class="wrap">
   <header>
+    <div class="lockup"><img class="mark-dark" src="/assets/mark-dark.png" alt="The Isle"><img class="mark-colour" src="/assets/mark-colour.png" alt="The Isle"></div>
     <span class="eye">The Isle, Secure</span>
     <h1>Permit Documents</h1>
     <p class="line">The permit documents themselves, readable here. Nothing leaves the page: each file is decrypted in this browser only.</p>
     <a class="back" href="/build/permits/">Back to Permits &amp; Documents</a>
+    <a class="home" href="/build/" aria-label="Project Home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg></a>
   </header>
   <div class="rule"></div>
 
@@ -124,13 +126,13 @@
         var entry = f.aliasOf ? byId[f.aliasOf] : f;
         var disp = { name: f.name, id: entry.id, iv: entry.iv, sha256: entry.sha256, bytes: entry.bytes, parts: entry.parts };
         html += '<tr><td class="dn">' + esc(f.name) + '</td><td class="sz">' + fmt(disp.bytes) + '</td>' +
-          '<td class="act"><button type="button" class="read" data-id="' + esc(disp.id) + '">Read</button></td></tr>';
+          '<td class="act"><button type="button" class="btn" data-id="' + esc(disp.id) + '">Read</button></td></tr>';
         byId[disp.id] = disp;
       });
       html += '</tbody></table>';
     });
     lists.innerHTML = html;
-    Array.prototype.forEach.call(lists.querySelectorAll('button.read'), function (b) {
+    Array.prototype.forEach.call(lists.querySelectorAll('button.btn'), function (b) {
       b.addEventListener('click', function () { readDoc(byId[b.getAttribute('data-id')], b); });
     });
   }
