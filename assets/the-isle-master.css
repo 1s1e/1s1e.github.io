@@ -1481,7 +1481,7 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .sx-sec p { max-width:72ch; }
 :where(html.pg-style) .sx-sec ul { max-width:72ch; padding-left:20px; }
 :where(html.pg-style) .sx-sec li { margin-bottom:12px; }
-:where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; }
+:where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; overflow-wrap:anywhere; }
 :where(html.pg-style) .sx-role { padding:20px 0; border-bottom:1px solid var(--gold-line-soft); }
 :where(html.pg-style) .sx-role:last-child { border-bottom:none; }
 /* The technical face specimen: a status line from the systems
