@@ -250,9 +250,11 @@
   .clockbox{ display:flex; align-items:center; gap:.55em; font-size: calc(var(--tile-w) * 1.02); }
   .lamp{ display:block; width:.34em; height:.34em; border-radius:50%; flex:none;
     box-shadow: inset 0 0 3px rgba(0,0,0,.55), 0 0 .22em currentColor; }
+  .lamp[hidden]{ display:none; }
   .lamp.ok{ background:#46b96a; color:#46b96a; }
   .lamp.delayed{ background:#e8a33d; color:#e8a33d; }
   .lamp.down{ background:#d8402e; color:#d8402e; }
+  .lamp.wait{ background:#8f8c82; color:#8f8c82; }
   #board{ position:relative; }
   #lampwrap{ position:absolute; top: calc(var(--pad-y, 2vh) * 0.30); right: var(--pad-x, 2vw);
     z-index:6; pointer-events:none; font-size: calc(var(--tile-w, 18px) * 1.02); }
@@ -346,17 +348,17 @@ function nineFlights(){
 function demoBoards(){
   return [
     {
-      id: "board-terminal-one", name: "Terminal One", type: "departures", kind: "departures", shows: "departures", rows: 14,
+      id: "board-terminal-one", name: "Terminal One", type: "departures", kind: "departures", shows: "departures",
       flights: nineFlights(),
       clackSet: "pragotron",
       ambience: { on:true, bed:"rdu",
                   levels:{ bed:0.45, events:0.6, announcements:0.9, clack:0.8 } },
       voice: "isabella", signal: "dong",
       announcements: { on:true, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
-      quietHours: { on:true, start:"23:00", end:"07:00" }
+      quietHours: { on:false, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", kind: "departures", shows: "departures", rows: 14,
+      id: "board-frankfurt-hall", name: "Frankfurt Hall", type: "departures", kind: "departures", shows: "departures",
       flights: [
         {time:"08:05", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"BOARDING"},
         {time:"08:40", destination:"FRANKFURT", flight:"LH 903",  gate:"14", remarks:"ON TIME"},
@@ -376,7 +378,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", kind: "departures", shows: "departures", rows: 5,
+      id: "board-quiet-evening", name: "Quiet Evening", type: "departures", kind: "departures", shows: "departures",
       flights: [
         {time:"17:40", destination:"THE ISLE",  flight:"IS 808",  gate:"7",  remarks:"ON TIME"},
         {time:"18:25", destination:"HONOLULU",  flight:"HA 51",   gate:"12", remarks:"ON TIME"},
@@ -392,7 +394,7 @@ function demoBoards(){
       quietHours: { on:true, start:"22:00", end:"07:00" }
     },
     {
-      id: "board-arrivals", name: "Arrivals", type: "departures", kind: "arrivals", shows: "arrivals", rows: 5,
+      id: "board-arrivals", name: "Arrivals", type: "departures", kind: "arrivals", shows: "arrivals",
       flights: [
         {time:"07:55", destination:"MIAMI",     flight:"IS 809",  gate:"7",  remarks:"LANDED"},
         {time:"08:10", destination:"MIAMI",     flight:"AA 2240", gate:"C3", remarks:"LANDED"},
@@ -408,7 +410,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-weather", name: "Weather", type: "departures", kind: "weather", rows: 5,
+      id: "board-weather", name: "Weather", type: "departures", kind: "weather",
       flights: [],
       lines: [
         {text:"THE ISLE \u00b7 CLEAR \u00b7 84 F", black:false},
@@ -425,7 +427,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-news", name: "News", type: "departures", kind: "news", rows: 14,
+      id: "board-news", name: "News", type: "departures", kind: "news",
       flights: [],
       lines: [
         {text:"SAMPLE HEADLINE \u00b7 REPLACE IN SETTINGS", black:false},
@@ -451,7 +453,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-north-shore", name: "North Shore", type: "departures", kind: "custom", customTitle: "NORTH SHORE", rows: 14,
+      id: "board-north-shore", name: "North Shore", type: "departures", kind: "custom", customTitle: "NORTH SHORE",
       flights: [],
       lines: [
         {text:"PIPELINE · EHUKAI BEACH", black:false},
@@ -476,7 +478,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-colour", name: "Colour Board", type: "colour", rows: 14, scene: "walk",
+      id: "board-colour", name: "Colour Board", type: "colour", scene: "walk",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -486,7 +488,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-menorah", name: "Menorah", type: "colour", rows: 14, scene: "menorah", night: 8,
+      id: "board-menorah", name: "Menorah", type: "colour", scene: "menorah", night: 8,
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -496,7 +498,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-dreidel", name: "Dreidel", type: "colour", rows: 5, scene: "dreidel",
+      id: "board-dreidel", name: "Dreidel", type: "colour", scene: "dreidel",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -506,18 +508,18 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-gallery-six", name: "Gallery Six", type: "departures", kind: "departures", shows: "departures", rows: 5,
+      id: "board-gallery-six", name: "Gallery Six", type: "departures", kind: "departures", shows: "departures",
       style: "gallery",
       flights: nineFlights(),
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
-                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0.8 } },
+                  levels:{ bed:0.5, events:0.7, announcements:0.9, clack:0.55 } },
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-level", name: "Level", type: "colour", rows: 14, scene: "level",
+      id: "board-level", name: "Level", type: "colour", scene: "level",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -527,7 +529,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-isle-palm", name: "Isle Palm", type: "colour", rows: 14, scene: "palm",
+      id: "board-isle-palm", name: "Isle Palm", type: "colour", scene: "palm",
       flights: [],
       clackSet: "pragotron",
       ambience: { on:false, bed:"manchester",
@@ -537,7 +539,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-tides", name: "Tides", type: "departures", kind: "custom", customTitle: "TIDES", rows: 5,
+      id: "board-tides", name: "Tides", type: "departures", kind: "custom", customTitle: "TIDES",
       flights: [],
       lines: [
         {text:"LOW 7 14 AM \u00b7 -1 0 FT", black:false},
@@ -554,7 +556,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-shabbat", name: "Shabbat", type: "departures", kind: "custom", customTitle: "SHABBAT", rows: 5,
+      id: "board-shabbat", name: "Shabbat", type: "departures", kind: "custom", customTitle: "SHABBAT",
       flights: [],
       lines: [
         {text:"SHABBAT SHALOM", black:false},
@@ -571,7 +573,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-today", name: "Today at the House", type: "departures", kind: "custom", customTitle: "TODAY AT THE HOUSE", rows: 5,
+      id: "board-today", name: "Today at the House", type: "departures", kind: "custom", customTitle: "TODAY AT THE HOUSE",
       flights: [],
       lines: [
         {text:"8 00 AM \u00b7 YOGA ON THE DOCK", black:false},
@@ -588,7 +590,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-holidays", name: "Holidays", type: "departures", kind: "custom", customTitle: "NEXT CHAG", rows: 5,
+      id: "board-holidays", name: "Holidays", type: "departures", kind: "custom", customTitle: "NEXT CHAG",
       flights: [],
       lines: [
         {text:"NEXT HOLIDAY \u00b7 CHANUKAH", black:false},
@@ -605,7 +607,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-dinner", name: "Dinner Tonight", type: "departures", kind: "custom", customTitle: "DINNER TONIGHT", rows: 14,
+      id: "board-dinner", name: "Dinner Tonight", type: "departures", kind: "custom", customTitle: "DINNER TONIGHT",
       flights: [],
       lines: [
         {text:"7 00 PM \u00b7 THE PORCH", black:false},
@@ -624,7 +626,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-beach", name: "Beach Today", type: "departures", kind: "custom", customTitle: "BEACH TODAY", rows: 5,
+      id: "board-beach", name: "Beach Today", type: "departures", kind: "custom", customTitle: "BEACH TODAY",
       flights: [],
       lines: [
         {text:"SHELLING: GOOD \u00b7 GO EARLY", black:false},
@@ -641,7 +643,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-calendar", name: "Calendar", type: "departures", kind: "custom", customTitle: "NEXT UP", rows: 5,
+      id: "board-calendar", name: "Calendar", type: "departures", kind: "custom", customTitle: "NEXT UP",
       flights: [],
       lines: [
         {text:"TODAY \u00b7 4 00 PM", black:false},
@@ -658,7 +660,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-marine", name: "Marine", type: "departures", kind: "custom", customTitle: "MARINE", rows: 5,
+      id: "board-marine", name: "Marine", type: "departures", kind: "custom", customTitle: "MARINE",
       flights: [],
       lines: [
         {text:"SMALL CRAFT ADVISORY TO TONIGHT", black:false},
@@ -675,7 +677,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-now-playing", name: "Now Playing", type: "departures", kind: "custom", customTitle: "NOW PLAYING", rows: 5,
+      id: "board-now-playing", name: "Now Playing", type: "departures", kind: "custom", customTitle: "NOW PLAYING",
       flights: [],
       lines: [
         {text:"SONOS \u00b7 GREAT ROOM", black:false},
@@ -692,7 +694,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-moon", name: "Moon", type: "departures", kind: "custom", customTitle: "MOON", rows: 5,
+      id: "board-moon", name: "Moon", type: "departures", kind: "custom", customTitle: "MOON",
       flights: [],
       lines: [
         {text:"WANING GIBBOUS \u00b7 94 LIT", black:false},
@@ -709,7 +711,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-markets", name: "Markets", type: "departures", kind: "custom", customTitle: "MARKETS", rows: 14,
+      id: "board-markets", name: "Markets", type: "departures", kind: "custom", customTitle: "MARKETS",
       flights: [],
       lines: [
         {text:"VOO \u00b7 632 10 \u00b7 UP 0 8", black:false},
@@ -727,7 +729,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-sports", name: "Sports", type: "departures", kind: "custom", customTitle: "SPORTS", rows: 14,
+      id: "board-sports", name: "Sports", type: "departures", kind: "custom", customTitle: "SPORTS",
       flights: [],
       lines: [
         {text:"SCORES \u00b7 FINAL", black:false},
@@ -745,7 +747,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-countdown", name: "Countdown", type: "departures", kind: "custom", customTitle: "COUNTDOWN", rows: 5,
+      id: "board-countdown", name: "Countdown", type: "departures", kind: "custom", customTitle: "COUNTDOWN",
       flights: [],
       lines: [
         {text:"GUESTS ARRIVE \u00b7 DEC 20", black:false},
@@ -761,7 +763,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-world-clock", name: "World Clock", type: "departures", kind: "custom", customTitle: "WORLD CLOCK", rows: 5,
+      id: "board-world-clock", name: "World Clock", type: "departures", kind: "custom", customTitle: "WORLD CLOCK",
       flights: [],
       lines: [
         {text:"THE ISLE \u00b7 12 34 PM", black:false},
@@ -778,7 +780,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-omer", name: "Omer", type: "departures", kind: "custom", customTitle: "OMER", rows: 5,
+      id: "board-omer", name: "Omer", type: "departures", kind: "custom", customTitle: "OMER",
       flights: [],
       lines: [
         {text:"COUNTING THE OMER", black:false},
@@ -795,7 +797,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-hebrew-date", name: "Hebrew Date", type: "departures", kind: "custom", customTitle: "HEBREW DATE", rows: 5,
+      id: "board-hebrew-date", name: "Hebrew Date", type: "departures", kind: "custom", customTitle: "HEBREW DATE",
       flights: [],
       lines: [
         {text:"THURSDAY \u00b7 NOVEMBER 26 \u00b7 2026", black:false},
@@ -811,7 +813,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-remembrance", name: "Remembrance", type: "departures", kind: "custom", customTitle: "REMEMBRANCE", rows: 5,
+      id: "board-remembrance", name: "Remembrance", type: "departures", kind: "custom", customTitle: "REMEMBRANCE",
       flights: [],
       lines: [
         {text:"YAHRZEIT THIS WEEK", black:false},
@@ -828,7 +830,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-quote", name: "Quote & Verse", type: "departures", kind: "custom", customTitle: "QUOTE & VERSE", rows: 5,
+      id: "board-quote", name: "Quote & Verse", type: "departures", kind: "custom", customTitle: "QUOTE & VERSE",
       flights: [],
       lines: [
         {text:"QUOTE OF THE DAY", black:false},
@@ -845,7 +847,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-storm", name: "Storm Watch", type: "departures", kind: "custom", customTitle: "STORM WATCH", rows: 5,
+      id: "board-storm", name: "Storm Watch", type: "departures", kind: "custom", customTitle: "STORM WATCH",
       flights: [],
       lines: [
         {text:"GULF OF MEXICO \u00b7 QUIET", black:false},
@@ -862,7 +864,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-welcome", name: "Guests Welcome", type: "departures", kind: "custom", customTitle: "WELCOME", rows: 5,
+      id: "board-welcome", name: "Guests Welcome", type: "departures", kind: "custom", customTitle: "WELCOME",
       flights: [],
       lines: [
         {text:"GUEST FAMILY \u00b7 TO DEC 1", black:false},
@@ -879,7 +881,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-overhead", name: "Overhead", type: "departures", kind: "custom", customTitle: "OVERHEAD", rows: 14,
+      id: "board-overhead", name: "Overhead", type: "departures", kind: "custom", customTitle: "OVERHEAD",
       flights: [],
       lines: [
         {text:"NO TRAFFIC OVERHEAD", black:false}
@@ -892,7 +894,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-tracked", name: "Tracked Flights", type: "departures", rows: 14,
+      id: "board-tracked", name: "Tracked Flights", type: "departures",
       flights: [
         {time:"08:05", destination:"THE ISLE", flight:"IS 808", gate:"7", remarks:"BOARDING", black:false},
         {time:"09:40", destination:"MIAMI", flight:"AA 2241", gate:"C3", remarks:"ON TIME", black:false},
@@ -910,7 +912,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-simulated", name: "Simulated Departures", type: "departures", kind: "departures", shows: "departures", rows: 14,
+      id: "board-simulated", name: "Simulated Departures", type: "departures", kind: "departures", shows: "departures",
       simulation: true,
       flights: nineFlights(),
       lines: [],
@@ -935,23 +937,25 @@ function mergeSeeds(cfg){
     demos.forEach(function(sb){
       var nameTaken = Object.keys(cfg.boards).some(function(id){ return cfg.boards[id].name === sb.name; });
       if(nameTaken) return;
+      /* A seed board the user deleted stays deleted: its id is on
+         the configuration's deletedSeeds record, and the merge
+         never resurrects it. */
+      if((cfg.deletedSeeds || []).indexOf(sb.id) >= 0) return;
       if(cfg.boards[sb.id]){ sb.id = sb.id + "-seed"; }
       cfg.boards[sb.id] = sb; changed = true;
     });
     cfg.seedVersion = SEED_VERSION; changed = true;
   }
-  /* Field fill-ins for boards stored before rows/kind existed: a board whose
-     name matches a demo board takes that demo's row count; anything else
-     defaults to 14. User boards and their edits are never overwritten. */
+  /* Field fill-ins for boards stored before kind existed, and the row
+     count upgrade: boards stored before the fill rework may carry a
+     size value; it is dropped here, because row count is now computed
+     from the screen, never stored. User boards and their edits are
+     never overwritten. */
   Object.keys(cfg.boards).forEach(function(id){
     var b = cfg.boards[id];
     if(!b) return;
     if(!b.type){ b.type = "departures"; changed = true; }
-    if(b.rows !== 5 && b.rows !== 14){
-      var demo = null;
-      demos.forEach(function(d){ if(d.name === b.name) demo = d; });
-      b.rows = demo && demo.rows ? demo.rows : 14; changed = true;
-    }
+    if("rows" in b){ delete b.rows; changed = true; }
     if(b.type !== "colour" && !b.kind){
       b.kind = b.shows === "arrivals" ? "arrivals" : "departures"; changed = true;
     }
@@ -981,12 +985,14 @@ function loadConfig(){
   }
   return res.cfg;
 }
+var stagedCfgObj = null;
 function stagedBoard(){
   try{
     var raw = localStorage.getItem("isle-board-demo-v1");
     if(!raw) return null;
     var parsed = JSON.parse(raw);
     if(!parsed || !parsed.boards) return null;
+    stagedCfgObj = parsed;
     var res = mergeSeeds(parsed);
     if(res.changed){
       try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(res.cfg)); }catch(e){}
@@ -1006,6 +1012,76 @@ var config = loadConfig();
 var board = null;
 if(DEMO){ board = stagedBoard(); if(board) document.getElementById("demo-marker").style.display = "block"; }
 if(!board) board = config.boards[config.liveBoardId] || demoBoards()[0];
+
+/* ============ Carousels ============
+   A carousel in the shared configuration rotates the live slot
+   through its boards: each board shows for the carousel's interval,
+   then the next takes over with the board's normal cascade, looping
+   back to the first. The position is worked out from the clock
+   alone, so the page never reloads and every screen showing the
+   carousel agrees on which board is up. Each board keeps its own
+   sounds, style and settings while it is up, unless the carousel
+   carries a sound override: then a merged view (the member's
+   content and style, the carousel's sound fields) is what plays,
+   and the stored member board is never modified. Quiet hours and
+   the service lamp follow whichever board is up, as they do for a
+   single live board. Publishing a single board clears the live
+   carousel, and the rotation stops. */
+var carousel = null;
+function fillBoardFields(nb){
+  if(!nb.type) nb.type = "departures";
+  if("rows" in nb) delete nb.rows;
+  if(nb.type !== "colour" && !nb.kind) nb.kind = nb.shows === "arrivals" ? "arrivals" : "departures";
+  if(!nb.flights) nb.flights = [];
+  if(!nb.lines) nb.lines = [];
+  if(nb.type === "colour" && !nb.scene) nb.scene = "walk";
+  if(nb.type === "colour" && !(nb.night >= 1 && nb.night <= 8)) nb.night = 8;
+  if(!nb.style) nb.style = "isle";
+  if(!nb.sceneSounds) nb.sceneSounds = { on: false, level: 0.5 };
+}
+function carouselFrom(cfg, demo){
+  if(!cfg) return null;
+  var cid = demo ? cfg.demoCarouselId : cfg.liveCarouselId;
+  if(!cid || !cfg.carousels || !cfg.carousels[cid]) return null;
+  var def = cfg.carousels[cid];
+  var list = (def.boardIds || []).map(function(id){ return cfg.boards[id]; }).filter(Boolean);
+  if(!list.length) return null;
+  list.forEach(fillBoardFields);
+  return { def: def, list: list, intervalSec: Math.max(10, Math.min(3600, +def.intervalSec || 30)), idx: -1 };
+}
+function carouselIdx(car){ return Math.floor(Date.now() / (car.intervalSec * 1000)) % car.list.length; }
+function effectiveBoard(member, car){
+  if(car && car.def.soundOverride && car.def.soundOverride.on && car.def.soundOverride.sound){
+    var snd = car.def.soundOverride.sound;
+    var m = {};
+    for(var k in member) m[k] = member[k];
+    ["clackSet", "ambience", "voice", "signal", "announcements", "quietHours", "sceneSounds"].forEach(function(k){
+      if(snd[k] !== undefined) m[k] = JSON.parse(JSON.stringify(snd[k]));
+    });
+    return m;
+  }
+  return member;
+}
+function showCarouselBoard(car, idx){
+  board = effectiveBoard(car.list[idx], car);
+  fitBoard();
+  if(AC){ applyLevels(); loadSet(board.clackSet); setupBed(); }
+  if(evtNow) stopEvent(true);
+  nextPaAt = Date.now() + 20000;
+  wasQuiet = inQuietHours();
+  renderBoard(true);
+  renderLamp();
+}
+carousel = DEMO ? carouselFrom(stagedCfgObj, true) : carouselFrom(config, false);
+if(carousel){
+  carousel.idx = carouselIdx(carousel);
+  board = effectiveBoard(carousel.list[carousel.idx], carousel);
+}
+setInterval(function(){
+  if(!carousel) return;
+  var idx = carouselIdx(carousel);
+  if(idx !== carousel.idx){ carousel.idx = idx; showCarouselBoard(carousel, idx); }
+}, 1000);
 
 /* ============ Flap machinery ============ */
 var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
@@ -1055,7 +1131,78 @@ function isTextBoard(){
   var k = boardKind();
   return k === "weather" || k === "news" || k === "art" || k === "custom";
 }
-function boardRows(){ return (board.rows === 5 || board.rows === 14) ? board.rows : 14; }
+/* ============ Computed fill ============
+   Row count is geometry, not a setting (fill rework, Nov 26, 2026):
+   the tile size comes from the columns across the frame at the
+   style's fixed aspect, the row count is the count of whole rows
+   that fills the remaining height inside the settled insets, content
+   rows come first and blank flap rows complete the field, and the
+   small leftover is spread into the row spacing by fitBoard. Tiles
+   are never stretched or shrunk to force a fit. */
+var FILL_PITCH = 1.53; /* row pitch in tile widths, gap included */
+function isleTileW(iw, ih, fs){
+  var pad = boardPads(fs, iw, ih);
+  var units = 43 + 38 * 0.14 + 4 * 1.15; /* tiles + in-cell gaps + spacers, in tile widths */
+  return (iw * (1 - 2 * INSET_X) - 2 * pad.x) / units;
+}
+function isleRowsFor(iw, ih, fs, text){
+  var w = isleTileW(iw, ih, fs);
+  var pad = boardPads(fs, iw, ih);
+  var headerEtc = text ? 1.85 : 2.52;
+  var avail = ih * (1 - 2 * INSET_Y) - 2 * pad.y - 2 - headerEtc * w;
+  return Math.max(1, Math.floor(avail / (FILL_PITCH * w)));
+}
+var fillKey = "", fillRows = 0;
+function boardRows(){
+  var text = isTextBoard();
+  var fs = !!document.fullscreenElement;
+  var key = (text ? "t" : "f") + "|" + window.innerWidth + "x" + window.innerHeight + "|" + (fs ? 1 : 0);
+  if(key !== fillKey){ fillKey = key; fillRows = isleRowsFor(window.innerWidth, window.innerHeight, fs, text); }
+  return fillRows;
+}
+/* Overflow on the Isle layout: the board has no paging of its own, so
+   content beyond the computed first screen pages through at the
+   Gallery interval (14 s), the interval behaviour the spec borrows. */
+var pageOff = 0, pageKey = "", pageTimer = null;
+function pageSlice(list, count){
+  var key = (board ? board.id : "") + "|" + boardStyle() + "|" + (isTextBoard() ? "t" : "f");
+  if(key !== pageKey){ pageKey = key; pageOff = 0; }
+  if(pageOff >= list.length) pageOff = 0;
+  if(list.length > count){
+    if(!pageTimer){
+      pageTimer = setInterval(function(){
+        if(boardStyle() !== "isle" || board.type === "colour"){ clearInterval(pageTimer); pageTimer = null; return; }
+        pageOff += count;
+        if(pageOff >= list.length) pageOff = 0;
+        renderBoard(true);
+      }, 14000);
+    }
+  } else if(pageTimer){ clearInterval(pageTimer); pageTimer = null; pageOff = 0; }
+  return list.slice(pageOff, pageOff + count);
+}
+/* Projekt 1400: its row height is a fixed share of the frame height;
+   the row count is whatever whole rows fill the table at that height. */
+function projektRowsFor(H){
+  var tableH = H - H * 0.21 - H * 0.115;
+  return Math.max(1, Math.floor(tableH / (H * 0.045) + 1e-6) - 1); /* epsilon: the ratio is exactly 15 at frame height, and float error must not steal a row */
+}
+/* Styled overflow paging, shared by the styles whose rows are built
+   per screen (Clipper, Patapata, Projekt): slices of the computed
+   capacity, advancing at the Gallery interval. */
+var stPageOff = 0, stPageKey = "";
+function styledPageSlice(data, capacity){
+  var key = (board ? board.id : "") + "|" + boardStyle();
+  if(key !== stPageKey){ stPageKey = key; stPageOff = 0; }
+  if(stPageOff >= data.length) stPageOff = 0;
+  if(data.length > capacity){
+    stInterval(function(){
+      stPageOff += capacity;
+      if(stPageOff >= data.length) stPageOff = 0;
+      showStyled(boardStyle(), true);
+    }, 14000);
+  }
+  return data.slice(stPageOff, stPageOff + capacity);
+}
 function escHtml(s){
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -1072,7 +1219,7 @@ function applyHeadings(){
   if(headSpans[1]) headSpans[1].textContent = boardKind() === "arrivals" ? "FROM" : "DESTINATION";
 }
 var tileGrid = []; /* [row][col] -> [tile elements] */
-var rowsBuilt = false;
+var rowsBuilt = false, builtRowCount = 0;
 var TEXT_COLS = 46; /* tiles across a text-board line, computed by fitBoard */
 function buildOneRow(colsDef, black, flight){
   var rowEl = document.createElement("div"); rowEl.className = "row";
@@ -1091,20 +1238,22 @@ function buildOneRow(colsDef, black, flight){
   });
   rowsEl.appendChild(rowEl); tileGrid.push(gridRow);
 }
-/* Exactly boardRows() rows: flights beyond the count are not built, fewer
-   flights are padded with blank flap rows, and a black row is all blank. */
+/* Exactly boardRows() rows, the computed fill: content rows come
+   first (one page of them, see pageSlice), fewer flights are padded
+   with blank flap rows, and a black row is all blank. */
 function buildRows(){
   rowsEl.innerHTML = ""; tileGrid = [];
   var count = boardRows(), i;
+  builtRowCount = count;
   if(isTextBoard()){
-    var lines = effLines();
+    var lines = pageSlice(effLines(), count);
     for(i = 0; i < count; i++){
       var ln = lines[i] || { text:"", black:false };
       buildOneRow([{ key:"line", width: TEXT_COLS }], !!ln.black, null);
     }
     return;
   }
-  var fl = effFlights();
+  var fl = pageSlice(effFlights(), count);
   for(i = 0; i < count; i++){
     var f = fl[i] || null;
     buildOneRow(COLS, !!(f && f.black), f);
@@ -1443,6 +1592,53 @@ var PALMS = {
   "palm-rainbow": { sky: ["#6ab4d8", "#9ad0ea", "#c8ecf8"], sun: [0.16, 0.16, "#fcfc54", 0.06], water: ["#1a6a8a", "#2a9aba", "#7ad0e8"], wind: 0.8, wspd: 0.9, clouds: 3, cspd: 0.8, cloudC: "#ffffff", sand: "#e8d8a0", trunk: "#8a5a20", frond: "#1e9e4c", rainbow: true },
   "palm-mist":    { sky: ["#a8b4b8", "#bcc4c6", "#ccd2d2"], sun: null, water: ["#6a7e82", "#7e9296", "#aebfc2"], wind: 0.4, wspd: 0.5, clouds: 2, cspd: 0.4, cloudC: "#d4dcdc", sand: "#d8d0bc", trunk: "#8a7452", frond: "#5a8a64", mist: true }
 };
+/* The Isle mark, traced: the island and palm in the scenes are the
+   house's own mark, sampled from the master artwork
+   (the-isle-mark-colour.png in the master file set) into a 192 x 107
+   grid: C crown, T trunk, I island. The scenes stamp this grid; they
+   do not draw a palm of their own. Wind moves the stamp with a small
+   shear, greatest at the crown, so the true outline breathes without
+   being redrawn. */
+var MARK_W = 192, MARK_H = 107;
+var MARK_ROWS = (function(){
+  var enc = "97.,13C,41.,10C,31.|94.,19C,33.,18C,28.|91.,24C,29.,16C,32.|89.,27C,26.,22C,28.|88.,30C,22.,27C,11.,1C,13.|86.,33C,19.,31C,7.,3C,13.|85.,35C,17.,24C,1.,16C,14.|99.,22C,15.,26C,3.,11C,16.|98.,24C,13.,20C,3.,5C,4.,8C,17.|96.,27C,11.,23C,2.,5C,28.|95.,28C,10.,25C,3.,5C,26.|94.,1C,16.,13C,8.,13C,10.,3C,5.,6C,23.|108.,17C,6.,18C,8.,2C,33.|105.,20C,5.,21C,41.|103.,23C,4.,19C,32.,1C,10.|109.,17C,3.,16C,36.,1C,10.|111.,15C,2.,14C,39.,1C,10.|112.,15C,1.,12C,40.,2C,10.|114.,25C,3.,15C,23.,2C,10.|116.,21C,2.,21C,19.,3C,10.|106.,7C,4.,46C,15.,4C,10.|101.,16C,1.,36C,4.,6C,13.,4C,11.|99.,60C,17.,5C,11.|97.,67C,8.,8C,12.|95.,84C,13.|94.,84C,14.|92.,84C,16.|91.,83C,17.,1C|90.,82C,18.,2C|89.,75C,24.,3C,1.|89.,48C,3.,26C,21.,3C,2.|88.,15C,1.,10C,3.,23C,4.,24C,17.,4C,3.|87.,15C,1.,9C,3.,28C,3.,8C,1.,16C,11.,7C,3.|87.,14C,2.,7C,4.,11C,1T,19C,4.,39C,4.|86.,14C,2.,4C,1.,1C,6.,6C,3.,4T,19C,5.,4C,1.,31C,5.|86.,13C,3.,3C,8.,5C,5.,4T,2.,19C,4.,3C,2.,29C,6.|85.,13C,4.,2C,9.,4C,6.,4T,3.,20C,4.,2C,2.,26C,8.|85.,12C,4.,3C,8.,5C,6.,4T,3.,21C,8.,24C,9.|84.,8C,1.,4C,4.,2C,9.,4C,6.,5T,4.,22C,7.,20C,12.|84.,7C,2.,3C,5.,1C,10.,3C,7.,5T,4.,24C,6.,5C,2.,10C,14.|84.,6C,3.,2C,17.,3C,7.,5T,4.,4C,1.,21C,5.,7C,23.|84.,5C,3.,3C,17.,3C,7.,5T,5.,3C,2.,23C,4.,9C,19.|83.,6C,3.,2C,19.,1C,8.,5T,5.,4C,1.,13C,2.,6C,8.,7C,19.|83.,5C,4.,2C,19.,1C,7.,6T,6.,3C,2.,13C,41.|83.,4C,5.,1C,28.,6T,6.,3C,2.,14C,40.|83.,4C,34.,5T,8.,3C,2.,14C,39.|83.,3C,35.,5T,9.,2C,2.,15C,38.|83.,2C,35.,6T,10.,2C,2.,16C,36.|83.,2C,35.,6T,15.,16C,35.|83.,1C,36.,6T,16.,17C,33.|119.,6T,18.,19C,30.|119.,6T,19.,30C,18.|119.,6T,20.,27C,20.|118.,7T,21.,6C,1.,17C,22.|118.,7T,22.,6C,3.,11C,25.|118.,6T,25.,6C,37.|117.,7T,27.,7C,34.|117.,7T,31.,5C,32.|116.,7T,69.|116.,7T,69.|116.,7T,69.|115.,8T,69.|115.,7T,70.|114.,8T,70.|113.,8T,71.|113.,8T,71.|112.,9T,71.|112.,8T,72.|111.,9T,72.|111.,8T,73.|110.,9T,73.|109.,10T,73.|109.,9T,74.|108.,10T,74.|75.,14I,18.,10T,75.|71.,22I,14.,10T,75.|67.,29I,10.,10T,76.|65.,34I,6.,11T,76.|62.,41I,2.,10T,77.|59.,45I,11T,77.|56.,49I,9T,78.|53.,53I,8T,78.|48.,60I,5T,79.|39.,78I,75.|34.,97I,61.|31.,104I,57.|28.,111I,53.|26.,115I,51.|24.,119I,49.|22.,122I,48.|21.,125I,46.|19.,129I,44.|17.,132I,43.|16.,135I,41.|14.,138I,40.|12.,142I,38.|9.,149I,34.|5.,158I,29.|2.,162I,28.|165I,27.|2.,58I,54.,49I,29.|192.|192.|71.,40I,81.|56.,69I,67.|42.,93I,57.|34.,107I,51.";
+  return enc.split("|").map(function(rowEnc){
+    var row = "";
+    rowEnc.split(",").forEach(function(tok){
+      var n = parseInt(tok, 10), ch = tok.charAt(tok.length - 1);
+      for(var i = 0; i < n; i++) row += ch;
+    });
+    return row;
+  });
+})();
+function stampMark(g, W, H, cx, baseY, wCells, colI, colT, colC, swayAmp, t, spd){
+  var hCells = Math.max(4, Math.round(wCells * MARK_H / MARK_W));
+  var x0 = Math.round(cx - wCells / 2), y0 = baseY - hCells + 1;
+  for(var dy = 0; dy < hCells; dy++){
+    var frac = hCells <= 1 ? 0 : (hCells - 1 - dy) / (hCells - 1); /* 0 at the shore, 1 at the crown top */
+    var shift = Math.round(Math.sin(t * spd + frac * 2.0) * swayAmp * frac * frac);
+    var sy0 = Math.floor(dy * MARK_H / hCells), sy1 = Math.max(sy0 + 1, Math.floor((dy + 1) * MARK_H / hCells));
+    for(var dx = 0; dx < wCells; dx++){
+      var sx0 = Math.floor(dx * MARK_W / wCells), sx1 = Math.max(sx0 + 1, Math.floor((dx + 1) * MARK_W / wCells));
+      var cC = 0, cT = 0, cI = 0, tot = 0;
+      for(var sy = sy0; sy < sy1 && sy < MARK_H; sy++){
+        var row = MARK_ROWS[sy];
+        for(var sx = sx0; sx < sx1 && sx < MARK_W; sx++){
+          var ch = row.charAt(sx); tot++;
+          if(ch === "C") cC++; else if(ch === "T") cT++; else if(ch === "I") cI++;
+        }
+      }
+      if(!tot) continue;
+      var fC = cC / tot, fT = cT / tot, fI = cI / tot, col = null;
+      if(fC >= 0.13 && fC >= fT && fC >= fI) col = colC;
+      else if(fT >= 0.13 && fT >= fI) col = colT;
+      else if(fI >= 0.34) col = colI;
+      if(col) put(g, W, H, x0 + dx + shift, y0 + dy, col);
+    }
+  }
+  return hCells;
+}
+
 function drawPalm(g, W, H, st, t, P){
   var horizon = Math.round(H * 0.64), x, y, i;
   for(y = 0; y < horizon; y++){
@@ -1500,10 +1696,12 @@ function drawPalm(g, W, H, st, t, P){
   for(y = horizon + 1; y < H; y++)
     for(x = 0; x < W; x++)
       if(H2(x * 1.9 + y * 23.3 + Math.floor(t * 2.2) * 67) > 0.955) put(g, W, H, x, y, P.water[2]);
-  /* island */
+  /* the island and palm are the Isle mark itself, traced from the
+     master artwork and stamped by stampMark: the island in the
+     scene's sand, the trunk and crown in the scene's own colours */
   var ix = Math.round(W * 0.52), irx = Math.round(W * 0.155), iry = Math.max(2, Math.round(H * 0.05));
-  ellipse(g, W, H, ix, horizon + 1, irx, iry, P.sand);
-  ellipse(g, W, H, ix, horizon - 1, Math.round(irx * 0.55), Math.max(1, Math.round(iry * 0.6)), P.frond);
+  var markW = Math.round(W * 0.54);
+  stampMark(g, W, H, ix, horizon + iry, markW, P.sand, P.trunk, P.frond, W * 0.006 * P.wind, t, P.wspd * 1.4);
   /* shimmer rings running around the island */
   for(var ring = 0; ring < 2; ring++){
     var phase = ((t * 0.45 + ring * 0.5) % 1);
@@ -1511,31 +1709,6 @@ function drawPalm(g, W, H, st, t, P){
     for(var a3 = 0; a3 < Math.PI * 2; a3 += 0.05){
       if(H2(Math.floor(a3 * 9) + Math.floor(t * 3)) > 0.4)
         put(g, W, H, Math.round(ix + rrx * Math.cos(a3)), Math.round(horizon + 1 + rry * Math.sin(a3)), P.water[2]);
-    }
-  }
-  /* palm: a windswept trunk leaning away from the wind, crown at the top */
-  var baseX = ix, baseY = horizon - 1;
-  var lean = -W * 0.055 * (0.8 + P.wind * 0.2);
-  var crownX = Math.round(baseX + lean), crownY = Math.round(horizon - H * 0.42);
-  for(var s3 = 0; s3 <= 1.0001; s3 += 0.06){
-    var tx2 = Math.round(baseX + lean * s3 * s3), ty2 = Math.round(baseY + (crownY - baseY) * s3);
-    put(g, W, H, tx2, ty2, P.trunk); put(g, W, H, tx2 + 1, ty2, P.trunk);
-  }
-  put(g, W, H, crownX, crownY + 1, "#6e4520"); put(g, W, H, crownX + 1, crownY + 1, "#6e4520");
-  var fronds = 6;
-  for(i = 0; i < fronds; i++){
-    var fa = Math.PI * (0.08 + 0.84 * i / (fronds - 1)); /* fan across the top */
-    var fl2 = W * (0.115 + 0.035 * Math.sin(i * 2.3));
-    var swayX = Math.sin(t * P.wspd * 1.6 + i * 1.3) * P.wind * W * 0.009;
-    var swayY = Math.cos(t * P.wspd * 1.25 + i * 0.9) * P.wind * H * 0.007;
-    var tipX = crownX + Math.cos(fa) * fl2 + swayX;
-    var tipY = crownY - Math.sin(fa) * fl2 * 0.55 + fl2 * 0.22 + swayY;
-    var ctlX = crownX + Math.cos(fa) * fl2 * 0.5;
-    var ctlY = crownY - Math.sin(fa) * fl2 * 0.78 + swayY * 0.5;
-    for(var q = 0; q <= 1.0001; q += 0.09){
-      var qx = (1 - q) * (1 - q) * crownX + 2 * (1 - q) * q * ctlX + q * q * tipX;
-      var qy = (1 - q) * (1 - q) * crownY + 2 * (1 - q) * q * ctlY + q * q * tipY;
-      put(g, W, H, Math.round(qx), Math.round(qy), P.frond);
     }
   }
   if(P.rain){
@@ -1606,15 +1779,11 @@ function drawPix(g, W, H, t){
       if(H2(x * 4.1 + y * 29.3 + Math.floor(t * 2) * 53) > 0.972) put(g, W, H, x, y, "#ffe9b0");
   }
   rect(g, W, H, 0, horizon, W, 1, "#ffd9a0");
-  /* island with a palm silhouette, right of centre */
+  /* the island and palm silhouette, right of centre: the Isle mark
+     traced from the master artwork, stamped in the picture's
+     silhouette colour like everything else in the scene */
   var ix = Math.round(W * 0.70);
-  ellipse(g, W, H, ix, horizon + 1, Math.round(W * 0.085), Math.max(1, Math.round(H * 0.028)), "#0d0f18");
-  var tx3 = ix - Math.round(W * 0.01), ty3 = horizon - Math.round(H * 0.15);
-  line(g, W, H, ix, horizon, tx3, ty3, "#0d0f18", 1);
-  for(var fi = 0; fi < 5; fi++){
-    var fa2 = Math.PI * (0.15 + 0.7 * fi / 4);
-    line(g, W, H, tx3, ty3, Math.round(tx3 + Math.cos(fa2) * W * 0.045), Math.round(ty3 - Math.sin(fa2) * H * 0.045 + H * 0.03), "#0d0f18", 0);
-  }
+  stampMark(g, W, H, ix, horizon + Math.max(1, Math.round(H * 0.03)), Math.round(W * 0.36), "#0d0f18", "#0d0f18", "#0d0f18", W * 0.002, t, 1.2);
   /* sailboat, left */
   var bx2 = Math.round(W * 0.15), by2 = horizon + Math.round(H * 0.035);
   rect(g, W, H, bx2 - Math.round(W * 0.02), by2, Math.round(W * 0.04), Math.max(1, Math.round(H * 0.014)), "#0d0f18");
@@ -1664,13 +1833,36 @@ return { createState: createState, frame: frame };
 /* === SCENE ENGINE END === */
 
 /* ============ Colour board scenes: page adapter for the shared engine ============ */
-var CW = 48, CH = 27, builtCW = 0, builtCH = 0;
+var CW = 64, CH = 32, builtCW = 0, builtCH = 0;
 var colourEl = document.getElementById("colour");
 var pxEls = [], pxState = [], colourTimer = null, sceneState = null, sceneLast = 0;
+/* The colour grid is computed to fill the frame (fill rework): the
+   column count is the style's own (64 for a colour board, 96 for
+   Flap Pix), the cells stay square and true, and the row count is
+   the one whose whole cells fill the remaining height most fully. */
+function colourGridFor(fl, iw, ih, fs){
+  var pad = boardPads(fs, iw, ih);
+  var boardW = iw * (1 - 2 * INSET_X), boardH = ih * (1 - 2 * INSET_Y);
+  var tw = Math.min(84, Math.max(18, iw * 0.0205)); /* header scale driver, as in fitColour */
+  var headBlock = 2.52 * tw + 2;
+  if(fl) headBlock += tw * 1.15; /* the caption band under the picture */
+  var availW = boardW - 2 * pad.x, availH = boardH - 2 * pad.y - headBlock;
+  var cols = fl ? 96 : 64;
+  var px0 = Math.floor((availW - (cols - 1) * 2) / cols);
+  var est = Math.max(8, Math.round(availH / Math.max(4, px0 + 2)));
+  var best = null;
+  for(var ch = Math.max(8, est - 2); ch <= est + 2; ch++){
+    var px = Math.floor(Math.min((availW - (cols - 1) * 2) / cols, (availH - (ch - 1) * 2) / ch));
+    if(px < 4) continue;
+    var totH = ch * px + (ch - 1) * 2, totW = cols * px + (cols - 1) * 2;
+    if(totH > availH || totW > availW) continue;
+    if(!best || totH > best.totH) best = { cw: cols, ch: ch, px: px, totH: totH };
+  }
+  return best || { cw: cols, ch: 8, px: 4, totH: 0 };
+}
 function colourDims(){
-  var fl = boardStyle() === "flappix";
-  if(board.rows === 14){ CW = fl ? 96 : 64; CH = fl ? 54 : 36; }
-  else { CW = fl ? 64 : 48; CH = fl ? 36 : 27; }
+  var g = colourGridFor(boardStyle() === "flappix", window.innerWidth, window.innerHeight, !!document.fullscreenElement);
+  CW = g.cw; CH = g.ch;
 }
 function sceneId(){
   if(boardStyle() === "flappix") return "pix";
@@ -2069,7 +2261,7 @@ function renderBoard(cascade){
   var jobs = []; /* {tile, from, to, steps, delay, silent} */
   var count = boardRows(), r;
   if(text){
-    var lines = effLines();
+    var lines = pageSlice(effLines(), count);
     for(r = 0; r < count; r++){
       var ln = lines[r] || { text:"", black:false };
       var full = cleanRaw(ln.text);
@@ -2088,7 +2280,7 @@ function renderBoard(cascade){
       }
     }
   } else {
-    var fl = effFlights();
+    var fl = pageSlice(effFlights(), count);
     for(r = 0; r < count; r++){
       var f = fl[r] || null;
       var silent = !f || !!f.black; /* blank and black rows make no clack of their own */
@@ -2448,6 +2640,33 @@ function titleCase(s){
   return s.toLowerCase().split(" ").map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1); }).join(" ");
 }
 var GLOBE_SVG = '<svg viewBox="0 0 560 560" width="100%" height="100%"><circle cx="280" cy="280" r="272" fill="#0a2a7a"/><g fill="none" stroke="#ffffff" stroke-width="7"><circle cx="280" cy="280" r="272"/><ellipse cx="280" cy="280" rx="120" ry="272"/><ellipse cx="280" cy="280" rx="215" ry="272"/><line x1="8" y1="280" x2="552" y2="280"/><path d="M 40 175 Q 280 235 520 175"/><path d="M 40 385 Q 280 325 520 385"/><path d="M 95 95 Q 280 155 465 95"/><path d="M 95 465 Q 280 405 465 465"/></g></svg>';
+/* Clipper's fixed height, priced component by component from the
+   rendered board (see the note in buildClipper): everything except
+   the rows themselves, for a given bank count and row count. */
+function clipperFixedH(W, H, nBanks, nRows){
+  return H * 0.048 + W * 0.030 + H * 0.010 + W * 0.0095 * 1.16
+    + nBanks * (H * 0.016 + W * 0.0085 * 1.16 + H * 0.008 + W * 0.0075 * 1.16 + H * 0.006)
+    + Math.max(0, nBanks - 1) * (H * 0.012 + 1)
+    + Math.max(0, nRows - nBanks) * (H * 0.006);
+}
+/* The bank size follows the rows on the board, not the flights
+   among them: a screen of up to nine rows banks by three, a fuller
+   screen by five, as the full board has always done. */
+function clipperBankSize(totalRows){ return totalRows <= 9 ? 3 : 5; }
+/* Clipper's computed capacity: the largest row count whose exact
+   fixed height plus its rows fits the frame, priced for the bank
+   structure that row count would carry. The count is geometry
+   alone; it never depends on how many flights the board holds, so
+   a short board fills the same screen as a full one, its field
+   completed by blank rows at the standard gap. */
+function clipperCapacity(W, H, tileH){
+  for(var n = 40; n >= 1; n--){
+    var nb = Math.max(1, Math.ceil(n / clipperBankSize(n)));
+    if(clipperFixedH(W, H, nb, n) + n * tileH <= H) return n;
+  }
+  return 1;
+}
+var CLIPPER_BLANK = { time: "", destination: "", flight: "", gate: "", remarks: "", black: false, blank: true };
 function buildClipper(W, H, cascade){
   var root = stEl("div", "st-clipper", styledEl);
   var pad = W * 0.016;
@@ -2473,19 +2692,47 @@ function buildClipper(W, H, cascade){
   var sub = stEl("div", "c-sub", main, boardKind() === "arrivals" ? "CLIPPER ARRIVALS · JET AGE SERVICE" : "CLIPPER DEPARTURES · JET AGE SERVICE");
   sub.style.fontSize = (W * 0.0095) + "px"; sub.style.marginTop = (H * 0.010) + "px";
   var data = stRows();
-  var n = Math.max(1, data.length);
-  var bankSize = n <= 9 ? 3 : 5;
-  var banks = [], i;
-  for(i = 0; i < data.length; i += bankSize) banks.push(data.slice(i, i + bankSize));
-  if(!banks.length) banks.push([]);
   var bankNames = ["TRANSATLANTIC", "TRANSPACIFIC", "THE AMERICAS"];
   var mainW = W - railW - pad * 2.3;
   var longest = 4;
   data.forEach(function(f){ longest = Math.max(longest, Math.min(28, f.destination.length)); });
   var tileW = Math.min(mainW * 0.46 / longest, H * 0.030);
   var tileH = tileW * 1.82;
-  var needH = banks.length * (H * 0.042) + data.length * (tileH + H * 0.006) + H * 0.11;
-  if(needH > H * 0.97){ var k = (H * 0.97) / needH; tileH *= k; tileW = tileH / 1.82; }
+  /* Fit, priced component by component from the rendered board: the
+     main padding top and bottom, the wordmark (its line-height is 1),
+     the sub line's margin and its height at the real line height of
+     its font, each bank's top margin, bank name and column heads at
+     their real line heights, the name's margin and the collapsed gap
+     under the heads, the later banks' top padding and 1px rule, and
+     the collapsed gaps between the rows of a bank. The old estimate
+     priced a whole bank at 0.042H and the wordmark block at 0.11H;
+     both undercount, and its shrink then scaled the tile by the
+     ratio of the two totals, which cannot close a gap carried by
+     the fixed parts. The fixed height is totalled exactly by
+     clipperFixedH, and the capacity below is priced against it. */
+  /* Computed fill (fill rework): the tile size above is the style's
+     own and is never shrunk to fit. The capacity is the largest row
+     count whose exact fixed height plus its rows fits the frame;
+     flights beyond it page through at the Gallery interval, and a
+     board with fewer flights is completed to the same capacity by
+     blank rows: an empty row in the bank's table, blank destination
+     tiles with no time, clipper name or status text. The rows all
+     render at the standard gap; the small leftover is spread into
+     the row margins, the gaps the fixed height formula already
+     counts, and nothing wider is ever opened up to fill. */
+  var capacity = clipperCapacity(W, H, tileH);
+  var bankSize = clipperBankSize(capacity);
+  data = styledPageSlice(data, capacity);
+  var contentRows = data.length;
+  while(data.length < capacity) data.push(Object.assign({}, CLIPPER_BLANK));
+  var banks = [], i;
+  for(i = 0; i < data.length; i += bankSize) banks.push(data.slice(i, i + bankSize));
+  if(!banks.length) banks.push([]);
+  var fixedH = clipperFixedH(W, H, banks.length, data.length);
+  var rowGapExtra = 0;
+  if(data.length > banks.length){
+    rowGapExtra = Math.max(0, H - fixedH - data.length * tileH) / (data.length - banks.length);
+  }
   banks.forEach(function(bank, bi){
     var bk = stEl("div", "c-bank", main);
     bk.style.marginTop = (H * 0.016) + "px"; bk.style.paddingTop = bi ? (H * 0.012) + "px" : "0";
@@ -2499,7 +2746,7 @@ function buildClipper(W, H, cascade){
     var bankDelay = cascade ? bi * (longest * 55 + 600) : 0;
     bank.forEach(function(f, ri){
       var row = stEl("div", "c-row", bk);
-      row.style.marginTop = (H * 0.006) + "px";
+      row.style.marginTop = (H * 0.006 + (ri ? rowGapExtra : 0)) + "px";
       var tc = stEl("div", "c-timecell", row, f.black ? "" : f.time);
       tc.style.width = (W * 0.052) + "px"; tc.style.fontSize = (tileH * 0.52) + "px";
       var tiles = stEl("div", "c-tiles", row);
@@ -2514,13 +2761,13 @@ function buildClipper(W, H, cascade){
         if(cascade) jobs.push({ el: t, to: ch, delay: bankDelay + ci * 30 + ri * 60 });
       }
       if(cascade && jobs.length) stFlipTiles(jobs, { ring: RING_LO, stepMs: 46, sound: true });
-      var cn = stEl("div", "c-clip", row, (f.black || isTextBoard()) ? "" : clipName(f.destination));
+      var cn = stEl("div", "c-clip", row, (f.black || f.blank || isTextBoard()) ? "" : clipName(f.destination));
       cn.style.marginLeft = (W * 0.014) + "px"; cn.style.fontSize = (tileH * 0.40) + "px";
       var rm = stEl("div", "c-rem" + (f.remarks === "FINAL CALL" ? " final" : (!f.remarks || f.remarks === "ON TIME" ? " quiet" : "")), row, f.black ? "" : f.remarks);
       rm.style.marginLeft = "auto"; rm.style.fontSize = (tileH * 0.38) + "px";
     });
   });
-  if(cascade && data.length >= 4) duck(1400);
+  if(cascade && contentRows >= 4) duck(1400);
 }
 
 /* ---------- G Patapata ---------- */
@@ -2552,7 +2799,7 @@ function buildPatapata(W, H, cascade){
   var dl = stEl("div", "l", disc, "LOCAL"); dl.style.fontSize = (dsz * 0.10) + "px";
   var rule = stEl("div", "p-rule", root);
   rule.style.height = Math.max(3, H * 0.005) + "px"; rule.style.marginTop = (H * 0.018) + "px";
-  var data = stRows().slice(0, 8);
+  var data = styledPageSlice(stRows(), 8); /* its screen holds eight rows; the rest page through */
   var n = Math.max(1, data.length);
   var headsH = H * 0.045;
   var rowH = (H - H * 0.048 - H * 0.155 - headsH) / n;
@@ -2777,9 +3024,10 @@ function buildProjekt(W, H, cascade){
   var ct = stEl("div", "t st-clock", ck, "--:--"); ct.style.fontSize = (headH * 0.21) + "px";
   var cl = stEl("div", "", ck, "uhr · local time"); cl.style.fontSize = (headH * 0.075) + "px";
   var data = stRows();
-  var n = boardRows();
+  var n = projektRowsFor(H);
   var tableH = H - headH - stripH;
   var rowH = tableH / (n + 1);
+  data = styledPageSlice(data, n);
   var table = stEl("div", "", root);
   table.style.padding = "0 " + pad + "px";
   var colW = { time: W * 0.085, ziel: W * 0.30, flug: W * 0.14, pic: Math.max(rowH * 0.62, W * 0.048) };
@@ -2895,14 +3143,9 @@ function fitColour(){
   var pad = boardPads(fs, iw, ih);
   root.style.setProperty("--pad-x", pad.x + "px");
   root.style.setProperty("--pad-y", pad.y + "px");
-  var boardW = iw * (1 - 2 * INSET_X), boardH = ih * (1 - 2 * INSET_Y);
-  var tw = Math.min(84, Math.max(18, iw * 0.0205)); /* :root --tile-w clamp, drives header size */
-  var headBlock = 2.52 * tw + 2;
-  if(boardStyle() === "flappix") headBlock += tw * 1.15; /* the caption band under the picture */
-  var gapTotalW = (CW - 1) * 2, gapTotalH = (CH - 1) * 2;
-  var px = Math.floor(Math.min((boardW - 2 * pad.x - gapTotalW) / CW,
-                               (boardH - 2 * pad.y - headBlock - gapTotalH) / CH));
-  root.style.setProperty("--px", Math.max(4, px) + "px"); /* .px is square: width == height */
+  var g = colourGridFor(boardStyle() === "flappix", iw, ih, fs);
+  root.style.setProperty("--px", Math.max(4, g.px) + "px"); /* .px is square: width == height */
+  if(pxEls.length && (builtCW !== CW || builtCH !== CH)) buildColour();
 }
 function fitBoard(){
   var fst = boardStyle();
@@ -2911,24 +3154,24 @@ function fitBoard(){
   var root = document.documentElement;
   var fs = !!document.fullscreenElement;
   var iw = window.innerWidth, ih = window.innerHeight;
-  var units = 43 + 38 * 0.14 + 4 * 1.15; /* tiles + in-cell gaps + spacers, in tile widths */
   var rows = boardRows();
   var boardW = iw * (1 - 2 * INSET_X);
   var boardH = ih * (1 - 2 * INSET_Y);
   var pad = boardPads(fs, iw, ih);
   root.style.setProperty("--pad-x", pad.x + "px");
   root.style.setProperty("--pad-y", pad.y + "px");
-  /* Vertical metrics in tile-width units. The tile aspect is FIXED at
-     1.42 (height / width) by the --tile-h calc and never stretched:
-     tiles grow only in true proportion. The board renders exactly
-     `rows` rows (the chosen board size); leftover height is spread
-     into the row pitch so the board fills the frame inside the insets. */
+  /* Tile size in the fill model: the width alone sets it, from the
+     columns across the frame, at the FIXED 1.42 aspect (height /
+     width) the --tile-h calc holds. The row count is computed from
+     that size (boardRows), never the other way round, so tiles are
+     never shrunk to make a preset count fit. Leftover height beyond
+     whole rows is spread into the row pitch, a fine adjustment only:
+     boardRows chose the count that leaves the least of it. */
   var HEADER_ETC = isTextBoard() ? 1.85 : 2.52; /* header block (+ column headings for flight boards), in tile widths */
   var PITCH = 1.53;      /* row pitch incl. base row padding, in tile widths */
-  var wByWidth = (boardW - 2 * pad.x) / units;
-  var wByHeight = (boardH - 2 * pad.y - 2) / (HEADER_ETC + rows * PITCH);
-  var w = Math.max(4, Math.min(wByWidth, wByHeight * 0.998));
+  var w = Math.max(4, isleTileW(iw, ih, fs));
   root.style.setProperty("--tile-w", w + "px");
+  if(rowsBuilt && builtRowCount !== rows) renderBoard(false);
   /* Tiles that fit across a text-board line at this tile width. Lines
      longer than this are truncated to the grid, never clipped mid-tile. */
   var colsFit = Math.max(8, Math.floor(((boardW - 2 * pad.x) / w + 0.14) / 1.14));
@@ -3420,7 +3663,6 @@ function simHHMM(ms){
   return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
 }
 function simFlightsFor(b, nowMs){
-  var rows = (b && (b.rows === 5 || b.rows === 14)) ? b.rows : 14;
   var now = new Date(nowMs);
   var found = [];
   for(var off = -1; off <= 1; off++){
@@ -3441,7 +3683,7 @@ function simFlightsFor(b, nowMs){
     });
   }
   found.sort(function(a, c){ return a.depAbs - c.depAbs; });
-  return found.slice(0, rows).map(function(x){ return x.row; });
+  return found.slice(0, 48).map(function(x){ return x.row; });
 }
 function simSignature(b, nowMs){
   return simFlightsFor(b, nowMs).map(function(f){
@@ -3661,14 +3903,14 @@ function boardFeeds(b){
   }
   return feeds.length ? feeds : null;
 }
+var FEED_RANK = { ok: 0, wait: 1, delayed: 2, down: 3 };
 function lampState(b){
   var feeds = boardFeeds(b);
   if(!feeds) return null;
   var worst = "ok";
   feeds.forEach(function(key){
     var s = feedState(key);
-    if(s === "down") worst = "down";
-    else if(s !== "ok" && worst !== "down") worst = "delayed";
+    if(FEED_RANK[s] > FEED_RANK[worst]) worst = s;
   });
   return worst;
 }
@@ -3747,10 +3989,18 @@ if(!DEMO){
     if(e.key !== "isle-board-config-v1" || !e.newValue) return;
     try{
       config = JSON.parse(e.newValue);
+      var nc = carouselFrom(config, false);
+      if(nc){
+        carousel = nc;
+        nc.idx = carouselIdx(nc);
+        showCarouselBoard(nc, nc.idx);
+        return;
+      }
+      carousel = null;
       var nb = config.boards[config.liveBoardId];
       if(!nb) return;
       if(!nb.type) nb.type = "departures";
-      if(nb.rows !== 5 && nb.rows !== 14) nb.rows = 14;
+      if("rows" in nb) delete nb.rows;
       if(nb.type !== "colour" && !nb.kind) nb.kind = nb.shows === "arrivals" ? "arrivals" : "departures";
       if(!nb.flights) nb.flights = [];
       if(!nb.lines) nb.lines = [];
