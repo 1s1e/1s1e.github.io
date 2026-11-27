@@ -12,7 +12,7 @@
 <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
 <title>The Isle · Flight Board Settings</title>
 <style>
-  :root{ --amber:#e8a33d; --panel:#141416; --line:#2a2b30; --ink:#f2ede1; --mut:#9a978c; }
+  :root{ color-scheme:dark; --amber:#e8a33d; --panel:#141416; --line:#2a2b30; --ink:#f2ede1; --mut:#9a978c; }
   /* --amber is status only in this interface (delayed or stale, in
      the feed lamp and its status text, and the board faces' own
      remark colouring). Every decorative use is neutral: ink,
@@ -25,7 +25,8 @@
   body{ margin:0; background:#0a0a0b; color:var(--ink); overflow-x: clip;
         font-family:"Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
   button, select, input, textarea{ font-family: inherit; }
-  .wrap{ max-width: 860px; margin: 0 auto; padding: 20px 16px 90px; }
+  .wrap{ max-width: none; margin: 0; padding: 20px 20px 72px; }
+  @media (max-width: 560px){ .wrap{ padding: 16px 12px 56px; } }
   h1{ font-size: 20px; letter-spacing:.22em; text-transform: uppercase; margin: 6px 0 2px; }
   h1 .dot{ color: var(--ink); }
   h2{ font-size: 13px; letter-spacing:.24em; text-transform: uppercase; color: var(--mut);
@@ -41,7 +42,7 @@
   .badge.editing{ background:#3a3b41; color: var(--ink); }
   .badge.type{ background:#274435; color:#bfe6cf; }
   button{ background:#1e1f23; color:var(--ink); border:1px solid #3a3b41; border-radius: 7px;
-          padding: 9px 13px; font-size: 13px; font-weight:600; cursor:pointer; min-height: 40px; }
+          padding: 9px 13px; font-size: 13px; font-weight:600; cursor:pointer; min-height: 44px; }
   button:hover{ border-color:#5a5b63; }
   button.primary{ background: var(--ink); border-color: var(--ink); color:#141414; }
   button.danger{ color:#ff9a8a; }
@@ -70,30 +71,32 @@
   td{ padding: 3px; }
   td input{ min-height: 40px; padding: 8px; font-size: 14px; }
   td.del{ width: 44px; text-align:center; }
-  /* On a phone the flights table becomes one stacked card per flight:
-     every field on its own labelled row, full width, full tap height,
-     and no horizontal scrolling anywhere. */
-  @media (max-width: 560px){
-    #flights-card table, #flights-card tbody, #flights-card tr, #flights-card td{ display: block; width: auto; }
-    #flights-card thead{ display: none; }
-    #flights-card tr{ border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-    #flights-card td{ display: flex; align-items: center; gap: 10px; padding: 3px 0; }
-    #flights-card td::before{ content: attr(data-label); flex: 0 0 96px; font-size: 11px;
-      letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
-    #flights-card td input{ flex: 1; min-width: 0; min-height: 44px; font-size: 16px; padding: 8px 10px; }
-    #flights-card td.blk{ margin-top: 4px; }
-    #flights-card td.del{ width: auto; text-align: left; }
-    #flights-card td.del::before{ content: ""; flex: 0 0 96px; }
-    #flights-card td.del button{ min-height: 44px; padding: 9px 18px; }
-    #preview-wrap{ padding: 6px 0 8px; }
-  }
-  .bar{ position: fixed; left:0; right:0; bottom:0; background: rgba(12,12,14,.96);
-        border-top: 1px solid var(--line); padding: 12px 16px; z-index: 50; }
-  .bar .inner{ max-width: 860px; margin: 0 auto; }
+  /* Flights are stacked row cards at every width (the table form is
+     retired): fields reflow 7 across, then 3, then 2. */
+  .flight-card{ background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .flight-card.black-line .flight-fields input{ opacity:.45; }
+  .flight-card.next-page .flight-fields input{ opacity:.4; }
+  .flight-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .flight-head .fh-name{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--mut); }
+  .flight-fields{ display:grid; grid-template-columns:110px 1.6fr 1fr 80px 1.2fr auto auto; gap:10px; align-items:end; }
+  @media (max-width: 1020px){ .flight-fields{ grid-template-columns:1fr 1fr 1fr; } }
+  @media (max-width: 560px){ .flight-fields{ grid-template-columns:1fr 1fr; } }
+  .flight-fields .del{ min-width:44px; min-height:44px; }
+  .blackcell{ display:flex; flex-direction:column; gap:6px; }
+  .blackcell .black-toggle{ min-height:44px; }
+  .blackcell .lab{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--mut); }
+  label.f{ display:block; margin:0; letter-spacing:0; text-transform:none; }
+  label.f .lab{ display:block; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--mut); margin-bottom:6px; }
+  .sound-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(430px, 1fr)); gap:12px; }
+  @media (max-width: 480px){ .sound-grid{ grid-template-columns:1fr; } }
+  .sound-grid .card{ margin-bottom:0; }
+  /* Save bars live in the flow of the editor, at its head and its
+     foot. Nothing in Settings is sticky or fixed. */
+  .bar{ margin: 14px 0; }
   #status{ font-size: 13px; color: var(--mut); margin-bottom: 10px; min-height: 18px; }
   #status.clean{ color: var(--mut); }
   .bar .btns{ display:flex; gap: 10px; flex-wrap: wrap; }
-  .bar .btns button{ flex: 1; min-width: 100px; }
+  .bar .btns button{ flex: 1; min-width: 100px; min-height: 48px; font-size: 14px; }
   .slider-val{ color: var(--ink); font-size: 13px; float: right; letter-spacing: 0; }
   .hint{ color: var(--mut); font-size: 12px; margin-top: 6px; }
   /* ---- per-option test controls ---- */
@@ -110,21 +113,45 @@
   td.blk{ white-space: nowrap; }
   .black-toggle{ display:flex; align-items:center; gap:6px; font-size:11px; letter-spacing:.1em;
                  text-transform: uppercase; color: var(--mut); cursor: pointer; margin: 0; }
-  .mini-note{ font-size:10px; color: var(--mut); margin-top:3px; max-width: 96px; }
+  .mini-note{ font-size:10px; color: var(--mut); margin-top:3px; }
+  .flight-card .mini-note{ font-size:11px; margin-top:8px; }
   .line-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
   .line-row input[type="text"]{ flex:1; width:auto; min-width:0; }
   .symbol-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
   .symbol-row input[type="text"]{ flex:1; width:auto; min-width:0; text-transform: uppercase; }
   .symbol-row button{ flex:none; }
-  /* ---- sticky miniature board preview: the demo surface ----
-     A full width opaque black band locked to the top of the page, holding
-     a true 16:9 frame (the television's shape) with the board inside it
-     fitted exactly as the display page fits it to the television. */
-  #preview-wrap{ position: sticky; top: 0; z-index: 60; background:#000;
-                 width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
-                 padding: 10px 0 12px; border-bottom: 1px solid var(--line); }
+  /* ---- the demo television: in the middle of the page, in flow ----
+     A centred television with a bezel, neck and stand; the board plays
+     inside its screen, aspect locked at 16:9 and sized by pvFrame() to
+     the page width (never the viewport height). It is never sticky,
+     never fixed, and scrolls away like everything else. */
+  #preview-wrap{ padding: 10px 0 2px; }
+  .tv{ max-width: 1094px; margin: 0 auto; }
+  .tv-frame{ background:#101013; border:1px solid #26262b; border-radius:20px; padding:16px;
+             box-shadow:0 30px 60px -30px rgba(0,0,0,.9); }
   #preview{ position: relative; background:#000; margin: 0 auto; overflow: hidden;
-            display:flex; align-items:center; justify-content:center; border-radius: 4px; }
+            display:flex; align-items:center; justify-content:center; border-radius: 8px; }
+  .tv-neck{ width:110px; height:24px; margin:0 auto; background:#101013; }
+  .tv-stand{ height:7px; max-width:430px; margin:0 auto; background:#1b1b1f; border-radius:4px; }
+  /* the caption rides up beside the stand: its negative top margin lifts
+     it past the neck and stand (24px + 7px) so the caption text sits 5px
+     under the frame's own lower edge at the left, where the frame's edge
+     is higher than the stand's foot. The flex gap grows by the same 2px
+     the button row would otherwise take into the stand's band, so the
+     buttons begin exactly at the stand's bottom edge and never overlap
+     it. On narrow screens the neck leaves no room beside it (the caption
+     text is wider than the space left of the neck), so the caption keeps
+     its place under the stand there. */
+  .tv-caption{ max-width: 1094px; margin: -26px auto 0; display:flex; flex-direction: column;
+               align-items: stretch; gap: 12px; }
+  @media (max-width: 600px){
+    .tv-caption{ margin-top: 5px; gap: 10px; }
+  }
+  /* the caption starts where the picture starts: inset past the frame's
+     border and padding (1px + 16px), under the screen's left edge */
+  .tv-caption .cap-name{ align-self: flex-start; margin-left: 29px; }
+  .tv-caption .cap-name{ font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
+  .tv-caption .cap-name b{ color: var(--ink); font-weight: 700; }
   #pv-board{ padding: var(--pv-pad-y, 3px) var(--pv-pad-x, 4px); }
   #pv-head{ display:flex; justify-content: space-between; align-items: baseline; color: var(--ink);
             font-weight: 700; letter-spacing: .34em; line-height: 1.1; white-space: nowrap;
@@ -158,9 +185,10 @@
   .pvgrid .px{ border-radius: 2px; width: var(--pv-px, 10px); height: var(--pv-px, 10px); }
   .pvgrid .px.shimmer{ animation: pxflip 170ms ease-out; }
   @keyframes pxflip{ 0%{ transform: perspective(220px) rotateX(0deg); } 50%{ transform: perspective(220px) rotateX(-42deg); filter: brightness(1.35); } 100%{ transform: perspective(220px) rotateX(0deg); } }
-  #pv-foot{ display:flex; justify-content: space-between; align-items: center; margin: 8px auto 0;
+  #pv-foot{ display:flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0;
             color: var(--mut); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-  #pv-sound{ min-height: 30px; padding: 4px 10px; font-size: 11px; }
+  #pv-sound, #pv-cascade, #pv-full{ min-height: 44px; padding: 4px 12px; font-size: 11px;
+            text-transform: uppercase; letter-spacing: .2em; }
   #btn-test-all.playing{ background:#1e1f23; color: var(--ink); border-color: var(--ink); }
 
   /* ============ Preview: board styles ============ */
@@ -262,37 +290,45 @@
   .pv-feed-state.ok{ color:#46b96a; } .pv-feed-state.delayed{ color:#e8a33d; }
   .pv-feed-state.down{ color:#d8402e; } .pv-feed-state.wait{ color:#9a958a; }
   .pvlamp.wait{ background:#8f8c82; color:#8f8c82; }
-  /* ---- board tiles: the visual library ---- */
+  /* ---- board tiles: strict boxes, actions on the tile ---- */
   .tile-h{ font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--mut);
-           margin: 22px 0 10px; }
-  .tile-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-  @media (max-width: 560px){ .tile-grid{ grid-template-columns: 1fr; } }
+           margin: 26px 0 10px; }
+  .tile-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  @media (max-width: 400px){ .tile-grid{ grid-template-columns: 1fr; } }
   .tile{ background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-         padding: 8px; cursor: pointer; text-align: left; width: 100%; }
+         overflow: hidden; display: flex; flex-direction: column; min-width: 0; cursor: pointer; }
   .tile.selected{ border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
-  .tile-face{ position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000;
-              border-radius: 5px; overflow: hidden; }
+  .facebox{ position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; flex: none; }
+  .tile-face{ position: absolute; inset: 0; overflow: hidden; display: block; background: #000; }
   .tile-face .pv-row{ padding: var(--pv-rowpad, 1px) 0; }
-  .tile-name{ display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 700; font-size: 14px; }
-  .tile-sub{ color: var(--mut); font-size: 12px; margin-top: 2px; }
-  .tile .badge.live{ background: var(--ink); color: #111; font-size: 10px; font-weight: 700;
-                     letter-spacing: .12em; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
-  .tile.new .tile-face{ display: flex; align-items: center; justify-content: center;
-                        background: #101012; border: 1px dashed #3a3b41; }
-  .tile.new .plus{ font-size: 44px; color: var(--mut); font-weight: 300; line-height: 1; }
+  .face-plus{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+              font-size: 52px; font-weight: 300; color: var(--mut); line-height: 1; }
+  .tile.new .facebox{ background: #101012; border-bottom: 1px dashed #3a3b41; }
+  .meta{ padding: 10px 12px 2px; display: flex; flex-wrap: wrap; gap: 5px 8px; align-items: center; min-width: 0; }
+  .tile-name{ font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden;
+              text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
+  .tile-sub{ padding: 2px 12px 10px; color: var(--mut); font-size: 12px; white-space: nowrap;
+             overflow: hidden; text-overflow: ellipsis; }
+  .tile-num{ background: #26262b; color: var(--ink); font-size: 11px; font-weight: 700;
+             letter-spacing: .08em; padding: 3px 7px; border-radius: 4px; flex: none; }
+  .tile-orig{ border: 1px solid var(--line); color: var(--mut); font-size: 10px; font-weight: 700;
+              letter-spacing: .08em; text-transform: uppercase; padding: 3px 6px; border-radius: 4px; flex: none; }
+  .badge-live{ background: var(--ink); color: #111; font-size: 10px; font-weight: 700;
+               letter-spacing: .1em; padding: 3px 7px; border-radius: 4px; flex: none; text-transform: uppercase; }
+  .actions{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 12px 12px; margin-top: auto; }
+  .actions.a3{ grid-template-columns: repeat(3, 1fr); }
+  .actions.single{ grid-template-columns: 1fr; }
+  .actions.confirm{ grid-template-columns: 1fr 1fr; }
+  .actions button{ min-height: 44px; }
+  .actions2{ padding: 0 12px 12px; margin-top: -4px; }
+  .actions2 button{ width: 100%; min-height: 44px; }
+  .confirm-text{ grid-column: 1 / -1; font-size: 13px; }
   .tilegrid-mini{ display: grid; gap: 1px; width: 100%; height: 100%; }
   .tilegrid-mini .px{ width: 100%; height: 100%; }
   .tile-cap{ position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.72);
              color: #e8e6df; font-size: 10px; letter-spacing: .1em; padding: 3px 6px; white-space: nowrap; overflow: hidden; }
   .tile-car-chip{ position: absolute; top: 6px; right: 6px; background: #2a2b30; color: var(--ink);
-                  font-size: 10px; font-weight: 700; letter-spacing: .1em; padding: 2px 7px; border-radius: 4px; }
-  #tile-actions{ background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-                 padding: 12px 14px; margin-top: 14px; }
-  #tile-actions .ta-name{ font-weight: 700; font-size: 15px; margin-bottom: 10px; }
-  #tile-actions .ta-btns{ display: flex; gap: 8px; flex-wrap: wrap; }
-  #tile-actions .ta-btns button{ flex: 1; min-width: 84px; min-height: 44px; }
-  #tile-actions .ta-small{ display: flex; gap: 8px; margin-top: 8px; }
-  #tile-actions .ta-small button{ flex: 1; min-height: 40px; }
+                  font-size: 10px; font-weight: 700; letter-spacing: .1em; padding: 2px 7px; border-radius: 4px; z-index: 3; }
   .car-member{ display: flex; align-items: center; gap: 8px; border: 1px solid var(--line);
                border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
   .car-member .cm-name{ flex: 1; font-weight: 600; font-size: 14px; min-width: 0; }
@@ -302,10 +338,6 @@
               border-bottom: 1px solid #101011; }
   .tile-head .dot{ color: var(--amber); letter-spacing: 0; }
   .tile-colheads{ display: flex; color: #8f8c82; letter-spacing: .26em; font-weight: 600; text-transform: uppercase; }
-  .tile-num{ background: #2a2b30; color: var(--mut); font-size: 11px; font-weight: 700;
-             letter-spacing: .08em; padding: 2px 7px; border-radius: 4px; flex: none; }
-  .tile-orig{ border: 1px solid var(--line); color: var(--mut); font-size: 10px; font-weight: 700;
-              letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; flex: none; }
   #editor-sections{ scroll-margin-top: 8px; }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -315,62 +347,57 @@
   <h1>THE ISLE <span class="dot">·</span> FLIGHT BOARD</h1>
   <div class="sub">Settings. Pick a board below to edit it, demo it on this device, or publish it to the live board. Editing is a session: Save keeps your changes, Cancel throws them away.</div>
 
-  <div id="preview-wrap">
-    <div id="preview">
-      <div id="pv-board">
-        <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span class="pv-clockbox"><span id="pv-lamp" class="pvlamp ok" hidden></span><span id="pv-clock">--:--</span></span></div>
-        <div id="pv-colheads"></div>
-        <div id="pv-rows"></div>
-        <div id="pv-colour"></div>
-        <div id="pv-pixcap"></div>
-        <div id="pv-styled"></div>
-      </div>
-    </div>
-    <div id="pv-foot"><span>Preview</span><button id="pv-sound" type="button">Preview sound: off</button></div>
-  </div>
-  <div id="pv-feeds" hidden></div>
-
   <div id="library-sections">
   <h2>Boards</h2>
   <div class="tile-grid">
-    <button type="button" class="tile new" id="tile-new-board">
-      <span class="tile-face"><span class="plus">+</span></span>
-      <span class="tile-name">New board</span>
-      <span class="tile-sub">Start a new board from a style's defaults</span>
-    </button>
+    <article class="tile new" id="tile-new-board">
+      <div class="facebox"><span class="face-plus">+</span></div>
+      <div class="meta"><span class="tile-name">New board</span></div>
+      <div class="tile-sub">Start a new board from a style's defaults</div>
+      <div class="actions single"><button type="button" class="primary" id="btn-new-board">Start new board</button></div>
+    </article>
   </div>
   <div class="tile-h">Preset boards</div>
   <div class="tile-grid" id="preset-tiles"></div>
   <div class="tile-h">Your boards</div>
   <div class="tile-grid" id="your-tiles"></div>
-  <div id="tile-actions" hidden>
-    <div class="ta-name" id="ta-name"></div>
-    <div id="ta-main">
-      <div class="ta-btns">
-        <button type="button" id="ta-edit" class="primary">Edit</button>
-        <button type="button" id="ta-demo">Demo</button>
-        <button type="button" id="ta-publish">Publish</button>
-      </div>
-      <div class="ta-small" id="ta-small">
-        <button type="button" id="ta-rename">Rename</button>
-        <button type="button" id="ta-delete" class="danger">Delete</button>
-      </div>
-    </div>
-    <div id="ta-confirm" hidden>
-      <div class="ta-name" id="ta-confirm-text"></div>
-      <div class="ta-btns">
-        <button type="button" id="ta-confirm-del" class="danger">Delete</button>
-        <button type="button" id="ta-confirm-cancel">Cancel</button>
-      </div>
-    </div>
-  </div>
   <div class="hint" id="lib-status"></div>
   <div class="tile-h">Carousels</div>
   <div class="tile-grid" id="carousel-tiles"></div>
   </div>
 
+  <div id="preview-wrap">
+    <div class="tv">
+      <div class="tv-frame">
+        <div id="preview">
+          <div id="pv-board">
+            <div id="pv-head"><span id="pv-title">THE ISLE · DEPARTURES</span><span class="pv-clockbox"><span id="pv-lamp" class="pvlamp ok" hidden></span><span id="pv-clock">--:--</span></span></div>
+            <div id="pv-colheads"></div>
+            <div id="pv-rows"></div>
+            <div id="pv-colour"></div>
+            <div id="pv-pixcap"></div>
+            <div id="pv-styled"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tv-neck"></div><div class="tv-stand"></div>
+    </div>
+    <div class="tv-caption">
+      <span class="cap-name">Demo · <b id="tv-board-name"></b></span>
+      <div id="pv-foot"><button id="pv-cascade" type="button">REPLAY CASCADE</button><button id="pv-full" type="button">FULL SCREEN</button><button id="pv-sound" type="button">PREVIEW SOUND: OFF</button></div>
+    </div>
+  </div>
+  <div id="pv-feeds" hidden></div>
+
   <div id="editor-sections" hidden>
   <h2>Editing: <span id="editing-name"></span></h2>
+  <div class="bar" id="bar" hidden>
+    <div id="status"></div>
+    <div class="btns">
+      <button id="btn-save" type="button" class="primary">Save</button>
+      <button id="btn-cancel" type="button">Cancel</button>
+    </div>
+  </div>
 
   <div class="card" id="carousel-card" style="display:none;">
     <label for="inp-car-name">Carousel name</label>
@@ -381,7 +408,6 @@
       <select id="sel-car-add"></select>
       <button type="button" class="test-btn" id="btn-car-add">Add</button>
     </div>
-    <div class="hint">Boards show in this order, each for the interval, then the carousel loops. A preset joins as its copy in Your boards, made when you save if it has none yet.</div>
     <label>Each board shows for</label>
     <div class="grid2">
       <div><label for="num-car-min">Minutes</label><input type="number" id="num-car-min" min="0" max="60"></div>
@@ -461,7 +487,6 @@
       </select>
       <div class="hint">That many candles are lit, plus the shamash in the middle. The rest are drawn unlit.</div>
     </div>
-    <div class="hint">Every scene is drawn on the board’s own grid, computed to fill the screen.</div>
   </div>
 
   <div class="card" id="flights-card">
@@ -469,10 +494,7 @@
       <span class="switch"><input type="checkbox" id="sw-sim"><span class="track"></span></span></div>
     <div class="hint" id="sim-note" style="display:none;">Simulation is on: the board makes its own departures from the clock, all day. The rows below are kept, but they are not shown.</div>
     <label>Flights</label>
-    <table>
-      <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th>Black</th><th></th></tr></thead>
-      <tbody id="flights-body"></tbody>
-    </table>
+    <div id="flights-body"></div>
     <button id="btn-add-flight" type="button" style="margin-top:10px;">+ Add flight</button>
     <div class="hint" id="flights-note"></div>
   </div>
@@ -497,6 +519,7 @@
     <div class="note-text">This board is fed live by the OpenSky Network: aircraft over the house, refreshed every ten minutes. There is nothing to type; its content is the feed.</div>
   </div>
 
+  <div class="sound-grid">
   <div class="card" id="snd-test-card">
     <label>Sound</label>
     <button type="button" id="btn-test-all" class="primary" style="width:100%;">Test all together</button>
@@ -586,16 +609,15 @@
     </div>
     <div class="hint">A soft wave sound under every Isle Palm scene, rain on the rain scene and distant thunder on the storm scene, each a minutes-long seamless loop. Off by default. Scene sounds follow the ambience rules: they fade in and out, duck under announcements and cascades, and stop in quiet hours. Test plays the waves loop at the set level for a few seconds.</div>
   </div>
-</div>
-</div>
-
-<div class="bar" id="bar" hidden><div class="inner">
-  <div id="status"></div>
-  <div class="btns">
-    <button id="btn-save" type="button" class="primary">Save</button>
-    <button id="btn-cancel" type="button">Cancel</button>
   </div>
-</div></div>
+  <div class="bar" id="bar-foot" hidden>
+    <div class="btns">
+      <button id="btn-save-2" type="button" class="primary">Save</button>
+      <button id="btn-cancel-2" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+</div>
 
 <script>
 "use strict";
@@ -1629,35 +1651,69 @@ function liveKind(){
   return { kind: "board", key: work.liveBoardId };
 }
 function makeTile(kind, key, b, opts){
-  var tile = document.createElement("button");
-  tile.type = "button";
+  var tile = document.createElement("article");
   tile.className = "tile" + (selected && selected.kind === kind && selected.key === key ? " selected" : "");
   tile.dataset.kind = kind; tile.dataset.key = key;
+  var facebox = document.createElement("div"); facebox.className = "facebox";
   var face = document.createElement("span"); face.className = "tile-face";
-  tile.appendChild(face);
-  var numBadge = null;
-  if(opts && opts.number){
-    numBadge = document.createElement("span"); numBadge.className = "tile-num"; numBadge.textContent = "No. " + opts.number;
-  }
+  facebox.appendChild(face);
   if(opts && opts.chip){
     var chip = document.createElement("span"); chip.className = "tile-car-chip"; chip.textContent = opts.chip;
-    face.appendChild(chip);
+    facebox.appendChild(chip);
   }
-  var nm = document.createElement("span"); nm.className = "tile-name";
-  if(numBadge) nm.appendChild(numBadge);
-  var nmText = document.createElement("span"); nmText.textContent = b.name; nm.appendChild(nmText);
+  tile.appendChild(facebox);
+  var meta = document.createElement("div"); meta.className = "meta";
+  if(opts && opts.number){
+    var numBadge = document.createElement("span"); numBadge.className = "tile-num"; numBadge.textContent = "No. " + opts.number;
+    meta.appendChild(numBadge);
+  }
+  var nm = document.createElement("span"); nm.className = "tile-name"; nm.textContent = b.name; meta.appendChild(nm);
   if(opts && opts.original){
     var og = document.createElement("span"); og.className = "tile-orig"; og.textContent = "Original board";
-    nm.appendChild(og);
+    meta.appendChild(og);
   }
   if(opts && opts.live){
-    var lv = document.createElement("span"); lv.className = "badge live"; lv.textContent = "Live";
-    nm.appendChild(lv);
+    var lv = document.createElement("span"); lv.className = "badge-live"; lv.textContent = "Live";
+    meta.appendChild(lv);
   }
-  tile.appendChild(nm);
-  var sub = document.createElement("span"); sub.className = "tile-sub"; sub.textContent = (opts && opts.sub) || "";
+  tile.appendChild(meta);
+  var sub = document.createElement("div"); sub.className = "tile-sub"; sub.textContent = (opts && opts.sub) || "";
   tile.appendChild(sub);
-  tile.addEventListener("click", function(){ selectTile(kind, key); });
+  /* Every tile carries its own actions, always visible, directly under
+     its face and name. There is no separate actions box. */
+  var admin = kind !== "preset";
+  var confirming = confirmDelete && selected && selected.kind === kind && selected.key === key;
+  function mkBtn(label, cls, fn){
+    var btn = document.createElement("button"); btn.type = "button"; btn.textContent = label;
+    if(cls) btn.className = cls;
+    btn.addEventListener("click", function(ev){ ev.stopPropagation(); fn(); });
+    return btn;
+  }
+  if(confirming){
+    var cf = document.createElement("div"); cf.className = "actions confirm";
+    var ct = document.createElement("span"); ct.className = "confirm-text";
+    ct.textContent = "Are you sure? Delete " + (kind === "carousel" ? "this carousel" : "this board") + " for good?";
+    cf.appendChild(ct);
+    cf.appendChild(mkBtn("Delete", "danger", function(){ tileDeleteConfirm(); }));
+    cf.appendChild(mkBtn("Cancel", "", function(){ tileDeleteCancel(); }));
+    tile.appendChild(cf);
+  } else {
+    var acts = document.createElement("div"); acts.className = "actions" + (admin ? "" : " a3");
+    acts.appendChild(mkBtn("Edit", "", function(){ tileEdit(kind, key); }));
+    acts.appendChild(mkBtn("Demo", "", function(){ tileDemo(kind, key); }));
+    acts.appendChild(mkBtn("Publish", "primary", function(){ tilePublish(kind, key); }));
+    if(admin) acts.appendChild(mkBtn("Delete", "danger", function(){ tileDeleteAsk(kind, key); }));
+    tile.appendChild(acts);
+    if(admin){
+      var a2 = document.createElement("div"); a2.className = "actions2";
+      a2.appendChild(mkBtn("Rename", "", function(){ tileRename(kind, key); }));
+      tile.appendChild(a2);
+    }
+  }
+  tile.addEventListener("click", function(ev){
+    if(ev.target.closest("button")) return;
+    selectTile(kind, key);
+  });
   tile._faceBoard = b; tile._faceEl = face;
   return tile;
 }
@@ -1703,10 +1759,10 @@ function renderTiles(){
     yt.appendChild(none);
   }
   var ct = document.getElementById("carousel-tiles"); ct.innerHTML = "";
-  var nt = document.createElement("button");
-  nt.type = "button"; nt.className = "tile new"; nt.id = "tile-new-carousel";
-  nt.innerHTML = '<span class="tile-face"><span class="plus">+</span></span><span class="tile-name">New carousel</span><span class="tile-sub">Boards in rotation, each for an interval</span>';
-  nt.addEventListener("click", function(){ startCarouselSession(null); });
+  var nt = document.createElement("article");
+  nt.className = "tile new"; nt.id = "tile-new-carousel";
+  nt.innerHTML = '<div class="facebox"><span class="face-plus">+</span></div><div class="meta"><span class="tile-name">New carousel</span></div><div class="actions single"><button type="button" class="primary">Start new carousel</button></div>';
+  nt.querySelector("button").addEventListener("click", function(){ startCarouselSession(null); });
   ct.appendChild(nt);
   Object.keys(work.carousels || {}).forEach(function(id){
     var c = work.carousels[id];
@@ -1729,8 +1785,10 @@ function renderTiles(){
   renderTileActions();
 }
 function selectTile(kind, key){
+  var hadConfirm = confirmDelete;
   selected = { kind: kind, key: key };
   confirmDelete = false;
+  if(hadConfirm) renderTiles();
   document.querySelectorAll("#library-sections .tile").forEach(function(t){
     t.classList.toggle("selected", t.dataset.kind === kind && t.dataset.key === key);
   });
@@ -1750,31 +1808,20 @@ function selectionBoard(){
   return null;
 }
 function renderTileActions(){
-  var box = document.getElementById("tile-actions");
-  if(!selected){ box.hidden = true; return; }
-  box.hidden = false;
-  var name = "", canAdmin = false;
-  if(selected.kind === "board"){ var b = work.boards[selected.key]; name = b ? b.name : ""; canAdmin = true; }
-  else if(selected.kind === "preset"){ name = selected.key + " (preset)"; }
-  else { var c = work.carousels[selected.key]; name = c ? c.name + " (carousel)" : ""; canAdmin = true; }
-  document.getElementById("ta-name").textContent = name;
-  document.getElementById("ta-small").style.display = canAdmin ? "" : "none";
-  document.getElementById("ta-main").hidden = confirmDelete;
-  var cf = document.getElementById("ta-confirm");
-  cf.hidden = !confirmDelete;
-  if(confirmDelete){
-    document.getElementById("ta-confirm-text").textContent =
-      "Are you sure? Delete " + (selected.kind === "carousel" ? "this carousel" : "this board") + " for good?";
-  }
+  /* The tile actions live on each tile (see makeTile); there is no
+     separate actions box to render. Kept as a no-op so the existing
+     call sites in renderTiles and selectTile stay valid. */
 }
-document.getElementById("tile-new-board").addEventListener("click", function(){ startNewBoardSession(); });
-document.getElementById("ta-edit").addEventListener("click", function(){
+document.getElementById("btn-new-board").addEventListener("click", function(){ startNewBoardSession(); });
+function tileEdit(kind, key){
+  selected = { kind: kind, key: key };
   if(!selected) return;
   if(selected.kind === "board") startBoardSession(selected.key);
   else if(selected.kind === "preset") startPresetSession(seedByName()[selected.key]);
   else startCarouselSession(selected.key);
-});
-document.getElementById("ta-demo").addEventListener("click", function(){
+}
+function tileDemo(kind, key){
+  selected = { kind: kind, key: key };
   if(!selected) return;
   if(selected.kind === "carousel"){
     var c = work.carousels[selected.key]; if(!c) return;
@@ -1790,8 +1837,9 @@ document.getElementById("ta-demo").addEventListener("click", function(){
   }
   renderStatus();
   window.open("../live/?demo=1", "_blank");
-});
-document.getElementById("ta-publish").addEventListener("click", function(){
+}
+function tilePublish(kind, key){
+  selected = { kind: kind, key: key };
   if(!selected) return;
   if(selected.kind === "carousel"){
     var c = work.carousels[selected.key]; if(!c) return;
@@ -1805,8 +1853,9 @@ document.getElementById("ta-publish").addEventListener("click", function(){
   }
   publishConfig();
   renderAll();
-});
-document.getElementById("ta-rename").addEventListener("click", function(){
+}
+function tileRename(kind, key){
+  selected = { kind: kind, key: key };
   if(!selected) return;
   if(selected.kind === "board"){
     var b = work.boards[selected.key]; if(!b) return;
@@ -1817,18 +1866,17 @@ document.getElementById("ta-rename").addEventListener("click", function(){
     var n2 = prompt("Name for this carousel:", c.name);
     if(n2 && n2.trim()){ c.name = n2.trim(); persistStaged(); renderAll(); }
   }
-});
-document.getElementById("ta-delete").addEventListener("click", function(){
-  if(!selected) return;
+}
+function tileDeleteAsk(kind, key){
+  selected = { kind: kind, key: key };
   confirmDelete = true;
-  renderTileActions();
-  document.getElementById("ta-confirm").scrollIntoView({ block: "nearest" });
-});
-document.getElementById("ta-confirm-cancel").addEventListener("click", function(){
+  renderTiles();
+}
+function tileDeleteCancel(){
   confirmDelete = false;
-  renderTileActions();
-});
-document.getElementById("ta-confirm-del").addEventListener("click", function(){
+  renderTiles();
+}
+function tileDeleteConfirm(){
   if(!selected) return;
   confirmDelete = false;
   if(selected.kind === "carousel"){
@@ -1873,7 +1921,7 @@ document.getElementById("ta-confirm-del").addEventListener("click", function(){
      board that no longer exists. */
   if(wasLive) publishConfig();
   renderAll();
-});
+}
 function publishConfig(){
   live = clone(work);
   try{
@@ -1890,9 +1938,8 @@ function takeSnapshot(){
 function enterSession(){
   renderAll();
   var ed = document.getElementById("editor-sections");
-  var wrap = document.getElementById("preview-wrap");
   ed.scrollIntoView(true);
-  window.scrollBy(0, -(wrap.offsetHeight + 12));
+  window.scrollBy(0, -8);
 }
 function startBoardSession(id){
   var snap = takeSnapshot();
@@ -1990,6 +2037,8 @@ function cancelSession(){
 }
 document.getElementById("btn-save").addEventListener("click", saveSession);
 document.getElementById("btn-cancel").addEventListener("click", cancelSession);
+document.getElementById("btn-save-2").addEventListener("click", saveSession);
+document.getElementById("btn-cancel-2").addEventListener("click", cancelSession);
 
 /* ---- carousel editor ---- */
 function carouselMemberName(m){
@@ -2246,37 +2295,43 @@ function renderFlights(){
   var b = board();
   var limit = rowsOf(b);
   var tb = document.getElementById("flights-body"); tb.innerHTML = "";
+  var FLIGHT_LABELS = [["time","Time"],["destination","Destination"],["flight","Flight"],["gate","Gate"],["remarks","Remarks"]];
   b.flights.forEach(function(f, idx){
-    var tr = document.createElement("tr");
-    var cls = [];
+    var card = document.createElement("div");
+    var cls = ["flight-card"];
     if(f.black) cls.push("black-line");
     if(idx >= limit) cls.push("next-page");
-    tr.className = cls.join(" ");
-    var FLIGHT_LABELS = { time: "Time", destination: "Destination", flight: "Flight", gate: "Gate", remarks: "Remarks" };
-    ["time","destination","flight","gate","remarks"].forEach(function(key){
-      var td = document.createElement("td");
-      td.dataset.label = FLIGHT_LABELS[key];
+    card.className = cls.join(" ");
+    var head = document.createElement("div"); head.className = "flight-head";
+    var hn = document.createElement("span"); hn.className = "fh-name"; hn.textContent = "Flight " + (idx + 1);
+    head.appendChild(hn); card.appendChild(head);
+    var fields = document.createElement("div"); fields.className = "flight-fields";
+    FLIGHT_LABELS.forEach(function(pr){
+      var key = pr[0];
+      var lab = document.createElement("label"); lab.className = "f";
+      var lt = document.createElement("span"); lt.className = "lab"; lt.textContent = pr[1]; lab.appendChild(lt);
       var inp = document.createElement("input"); inp.type = "text"; inp.value = f[key] || "";
       inp.dataset.idx = idx; inp.dataset.key = key;
       inp.addEventListener("input", function(){ board().flights[idx][key] = inp.value; if(session) session.contentTouched = true; saveStaged(); });
-      td.appendChild(inp); tr.appendChild(td);
+      lab.appendChild(inp); fields.appendChild(lab);
     });
-    var tdb = document.createElement("td"); tdb.className = "blk"; tdb.dataset.label = "Black line";
-    tdb.appendChild(blackToggle(!!f.black, "Black", function(on){
+    var bc = document.createElement("div"); bc.className = "blackcell";
+    var bl = document.createElement("span"); bl.className = "lab"; bl.textContent = "Black line"; bc.appendChild(bl);
+    bc.appendChild(blackToggle(!!f.black, "", function(on){
       board().flights[idx].black = on; saveStaged(); renderFlights();
     }));
-    tr.appendChild(tdb);
-    var td = document.createElement("td"); td.className = "del"; td.dataset.label = "";
-    var del = document.createElement("button"); del.type = "button"; del.textContent = "\u00d7"; del.className = "danger";
+    fields.appendChild(bc);
+    var del = document.createElement("button"); del.type = "button"; del.textContent = "\u00d7"; del.className = "del danger";
+    del.setAttribute("aria-label", "Remove flight " + (idx + 1));
     del.addEventListener("click", function(){ board().flights.splice(idx, 1); saveStaged(); renderFlights(); });
-    td.appendChild(del);
+    fields.appendChild(del);
+    card.appendChild(fields);
     if(idx >= limit){
       var note = document.createElement("div"); note.className = "mini-note";
       note.textContent = "On a following page";
-      td.appendChild(note);
+      card.appendChild(note);
     }
-    tr.appendChild(td);
-    tb.appendChild(tr);
+    tb.appendChild(card);
   });
   var noteEl = document.getElementById("flights-note");
   if(b.flights.length > limit)
@@ -2363,6 +2418,7 @@ function bindEditor(){
     return;
   }
   document.getElementById("carousel-card").style.display = "none";
+  document.getElementById("kind-card").style.display = "";
   ["snd-test-card", "snd-clack-card", "snd-amb-card", "snd-solo-card", "snd-sched-card"].forEach(function(id){
     document.getElementById(id).style.display = "";
   });
@@ -3647,9 +3703,8 @@ function pvTitle(b){
   if(k === "custom") return 'THE ISLE <span class="dot">·</span> ' + pvEsc(String(b.customTitle || "CUSTOM").toUpperCase());
   return 'THE ISLE <span class="dot">·</span> ' + k.toUpperCase();
 }
-/* The preview frame is a true 16:9, the television's shape, sized as
-   large as the band allows: full viewport width, its height capped at
-   about 45 percent of the viewport height. Inside the frame the board is
+/* The preview frame is a true 16:9, the television's shape, sized to
+   the page width with its aspect locked. Inside the frame the board is
    fitted with the display page's own fit logic (fitBoard and fitColour in
    board/index.html, shared here in adapted form rather than approximated
    anew): the frame plays the part of the television viewport, with the
@@ -3663,13 +3718,29 @@ function pvTitle(b){
 var PV_INSET_X = 0.02, PV_INSET_Y = 0.025; /* the display's INSET_X / INSET_Y */
 var pvCols = 46; /* tiles across a text line at the current fit; the display's TEXT_COLS */
 function pvFrame(){
-  var iw = window.innerWidth, ih = window.innerHeight;
-  var maxH = Math.floor(ih * (iw <= 560 ? 0.30 : 0.45));
-  var w = Math.max(220, Math.min(iw - 20, Math.floor(maxH * 16 / 9)));
-  var h = Math.round(w * 9 / 16);
   var frame = document.getElementById("preview");
+  var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+  if(frame && fsEl === frame){
+    /* Full screen: the browser gives the screen the display's whole
+       area, and the board picture is fitted inside it at the locked
+       16:9, the largest that fits, centred on the black ground. The
+       element's own box belongs to the browser in this state, so no
+       inline size is set here; leaving full screen returns to the
+       page sizing below through the same render. */
+    var sw = frame.clientWidth || window.innerWidth;
+    var sh = frame.clientHeight || window.innerHeight;
+    var fw = Math.min(sw, Math.floor(sh * 16 / 9));
+    return { w: fw, h: Math.round(fw * 9 / 16) };
+  }
+  /* The television resizes to the page it sits on: its width follows
+     the page (capped at the sample's measure), its height follows
+     from the locked 16:9 aspect. Never sized by the viewport height,
+     never stretched or reshaped. */
+  var frameEl = document.querySelector(".tv-frame");
+  var avail = frameEl ? frameEl.clientWidth - 32 : window.innerWidth;
+  var w = Math.max(220, Math.min(avail, 1060));
+  var h = Math.round(w * 9 / 16);
   frame.style.width = w + "px"; frame.style.height = h + "px";
-  document.getElementById("pv-foot").style.width = w + "px";
   return { w: w, h: h };
 }
 function pvFit(text){
@@ -3752,6 +3823,8 @@ function pvBuildRows(b, text, rows){
 }
 function pvRender(cascade){
   var b = board(); pvB = b;
+  var tn = document.getElementById("tv-board-name");
+  if(tn) tn.textContent = b.name || "";
   document.getElementById("pv-title").innerHTML = pvTitle(b);
   var st = b.style || "isle";
   if(st === "flappix"){ pvHideStyled(); showColour(); pvShowPixCap(); return; }
@@ -3840,8 +3913,50 @@ function pvQueueRender(){
 }
 document.getElementById("pv-sound").addEventListener("click", function(){
   pvSoundOn = !pvSoundOn;
-  this.textContent = pvSoundOn ? "Preview sound: on" : "Preview sound: off";
+  this.textContent = pvSoundOn ? "PREVIEW SOUND: ON" : "PREVIEW SOUND: OFF";
   if(pvSoundOn) pvRender(true);
+});
+function pvReplayCascade(){
+  /* Replay the full cascade on the television: the whole board
+     re-flips to the content it is already showing. The Isle tile
+     board blanks its tiles and cascades back in through the ring,
+     the board's opening cascade over again; the colour scenes
+     restart from their first frame; the styled boards re-render.
+     The clack sounds only when Preview sound is on: the cascade
+     sound runs through pvRender's pvPlayCascade, which is never
+     called, and creates no audio at all, while pvSoundOn is off. */
+  var b = pvB || board(); if(!b) return;
+  var st = b.style || "isle";
+  if(st === "flappix" || b.type === "colour"){ builtCW = 0; pvRender(true); return; }
+  if(st !== "isle"){ pvRender(true); return; }
+  for(var r = 0; r < pvGrid.length; r++)
+    for(var c = 0; c < pvGrid[r].length; c++)
+      for(var k = 0; k < pvGrid[r][c].length; k++){
+        pvGrid[r][c][k].textContent = " ";
+        pvGrid[r][c][k].dataset.ch = " ";
+      }
+  pvRender(true);
+}
+document.getElementById("pv-cascade").addEventListener("click", pvReplayCascade);
+function pvFullscreen(){
+  /* The board picture alone, full screen on the device in hand.
+     #preview is the television's screen; pvFrame fits the board
+     inside the full screen area at the locked 16:9, and nothing
+     else is on screen. Leaving full screen is the browser's own
+     gesture, so no exit control is added here or anywhere. */
+  var frame = document.getElementById("preview");
+  if(!frame || document.fullscreenElement || document.webkitFullscreenElement) return;
+  var req = frame.requestFullscreen || frame.webkitRequestFullscreen;
+  if(!req) return;
+  try{ var p = req.call(frame); if(p && p.catch) p.catch(function(){}); }catch(e){}
+}
+document.getElementById("pv-full").addEventListener("click", pvFullscreen);
+["fullscreenchange", "webkitfullscreenchange"].forEach(function(ev){
+  document.addEventListener(ev, function(){
+    /* Refit the board to the area the transition leaves behind:
+       the full screen fit on the way in, the page fit on the way out. */
+    setTimeout(function(){ pvRender(false); }, 60);
+  });
 });
 setInterval(function(){
   var d = new Date();
@@ -4991,24 +5106,22 @@ function ensureGhost(){
   work.boards[g.id] = g; editingId = g.id;
 }
 function fitBarPadding(){
-  /* The session bar is fixed at the foot; the page pads itself by
-     the bar's measured height so the last editor rows can always
-     be scrolled clear of it. */
-  var bar = document.getElementById("bar");
+  /* The Save bars are in the flow of the editor now, so no page
+     padding is held against a fixed bar. Kept as a no-op so the
+     existing call in renderAll stays valid. */
   var wrap = document.querySelector(".wrap");
-  if(!wrap) return;
-  if(!bar || bar.hidden){ wrap.style.paddingBottom = ""; return; }
-  wrap.style.paddingBottom = (bar.offsetHeight + 28) + "px";
+  if(wrap) wrap.style.paddingBottom = "";
 }
 function renderAll(){
   var lib = document.getElementById("library-sections");
   var ed = document.getElementById("editor-sections");
   var bar = document.getElementById("bar");
+  var barFoot = document.getElementById("bar-foot");
   if(session){
-    lib.hidden = true; ed.hidden = false; bar.hidden = false;
+    lib.hidden = true; ed.hidden = false; bar.hidden = false; if(barFoot) barFoot.hidden = false;
     bindEditor();
   } else {
-    lib.hidden = false; ed.hidden = true; bar.hidden = true;
+    lib.hidden = false; ed.hidden = true; bar.hidden = true; if(barFoot) barFoot.hidden = true;
     if(!selected){
       var lk = liveKind();
       if(lk.key) selected = { kind: lk.kind, key: lk.key };

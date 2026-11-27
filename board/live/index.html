@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png" />
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png" />
@@ -27,8 +30,7 @@
   body{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: var(--ink);
-    display:flex; align-items:center; justify-content:center;
-    min-height:100vh; overflow:hidden;
+    min-height:100vh; overflow:hidden; position:relative;
   }
   #board{
     background: var(--board-bg);
@@ -51,12 +53,6 @@
     font-weight: 700; letter-spacing: .18em; font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
-  @media (max-width: 760px){
-    header .title{ font-size: 15px; letter-spacing: .16em; }
-    header .clock{ font-size: 15px; letter-spacing: .1em; }
-    #board{ padding: var(--pad-y, 2vh) var(--pad-x, 2vw); }
-    .colheads .cell span{ font-size: 8px; letter-spacing: .12em; }
-  }
   .colheads, .row{ display:flex; align-items:center; }
   .colheads{ padding: 0 0 calc(var(--tile-w) * 0.22); }
   .colheads span{
@@ -64,8 +60,6 @@
     color:#8f8c82; text-transform: uppercase; font-weight: 600;
   }
   .row{ padding: var(--row-pad, 0.55vh) 0; }
-  /* ---- fullscreen: the board fills the frame, and a real board has no footer ---- */
-  body.fullscreen #sound-hint, body.fullscreen #chrome{ display: none !important; }
   .cell{ display:flex; gap: var(--gap); }
   .spacer{ width: calc(var(--tile-w) * 1.15); flex: none; }
   .tile{
@@ -111,35 +105,15 @@
     background: var(--amber); color:#111; font-weight:700; letter-spacing:.25em;
     font-size: 13px; padding: 6px 16px 6px 19px; border-radius: 4px; display:none; z-index: 40;
   }
-  #chrome{
-    position: fixed; right: 2vw; bottom: 16px; display:flex; gap:10px; align-items:center; z-index: 40;
-  }
-  #chrome button{
-    background: rgba(20,20,22,.85); color:#cfccc2; border:1px solid #33343a;
-    font: 600 12px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing:.14em;
-    height: 34px; padding: 0 14px; border-radius: 6px; cursor: pointer; text-transform: uppercase;
-  }
-  #chrome button:hover{ color:#fff; border-color:#55565e; }
-  #sound-hint{
-    position: fixed; left: 2vw; bottom: 16px; height: 34px; z-index: 40;
-    display:flex; align-items:center;
-    color:#7d7a70; font-size: 12px; letter-spacing:.18em; text-transform: uppercase;
-  }
-  @media (max-width: 760px){
-    #chrome{ gap: 6px; }
-    #chrome button{ height: 30px; padding: 0 8px; font-size: 10px; letter-spacing: .1em; }
-    #sound-hint{ height: 30px; font-size: 9px; letter-spacing: .1em; }
-  }
-
   /* ============ Board styles: per-board display languages ============ */
   #styled{ display:none; width:100%; height:100%; position:relative; overflow:hidden; }
-  #pixcap{ display:none; align-items:center; margin: 0 auto; padding-top: 1.2vh; }
+  #pixcap{ display:none; align-items:center; margin: 0 auto; padding-top: 26px; }
   #pixcap .pc-tiles{ display:flex; gap:3px; flex:none; }
-  #pixcap .pc-tile{ background:linear-gradient(180deg,#26282c 0%,#1b1c1f 49%,#101112 50%,#1e2023 100%); color:#f2efe3; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:2px; position:relative; overflow:hidden; width:1.55vw; height:2.35vw; font-size:1.02vw; box-shadow: inset 0 0 0 1px #000; }
+  #pixcap .pc-tile{ background:linear-gradient(180deg,#26282c 0%,#1b1c1f 49%,#101112 50%,#1e2023 100%); color:#f2efe3; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:2px; position:relative; overflow:hidden; width:60px; height:90px; font-size:39px; box-shadow: inset 0 0 0 1px #000; }
   #pixcap .pc-tile::after{ content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(0,0,0,.6); }
-  #pixcap .pc-msg{ color:#e8e6df; letter-spacing:.14em; font-weight:600; white-space:nowrap; overflow:hidden; font-size:1.02vw; margin-left:1.1vw; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
+  #pixcap .pc-msg{ color:#e8e6df; letter-spacing:.14em; font-weight:600; white-space:nowrap; overflow:hidden; font-size:39px; margin-left:42px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
   #pixcap .pc-msg b{ color:#ffb43a; }
-  #pixcap .pc-clock{ margin-left:auto; color:#e8e6df; font-weight:600; letter-spacing:.1em; font-size:1.02vw; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
+  #pixcap .pc-clock{ margin-left:auto; color:#e8e6df; font-weight:600; letter-spacing:.1em; font-size:39px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
 
   /* Gallery Six: the board as furniture on a gallery wall */
   .st-gallery{ position:absolute; inset:0; background:linear-gradient(180deg,#e9e3d5 0%,#e3dac6 55%,#ded5c2 100%); font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#26241f; display:flex; flex-direction:column; }
@@ -255,7 +229,11 @@
   .lamp.delayed{ background:#e8a33d; color:#e8a33d; }
   .lamp.down{ background:#d8402e; color:#d8402e; }
   .lamp.wait{ background:#8f8c82; color:#8f8c82; }
-  #board{ position:relative; }
+  /* Fixed TV canvas: the board is always the television's own
+     3840x2160 picture, aspect locked. fitStage() scales the whole
+     stage to fit whatever screen shows it; the pure black ground
+     takes any difference in shape. Never a relayout per viewport. */
+  #board{ position:absolute; left:0; top:0; width:3840px; height:2160px; transform-origin:0 0; }
   #lampwrap{ position:absolute; top: calc(var(--pad-y, 2vh) * 0.30); right: var(--pad-x, 2vw);
     z-index:6; pointer-events:none; font-size: calc(var(--tile-w, 18px) * 1.02); }
 </style>
@@ -275,13 +253,11 @@
   <div id="styled" aria-label="Styled board"></div>
   <div id="lampwrap" hidden></div>
 </main>
-<div id="sound-hint">Tap anywhere for sound</div>
-<div id="chrome">
-  <button id="btn-cascade" type="button">Refresh board</button>
-  <button id="btn-full" type="button">Fullscreen</button>
-</div>
 <script>
 "use strict";
+/* The fixed TV canvas: every layout computation runs at the
+   television's own 3840x2160, whatever screen shows the page. */
+var VW = 3840, VH = 2160;
 /* ============ Shared catalogue (keep in step with settings page) ============ */
 var VOICES = [
   ["aria","Aria · American (F)"],["helio","Helio · American (M)"],
@@ -1008,6 +984,7 @@ function stagedBoard(){
 
 /* ============ Mode and state ============ */
 var DEMO = new URLSearchParams(location.search).get("demo") === "1";
+var WANTFS = new URLSearchParams(location.search).get("fs") === "1";
 var config = loadConfig();
 var board = null;
 if(DEMO){ board = stagedBoard(); if(board) document.getElementById("demo-marker").style.display = "block"; }
@@ -1156,8 +1133,8 @@ var fillKey = "", fillRows = 0;
 function boardRows(){
   var text = isTextBoard();
   var fs = !!document.fullscreenElement;
-  var key = (text ? "t" : "f") + "|" + window.innerWidth + "x" + window.innerHeight + "|" + (fs ? 1 : 0);
-  if(key !== fillKey){ fillKey = key; fillRows = isleRowsFor(window.innerWidth, window.innerHeight, fs, text); }
+  var key = (text ? "t" : "f") + "|" + VW + "x" + VH + "|" + (fs ? 1 : 0);
+  if(key !== fillKey){ fillKey = key; fillRows = isleRowsFor(VW, VH, fs, text); }
   return fillRows;
 }
 /* Overflow on the Isle layout: the board has no paging of its own, so
@@ -1861,7 +1838,7 @@ function colourGridFor(fl, iw, ih, fs){
   return best || { cw: cols, ch: 8, px: 4, totH: 0 };
 }
 function colourDims(){
-  var g = colourGridFor(boardStyle() === "flappix", window.innerWidth, window.innerHeight, !!document.fullscreenElement);
+  var g = colourGridFor(boardStyle() === "flappix", VW, VH, !!document.fullscreenElement);
   CW = g.cw; CH = g.ch;
 }
 function sceneId(){
@@ -1930,7 +1907,14 @@ var evtGain = null; /* soundscape events feed the events bus through this node, 
 var stepBufs = [], flapBufs = [], buffersReady = false;
 var bedEl = null, bedBaseGain = 0, duckUntil = 0;
 function initAudio(){
-  if(AC) { if(AC.state === "suspended") AC.resume(); return; }
+  if(AC) {
+    if(AC.state === "suspended") AC.resume();
+    /* A bed whose play() was refused before the first gesture stays
+       paused; start it now that a gesture (or an autoplay-permitting
+       browser) has let the context run. */
+    if(bedEl && bedEl.paused && board.ambience.on && !inQuietHours()) bedEl.play().catch(function(){});
+    return;
+  }
   try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return; }
   clackBus = AC.createGain(); clackBus.connect(AC.destination);
   eventBus = AC.createGain(); eventBus.connect(AC.destination);
@@ -1940,7 +1924,6 @@ function initAudio(){
   applyLevels();
   loadSet(board.clackSet);
   setupBed();
-  document.getElementById("sound-hint").style.display = "none";
 }
 function applyLevels(){
   if(!AC) return;
@@ -2392,7 +2375,7 @@ function showStyled(st, cascade){
   colourEl.style.display = "none";
   styledEl.style.display = "block";
   var b = document.getElementById("board");
-  var W = window.innerWidth * (1 - 2 * INSET_X), H = window.innerHeight * (1 - 2 * INSET_Y);
+  var W = VW * (1 - 2 * INSET_X), H = VH * (1 - 2 * INSET_Y);
   b.style.width = W + "px"; b.style.height = H + "px"; b.style.padding = "0px";
   clearStyledTimers();
   styledEl.innerHTML = "";
@@ -3138,7 +3121,7 @@ function boardPads(fs, iw, ih){
 function fitColour(){
   colourDims();
   var root = document.documentElement;
-  var iw = window.innerWidth, ih = window.innerHeight;
+  var iw = VW, ih = VH;
   var fs = !!document.fullscreenElement;
   var pad = boardPads(fs, iw, ih);
   root.style.setProperty("--pad-x", pad.x + "px");
@@ -3153,7 +3136,7 @@ function fitBoard(){
   if(fst !== "isle"){ fitStyled(); return; }
   var root = document.documentElement;
   var fs = !!document.fullscreenElement;
-  var iw = window.innerWidth, ih = window.innerHeight;
+  var iw = VW, ih = VH;
   var rows = boardRows();
   var boardW = iw * (1 - 2 * INSET_X);
   var boardH = ih * (1 - 2 * INSET_Y);
@@ -3185,11 +3168,22 @@ function fitBoard(){
   root.style.setProperty("--row-pad", rowPad + "px");
 }
 document.addEventListener("fullscreenchange", function(){
-  document.body.classList.toggle("fullscreen", !!document.fullscreenElement);
   fitBoard();
 });
 fitBoard();
 window.addEventListener("resize", fitBoard);
+/* Scale the fixed 3840x2160 stage to fit the showing screen, centred,
+   aspect locked; the black ground takes the difference in shape. */
+function fitStage(){
+  var el = document.getElementById("board");
+  if(!el) return;
+  var sc = Math.min(window.innerWidth / VW, window.innerHeight / VH);
+  var x = Math.round((window.innerWidth - VW * sc) / 2), y = Math.round((window.innerHeight - VH * sc) / 2);
+  el.style.transform = "translate(" + x + "px," + y + "px) scale(" + sc + ")";
+}
+fitStage();
+window.addEventListener("resize", fitStage);
+document.addEventListener("fullscreenchange", fitStage);
 
 /* ============ Clock, wiring, live updates ============ */
 
@@ -3971,19 +3965,30 @@ tickClock(); setInterval(tickClock, 1000);
 renderBoard(false);
 setTimeout(function(){ renderBoard(true); }, 600); /* opening cascade */
 
+/* Sound starts from the board's own configuration, with no on-page
+   control of any kind. Where the browser permits audio without a
+   gesture (the television kiosk), this call starts it at once. Where
+   it does not, the board displays silently and the first pointer or
+   key interaction anywhere on the page starts the sound, with no
+   prompt, text or button shown. */
+initAudio();
 document.addEventListener("pointerdown", initAudio);
-document.getElementById("btn-full").addEventListener("click", function(ev){
-  ev.stopPropagation();
-  if(document.fullscreenElement) document.exitFullscreen();
-  else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-});
-document.getElementById("btn-cascade").addEventListener("click", function(ev){
-  ev.stopPropagation(); initAudio();
-  if(board.type === "colour" || boardStyle() === "flappix"){ sceneState = SceneEngine.createState(); paintScene(); return; }
-  if(boardStyle() !== "isle"){ showStyled(boardStyle(), true); return; }
-  tileGrid.forEach(function(row){ row.forEach(function(cell){ cell.forEach(function(t){ t.dataset.ch = " "; t.textContent = " "; }); }); });
-  renderBoard(true);
-});
+document.addEventListener("keydown", initAudio);
+/* Opened from the /board menu (fs=1), the board asks for the full
+   screen as part of that same navigation: the request is made on
+   load, inside the gesture chain the menu click began, and again at
+   the first interaction if the browser refused it on load. Code
+   only; the page itself carries no control or text for it. */
+function askFullscreen(){
+  if(!WANTFS || document.fullscreenElement) return;
+  try{
+    var p = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    if(p && p.catch) p.catch(function(){});
+  }catch(e){}
+}
+askFullscreen();
+document.addEventListener("pointerdown", askFullscreen);
+document.addEventListener("keydown", askFullscreen);
 if(!DEMO){
   window.addEventListener("storage", function(e){
     if(e.key !== "isle-board-config-v1" || !e.newValue) return;
