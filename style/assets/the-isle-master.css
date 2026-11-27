@@ -128,7 +128,6 @@ a{ color:inherit; }
 }
 
 /* Hairlines */
-.rule-gold{ border:0; border-top:1px solid var(--gold-line); }
 .rule-soft{ border:0; border-top:1px solid var(--gold-line-soft); }
 
 /* Motion: the chart drifts and pulses; the coastline never moves.
@@ -1059,7 +1058,6 @@ html:where(.pg-ref)[data-theme="light"] .hero-dl .btn:hover, html:where(.pg-ref)
         margin: 18px auto 0;
       }
 :where(html.pg-ref) footer .f-title-row .f-title { margin: 0; }
-:where(html.pg-ref) footer .f-palm { width: 44px; height: 44px; flex: none; }
 :where(html.pg-ref) footer .f-imprint {
         margin: 5px auto 0; font-size: 13px; font-weight: 600;
         letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase; color: var(--gold-const-bright);
@@ -1483,9 +1481,15 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .sx-sec p { max-width:72ch; }
 :where(html.pg-style) .sx-sec ul { max-width:72ch; padding-left:20px; }
 :where(html.pg-style) .sx-sec li { margin-bottom:12px; }
-:where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; }
+:where(html.pg-style) .sx-spec { font-size:13.5px; color:var(--ivory-soft); margin:8px 0 0; overflow-wrap:anywhere; }
 :where(html.pg-style) .sx-role { padding:20px 0; border-bottom:1px solid var(--gold-line-soft); }
 :where(html.pg-style) .sx-role:last-child { border-bottom:none; }
+/* The technical face specimen: a status line from the systems
+   console, set in Roboto Mono, the face the entry above it names.
+   The lamp is the console's own: 11px, its green, a tight 4px halo. */
+:where(html.pg-style) .sx-tech { font-family:"Roboto Mono", Menlo, Consolas, monospace; font-size:13px; letter-spacing:.08em; display:flex; align-items:center; gap:10px; color:var(--ivory-soft); }
+:where(html.pg-style) .sx-tech .sx-techlamp { width:11px; height:11px; border-radius:50%; flex:none; background:#3fb950; box-shadow:0 0 4px rgba(63,185,80,.45); }
+:where(html.pg-style) .sx-tech .sx-techfig { margin-left:auto; font-weight:500; white-space:nowrap; }
 :where(html.pg-style) .sx-masters { display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin:26px 0 8px; }
 :where(html.pg-style) .sx-chip { height:104px; border:1px solid var(--gold-line-soft); }
 :where(html.pg-style) .sx-cname { font-weight:600; margin:12px 0 0; }
@@ -1504,9 +1508,14 @@ html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 :where(html.pg-style) .sx-btnrow { display:flex; flex-wrap:wrap; gap:26px; }
 :where(html.pg-style) .sx-btnfig { margin:0; }
 :where(html.pg-style) .sx-btnfig figcaption { font-size:13.5px; color:var(--ivory-soft); margin-top:10px; }
-:where(html.pg-style) .sx-hover-off { background:var(--gold-bright); color:#152130; }
-:where(html[data-theme="light"].pg-style) .sx-hover-off { color:#f0e8d5; }
-:where(html.pg-style) .sx-hover-on { background:#22344a; color:#f0e8d5; }
+/* The two hover specimens carry the hover form standing still,
+   since a still example cannot be hovered. The values are the
+   sheet's own hover values for each form and mode, and the .btn
+   compound in each selector is what lets the specimen carry the
+   cascade against the .btn and .btn.on rules above. */
+:where(html.pg-style) .btn.sx-hover-off { background:var(--gold-bright); color:#152130; }
+:where(html[data-theme="light"].pg-style) .btn.sx-hover-off { color:#f0e8d5; }
+:where(html.pg-style) .btn.sx-hover-on { background:#22344a; color:#f0e8d5; }
 :where(html.pg-style) .sx-fieldwrap { max-width:420px; margin:22px 0 6px; }
 :where(html.pg-style) .sx-fieldwrap label { display:block; margin-bottom:10px; }
 :where(html.pg-style) .sx-fieldwrap .field { width:100%; }
@@ -2193,4 +2202,93 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main, :where(html.pg-pages) .record { transition: none; }
+}
+
+/* ---------- Permit Documents viewer, /secure/permits/ ---------- */
+/* The viewer's own rules, scoped to the page and moved here from
+   its folder exception sheet, one for one, declarations unchanged.
+   The gate's field and button are the master's .field and .btn;
+   what stands here is the layout, the document table and the
+   reader frame. The frame's white ground is a document surface,
+   not a theme colour, and stands as written. */
+:where(html.pg-viewer) body { transition: background 0.4s ease, color 0.4s ease; }
+:where(html.pg-viewer) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+:where(html.pg-viewer) header { padding: 8svh 0 0 0; text-align: center; }
+:where(html.pg-viewer) .lockup { text-align: center; margin-bottom: 26px; }
+:where(html.pg-viewer) .lockup img { display: block; margin: 0 auto; width: min(252px, 72%); height: auto; }
+:where(html.pg-viewer) .lockup img.mark-colour { display: none; }
+html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-colour { display: block; }
+html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-dark { display: none; }
+:where(html.pg-viewer) .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+:where(html.pg-viewer) h1 { font-family: var(--serif); font-size: 36px; font-weight: 600; margin: 12px 0 0 0; }
+:where(html.pg-viewer) h2 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin: 34px 0 4px 0; overflow-wrap: anywhere; }
+:where(html.pg-viewer) .line { font-family: var(--serif); font-style: italic; font-size: 16.5px; color: var(--ivory-soft); margin: 14px auto 0 auto; max-width: 54ch; }
+:where(html.pg-viewer) .rule { border-top: 1px solid var(--gold-line); margin: 30px 0 0 0; }
+:where(html.pg-viewer) .back { display: inline-flex; align-items: center; min-height: 44px; margin-top: 20px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); text-decoration: none; }
+:where(html.pg-viewer) .back:hover { color: var(--gold); }
+:where(html.pg-viewer) .home { display: flex; align-items: center; justify-content: center; color: var(--ivory); background: none; border: none; box-shadow: none; padding: 0; width: 44px; height: 44px; text-decoration: none; margin: 20px auto 0 auto; }
+:where(html.pg-viewer) .home:hover { color: var(--gold); }
+:where(html.pg-viewer) .gate { max-width: 420px; margin: 40px auto 0 auto; text-align: center; }
+:where(html.pg-viewer) .gate label { display: block; font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); margin-bottom: 12px; }
+:where(html.pg-viewer) .gate .field { width: 100%; text-align: center; }
+:where(html.pg-viewer) .gate .btn { margin-top: 16px; }
+:where(html.pg-viewer) .gate .btn:disabled { opacity: 0.5; cursor: wait; }
+:where(html.pg-viewer) .err { color: var(--gold); font-size: 13.5px; margin-top: 14px; min-height: 18px; }
+:where(html.pg-viewer) table.docs { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+:where(html.pg-viewer) table.docs td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--gold-line); vertical-align: top; line-height: 1.45; }
+:where(html.pg-viewer) td.dn { overflow-wrap: anywhere; }
+:where(html.pg-viewer) td.act { text-align: right; white-space: nowrap; padding-right: 0; }
+:where(html.pg-viewer) .docs .btn:disabled { opacity: 0.55; cursor: wait; }
+:where(html.pg-viewer) .sz { color: var(--ivory-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+:where(html.pg-viewer) #viewer { margin-top: 30px; display: none; }
+:where(html.pg-viewer) #viewer .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--gold-line); padding-bottom: 8px; }
+:where(html.pg-viewer) #vname { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+:where(html.pg-viewer) #vopen { display: inline-flex; align-items: center; min-height: 44px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+:where(html.pg-viewer) #vframe { width: 100%; height: 78svh; border: 1px solid var(--gold-line); margin-top: 12px; background: #fff; }
+:where(html.pg-viewer) footer { text-align: center; padding: 30px 0 34px 0; }
+:where(html.pg-viewer) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
+:where(html.pg-viewer) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
+:where(html.pg-viewer) [hidden] { display: none !important; }
+
+/* ---------- Secure Test Zone, the /secure/ inner page ---------- */
+:where(html.pg-zone) body { transition: background 0.4s ease, color 0.4s ease; }
+:where(html.pg-zone) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+:where(html.pg-zone) header { padding: 8svh 0 0 0; text-align: center; }
+:where(html.pg-zone) .lockup { text-align: center; margin-bottom: 26px; }
+:where(html.pg-zone) .lockup img { display: block; margin: 0 auto; width: min(252px, 72%); height: auto; }
+:where(html.pg-zone) .lockup img.mark-colour { display: none; }
+html:where(.pg-zone)[data-theme="light"] .lockup img.mark-colour { display: block; }
+html:where(.pg-zone)[data-theme="light"] .lockup img.mark-dark { display: none; }
+:where(html.pg-zone) h1 { font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.15; margin: 0; }
+:where(html.pg-zone) .line { font-size: 17px; line-height: 1.65; margin: 16px auto 0 auto; max-width: 56ch; }
+:where(html.pg-zone) .rule { border-top: 1px solid var(--gold-line); margin: 30px 0 0 0; }
+:where(html.pg-zone) .idx { margin-top: 38px; }
+:where(html.pg-zone) .idxhead { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding-bottom: 10px; border-bottom: 1px solid var(--gold-line); margin-bottom: 4px; }
+:where(html.pg-zone) .idxrow { display: block; padding: 14px 0; border-bottom: 1px solid var(--gold-line-soft); text-decoration: none; color: var(--ivory); }
+:where(html.pg-zone) .idxrow .t { font-weight: 600; font-size: 17px; }
+:where(html.pg-zone) .idxrow .d { display: block; margin-top: 4px; font-size: 17px; line-height: 1.65; color: var(--ivory-soft); }
+:where(html.pg-zone) .idxrow .when { display: block; margin-top: 4px; font-size: 12px; color: var(--dim-sm); }
+:where(html.pg-zone) .idxrow:hover .t { text-decoration: underline; }
+:where(html.pg-zone) #record { margin-top: 38px; }
+:where(html.pg-zone) figure { margin: 30px auto 38px auto; max-width: 400px; }
+:where(html.pg-zone) figure img { display: block; width: 100%; height: auto; border: 1px solid var(--gold-line); }
+:where(html.pg-zone) figcaption { margin-top: 10px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); line-height: 1.7; }
+:where(html.pg-zone) table { width: 100%; border-collapse: collapse; font-size: 17px; line-height: 1.65; }
+:where(html.pg-zone) th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding: 0 14px 10px 0; border-bottom: 1px solid var(--gold-line); }
+:where(html.pg-zone) th:last-child { text-align: right; padding-right: 0; }
+:where(html.pg-zone) td { padding: 14px 14px 14px 0; border-bottom: 1px solid var(--gold-line-soft); vertical-align: top; }
+:where(html.pg-zone) td.check { white-space: nowrap; font-weight: 600; }
+:where(html.pg-zone) td.date { white-space: nowrap; color: var(--dim-sm); text-align: right; padding-right: 0; }
+:where(html.pg-zone) .item { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 30px; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory); text-decoration: none; }
+:where(html.pg-zone) .item:hover { color: var(--gold); }
+:where(html.pg-zone) footer { text-align: center; padding: 30px 0 34px 0; }
+:where(html.pg-zone) .foot { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
+:where(html.pg-zone) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
+@media (max-width: 640px) {
+  :where(html.pg-zone) table, :where(html.pg-zone) tbody, :where(html.pg-zone) tr, :where(html.pg-zone) td { display: block; width: 100%; }
+  :where(html.pg-zone) tr.head { display: none; }
+  :where(html.pg-zone) td { padding: 4px 0 14px 0; border-bottom: none; }
+  :where(html.pg-zone) td.check { white-space: normal; padding-top: 14px; }
+  :where(html.pg-zone) td.date { text-align: left; padding-bottom: 14px; border-bottom: 1px solid var(--gold-line-soft); }
+  :where(html.pg-zone) tr { border-bottom: none; }
 }
