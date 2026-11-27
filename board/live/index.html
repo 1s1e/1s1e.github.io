@@ -2588,13 +2588,10 @@ function buildGallery(W, H, cascade){
   root.style.padding = "0px";
   var plaque = stEl("div", "g-plaque", root);
   var left = stEl("div", "", plaque);
-  var title = stEl("div", "g-title", left, "The Isle · Gallery Six");
+  var title = stEl("div", "g-title", left, "The Isle · " + (board.name || "Departures"));
   title.style.fontSize = (H * 0.052) + "px";
-  var sub = stEl("div", "g-sub", left, boardKind() === "arrivals" ? "ARRIVALS · WELCOME HOME" : "DEPARTURES · THE ISLE");
-  sub.style.fontSize = (H * 0.016) + "px"; sub.style.marginTop = (H * 0.012) + "px";
   var clock = stEl("div", "g-clock", plaque);
   var ct = stEl("div", "t st-clock", clock, "--:--"); ct.style.fontSize = (H * 0.052) + "px";
-  var cl = stEl("div", "l", clock, "LOCAL TIME"); cl.style.fontSize = (H * 0.014) + "px"; cl.style.marginTop = (H * 0.010) + "px";
   /* No wall and no trim: the composition stands on the black page
      ground and the panel fills the frame. The plaque's height is
      measured as built, and the panel's own padding and foot are
@@ -2617,6 +2614,10 @@ function buildGallery(W, H, cascade){
   var tileH = tileW * 1.717;
   var panel = stEl("div", "g-board", root);
   panel.style.padding = padPanel + "px";
+  /* The plaque spans the panel's own width, centred, so the title
+     and the clock stand inside the board's edges. */
+  plaque.style.width = (22 * tileW + 21 * gap) + "px";
+  plaque.style.marginLeft = "auto"; plaque.style.marginRight = "auto";
   panel.style.marginTop = marginTop + "px";
   var grid = stEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";

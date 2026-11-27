@@ -4193,13 +4193,10 @@ function pvBuildGallery(b, W, H){
   root.style.padding = "0px";
   var plaque = pvStEl("div", "g-plaque", root);
   var left = pvStEl("div", "", plaque);
-  var title = pvStEl("div", "g-title", left, "The Isle · Gallery Six");
+  var title = pvStEl("div", "g-title", left, "The Isle · " + (b.name || "Departures"));
   title.style.fontSize = (H * 0.052) + "px";
-  var sub = pvStEl("div", "g-sub", left, pvKind(b) === "arrivals" ? "ARRIVALS · WELCOME HOME" : "DEPARTURES · THE ISLE");
-  sub.style.fontSize = Math.max(6, H * 0.016) + "px"; sub.style.marginTop = (H * 0.012) + "px";
   var clock = pvStEl("div", "g-clock", plaque);
   var ct = pvStEl("div", "t pv-st-clock", clock, "--:--"); ct.style.fontSize = (H * 0.052) + "px";
-  var cl = pvStEl("div", "l", clock, "LOCAL TIME"); cl.style.fontSize = Math.max(6, H * 0.014) + "px"; cl.style.marginTop = (H * 0.010) + "px";
   var rows = [];
   pvStRows(b).forEach(function(f){
     if(f.black){ rows.push(""); return; }
@@ -4236,6 +4233,10 @@ function pvBuildGallery(b, W, H){
   var tileH = tileW * 1.717;
   var panel = pvStEl("div", "g-board", root);
   panel.style.padding = padPanel + "px";
+  /* The plaque spans the panel's own width, centred, so the title
+     and the clock stand inside the board's edges. */
+  plaque.style.width = (22 * tileW + 21 * gap) + "px";
+  plaque.style.marginLeft = "auto"; plaque.style.marginRight = "auto";
   panel.style.marginTop = marginTop + "px";
   var grid = pvStEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";
