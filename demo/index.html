@@ -237,6 +237,24 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
    25.28px at desktop and (64 - 21.44) / 2 = 21.28px at phone
    width, the row at 13px standing 21.44px high. Nothing else
    differs from the base. */
+/* Lockup and trail centred at phone width, this sample (see
+   notes.md): inside the 560px step only, the header lockup is
+   centred in the band and enlarged to 315px, about 85 percent
+   of the 370px panel at a 390px viewport, its height scaling
+   in the artwork's own proportion; the first row centres its
+   content to centre it, and the trail centres its contents
+   with it, the crumbs line centred in the band. The lockup's
+   home link wraps it as now; the 8px gap under the lockup and
+   the line above the trail stand; the trail's links,
+   separator, colours, 13px size and the crumbs' 44px minimum
+   touch height stand. The header band's height at phone width
+   grows only by the lockup's growth. At 820px and 1440px
+   nothing changes. */
+@media (max-width:560px){
+ .hh-r1{justify-content:center;}
+ .hh-lockup{width:315px;}
+ .hh-trail{justify-content:center;}
+}
 </style>
 </head>
 <body>
