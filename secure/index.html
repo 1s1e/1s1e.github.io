@@ -24,10 +24,15 @@
 </head>
 <body>
   <form class="box" id="f">
-    <h1>The Isle</h1>
-    <div class="rule"></div>
+    <div class="logo">
+      <img class="lg-dark" src="/assets/the-isle-vertical-silver-colourtree.png" alt="The Isle" />
+      <img class="lg-light" src="/assets/mark-colour.png" alt="The Isle" />
+    </div>
+    <label for="u" class="t-label">Username</label>
+    <input id="u" class="field" type="text" autocomplete="username" />
     <label for="p" class="t-label">Password</label>
     <input id="p" class="field" type="password" autocomplete="current-password" />
+    <div class="pwrow"><button type="button" class="showpw" id="showpw" aria-pressed="false">Show</button></div>
     <button type="submit" class="btn">Open</button>
     <div class="err" id="e"></div>
   </form>
@@ -57,6 +62,17 @@
     } catch (e) {
       err.textContent = "That password does not open this page.";
     }
+  });
+</script>
+<script>
+  var pw = document.getElementById("p");
+  var tg = document.getElementById("showpw");
+  tg.addEventListener("click", function () {
+    var show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    tg.textContent = show ? "Hide" : "Show";
+    tg.setAttribute("aria-pressed", show ? "true" : "false");
+    pw.focus();
   });
 </script>
 </body>
