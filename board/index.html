@@ -328,7 +328,7 @@ var SET_FILES = {
 function pad2(n){ return String(n).padStart(2,"0"); }
 
 /* ============ Demo library: seed + merge (keep in step with settings) ============ */
-var SEED_VERSION = 9;
+var SEED_VERSION = 10;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -907,6 +907,18 @@ function demoBoards(){
                   levels:{ bed:0.4, events:0.5, announcements:0.85, clack:0.7 } },
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-simulated", name: "Simulated Departures", type: "departures", kind: "departures", shows: "departures", rows: 14,
+      simulation: true,
+      flights: nineFlights(),
+      lines: [],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.45, events:0.6, announcements:0.9, clack:0.8 } },
+      voice: "isabella", signal: "dong",
+      announcements: { on:true, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
     }
   ];
@@ -3327,7 +3339,118 @@ function trackedFlights(b){
   });
   return fl;
 }
+/* ================= Simulation =================
+   A flights board with simulation on ignores its stored rows: this
+   generator makes its departures from the wall clock alone. It is a
+   pure function of the time, seeded per day and per flight, so the
+   display page, the Settings preview and any second screen compute
+   the same board at the same moment, with no server and no shared
+   storage, and it runs indefinitely. Each day has its own chain of
+   departures, one every 8 to 12 minutes; at any moment the board
+   shows the flights leaving in the next three hours, plus any that
+   left in the last ten minutes, marked DEPARTED. Remarks follow the
+   revised time: ON TIME or DELAYED beyond 40 minutes out, BOARDING
+   inside 40, FINAL CALL inside 15, DEPARTED for ten minutes after
+   the time, then the flight is gone and the next one fills its row.
+   About 18 percent of flights carry a delay of 15 to 60 minutes and
+   about 3 percent are cancelled, both fixed by the same seeds. */
+var SIM_ROUTES = [
+  { dest: "MIAMI",        carrier: "AA", lo: 2000, hi: 2499, gate: "C", glo: 1, ghi: 30, w: 10 },
+  { dest: "HONOLULU",     carrier: "HA", lo: 40,   hi: 99,   gate: "",  glo: 5, ghi: 20, w: 7 },
+  { dest: "BORA BORA",    carrier: "VT", lo: 400,  hi: 499,  gate: "",  glo: 1, ghi: 12, w: 5 },
+  { dest: "PHUKET",       carrier: "TG", lo: 900,  hi: 999,  gate: "",  glo: 5, ghi: 25, w: 5 },
+  { dest: "LONDON",       carrier: "BA", lo: 100,  hi: 299,  gate: "E", glo: 1, ghi: 20, w: 8 },
+  { dest: "FRANKFURT",    carrier: "LH", lo: 400,  hi: 999,  gate: "",  glo: 5, ghi: 30, w: 7 },
+  { dest: "NEW YORK",     carrier: "B6", lo: 100,  hi: 999,  gate: "",  glo: 1, ghi: 25, w: 9 },
+  { dest: "CHARLOTTE",    carrier: "AA", lo: 1000, hi: 1999, gate: "C", glo: 1, ghi: 30, w: 7 },
+  { dest: "DALLAS",       carrier: "AA", lo: 1000, hi: 2499, gate: "C", glo: 1, ghi: 30, w: 7 },
+  { dest: "HOUSTON",      carrier: "UA", lo: 1000, hi: 1999, gate: "A", glo: 1, ghi: 30, w: 7 },
+  { dest: "THE ISLE",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 6 },
+  { dest: "KEY WEST",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "NASSAU",       carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "SAN JUAN",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "GRAND CAYMAN", carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 3 }
+];
+function simHash(a, b){
+  var h = (a >>> 0) ^ 0x9e3779b9;
+  h = Math.imul(h ^ (b >>> 0), 0x85ebca6b);
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  return h >>> 0;
+}
+function simRng(seed){
+  var s = seed >>> 0;
+  return function(){
+    s = (s + 0x6D2B79F5) >>> 0;
+    var t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function simDayKey(d){ return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
+function simMakeFlight(dayKey, idx, schedMin){
+  var r = simRng(simHash(dayKey, 1000 + idx));
+  var totalW = 0, i;
+  for(i = 0; i < SIM_ROUTES.length; i++) totalW += SIM_ROUTES[i].w;
+  var pick = r() * totalW, route = SIM_ROUTES[SIM_ROUTES.length - 1];
+  for(i = 0; i < SIM_ROUTES.length; i++){ pick -= SIM_ROUTES[i].w; if(pick <= 0){ route = SIM_ROUTES[i]; break; } }
+  var num = route.lo + Math.floor(r() * (route.hi - route.lo + 1));
+  var gate = route.gate + (route.glo + Math.floor(r() * (route.ghi - route.glo + 1)));
+  var cancelled = r() < 0.03;
+  var delay = 0;
+  if(!cancelled && r() < 0.18) delay = 15 + Math.floor(r() * 46);
+  return { schedMin: schedMin, depMin: schedMin + delay, dest: route.dest,
+           flight: route.carrier + " " + num, gate: gate,
+           cancelled: cancelled, delayed: delay > 0 };
+}
+function simDayFlights(dayDate){
+  var key = simDayKey(dayDate);
+  var rng = simRng(simHash(key, 101));
+  var out = [], idx = 0;
+  var cursor = Math.floor(rng() * 10);
+  while(cursor < 24 * 60){
+    out.push(simMakeFlight(key, idx, cursor));
+    cursor += 8 + Math.floor(rng() * 5);
+    idx++;
+  }
+  return out;
+}
+function simHHMM(ms){
+  var d = new Date(ms);
+  return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+function simFlightsFor(b, nowMs){
+  var rows = (b && (b.rows === 5 || b.rows === 14)) ? b.rows : 14;
+  var now = new Date(nowMs);
+  var found = [];
+  for(var off = -1; off <= 1; off++){
+    var day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + off);
+    var dayStart = day.getTime();
+    simDayFlights(day).forEach(function(f){
+      var depAbs = dayStart + f.depMin * 60000;
+      var delta = depAbs - nowMs;
+      if(delta <= -10 * 60000 || delta > 3 * 3600000) return;
+      var remarks;
+      if(f.cancelled) remarks = "CANCELLED";
+      else if(delta > 40 * 60000) remarks = f.delayed ? "DELAYED" : "ON TIME";
+      else if(delta > 15 * 60000) remarks = "BOARDING";
+      else if(delta > 0) remarks = "FINAL CALL";
+      else remarks = "DEPARTED";
+      found.push({ depAbs: depAbs, row: { time: simHHMM(depAbs), destination: f.dest,
+        flight: f.flight, gate: f.gate, remarks: remarks, black: false } });
+    });
+  }
+  found.sort(function(a, c){ return a.depAbs - c.depAbs; });
+  return found.slice(0, rows).map(function(x){ return x.row; });
+}
+function simSignature(b, nowMs){
+  return simFlightsFor(b, nowMs).map(function(f){
+    return f.time + " " + f.destination + " " + f.flight + " " + f.gate + " " + f.remarks;
+  }).join("|");
+}
+/* ================= end simulation ================= */
 function effFlights(){
+  if(board && board.simulation) return simFlightsFor(board, Date.now());
   if(board && board.id === "board-tracked") return trackedFlights(board);
   return board.flights || [];
 }
@@ -3477,6 +3600,7 @@ function liveLinesFor(b){
 function effLines(){ return liveLinesFor(board) || board.lines || []; }
 function liveSignature(){
   var parts = [];
+  if(board && board.simulation) parts.push(simSignature(board, Date.now()));
   var ll = liveLinesFor(board);
   if(ll) parts.push(ll.map(function(l){ return (l.black ? "#" : "") + l.text; }).join("|"));
   if(board && board.id === "board-tracked")
@@ -3486,6 +3610,7 @@ function liveSignature(){
   return parts.join("~");
 }
 function liveActive(){
+  if(board && board.simulation) return true;
   if(liveLinesFor(board)) return true;
   if(board && board.id === "board-tracked" && LIVE.region) return true;
   var h = datorHouse();
@@ -3583,6 +3708,16 @@ function refreshLive(){
 }
 refreshLive();
 setInterval(refreshLive, 10 * 60 * 1000);
+/* A simulation board changes on its own clock, far oftener than the
+   ten minute feed cycle: check its signature every 30 seconds and
+   cascade only when the generated board has actually moved. */
+setInterval(function(){
+  if(board && board.simulation){
+    var sig = simSignature(board, Date.now());
+    if(LIVE.sigSim === undefined){ LIVE.sigSim = sig; }
+    else if(sig !== LIVE.sigSim){ LIVE.sigSim = sig; renderBoard(true); }
+  }
+}, 30000);
 function tickClock(){
   var d = new Date();
   var t = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");

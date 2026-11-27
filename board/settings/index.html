@@ -96,6 +96,9 @@
   .mini-note{ font-size:10px; color: var(--amber); margin-top:3px; max-width: 96px; }
   .line-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
   .line-row input[type="text"]{ flex:1; width:auto; min-width:0; }
+  .symbol-row{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+  .symbol-row input[type="text"]{ flex:1; width:auto; min-width:0; text-transform: uppercase; }
+  .symbol-row button{ flex:none; }
   /* ---- sticky miniature board preview: the demo surface ----
      A full width opaque black band locked to the top of the page, holding
      a true 16:9 frame (the television's shape) with the board inside it
@@ -226,6 +229,7 @@
   .pv-clockbox{ display:inline-flex; align-items:center; gap:.5em; }
   .pvlamp{ display:block; width:.62em; height:.62em; border-radius:50%; flex:none;
     box-shadow: inset 0 0 2px rgba(0,0,0,.55), 0 0 .3em currentColor; }
+  .pvlamp[hidden]{ display:none; }
   .pvlamp.ok{ background:#46b96a; color:#46b96a; }
   .pvlamp.delayed{ background:#e8a33d; color:#e8a33d; }
   .pvlamp.down{ background:#d8402e; color:#d8402e; }
@@ -274,29 +278,32 @@
   <h2>Editing: <span id="editing-name"></span></h2>
 
   <div class="card" id="kind-card">
-    <label for="sel-kind">Board kind</label>
-    <select id="sel-kind">
-      <option value="departures">Departures</option>
-      <option value="arrivals">Arrivals</option>
-      <option value="weather">Weather</option>
-      <option value="news">News</option>
-      <option value="art">Art</option>
-      <option value="custom">Custom</option>
+    <label for="sel-type">Board type</label>
+    <select id="sel-type">
+      <option value="departures">Flights · Departures</option>
+      <option value="arrivals">Flights · Arrivals</option>
+      <option value="weather">Lines · Weather</option>
+      <option value="news">Lines · News</option>
+      <option value="art">Lines · Art</option>
+      <option value="custom">Lines · Custom</option>
+      <option value="markets">Markets</option>
+      <option value="overhead">Overhead (live feed)</option>
+      <option value="colour">Colour</option>
     </select>
     <div id="custom-title-row" style="display:none;">
       <label for="inp-custom-title">Custom title</label>
       <input type="text" id="inp-custom-title" placeholder="e.g. Regatta">
     </div>
-    <div class="hint">Departures and Arrivals boards list flights; arrivals boards read THE ISLE · ARRIVALS at the top and the DESTINATION column becomes FROM. Weather, News, Art and Custom boards show lines of text across the full board, under the header THE ISLE · followed by the kind, or your custom title.</div>
+    <div class="hint" id="type-hint"></div>
   </div>
 
   <div class="card" id="size-card">
-    <label for="sel-rows">Board size</label>
+    <label for="sel-rows" id="rows-label">Board size</label>
     <select id="sel-rows">
-      <option value="5">5 flights</option>
-      <option value="14">14 flights</option>
+      <option value="5">5 rows</option>
+      <option value="14">14 rows</option>
     </select>
-    <div class="hint">The board renders exactly this many rows: extra flights are kept in the editor but not shown, and blank flap rows complete the board when fewer are listed. On a colour board the size chooses the picture canvas: 14 is the large, fine canvas and 5 is the standard, chunkier one. On a text board it is the number of lines.</div>
+    <div class="hint" id="rows-hint">The board shows exactly this many rows; blank flap rows complete it.</div>
   </div>
 
   <div class="card" id="style-card">
@@ -310,10 +317,13 @@
       <option value="flappix">Flap Pix (picture board)</option>
       <option value="projekt">Projekt 1400 (Aicher system)</option>
     </select>
-    <div class="hint">The style is the board's display language: layout, type and flip behaviour. It never changes the board's content or its sounds. New boards start in Gallery Six, and choosing Gallery Six turns quiet hours on for the board, as that board keeps them. Flap Pix shows the picture treatment with the next departure in a caption band. On a colour board the scene carries the picture, and the style applies when the board shows flights or lines, except Flap Pix, which uses the picture treatment there too.</div>
+    <div class="hint">The board's display language: layout, type and flip behaviour. It never changes the content or the sounds.</div>
   </div>
 
   <div class="card" id="flights-card">
+    <div class="switch-row"><span class="lab">Simulation</span>
+      <span class="switch"><input type="checkbox" id="sw-sim"><span class="track"></span></span></div>
+    <div class="hint" id="sim-note" style="display:none;">Simulation is on: the board makes its own departures from the clock, all day. The rows below are kept, but they are not shown.</div>
     <label>Flights</label>
     <table>
       <thead><tr><th>Time</th><th>Destination</th><th>Flight</th><th>Gate</th><th>Remarks</th><th>Black</th><th></th></tr></thead>
@@ -325,14 +335,22 @@
 
   <div class="card" id="lines-card" style="display:none;">
     <label>Lines</label>
+    <div class="note-text" id="lines-live-note" style="display:none; margin-bottom:10px;"></div>
     <div id="lines-body"></div>
-    <div class="hint">One line per row, up to the board size. A line marked as a black line shows as a full row of blank flaps. Lines are samples until live feeds arrive with the server.</div>
+    <div class="hint">One line per row, up to the board size. A line marked as a black line shows as a full row of blank flaps.</div>
     <div class="hint" id="lines-note"></div>
   </div>
 
-  <div class="card" id="colour-note" style="display:none;">
-    <label>Colour board</label>
-    <div class="note-text">Colour board: pick a scene below; sound layers still apply if you turn them on.</div>
+  <div class="card" id="markets-card" style="display:none;">
+    <label>Ticker symbols</label>
+    <div id="symbols-body"></div>
+    <button id="btn-add-symbol" type="button" style="margin-top:10px;">+ Add symbol</button>
+    <div class="hint">One symbol per row. The day's figures come from the feed when the board shows; each symbol keeps a sample line for when the feed cannot be reached.</div>
+  </div>
+
+  <div class="card" id="live-card" style="display:none;">
+    <label>Live board</label>
+    <div class="note-text">This board is fed live by the OpenSky Network: aircraft over the house, refreshed every ten minutes. There is nothing to type; its content is the feed.</div>
   </div>
 
   <div class="card" id="scene-card" style="display:none;">
@@ -522,7 +540,7 @@ function pad2(n){ return String(n).padStart(2,"0"); }
 var AUDIO = "../assets/audio/";
 
 /* ============ Demo library: seed + merge (keep in step with display page) ============ */
-var SEED_VERSION = 9;
+var SEED_VERSION = 10;
 var DEFAULT_ROTATION = ["the-isle-boarding","honolulu","bora-bora","phuket","the-isle-final"];
 function nineFlights(){
   return [
@@ -1102,6 +1120,18 @@ function demoBoards(){
       voice: "isabella", signal: "none",
       announcements: { on:false, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
       quietHours: { on:true, start:"23:00", end:"07:00" }
+    },
+    {
+      id: "board-simulated", name: "Simulated Departures", type: "departures", kind: "departures", shows: "departures", rows: 14,
+      simulation: true,
+      flights: nineFlights(),
+      lines: [],
+      clackSet: "pragotron",
+      ambience: { on:true, bed:"rdu",
+                  levels:{ bed:0.45, events:0.6, announcements:0.9, clack:0.8 } },
+      voice: "isabella", signal: "dong",
+      announcements: { on:true, minSec:420, maxSec:1200, rotation: DEFAULT_ROTATION.slice() },
+      quietHours: { on:true, start:"23:00", end:"07:00" }
     }
   ];
 }
@@ -1257,6 +1287,138 @@ function kindOf(b){
   if(b.type === "colour") return "colour";
   return b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
 }
+/* ---- board types: the editor shows only the options a type can use ----
+   flights: departures, arrivals and tracked flights boards.
+   lines: weather, news, art and custom text boards.
+   markets: a custom board titled MARKETS, edited by ticker symbol only.
+   overhead: a custom board titled OVERHEAD, fed live, nothing to type.
+   colour: a picture board, edited by scene. */
+function boardType(b){
+  if(!b) return "flights";
+  if(b.type === "colour") return "colour";
+  var k = kindOf(b);
+  if(k === "departures" || k === "arrivals") return "flights";
+  if(k === "custom"){
+    var t = String(b.customTitle || "").toUpperCase();
+    if(t === "MARKETS") return "markets";
+    if(t === "OVERHEAD") return "overhead";
+  }
+  return "lines";
+}
+function typeSelectValue(b){
+  var t = boardType(b);
+  if(t === "colour" || t === "markets" || t === "overhead") return t;
+  return kindOf(b); /* departures, arrivals, weather, news, art or custom */
+}
+var TYPE_HINTS = {
+  departures: "A flights board: the flight rows below, and the layout. Arrivals boards read THE ISLE · ARRIVALS at the top and the destination column becomes FROM.",
+  arrivals: "A flights board: the flight rows below, and the layout. Arrivals boards read THE ISLE · ARRIVALS at the top and the destination column becomes FROM.",
+  weather: "A lines board: the lines below, and the layout. This one is fed live; see the note above the lines.",
+  news: "A lines board: the lines below, and the layout.",
+  art: "A lines board: the lines below, and the layout.",
+  custom: "A lines board: the lines below, the layout, and the title the board carries at the top.",
+  markets: "A markets board: ticker symbols only, below. The figures come from the feed.",
+  overhead: "A live board: its content is the feed. There are no rows to edit.",
+  colour: "A colour board: a scene, below. The size chooses the picture canvas."
+};
+function linesLiveNote(b){
+  var k = kindOf(b);
+  if(k === "weather")
+    return "Fed live: weather and tides from NOAA. The lines below are the board's own text, shown until the feed answers and again whenever it cannot be reached.";
+  if(k === "custom"){
+    var t = String(b.customTitle || "").toUpperCase();
+    if(t === "TIDES")
+      return "Fed live: tides from NOAA, Anclote Key. The lines below show whenever the feed cannot be reached.";
+    if(t === "NORTH SHORE")
+      return "Fed live: tides and weather from NOAA and the Waimea buoy. The lines below show whenever a feed cannot be reached.";
+  }
+  return "";
+}
+/* ---- markets: symbols are the board's content ----
+   The symbols live in b.symbols; b.lines is kept as one fallback line per
+   symbol, in the form the display already reads, so the board keeps
+   working exactly as before when the feed cannot be reached. A symbol
+   the board already carries keeps its line; a new one starts as a
+   placeholder figure. */
+function marketSymbolsOf(b){
+  if(b && Array.isArray(b.symbols) && b.symbols.length){
+    var out = [];
+    b.symbols.forEach(function(s){
+      s = String(s || "").toUpperCase().trim();
+      if(s && out.indexOf(s) < 0) out.push(s);
+    });
+    if(out.length) return out;
+  }
+  return pvBoardMarketSymbols(b);
+}
+function syncMarketLines(b){
+  var old = b.lines || [];
+  var lines = marketSymbolsOf(b).map(function(sym){
+    for(var i = 0; i < old.length; i++){
+      var t = String(old[i].text || "").trim().toUpperCase();
+      var m = t.match(/^([A-Z]{1,5})\b/);
+      if(m && m[1] === sym) return { text: old[i].text, black: !!old[i].black };
+    }
+    return { text: sym + " · 0 00 · FLAT", black: false };
+  });
+  lines.push({ text: "FIGURES ARE SAMPLES", black: false });
+  b.lines = lines;
+}
+function writeSymbolsFromInputs(){
+  var b = board();
+  var inputs = document.querySelectorAll("#symbols-body input");
+  var syms = [];
+  inputs.forEach(function(inp){
+    var s = inp.value.toUpperCase().trim();
+    if(s && syms.indexOf(s) < 0) syms.push(s);
+  });
+  b.symbols = syms;
+  syncMarketLines(b);
+}
+function renderSymbols(){
+  var b = board();
+  var syms = marketSymbolsOf(b).slice();
+  if(!syms.length) syms = [""];
+  var wrap = document.getElementById("symbols-body"); wrap.innerHTML = "";
+  syms.forEach(function(sym, idx){
+    var row = document.createElement("div"); row.className = "symbol-row";
+    var inp = document.createElement("input"); inp.type = "text"; inp.value = sym;
+    inp.placeholder = "Symbol " + (idx + 1); inp.setAttribute("autocapitalize", "characters");
+    inp.addEventListener("input", function(){
+      var up = inp.value.toUpperCase();
+      if(inp.value !== up) inp.value = up;
+      writeSymbolsFromInputs(); saveStaged();
+    });
+    row.appendChild(inp);
+    var del = document.createElement("button"); del.type = "button"; del.textContent = "×"; del.className = "danger";
+    del.addEventListener("click", function(){
+      row.remove();
+      writeSymbolsFromInputs(); saveStaged(); renderSymbols();
+    });
+    row.appendChild(del);
+    wrap.appendChild(row);
+  });
+}
+document.getElementById("btn-add-symbol").addEventListener("click", function(){
+  var wrap = document.getElementById("symbols-body");
+  var row = document.createElement("div"); row.className = "symbol-row";
+  var inp = document.createElement("input"); inp.type = "text"; inp.value = "";
+  inp.placeholder = "Symbol"; inp.setAttribute("autocapitalize", "characters");
+  inp.addEventListener("input", function(){
+    var up = inp.value.toUpperCase();
+    if(inp.value !== up) inp.value = up;
+    writeSymbolsFromInputs(); saveStaged();
+  });
+  row.appendChild(inp);
+  var del = document.createElement("button"); del.type = "button"; del.textContent = "×"; del.className = "danger";
+  del.addEventListener("click", function(){
+    row.remove();
+    writeSymbolsFromInputs(); saveStaged(); renderSymbols();
+  });
+  row.appendChild(del);
+  wrap.appendChild(row);
+  inp.focus();
+});
 function blackToggle(on, label, fn){
   var lab = document.createElement("label"); lab.className = "black-toggle";
   var sw = document.createElement("span"); sw.className = "switch";
@@ -1310,6 +1472,12 @@ function renderFlights(){
     var n = limit - b.flights.length;
     noteEl.textContent = n + " blank row" + (n === 1 ? "" : "s") + " will complete the board.";
   } else noteEl.textContent = "";
+  /* While simulation runs, the stored rows are the board's spare set:
+     kept in order, but not editable and not shown. */
+  var simOn = !!b.simulation;
+  tb.querySelectorAll("input, button").forEach(function(el){ el.disabled = simOn; });
+  document.getElementById("btn-add-flight").disabled = simOn;
+  tb.style.opacity = simOn ? ".45" : "";
 }
 function renderLines(){
   var b = board();
@@ -1351,23 +1519,50 @@ function bindEditor(){
   if(boundBoardId !== null && boundBoardId !== b.id) stopAllTestLayers(); /* leaving a board stops its tests, bed included */
   boundBoardId = b.id;
   document.getElementById("editing-name").textContent = b.name;
-  var isColour = b.type === "colour";
+  var type = boardType(b);
+  var isColour = type === "colour";
   var kind = kindOf(b);
-  var isText = !isColour && kind !== "departures" && kind !== "arrivals";
-  document.getElementById("kind-card").style.display = isColour ? "none" : "";
-  document.getElementById("sel-kind").value = isColour ? "departures" : kind;
-  document.getElementById("custom-title-row").style.display = kind === "custom" ? "" : "none";
+  var tval = typeSelectValue(b);
+  document.getElementById("sel-type").value = tval;
+  document.getElementById("type-hint").textContent = TYPE_HINTS[tval] || "";
+  document.getElementById("custom-title-row").style.display = tval === "custom" ? "" : "none";
   document.getElementById("inp-custom-title").value = b.customTitle || "";
-  document.getElementById("sel-rows").value = String(rowsOf(b));
+  /* Size shows where rows mean something; on a colour board it is the
+     picture canvas. An overhead board has no rows of its own to size. */
+  var sizeCard = document.getElementById("size-card");
+  if(type === "overhead"){ sizeCard.style.display = "none"; }
+  else {
+    sizeCard.style.display = "";
+    document.getElementById("rows-label").textContent = isColour ? "Picture canvas" : "Board size";
+    var sizeLabels = isColour ? ["Standard canvas", "Large canvas"]
+      : (type === "flights" ? ["5 flights", "14 flights"] : ["5 rows", "14 rows"]);
+    var rowsSel = document.getElementById("sel-rows");
+    rowsSel.options[0].textContent = sizeLabels[0];
+    rowsSel.options[1].textContent = sizeLabels[1];
+    document.getElementById("rows-hint").textContent = isColour
+      ? "The large canvas is finer; the standard canvas is chunkier."
+      : "The board shows exactly this many rows; blank flap rows complete it.";
+    rowsSel.value = String(rowsOf(b));
+  }
+  document.getElementById("style-card").style.display =
+    (type === "flights" || type === "lines") ? "" : "none";
   document.getElementById("sel-style").value = b.style || "isle";
   document.getElementById("sw-scene-snd").checked = !!(b.sceneSounds && b.sceneSounds.on);
   var ssr = document.getElementById("rng-scene-snd");
   ssr.value = Math.round(((b.sceneSounds && b.sceneSounds.level) || 0) * 100);
   document.getElementById("val-scene-snd").textContent = ssr.value + "%";
-  document.getElementById("flights-card").style.display = (!isColour && !isText) ? "" : "none";
-  document.getElementById("lines-card").style.display = isText ? "" : "none";
-  document.getElementById("colour-note").style.display = isColour ? "" : "none";
+  document.getElementById("flights-card").style.display = type === "flights" ? "" : "none";
+  document.getElementById("lines-card").style.display = type === "lines" ? "" : "none";
+  document.getElementById("markets-card").style.display = type === "markets" ? "" : "none";
+  document.getElementById("live-card").style.display = type === "overhead" ? "" : "none";
   document.getElementById("scene-card").style.display = isColour ? "" : "none";
+  document.getElementById("scene-snd-card").style.display = isColour ? "" : "none";
+  if(type === "lines"){
+    var liveNote = document.getElementById("lines-live-note");
+    var noteText = linesLiveNote(b);
+    liveNote.textContent = noteText;
+    liveNote.style.display = noteText ? "" : "none";
+  }
   document.getElementById("sel-scene").value = b.scene || "walk";
   document.getElementById("night-row").style.display = (isColour && (b.scene || "walk") === "menorah") ? "" : "none";
   document.getElementById("sel-night").value = String((b.night >= 1 && b.night <= 8) ? Math.floor(b.night) : 8);
@@ -1387,7 +1582,11 @@ function bindEditor(){
   document.getElementById("sw-quiet").checked = !!b.quietHours.on;
   document.getElementById("time-start").value = b.quietHours.start;
   document.getElementById("time-end").value = b.quietHours.end;
-  if(isText) renderLines(); else if(!isColour) renderFlights();
+  document.getElementById("sw-sim").checked = !!b.simulation;
+  document.getElementById("sim-note").style.display = b.simulation ? "" : "none";
+  if(type === "lines") renderLines();
+  else if(type === "flights") renderFlights();
+  else if(type === "markets") renderSymbols();
   pvRender(true);
 }
 /* Sample lines seeded when a board is switched to a text kind while it
@@ -1427,15 +1626,37 @@ function seedLinesForKind(b){
   }
   b.lines = texts.map(function(t){ return { text: t, black: false }; });
 }
-document.getElementById("sel-kind").addEventListener("change", function(e){
-  var b = board(); b.kind = e.target.value;
-  if(b.kind === "arrivals") b.shows = "arrivals";
-  else if(b.kind === "departures") b.shows = "departures";
-  seedLinesForKind(b);
+document.getElementById("sel-type").addEventListener("change", function(e){
+  var b = board(); var v = e.target.value;
+  if(v === "colour"){
+    b.type = "colour";
+    if(!b.scene) b.scene = "walk";
+    if(!(b.night >= 1 && b.night <= 8)) b.night = 8;
+    if(!b.sceneSounds) b.sceneSounds = { on: false, level: 0.5 };
+  } else {
+    if(b.type === "colour") b.type = "departures";
+    if(v === "departures"){ b.kind = "departures"; b.shows = "departures"; }
+    else if(v === "arrivals"){ b.kind = "arrivals"; b.shows = "arrivals"; }
+    else if(v === "weather" || v === "news" || v === "art" || v === "custom"){
+      b.kind = v; seedLinesForKind(b);
+    }
+    else if(v === "markets"){
+      b.kind = "custom"; b.customTitle = "MARKETS";
+      if(!Array.isArray(b.symbols)) b.symbols = marketSymbolsOf(b);
+      syncMarketLines(b);
+    }
+    else if(v === "overhead"){
+      b.kind = "custom"; b.customTitle = "OVERHEAD";
+      if(!b.lines || !b.lines.length) b.lines = [{ text: "NO TRAFFIC OVERHEAD", black: false }];
+    }
+  }
   saveStaged(); bindEditor();
 });
 document.getElementById("inp-custom-title").addEventListener("input", function(e){
   board().customTitle = e.target.value; saveStaged();
+});
+document.getElementById("sw-sim").addEventListener("change", function(e){
+  board().simulation = e.target.checked; saveStaged(); bindEditor();
 });
 document.getElementById("sel-rows").addEventListener("change", function(e){
   board().rows = +e.target.value; saveStaged(); bindEditor();
@@ -2193,7 +2414,118 @@ function pvTrackedFlights(b){
   });
   return fl;
 }
+/* ================= Simulation =================
+   A flights board with simulation on ignores its stored rows: this
+   generator makes its departures from the wall clock alone. It is a
+   pure function of the time, seeded per day and per flight, so the
+   display page, the Settings preview and any second screen compute
+   the same board at the same moment, with no server and no shared
+   storage, and it runs indefinitely. Each day has its own chain of
+   departures, one every 8 to 12 minutes; at any moment the board
+   shows the flights leaving in the next three hours, plus any that
+   left in the last ten minutes, marked DEPARTED. Remarks follow the
+   revised time: ON TIME or DELAYED beyond 40 minutes out, BOARDING
+   inside 40, FINAL CALL inside 15, DEPARTED for ten minutes after
+   the time, then the flight is gone and the next one fills its row.
+   About 18 percent of flights carry a delay of 15 to 60 minutes and
+   about 3 percent are cancelled, both fixed by the same seeds. */
+var SIM_ROUTES = [
+  { dest: "MIAMI",        carrier: "AA", lo: 2000, hi: 2499, gate: "C", glo: 1, ghi: 30, w: 10 },
+  { dest: "HONOLULU",     carrier: "HA", lo: 40,   hi: 99,   gate: "",  glo: 5, ghi: 20, w: 7 },
+  { dest: "BORA BORA",    carrier: "VT", lo: 400,  hi: 499,  gate: "",  glo: 1, ghi: 12, w: 5 },
+  { dest: "PHUKET",       carrier: "TG", lo: 900,  hi: 999,  gate: "",  glo: 5, ghi: 25, w: 5 },
+  { dest: "LONDON",       carrier: "BA", lo: 100,  hi: 299,  gate: "E", glo: 1, ghi: 20, w: 8 },
+  { dest: "FRANKFURT",    carrier: "LH", lo: 400,  hi: 999,  gate: "",  glo: 5, ghi: 30, w: 7 },
+  { dest: "NEW YORK",     carrier: "B6", lo: 100,  hi: 999,  gate: "",  glo: 1, ghi: 25, w: 9 },
+  { dest: "CHARLOTTE",    carrier: "AA", lo: 1000, hi: 1999, gate: "C", glo: 1, ghi: 30, w: 7 },
+  { dest: "DALLAS",       carrier: "AA", lo: 1000, hi: 2499, gate: "C", glo: 1, ghi: 30, w: 7 },
+  { dest: "HOUSTON",      carrier: "UA", lo: 1000, hi: 1999, gate: "A", glo: 1, ghi: 30, w: 7 },
+  { dest: "THE ISLE",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 6 },
+  { dest: "KEY WEST",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "NASSAU",       carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "SAN JUAN",     carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 4 },
+  { dest: "GRAND CAYMAN", carrier: "IS", lo: 800,  hi: 899,  gate: "",  glo: 1, ghi: 9,  w: 3 }
+];
+function simHash(a, b){
+  var h = (a >>> 0) ^ 0x9e3779b9;
+  h = Math.imul(h ^ (b >>> 0), 0x85ebca6b);
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  return h >>> 0;
+}
+function simRng(seed){
+  var s = seed >>> 0;
+  return function(){
+    s = (s + 0x6D2B79F5) >>> 0;
+    var t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function simDayKey(d){ return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
+function simMakeFlight(dayKey, idx, schedMin){
+  var r = simRng(simHash(dayKey, 1000 + idx));
+  var totalW = 0, i;
+  for(i = 0; i < SIM_ROUTES.length; i++) totalW += SIM_ROUTES[i].w;
+  var pick = r() * totalW, route = SIM_ROUTES[SIM_ROUTES.length - 1];
+  for(i = 0; i < SIM_ROUTES.length; i++){ pick -= SIM_ROUTES[i].w; if(pick <= 0){ route = SIM_ROUTES[i]; break; } }
+  var num = route.lo + Math.floor(r() * (route.hi - route.lo + 1));
+  var gate = route.gate + (route.glo + Math.floor(r() * (route.ghi - route.glo + 1)));
+  var cancelled = r() < 0.03;
+  var delay = 0;
+  if(!cancelled && r() < 0.18) delay = 15 + Math.floor(r() * 46);
+  return { schedMin: schedMin, depMin: schedMin + delay, dest: route.dest,
+           flight: route.carrier + " " + num, gate: gate,
+           cancelled: cancelled, delayed: delay > 0 };
+}
+function simDayFlights(dayDate){
+  var key = simDayKey(dayDate);
+  var rng = simRng(simHash(key, 101));
+  var out = [], idx = 0;
+  var cursor = Math.floor(rng() * 10);
+  while(cursor < 24 * 60){
+    out.push(simMakeFlight(key, idx, cursor));
+    cursor += 8 + Math.floor(rng() * 5);
+    idx++;
+  }
+  return out;
+}
+function simHHMM(ms){
+  var d = new Date(ms);
+  return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+function simFlightsFor(b, nowMs){
+  var rows = (b && (b.rows === 5 || b.rows === 14)) ? b.rows : 14;
+  var now = new Date(nowMs);
+  var found = [];
+  for(var off = -1; off <= 1; off++){
+    var day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + off);
+    var dayStart = day.getTime();
+    simDayFlights(day).forEach(function(f){
+      var depAbs = dayStart + f.depMin * 60000;
+      var delta = depAbs - nowMs;
+      if(delta <= -10 * 60000 || delta > 3 * 3600000) return;
+      var remarks;
+      if(f.cancelled) remarks = "CANCELLED";
+      else if(delta > 40 * 60000) remarks = f.delayed ? "DELAYED" : "ON TIME";
+      else if(delta > 15 * 60000) remarks = "BOARDING";
+      else if(delta > 0) remarks = "FINAL CALL";
+      else remarks = "DEPARTED";
+      found.push({ depAbs: depAbs, row: { time: simHHMM(depAbs), destination: f.dest,
+        flight: f.flight, gate: f.gate, remarks: remarks, black: false } });
+    });
+  }
+  found.sort(function(a, c){ return a.depAbs - c.depAbs; });
+  return found.slice(0, rows).map(function(x){ return x.row; });
+}
+function simSignature(b, nowMs){
+  return simFlightsFor(b, nowMs).map(function(f){
+    return f.time + " " + f.destination + " " + f.flight + " " + f.gate + " " + f.remarks;
+  }).join("|");
+}
+/* ================= end simulation ================= */
 function pvEffFlights(b){
+  if(b && b.simulation) return simFlightsFor(b, Date.now());
   if(b && b.id === "board-tracked") return pvTrackedFlights(b);
   return (b && b.flights) || [];
 }
@@ -2348,12 +2680,15 @@ function pvLiveSignature(){
   if(ll) parts.push(ll.map(function(l){ return (l.black ? "#" : "") + l.text; }).join("|"));
   if(b && b.id === "board-tracked")
     parts.push(pvTrackedFlights(b).map(function(f){ return f.remarks; }).join("|"));
+  if(b && b.simulation)
+    parts.push(simSignature(b, Date.now()));
   var h = pvDatorHouse(b);
   parts.push(h.TIDE + "/" + h.WIND + "/" + h.SUNSET);
   return parts.join("~");
 }
 function pvLiveActive(){
   var b = board();
+  if(b && b.simulation) return true;
   if(pvLiveLinesFor(b)) return true;
   if(b && b.id === "board-tracked" && PV_LIVE.region) return true;
   var h = pvDatorHouse(b);
@@ -2457,6 +2792,16 @@ function pvRefreshLive(){
 }
 pvRefreshLive();
 setInterval(pvRefreshLive, 10 * 60 * 1000);
+/* The preview of a simulation board follows the same 30 second
+   signature check the display page runs. */
+setInterval(function(){
+  var b = board();
+  if(b && b.simulation){
+    var sig = simSignature(b, Date.now());
+    if(PV_LIVE.sigSim === undefined){ PV_LIVE.sigSim = sig; }
+    else if(sig !== PV_LIVE.sigSim){ PV_LIVE.sigSim = sig; pvQueueRender(); }
+  }
+}, 30000);
 function pvEsc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 function pvCleanRaw(text){
   text = String(text == null ? "" : text).toUpperCase();
