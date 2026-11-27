@@ -127,14 +127,14 @@
   #pixcap .pc-msg b{ color:#ffb43a; }
   #pixcap .pc-clock{ margin-left:auto; color:#e8e6df; font-weight:600; letter-spacing:.1em; font-size:39px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
 
-  /* Gallery Six: the board as furniture on a gallery wall */
-  .st-gallery{ position:absolute; inset:0; background:linear-gradient(180deg,#e9e3d5 0%,#e3dac6 55%,#ded5c2 100%); font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#26241f; display:flex; flex-direction:column; }
+  /* Gallery Six: the board as furniture, standing on the black page ground */
+  .st-gallery{ position:absolute; inset:0; background:#000000; font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#f2efe3; display:flex; flex-direction:column; }
   .st-gallery .g-plaque{ display:flex; align-items:flex-end; justify-content:space-between; }
-  .st-gallery .g-title{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1.02; }
-  .st-gallery .g-sub{ letter-spacing:.30em; color:#7a7261; font-weight:600; }
+  .st-gallery .g-title{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#f2efe3; line-height:1.02; }
+  .st-gallery .g-sub{ letter-spacing:.30em; color:#8f887a; font-weight:600; }
   .st-gallery .g-clock{ text-align:right; }
-  .st-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1; }
-  .st-gallery .g-clock .l{ letter-spacing:.26em; color:#7a7261; font-weight:600; }
+  .st-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#f2efe3; line-height:1; }
+  .st-gallery .g-clock .l{ letter-spacing:.26em; color:#8f887a; font-weight:600; }
   .st-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); margin:0 auto; }
   .st-gallery .g-grid{ display:grid; }
   .st-gallery .g-tile{ background:linear-gradient(180deg,#262624 0%,#1b1b1a 49%,#141413 50%,#1e1e1d 100%); color:#f2efe3; font-family:Archivo,"Helvetica Neue",sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:3px; position:relative; overflow:hidden; width:100%; height:100%; }
@@ -1033,6 +1033,7 @@ function showCarouselBoard(car, idx){
   if(AC){ applyLevels(); loadSet(board.clackSet); setupBed(); }
   if(evtNow) stopEvent(true);
   armFirstPa();
+  armFirstClack();
   wasQuiet = inQuietHours();
   renderBoard(true);
   renderLamp();
@@ -1989,11 +1990,13 @@ function impactWhen(buf){
 }
 function playStep(colFrac){
   if(!AC || !buffersReady || !stepBufs.length) return;
+  noteClack(clackBus.gain.value);
   var buf = nextFrom("step", stepBufs);
   playBuf(buf, clackBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.85 + Math.random()*0.3);
 }
 function playFlap(){
   if(!AC || !buffersReady || !flapBufs.length) return;
+  noteClack(eventBus.gain.value);
   var buf = nextFrom("flap", flapBufs);
   playBuf(buf, eventBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.9 + Math.random()*0.25);
 }
@@ -2163,6 +2166,20 @@ function playAnnouncement(scriptId){
     a.play().catch(paDone);
   });
 }
+/* The same settled rule's other half: the first clack. A flip that
+   actually sounds (a step or landing buffer started on a running
+   context, at a positive level, outside quiet hours) settles the
+   watch through noteClack(); if the drawn point inside two minutes
+   passes with nothing heard, the scheduler runs one cascade so the
+   clack is heard. Colour boards have no flips and are outside it. */
+var clackDueAt = 0, clackHeard = true;
+function armFirstClack(){
+  clackHeard = false;
+  clackDueAt = Date.now() + (20 + Math.random() * 100) * 1000;
+}
+function noteClack(gain){
+  if(gain > 0 && AC && AC.state === "running" && !inQuietHours()) clackHeard = true;
+}
 /* Settled rule (Nov 27, 2026): the first announcement after a board
    opens lands within two minutes of the opening, at a natural point
    inside that window, never at a fixed second. Every board opening
@@ -2190,6 +2207,7 @@ function paDone(){
 }
 var nextPaAt = 0, paIdx = 0;
 armFirstPa();
+armFirstClack();
 var wasQuiet = inQuietHours();
 setInterval(function(){
   /* Quiet hours begin and end on their own clock: when the board
@@ -2210,6 +2228,18 @@ setInterval(function(){
      && board.ambience.levels.events > 0 && !evtNow && Date.now() >= nextEventAt)
     playEvent();
   if(!AC) return;
+  /* First clack: the drawn point has passed with no flip heard, and
+     sound is available now, so run one cascade. If the point passes
+     while the context is held or quiet hours run, the first tick
+     after they clear is the one that fires it; the flag is set
+     before the render so it can never fire twice for one opening. */
+  if(!clackHeard && clackDueAt && Date.now() >= clackDueAt
+     && AC.state === "running" && !inQuietHours()
+     && board.ambience.levels.clack > 0
+     && board.type !== "colour" && boardStyle() !== "flappix"){
+    clackHeard = true;
+    renderBoard(true);
+  }
   if(!board.announcements.on || inQuietHours() || paPlaying) return;
   if(Date.now() < nextPaAt) return;
   var rot = board.announcements.rotation && board.announcements.rotation.length
@@ -2553,9 +2583,9 @@ function gShowPage(idx, animate){
   }
 }
 function buildGallery(W, H, cascade){
-  document.body.style.background = "linear-gradient(180deg,#e9e3d5 0%,#e3dac6 55%,#ded5c2 100%)";
+  document.body.style.background = "";
   var root = stEl("div", "st-gallery", styledEl);
-  root.style.padding = (H * 0.035) + "px " + (W * 0.03) + "px";
+  root.style.padding = "0px";
   var plaque = stEl("div", "g-plaque", root);
   var left = stEl("div", "", plaque);
   var title = stEl("div", "g-title", left, "The Isle · Gallery Six");
@@ -2565,15 +2595,29 @@ function buildGallery(W, H, cascade){
   var clock = stEl("div", "g-clock", plaque);
   var ct = stEl("div", "t st-clock", clock, "--:--"); ct.style.fontSize = (H * 0.052) + "px";
   var cl = stEl("div", "l", clock, "LOCAL TIME"); cl.style.fontSize = (H * 0.014) + "px"; cl.style.marginTop = (H * 0.010) + "px";
-  var availW = W * 0.94, availH = H - H * 0.07 - H * 0.115 - H * 0.014 - H * 0.05; /* last term reserves the panel foot */
-  var gap = 4;
-  var tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
-  gap = Math.max(2, Math.round(tileW * 0.055));
-  tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
+  /* No wall and no trim: the composition stands on the black page
+     ground and the panel fills the frame. The plaque's height is
+     measured as built, and the panel's own padding and foot are
+     accounted in the height budget with a small safety allowance
+     (a plaque measured before its fonts settle can grow a little),
+     so the whole composition is contained in the frame with no
+     overflow. The panel keeps its
+     gradient, its 22 by 6 grid and its tile aspect; only the scale
+     grows into the space the wall occupied. */
+  var plaqueH = plaque.offsetHeight, marginTop = H * 0.014;
+  var gap = 4, tileW = Math.min(W / 22, H / 6.30 / 1.717);
+  for(var pass = 0; pass < 3; pass++){
+    var padTry = Math.round(tileW * 0.55) + 1;
+    var footTry = Math.round(tileW * 0.4) + Math.ceil(H * 0.0135 * 1.3);
+    var gridTry = H - plaqueH - marginTop - 2 * padTry - footTry - Math.max(4, Math.round(H * 0.004));
+    tileW = Math.min((W - 2 * padTry - 21 * gap) / 22, (gridTry - 6 * gap) / 6.30 / 1.717);
+    gap = Math.max(2, Math.round(tileW * 0.055));
+  }
+  var padPanel = Math.round(tileW * 0.55) + 1;
   var tileH = tileW * 1.717;
   var panel = stEl("div", "g-board", root);
-  panel.style.padding = (Math.round(tileW * 0.55) + 1) + "px"; /* +1: the removed panel border's thickness, so the panel's size and the grid's position are unchanged */
-  panel.style.marginTop = (H * 0.014) + "px";
+  panel.style.padding = padPanel + "px";
+  panel.style.marginTop = marginTop + "px";
   var grid = stEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";
   grid.style.gridTemplateRows = [tileH, tileH, tileH, tileH, tileH, tileH * 0.30, tileH].map(function(v){ return Math.round(v) + "px"; }).join(" ");
@@ -4017,6 +4061,7 @@ window.addEventListener("storage", function(e){
       var bedChanged = nb.ambience.bed !== board.ambience.bed || nb.ambience.on !== board.ambience.on;
       board = nb;
       armFirstPa();
+      armFirstClack();
       fitBoard();
       if(AC){ applyLevels(); if(setChanged) loadSet(board.clackSet); if(bedChanged) setupBed(); }
       renderBoard(true);

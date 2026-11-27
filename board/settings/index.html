@@ -255,13 +255,13 @@
   /* ============ Preview: board styles ============ */
   #pv-styled{ display:none; margin:0 auto; position:relative; overflow:hidden; border-radius:4px; }
   #pv-pixcap{ display:none; color:#e8e6df; letter-spacing:.12em; font-weight:600; padding-top:8px; white-space:nowrap; overflow:hidden; font-size:12px; }
-  .pvst-gallery{ position:absolute; inset:0; font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#26241f; display:flex; flex-direction:column; background:linear-gradient(180deg,#e9e3d5 0%,#e3dac6 55%,#ded5c2 100%); }
+  .pvst-gallery{ position:absolute; inset:0; font-family:"Source Sans 3","Helvetica Neue",Arial,sans-serif; color:#f2efe3; display:flex; flex-direction:column; background:#000000; }
   .pvst-gallery .g-plaque{ display:flex; align-items:flex-end; justify-content:space-between; }
-  .pvst-gallery .g-title{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1.02; }
-  .pvst-gallery .g-sub{ letter-spacing:.30em; color:#7a7261; font-weight:600; }
+  .pvst-gallery .g-title{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#f2efe3; line-height:1.02; }
+  .pvst-gallery .g-sub{ letter-spacing:.30em; color:#8f887a; font-weight:600; }
   .pvst-gallery .g-clock{ text-align:right; }
-  .pvst-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1; }
-  .pvst-gallery .g-clock .l{ letter-spacing:.26em; color:#7a7261; font-weight:600; }
+  .pvst-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#f2efe3; line-height:1; }
+  .pvst-gallery .g-clock .l{ letter-spacing:.26em; color:#8f887a; font-weight:600; }
   .pvst-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); margin:0 auto; }
   .pvst-gallery .g-grid{ display:grid; }
   .pvst-gallery .g-tile{ background:linear-gradient(180deg,#262624 0%,#1b1b1a 49%,#141413 50%,#1e1e1d 100%); color:#f2efe3; font-family:Archivo,"Helvetica Neue",sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:2px; width:100%; height:100%; }
@@ -4155,7 +4155,7 @@ function pvGWrap(text, width){
 }
 function pvBuildGallery(b, W, H){
   var root = pvStEl("div", "pvst-gallery", pvStHost || pvStyledEl);
-  root.style.padding = (H * 0.035) + "px " + (W * 0.03) + "px";
+  root.style.padding = "0px";
   var plaque = pvStEl("div", "g-plaque", root);
   var left = pvStEl("div", "", plaque);
   var title = pvStEl("div", "g-title", left, "The Isle · Gallery Six");
@@ -4185,15 +4185,23 @@ function pvBuildGallery(b, W, H){
   });
   var notice = "WELCOME TO THE ISLE", lead = "G";
   if(pvKind(b) === "art"){ notice = "MADE OF FLAPS"; lead = "R"; }
-  var availW = W * 0.94, availH = H - H * 0.07 - H * 0.115 - H * 0.014 - H * 0.05; /* last term reserves the panel foot */
-  var gap = 2;
-  var tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
-  gap = Math.max(1, Math.round(tileW * 0.055));
-  tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
+  /* The live composition in miniature: no wall and no trim, the
+     plaque measured as built, the panel filling the preview frame
+     and contained in it. */
+  var plaqueH = plaque.offsetHeight, marginTop = H * 0.014;
+  var gap = 2, tileW = Math.min(W / 22, H / 6.30 / 1.717);
+  for(var pass = 0; pass < 3; pass++){
+    var padTry = Math.round(tileW * 0.55) + 1;
+    var footTry = Math.round(tileW * 0.4) + Math.ceil(Math.max(6, H * 0.0135) * 1.3);
+    var gridTry = H - plaqueH - marginTop - 2 * padTry - footTry - Math.max(4, Math.round(H * 0.004));
+    tileW = Math.min((W - 2 * padTry - 21 * gap) / 22, (gridTry - 6 * gap) / 6.30 / 1.717);
+    gap = Math.max(1, Math.round(tileW * 0.055));
+  }
+  var padPanel = Math.round(tileW * 0.55) + 1;
   var tileH = tileW * 1.717;
   var panel = pvStEl("div", "g-board", root);
-  panel.style.padding = (Math.round(tileW * 0.55) + 1) + "px"; /* +1: the removed panel border's thickness, so the panel's size and the grid's position are unchanged */
-  panel.style.marginTop = (H * 0.014) + "px";
+  panel.style.padding = padPanel + "px";
+  panel.style.marginTop = marginTop + "px";
   var grid = pvStEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";
   grid.style.gridTemplateRows = [tileH, tileH, tileH, tileH, tileH, tileH * 0.30, tileH].map(function(v){ return Math.round(v) + "px"; }).join(" ");
