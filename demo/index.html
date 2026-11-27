@@ -34,8 +34,6 @@ body{background:#1d2a3b;color:var(--ink);font-family:var(--sans);font-size:17px;
 a{color:inherit;text-decoration:none;}
 img{display:block;}
 .wrap{max-width:1020px;margin:0 auto;padding:0 40px;}
-h1{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1.05;}
-.serif-line{font-family:var(--serif);font-style:italic;font-weight:500;font-size:19px;line-height:1.4;color:var(--dim);margin-top:6px;}
 .cols{display:grid;grid-template-columns:1fr 1fr;margin-top:38px;border-top:1px solid var(--line);}
 .col-l{padding:30px 44px 6px 0;}
 .col-r{padding:30px 0 6px 44px;border-left:1px solid var(--line);}
@@ -58,7 +56,7 @@ h1{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1.05;}
 .record .cat{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);}
 .record .desc{color:var(--dim);font-size:13.5px;line-height:1.6;margin-top:6px;}
 .record:hover .rid{color:var(--accent);}
-.statement{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 2px 20px;margin-top:30px;}
+.statement{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 2px 20px;margin-top:32px;}
 .statement .s-line{font-family:var(--serif);font-style:italic;font-weight:500;font-size:19px;}
 .statement p{color:var(--dim);font-size:17px;margin-top:8px;}
 @media (max-width:820px){
@@ -66,7 +64,6 @@ h1{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1.05;}
  .cols{grid-template-columns:1fr;}
  .col-l{padding:26px 0 0;}
  .col-r{padding:30px 0 0;border-left:none;}
- h1{font-size:38px;}
 }
 /* Header HH The Depth Line, revised at the user's direction:
    the lockup enlarged by a third at every breakpoint, the
@@ -100,8 +97,6 @@ a.hh-crumb:hover{color:#f0e8d5;}
  .hh-ellipsis{display:flex;}
  .hh-sep-ell{display:block;}
 }
-/* H's title matter at the head of the body (see notes.md). */
-.h-title{padding-top:32px;}
 /* Navy sides: the page ground outside the body column is The
    Isle Navy, and the ivory body stands as a centred panel between
    the sides, running the full height of the body between the
@@ -213,6 +208,18 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
    margin-top 6px; its colour already matched, the sheet's
    --ivory-soft resolving to Soft Ink on a light ground).
    Nothing else differs from the base. */
+/* Statement as the introduction and title block removed, this
+   sample (see notes.md): the statement block that stood in the
+   right column under Permit Documents now opens the body at
+   the head of the panel, in its own type settings and with
+   its rules above and below it. The visible title block, the
+   "Pages" heading and its serif subtext, is removed whole,
+   with the CSS rules that served only it; the title block's
+   32px opening gap is carried by the statement's top margin.
+   The document title in the head is unchanged. The right
+   column ends with Permit Documents. The statement's wording
+   is unchanged by a letter. Nothing else differs from the
+   base. */
 </style>
 </head>
 <body>
@@ -231,9 +238,9 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
 </header>
 
 <div class="wrap panel">
- <div class="h-title">
-  <h1>Pages</h1>
-  <p class="serif-line">Every page on the site.</p>
+ <div class="statement">
+  <div class="s-line">Nine pages, in two groups.</div>
+  <p>The Site stands open. The Working Pages hold the standard the pages are built from, the test zone under trial, and the permit documents behind the gate.</p>
  </div>
  <div class="cols">
   <div class="col-l">
@@ -306,11 +313,6 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
     <div class="cat">The Documents</div>
     <div class="desc">The permit documents, read behind the gate.</div>
    </a>
-
-   <div class="statement">
-    <div class="s-line">Nine pages, in two groups.</div>
-    <p>The Site stands open. The Working Pages hold the standard the pages are built from, the test zone under trial, and the permit documents behind the gate.</p>
-   </div>
   </div>
  </div>
 </div>
