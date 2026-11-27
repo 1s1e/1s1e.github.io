@@ -2,6 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+/* One-time on-device storage reset (Nov 27, 2026). Earlier builds stored
+   board data under the two keys below; on the first load of this build
+   that old data is cleared so nothing stale carries over, and the page
+   seeds fresh. The marker makes the reset fire once only, so boards made
+   afterwards persist across visits. */
+(function(){
+  var RESET_EPOCH = "20261127";
+  try{
+    if(localStorage.getItem("isle-board-reset") !== RESET_EPOCH){
+      localStorage.removeItem("isle-board-config-v1");
+      localStorage.removeItem("isle-board-demo-v1");
+      localStorage.setItem("isle-board-reset", RESET_EPOCH);
+    }
+  }catch(e){}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png" />
