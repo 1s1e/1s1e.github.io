@@ -1434,28 +1434,49 @@ html:where(.pg-ref)[data-theme="light"] .thumb.current { box-shadow: none; }
         top: calc(16px + env(safe-area-inset-top, 0px)); bottom: auto;
       }
 
-/* ---------- Secure, /secure/ ---------- */
+/* ---------- Secure, the lock screens ---------- */
+/* One lock form on all three gates of the secure zone: the
+   /secure/ and /secure/status/ shells, whose form is the .box of
+   a pg-secure page, and the permits viewer's gate, whose form is
+   the .lockform of a pg-viewer page. The form rules below are
+   written once, with both scopes named, so the three locks
+   cannot drift apart. The form's rhythm: the lockup alone
+   heads the page and stands with its full clear space below
+   it (three quarters of the mark's height, met by the artwork's
+   own lower transparency and the first label's 34px margin),
+   each label sits 12px above its field, field groups stand 26px
+   apart, the Show control closes the password group, and the
+   button follows at the same 26px group gap, with the error
+   line reserved under it so the form never jumps. */
 html:where(.pg-secure) { --silver:#C0C0C0; }
 :where(html.pg-secure) * { margin:0; padding:0; }
 :where(html.pg-secure) body { color:var(--silver); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-:where(html.pg-secure) .box { width:100%; max-width:340px; text-align:center; }
-:where(html.pg-secure) h1 { font-family:var(--serif); font-weight:500; letter-spacing:.35em; font-size:26px; text-transform:uppercase; }
-:where(html.pg-secure) .rule { height:1px; background:var(--silver); margin:20px 0 26px; }
-:where(html.pg-secure) label { display:block; color:var(--dim-sm); margin-bottom:12px; }
-:where(html.pg-secure) input { width:100%; text-align:center; }
-:where(html.pg-secure) .box .btn { width:100%; margin-top:14px; }
-:where(html.pg-secure) .err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }
+:where(html.pg-secure) .box { width:100%; max-width:340px; text-align:center; transform:translateY(4px); }
+:where(html.pg-secure) .box .logo img, :where(html.pg-viewer) .lockform .logo img { width:100%; height:auto; display:block; }
+:where(html.pg-secure) .box .logo .lg-light, :where(html.pg-viewer) .lockform .logo .lg-light { display:none; }
+html:where(.pg-secure)[data-theme="light"] .box .logo .lg-dark, html:where(.pg-viewer)[data-theme="light"] .lockform .logo .lg-dark { display:none; }
+html:where(.pg-secure)[data-theme="light"] .box .logo .lg-light, html:where(.pg-viewer)[data-theme="light"] .lockform .logo .lg-light { display:block; }
+:where(html.pg-secure) label, :where(html.pg-viewer) .lockform label { display:block; color:var(--dim-sm); margin-bottom:12px; }
+:where(html.pg-secure) .box label, :where(html.pg-viewer) .lockform label { text-align:left; margin-top:26px; }
+:where(html.pg-secure) .box label:first-of-type, :where(html.pg-viewer) .lockform label:first-of-type { margin-top:34px; }
+:where(html.pg-secure) input, :where(html.pg-viewer) .lockform input { width:100%; text-align:center; }
+:where(html.pg-secure) .box .pwrow, :where(html.pg-viewer) .lockform .pwrow { text-align:right; margin-top:8px; }
+:where(html.pg-secure) .box .showpw, :where(html.pg-viewer) .lockform .showpw {
+  font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.06em;
+  color:var(--dim-sm); background:none; border:0; padding:2px 0; cursor:pointer;
+}
+:where(html.pg-secure) .box .showpw:hover, :where(html.pg-viewer) .lockform .showpw:hover { color:var(--ivory-soft); text-decoration:underline; }
+:where(html.pg-secure) .box .btn, :where(html.pg-viewer) .lockform .btn { width:100%; margin-top:26px; }
+:where(html.pg-secure) .err, :where(html.pg-viewer) .lockform .err { margin-top:14px; font-size:13px; color:var(--ivory-soft); min-height:18px; }
 /* Light mode inverts the lock screen by the same exchange as the
-   master sheet: the ground (var(--field)) and the field (Panel to
-   Light Tint) already exchange through the master tokens, the
-   label and error text already exchange through --ivory-dim and
-   --ivory-soft, and the button through the master's .btn. What
-   stands here is only this sheet's own silver ink: in light mode
-   the wordmark and box text take The Isle Navy, and the rule
-   takes the light mode accent, the master's --gold token, which
-   computes to the silver grey of the light palette. */
+   master sheet: the ground and the field (Panel to Light Tint)
+   already exchange through the master tokens, the label and
+   error text already exchange through --dim-sm and --ivory-soft,
+   the button through the master's .btn, and the lockup through
+   the colourway swap above. What stands here is only this
+   sheet's own silver ink: in light mode the box text takes
+   The Isle Navy. */
 html:where(.pg-secure)[data-theme="light"] body { color:#1d2a3b; }
-html:where(.pg-secure)[data-theme="light"] .rule { background:var(--gold); }
 
 /* ---------- The Style page, /style/ ---------- */
 /* The Style page's own rules, scoped to the page. The specimens
@@ -2207,10 +2228,11 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 /* ---------- Permit Documents viewer, /secure/permits/ ---------- */
 /* The viewer's own rules, scoped to the page and moved here from
    its folder exception sheet, one for one, declarations unchanged.
-   The gate's field and button are the master's .field and .btn;
-   what stands here is the layout, the document table and the
-   reader frame. The frame's white ground is a document surface,
-   not a theme colour, and stands as written. */
+   The gate carries the shared lock form of the Secure block
+   above (the form.lockform rules there); what stands here is
+   the gate's place on the page, the layout, the document table
+   and the reader frame. The frame's white ground is a document
+   surface, not a theme colour, and stands as written. */
 :where(html.pg-viewer) body { transition: background 0.4s ease, color 0.4s ease; }
 :where(html.pg-viewer) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
 :where(html.pg-viewer) header { padding: 8svh 0 0 0; text-align: center; }
@@ -2228,12 +2250,18 @@ html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-dark { display: none
 :where(html.pg-viewer) .back:hover { color: var(--gold); }
 :where(html.pg-viewer) .home { display: flex; align-items: center; justify-content: center; color: var(--ivory); background: none; border: none; box-shadow: none; padding: 0; width: 44px; height: 44px; text-decoration: none; margin: 20px auto 0 auto; }
 :where(html.pg-viewer) .home:hover { color: var(--gold); }
-:where(html.pg-viewer) .gate { max-width: 420px; margin: 40px auto 0 auto; text-align: center; }
-:where(html.pg-viewer) .gate label { display: block; font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ivory-dim); margin-bottom: 12px; }
-:where(html.pg-viewer) .gate .field { width: 100%; text-align: center; }
-:where(html.pg-viewer) .gate .btn { margin-top: 16px; }
+:where(html.pg-viewer) .gate { max-width: 340px; margin: 40px auto 0 auto; text-align: center; }
+/* While the page is locked (the content still hidden), the gate
+   is the whole page: it stands centred on the full height, in
+   the same 340px column as the other two locks. Once the page
+   opens, the rule lets go, and a gate shown again (a document
+   that could not be opened) takes its ordinary place in the
+   column. */
+:where(html.pg-viewer) body:has(#content[hidden]) .wrap { padding-bottom: 0; }
+:where(html.pg-viewer) body:has(#content[hidden]) .gate { min-height: 100svh; display: flex; align-items: center; justify-content: center; margin-top: 0; padding: 24px 0; }
+:where(html.pg-viewer) .lockform { width: 100%; }
+:where(html.pg-viewer) body:has(#content[hidden]) .lockform { transform: translateY(4px); }
 :where(html.pg-viewer) .gate .btn:disabled { opacity: 0.5; cursor: wait; }
-:where(html.pg-viewer) .err { color: var(--gold); font-size: 13.5px; margin-top: 14px; min-height: 18px; }
 :where(html.pg-viewer) table.docs { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
 :where(html.pg-viewer) table.docs td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--gold-line); vertical-align: top; line-height: 1.45; }
 :where(html.pg-viewer) td.dn { overflow-wrap: anywhere; }
