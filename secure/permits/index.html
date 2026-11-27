@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
+  <header id="pagehead" hidden>
     <div class="lockup"><img class="mark-dark" src="/assets/mark-dark.png" alt="The Isle"><img class="mark-colour" src="/assets/mark-colour.png" alt="The Isle"></div>
     <span class="eye">The Isle, Secure</span>
     <h1>Permit Documents</h1>
@@ -34,14 +34,20 @@
     <a class="back" href="/build/permits/">Back to Permits &amp; Documents</a>
     <a class="home" href="/build/" aria-label="Project Home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V21h14V9.8"/></svg></a>
   </header>
-  <div class="rule"></div>
+  <div class="rule" id="headrule" hidden></div>
 
   <div class="gate" id="gate">
-    <form id="gateform">
-      <label for="pw">House password</label>
+    <form class="lockform" id="gateform">
+      <div class="logo">
+        <img class="lg-dark" src="/assets/the-isle-vertical-silver-colourtree.png" alt="The Isle">
+        <img class="lg-light" src="/assets/mark-colour.png" alt="The Isle">
+      </div>
+      <label for="u" class="t-label">Username</label>
+      <input id="u" class="field" type="text" autocomplete="username">
+      <label for="pw" class="t-label">Password</label>
       <input type="password" id="pw" class="field" autocomplete="current-password" required>
-      <br>
-      <button type="submit" id="unlock" class="btn on">Unlock</button>
+      <div class="pwrow"><button type="button" class="showpw" id="showpw" aria-pressed="false">Show</button></div>
+      <button type="submit" id="unlock" class="btn">Open</button>
       <p class="err" id="err"></p>
     </form>
   </div>
@@ -54,7 +60,7 @@
     </div>
   </main>
 
-  <footer>
+  <footer id="pagefoot" hidden>
     <div class="dom">1s1e.com</div>
     <button type="button" class="switch" id="themeSwitch" role="switch" aria-checked="true" aria-label="Dark mode" data-mode="dark"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
   </footer>
@@ -70,6 +76,9 @@
   var vframe = document.getElementById('vframe');
   var vname = document.getElementById('vname');
   var vopen = document.getElementById('vopen');
+  var pagehead = document.getElementById('pagehead');
+  var headrule = document.getElementById('headrule');
+  var pagefoot = document.getElementById('pagefoot');
   var manifest = null, key = null, byId = {}, cache = {};
 
   function b64ToBytes(b64) {
@@ -138,7 +147,7 @@
   }
   document.getElementById('gateform').addEventListener('submit', function (ev) {
     ev.preventDefault();
-    err.textContent = ''; btn.disabled = true; btn.textContent = 'Unlocking';
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Opening';
     var pw = document.getElementById('pw').value;
     fetchText('manifest.json').then(function (txt) {
       manifest = JSON.parse(txt);
@@ -157,13 +166,25 @@
     }).then(function (buf) {
       if (new TextDecoder().decode(buf) !== 'ISLE-PERMITS-OK') throw new Error('check');
       gate.hidden = true; content.hidden = false;
+      pagehead.hidden = false; headrule.hidden = false; pagefoot.hidden = false;
       buildLists();
     }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Unlock';
+      btn.disabled = false; btn.textContent = 'Open';
       err.textContent = 'That password did not open the documents. Please try again.';
     });
   });
 })();
+</script>
+<script>
+  var pw = document.getElementById('pw');
+  var tg = document.getElementById('showpw');
+  tg.addEventListener('click', function () {
+    var show = pw.type === 'password';
+    pw.type = show ? 'text' : 'password';
+    tg.textContent = show ? 'Hide' : 'Show';
+    tg.setAttribute('aria-pressed', show ? 'true' : 'false');
+    pw.focus();
+  });
 </script>
 <script>
   (function () {
