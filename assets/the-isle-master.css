@@ -720,11 +720,13 @@ html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; 
 /* ---------- Reference Catalogues, /ref/ ---------- */
 /* The section's own values, keyed as the master sheet keys
          its modes: dark at :root, light under [data-theme="light"].
-         The constant silvers serve the bands that invert and the
-         ornaments, at Page Silver, the step for light grounds, in
-         light; the Reader's bars and stage stand on navy in both
-         modes and keep The Isle Silver in both, by the block at
-         the inversion below. The soft ink pairs Soft Ink on light
+         The constant silvers serve the hero, the footer and the
+         ornaments: on those navy grounds they stay The Isle Silver
+         in both modes, by the block below, and their Page Silver
+         steps serve the light grounds of the body. The Reader's
+         bars and stage stand on navy in both modes and keep The
+         Isle Silver in both, by the same block. The soft ink pairs
+         Soft Ink on light
          with Ivory Dim on dark, as this page has always set its
          secondary text; the shadows are the covers' and pages'
          own. */
@@ -882,23 +884,8 @@ html:where(.pg-ref) { scroll-behavior: smooth; touch-action: manipulation; -webk
 :where(html.pg-ref) .trio .t-pages { display: block; font-size: 13.5px; color: #a89f88; margin-top: 3px; }
 :where(html.pg-ref) .hero-note { margin: 46px auto 0; font-size: 13.5px; color: #a89f88; letter-spacing: 0.04em; }
 :where(html.pg-ref) .hero-dl { margin: 24px auto 0; display: flex; justify-content: center; }
-/* The hero download is the master sheet's .btn in its secondary form.
-         In light mode the hero band inverts to ivory (the inversion block
-         below), so the download mirrors its dark form instead of keeping
-         the dark ground colour: transparent, with the light step at its
-         border, which the master sheet's --gold-bright already carries,
-         and at its label, set here. The Option B hero fix, which held
-         the label at The Isle Silver on the navy band, is not needed
-         once the band inverts and is replaced by this rule. */
-html:where(.pg-ref)[data-theme="light"] .hero-dl .btn { color: #686868; }
-/* On hover the master sheet fills the button with the accent and
-         sets The Isle Ivory as its label, but the label rule above
-         outranks the master sheet's hover colour, which would leave
-         the light step standing on its own fill. The mirrored form
-         therefore states the master sheet's light hover pairing
-         itself: the accent fill, which the master sheet supplies,
-         with The Isle Ivory text. */
-html:where(.pg-ref)[data-theme="light"] .hero-dl .btn:hover, html:where(.pg-ref)[data-theme="light"] .hero-dl .btn:focus-visible { color: #f0e8d5; }
+/* The hero download is the master sheet's .btn in its secondary form,
+         in the same form on the navy hero in both modes. */
 /* ---------- volume sections ---------- */
 :where(html.pg-ref) .vol { padding: 76px 20px 84px; }
 :where(html.pg-ref) .vol.tint { background: var(--raise); }
@@ -1080,54 +1067,23 @@ html:where(.pg-ref)[data-theme="light"] .hero-dl .btn:hover, html:where(.pg-ref)
       }
 :where(html.pg-ref) footer .f-line { width: min(880px, 90%); height: 1px; background: rgba(192, 192, 192, 0.35); margin: 30px auto 0; }
 :where(html.pg-ref) footer p { margin: 18px auto 0; max-width: 560px; font-size: 14px; line-height: 1.65; color: #a89f88; }
-/* ---------- light mode: the inversion ----------
-         In light mode the two grounds that otherwise stay navy, the
-         hero band and the footer, invert: ground and ink exchange
-         places and every element on them takes its mirrored
-         counterpart, so the light page is the dark page turned over,
-         not a different page. The hero's ground becomes The Isle
-         Ivory easing to Light Tint, as the dark hero eases from navy
-         to Deep; its wordmark swaps to the navy artwork at the same
-         geometry; its intro and note take Soft Ink, as Ivory Soft
-         and Ivory Dim stand on the dark band; the stats figures take
-         navy, their labels, rules and dividers the light step at the
-         dark band's own alphas; the trio's names take navy and their
-         page lines Soft Ink. The footer's ground becomes Light Tint,
-         its one-image lockup swaps to the colour artwork, navy where
-         the white stands on Deep, its imprint and rule take the light
-         step (the imprint through --gold-const-bright, the rule at
-         the dark rule's own alpha), and its text takes Soft Ink. The
-         Reader's bars and stage keep their navy in both modes, as
-         they do today, and the switch keeps its Deep pill in both. */
-html:where(.pg-ref)[data-theme="light"] .hero {
-        background: #f0e8d5;
-        background-image: linear-gradient(180deg, #f0e8d5 0%, #f3eee0 100%);
-        color: #1d2a3b;
+/* ---------- light mode: the navy grounds stand ----------
+         The hero and the footer stand on navy in both modes and keep
+         their dark form entire in light mode: the hero its navy
+         gradient and cream wordmark, the footer its Deep ground and
+         white one-image lockup. The constants that serve those two
+         grounds therefore stay The Isle Silver in light mode too,
+         while their Page Silver steps serve the light grounds of
+         the body between them. */
+html:where(.pg-ref)[data-theme="light"] .hero, html:where(.pg-ref)[data-theme="light"] footer {
+        --ivory: #f0e8d5;
+        --gold-const: #C0C0C0;
+        --gold-const-bright: #C0C0C0;
+        --gold: #C0C0C0;
+        --gold-bright: #C0C0C0;
+        --gold-line: rgba(192, 192, 192, 0.30);
+        --gold-line-soft: rgba(192, 192, 192, 0.16);
       }
-html:where(.pg-ref)[data-theme="light"] .hero-intro { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] .hero-note { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] .stats {
-        border-top-color: rgba(104, 104, 104, 0.35);
-        border-bottom-color: rgba(104, 104, 104, 0.35);
-      }
-html:where(.pg-ref)[data-theme="light"] .stat + .stat { border-left-color: rgba(104, 104, 104, 0.22); }
-html:where(.pg-ref)[data-theme="light"] .stat b { color: #1d2a3b; }
-html:where(.pg-ref)[data-theme="light"] .trio .t-name { color: #1d2a3b; }
-html:where(.pg-ref)[data-theme="light"] .trio .t-pages { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] .trio img { outline-color: rgba(104, 104, 104, 0.4); }
-html:where(.pg-ref)[data-theme="light"] .hero .dl-fail { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] footer { background: #f3eee0; color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] footer p:not(.f-imprint) { color: #3c4763; }
-html:where(.pg-ref)[data-theme="light"] footer .f-line { background: rgba(104, 104, 104, 0.35); }
-/* The wordmark and lockup swaps: each band carries both artworks
-         and shows the one its ground calls for. The hidden artwork is
-         display none, so dark mode renders exactly as it did. */
-html:where(.pg-ref) .hero h1 .hero-wordmark.navy { display: none; }
-html:where(.pg-ref)[data-theme="light"] .hero h1 .hero-wordmark.cream { display: none; }
-html:where(.pg-ref)[data-theme="light"] .hero h1 .hero-wordmark.navy { display: block; }
-html:where(.pg-ref) footer .f-title-row .f-one.colour { display: none; }
-html:where(.pg-ref)[data-theme="light"] footer .f-title-row .f-one.white { display: none; }
-html:where(.pg-ref)[data-theme="light"] footer .f-title-row .f-one.colour { display: block; }
 /* The Reader's bars and stage do not invert: the topbar, the
          full size bar and the stage surround stand on Deep in both
          modes, as imagery grounds. The accent follows the ground,
