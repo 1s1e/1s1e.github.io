@@ -3456,6 +3456,21 @@ function simHHMM(ms){
   var d = new Date(ms);
   return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
 }
+/* The remark ladder itself, one definition shared by the simulation
+   and by composed boards (see the evolution block below): CANCELLED
+   before everything; beyond 40 minutes out, DELAYED for a delayed
+   flight and ON TIME otherwise; BOARDING inside 40; FINAL CALL
+   inside 15; DEPARTED from the departure time. In the simulation a
+   flight leaves the board ten minutes after its time; a composed
+   line stays on its board, and its clock rolls to the next day's
+   departure at that same ten minute mark. */
+function simLadder(delta, delayed, cancelled){
+  if(cancelled) return "CANCELLED";
+  if(delta > 40 * 60000) return delayed ? "DELAYED" : "ON TIME";
+  if(delta > 15 * 60000) return "BOARDING";
+  if(delta > 0) return "FINAL CALL";
+  return "DEPARTED";
+}
 function simFlightsFor(b, nowMs){
   var now = new Date(nowMs);
   var found = [];
@@ -3466,12 +3481,7 @@ function simFlightsFor(b, nowMs){
       var depAbs = dayStart + f.depMin * 60000;
       var delta = depAbs - nowMs;
       if(delta <= -10 * 60000 || delta > 3 * 3600000) return;
-      var remarks;
-      if(f.cancelled) remarks = "CANCELLED";
-      else if(delta > 40 * 60000) remarks = f.delayed ? "DELAYED" : "ON TIME";
-      else if(delta > 15 * 60000) remarks = "BOARDING";
-      else if(delta > 0) remarks = "FINAL CALL";
-      else remarks = "DEPARTED";
+      var remarks = simLadder(delta, f.delayed, f.cancelled);
       found.push({ depAbs: depAbs, row: { time: simHHMM(depAbs), destination: f.dest,
         flight: f.flight, gate: f.gate, remarks: remarks, black: false } });
     });
@@ -3485,10 +3495,70 @@ function simSignature(b, nowMs){
   }).join("|");
 }
 /* ================= end simulation ================= */
+/* ================= Composed remark evolution =================
+   A composed departures or arrivals board (stored timed lines, not
+   the simulation, not a live-feed board, not the tracked board)
+   derives each timed line's remark from the wall clock by time to
+   departure, through the simulation's own ladder (simLadder above),
+   so the board lives and flips through the day. The stored remark
+   carries the flight's character into the ladder: a line stored
+   CANCELLED stays CANCELLED, a line stored DELAYED is the ladder's
+   delayed flight, and any other ladder status (ON TIME, BOARDING,
+   FINAL CALL, DEPARTED, and for arrivals EXPECTED and LANDED) is an
+   on-time flight whose remark the clock now speaks for. A timed
+   line whose stored remark is none of those words is written text,
+   not a status, and keeps it; a line without a parseable time keeps
+   its stored remark untouched. The line's time is read as a daily
+   time: once a departure is ten minutes past, the next one is
+   tomorrow's, exactly where the simulation's DEPARTED window ends,
+   so after the last threshold the remark returns to the top of the
+   ladder for the next day. Arrivals speak their own standing words
+   over the same clock: EXPECTED while an on-time arrival is still
+   to come, DELAYED while a delayed one is, and LANDED in the
+   DEPARTED slot, from the arrival time through the same ten
+   minutes. The evolution is computed at render and on the 30 second
+   signature tick; stored board data is never rewritten. */
+function ladderRemarkFor(f, kind, nowMs){
+  var m = /^(\d{1,2}):(\d{2})$/.exec(String(f.time || "").trim());
+  if(!m) return null;
+  var stored = String(f.remarks || "").toUpperCase();
+  var delayed = stored.indexOf("DELAYED") === 0;
+  var cancelled = stored.indexOf("CANCELLED") === 0;
+  if(!cancelled && !delayed
+     && ["", "ON TIME", "BOARDING", "FINAL CALL", "DEPARTED", "EXPECTED", "LANDED"].indexOf(stored) < 0)
+    return null;
+  var now = new Date(nowMs);
+  var dep = new Date(now.getFullYear(), now.getMonth(), now.getDate(), +m[1], +m[2]).getTime();
+  if(nowMs - dep > 10 * 60000) dep += 24 * 3600000;
+  var delta = dep - nowMs;
+  if(cancelled) return "CANCELLED";
+  if(kind === "arrivals"){
+    if(delta <= 0) return "LANDED";
+    return delayed ? "DELAYED" : "EXPECTED";
+  }
+  return simLadder(delta, delayed, false);
+}
+function evolveFlights(b, rows, nowMs){
+  if(!b || b.simulation || b.id === "board-tracked") return rows;
+  var kind = b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
+  if(kind !== "departures" && kind !== "arrivals") return rows;
+  return rows.map(function(f){
+    if(!f || f.black) return f;
+    var r = ladderRemarkFor(f, kind, nowMs);
+    if(r === null || r === f.remarks) return f;
+    var c = {}; for(var k in f) c[k] = f[k]; c.remarks = r; return c;
+  });
+}
+function composedSignature(b, nowMs){
+  return evolveFlights(b, (b && b.flights) || [], nowMs).map(function(f){
+    return (f.black ? "#" : "") + f.time + " " + f.destination + " " + f.flight + " " + f.gate + " " + f.remarks;
+  }).join("|");
+}
+/* ================= end composed remark evolution ================= */
 function pvEffFlights(b){
   if(b && b.simulation) return simFlightsFor(b, Date.now());
   if(b && b.id === "board-tracked") return pvTrackedFlights(b);
-  return (b && b.flights) || [];
+  return evolveFlights(b, (b && b.flights) || [], Date.now());
 }
 
 /* ---- Markets: Yahoo chart feed (Alpaca slot: see the layer note) ---- */
@@ -3754,14 +3824,27 @@ function pvRefreshLive(){
 pvRefreshLive();
 setInterval(pvRefreshLive, 10 * 60 * 1000);
 /* The preview of a simulation board follows the same 30 second
-   signature check the display page runs. */
+   signature check the display page runs. A composed board's remarks
+   are covered the same way, so the preview stays truthful to the
+   display page: its renderer flips only the tiles whose target has
+   moved, so a remark change flips only the remark tiles. */
 setInterval(function(){
   var b = board();
   if(b && b.simulation){
     var sig = simSignature(b, Date.now());
     if(PV_LIVE.sigSim === undefined){ PV_LIVE.sigSim = sig; }
     else if(sig !== PV_LIVE.sigSim){ PV_LIVE.sigSim = sig; pvQueueRender(); }
+    return;
   }
+  if(!b || b.id === "board-tracked" || b.type === "colour" || pvIsText(b)) return;
+  var csig = composedSignature(b, Date.now());
+  if(PV_LIVE.sigComp === undefined){
+    /* First check, as on the display page: store and render, so a
+       threshold that crossed during the opening cascade is caught
+       up; the preview renderer moves only tiles whose target moved. */
+    PV_LIVE.sigComp = csig; pvQueueRender();
+  }
+  else if(csig !== PV_LIVE.sigComp){ PV_LIVE.sigComp = csig; pvQueueRender(); }
 }, 30000);
 function pvEsc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 function pvCleanRaw(text){

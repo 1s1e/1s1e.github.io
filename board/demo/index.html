@@ -2434,6 +2434,122 @@ function renderBoard(cascade){
   renderLamp();
 }
 
+/* ============ Remark evolution: the tick's hands ============
+   When the 30 second check finds a composed board's remarks have
+   moved, only the changed lines' remarks move on the board. On the
+   Isle layout that is the remark column's tiles, flipped with the
+   clack through the same job machinery renderBoard runs (same ring,
+   same delays, same thinning, same generation guard, same quiet
+   hours discipline: the tiles still turn in quiet hours, they just
+   make no sound, exactly as a cascade there is silent). The styled
+   styles carry remarks as text, not tiles; theirs are updated in
+   place by updateStyledRemarks, which is what their own builders do
+   with remark text at build. Gallery's composition carries no
+   remarks at all, and the Flap Pix caption is re-read. */
+function applyRemarkChange(){
+  var st = boardStyle();
+  if(board.type === "colour") return;
+  if(st === "flappix"){ showPixCap(); return; }
+  if(st === "isle"){ flipRemarkTiles(); return; }
+  if(st === "gallery") return;
+  updateStyledRemarks();
+}
+function flipRemarkTiles(){
+  var ci = -1;
+  COLS.forEach(function(c, i){ if(c.key === "remarks") ci = i; });
+  if(ci < 0 || !tileGrid.length) return;
+  var count = boardRows();
+  var fl = pageSlice(effFlights(), count);
+  var width = COLS[ci].width, jobs = [], r, k;
+  for(r = 0; r < count; r++){
+    var f = fl[r] || null;
+    if(!f || f.black || !tileGrid[r] || !tileGrid[r][ci]) continue;
+    var target = clean(f.remarks, width);
+    target = (target + " ".repeat(width)).slice(0, width);
+    var shown = "";
+    for(k = 0; k < width; k++) shown += tileGrid[r][ci][k].dataset.ch || " ";
+    if(shown === target) continue;
+    var hot = /FINAL|DELAY|CANCEL/.test(f.remarks || "");
+    for(k = 0; k < width; k++){
+      var tile = tileGrid[r][ci][k];
+      tile.classList.toggle("hot", hot);
+      var from = tile.dataset.ch || " ";
+      var steps = (ringIdx(target[k]) - ringIdx(from) + RING.length) % RING.length;
+      jobs.push({ tile: tile, from: from, to: target[k], steps: steps,
+                  delay: r * 55 + ci * 130 + k * 26 + Math.random() * 22, silent: false });
+    }
+  }
+  if(!jobs.length) return;
+  var totalSteps = 0; jobs.forEach(function(j){ totalSteps += j.steps; });
+  if(totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
+  var quiet = inQuietHours();
+  jobs.forEach(function(j){
+    /* Generation guard, as in renderBoard: a newer render supersedes
+       this tile's older jobs. */
+    var gen = (j.tile._flipGen = (j.tile._flipGen || 0) + 1);
+    if(j.steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
+    var thinning = Math.min(0.92, 0.25 + totalSteps / 260);
+    setTimeout(function(){
+      if(j.tile._flipGen !== gen) return;
+      var pos = ringIdx(j.from), remaining = j.steps;
+      var iv = setInterval(function(){
+        if(j.tile._flipGen !== gen){ clearInterval(iv); return; }
+        pos = (pos + 1) % RING.length;
+        var ch = RING[pos];
+        j.tile.textContent = ch;
+        j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
+        if(!quiet && Math.random() > thinning) playStep();
+        if(--remaining <= 0){
+          clearInterval(iv);
+          j.tile.dataset.ch = j.to;
+          j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
+          if(!quiet) playFlap();
+        }
+      }, STEP_MS);
+    }, j.delay);
+  });
+}
+/* The styled styles' remark text, updated in place: each builder
+   registers its remark elements in styledState.remSpots with the
+   row's index into stRows(), whose order is the stored order and
+   does not move. Dator's remarks live inside its composed ticker
+   line; its builder leaves a refresh that re-composes that line and
+   flips its changed tiles through stFlipTiles. */
+function updateStyledRemarks(){
+  if(styledState.style === "dator"){
+    if(styledState.dTickerRefresh) styledState.dTickerRefresh();
+    return;
+  }
+  var spots = styledState.remSpots || [];
+  if(!spots.length) return;
+  var rows = stRows();
+  spots.forEach(function(sp){
+    var f = rows[sp.idx]; if(!f) return;
+    if(sp.kind === "clipper"){
+      sp.el.textContent = f.black ? "" : f.remarks;
+      sp.el.className = "c-rem" + (f.remarks === "FINAL CALL" ? " final" : (!f.remarks || f.remarks === "ON TIME" ? " quiet" : ""));
+    } else if(sp.kind === "patapata"){
+      sp.el.textContent = f.black ? "" : f.remarks;
+      sp.el.className = "p-status" + ((f.remarks === "BOARDING" || f.remarks === "FINAL CALL") ? " alert" : "");
+    } else if(sp.kind === "projekt"){
+      sp.rem.textContent = (f.black || isTextBoard()) ? "" : remarkDe(f.remarks);
+      var strong = ["BOARDING", "FINAL CALL"].indexOf(f.remarks) >= 0 || f.remarks.indexOf("DELAYED") === 0;
+      sp.rem.className = "j-rem" + (strong ? " strong" : "");
+      if(sp.pic && !f.black && (f.time || f.destination)){
+        var kind2 = f.remarks.indexOf("DELAYED") === 0 ? "clock" : (f.remarks === "GATE OPEN" ? "gate" : "takeoff");
+        var old = sp.pic.firstChild;
+        var w = old ? old.style.width : "", h = old ? old.style.height : "";
+        sp.pic.innerHTML = PIC[kind2];
+        var svg = sp.pic.firstChild;
+        if(svg){
+          if(w){ svg.style.width = w; svg.style.height = h; }
+          if(boardKind() === "arrivals" && f.remarks === "LANDED") svg.style.transform = "rotate(28deg)";
+        }
+      }
+    }
+  });
+}
+
 /* ============ Board styles: renderers ============ */
 var styledEl = document.getElementById("styled");
 var pixcapEl = document.getElementById("pixcap");
@@ -2503,6 +2619,8 @@ function showStyled(st, cascade){
   styledEl.innerHTML = "";
   document.body.style.background = "";
   styledState.style = st;
+  styledState.remSpots = [];
+  styledState.dTickerRefresh = null;
   if(st === "gallery") buildGallery(W, H, cascade);
   else if(st === "clipper") buildClipper(W, H, cascade);
   else if(st === "patapata") buildPatapata(W, H, cascade);
@@ -2850,6 +2968,7 @@ function buildClipper(W, H, cascade){
   if(data.length > banks.length){
     rowGapExtra = Math.max(0, H - fixedH - data.length * tileH) / (data.length - banks.length);
   }
+  var rowAbs = stPageOff;
   banks.forEach(function(bank, bi){
     var bk = stEl("div", "c-bank", main);
     bk.style.marginTop = (H * 0.016) + "px"; bk.style.paddingTop = bi ? (H * 0.012) + "px" : "0";
@@ -2862,6 +2981,7 @@ function buildClipper(W, H, cascade){
     stEl("span", "", heads, "CLIPPER");
     var bankDelay = cascade ? bi * (longest * 55 + 600) : 0;
     bank.forEach(function(f, ri){
+      var abs = rowAbs++;
       var row = stEl("div", "c-row", bk);
       row.style.marginTop = (H * 0.006 + (ri ? rowGapExtra : 0)) + "px";
       var tc = stEl("div", "c-timecell", row, f.black ? "" : f.time);
@@ -2882,6 +3002,7 @@ function buildClipper(W, H, cascade){
       cn.style.marginLeft = (W * 0.014) + "px"; cn.style.fontSize = (tileH * 0.40) + "px";
       var rm = stEl("div", "c-rem" + (f.remarks === "FINAL CALL" ? " final" : (!f.remarks || f.remarks === "ON TIME" ? " quiet" : "")), row, f.black ? "" : f.remarks);
       rm.style.marginLeft = "auto"; rm.style.fontSize = (tileH * 0.38) + "px";
+      if(!f.blank) styledState.remSpots.push({ kind: "clipper", el: rm, idx: abs });
     });
   });
   if(cascade && contentRows >= 4) duck(1400);
@@ -2945,6 +3066,7 @@ function buildPatapata(W, H, cascade){
     destEls.push(dest);
     var st = stEl("div", "p-status" + ((f.remarks === "BOARDING" || f.remarks === "FINAL CALL") ? " alert" : ""), row, f.black ? "" : f.remarks);
     st.style.width = statusW + "px"; st.style.marginLeft = (W * 0.018) + "px"; st.style.fontSize = (rowH * 0.20) + "px";
+    styledState.remSpots.push({ kind: "patapata", el: st, idx: stPageOff + ri });
     if(cascade){ dest.classList.add("flip"); dest.style.animationDelay = (ri * 90) + "ms"; }
   });
   styledState.pDest = destEls; styledState.pPhase = 0;
@@ -3089,6 +3211,35 @@ function buildDator(W, H, cascade){
     if(cascade) tjobs.push({ el: tt, to: ch2, delay: 300 + ci * 18 });
   }
   if(cascade && tjobs.length){ stFlipTiles(tjobs, { stepMs: 60, sound: true }); duck(1200); }
+  /* Remark evolution reaches Dator through this ticker line alone:
+     the refresh re-composes the line from the current rows exactly
+     as the build composed it, and flips only its changed tiles
+     through stFlipTiles. The line is held to the built tile count,
+     padded with blanks, so the foot never changes size. */
+  styledState.dTickerRefresh = function(){
+    var n = trow.children.length;
+    if(!n) return;
+    var d2 = stRows().filter(function(f){ return !f.black && (f.time || f.destination); });
+    var g1 = d2[0], g2 = d2[1];
+    var l2 = "", aF = -1, aT = -1;
+    if(g1 && g1.time){
+      l2 = "NEXT DEPARTURE " + g1.time + " · " + g1.destination + " · ";
+      aF = l2.length; l2 += g1.remarks; aT = l2.length;
+    } else if(g1) l2 = g1.destination;
+    else l2 = (board.name || "THE ISLE").toUpperCase();
+    l2 = cleanRaw(l2); aT = Math.min(aT, l2.length);
+    var r2 = (g2 && g2.time) ? cleanRaw("THEN " + g2.time + " · " + g2.destination + " · " + g2.remarks) : "";
+    var ln2 = l2.slice(0, n);
+    if(r2 && ln2.length + 2 + r2.length <= n) ln2 = ln2 + " ".repeat(n - ln2.length - r2.length) + r2;
+    ln2 = (ln2 + " ".repeat(n)).slice(0, n);
+    var jobs2 = [];
+    for(var i2 = 0; i2 < n; i2++){
+      var el2 = trow.children[i2], ch3 = ln2[i2];
+      el2.className = "d-tile" + (ch3 === " " ? " dim" : "") + (i2 >= aF && i2 < aT ? " amb" : "");
+      if((el2.dataset.ch || " ") !== ch3) jobs2.push({ el: el2, to: ch3, delay: i2 * 18 });
+    }
+    if(jobs2.length) stFlipTiles(jobs2, { stepMs: 60, sound: true });
+  };
 }
 
 /* ---------- J Projekt 1400 ---------- */
@@ -3171,7 +3322,8 @@ function buildProjekt(W, H, cascade){
       if(boardKind() === "arrivals" && f.remarks === "LANDED") svg.style.transform = "rotate(28deg)";
     }
     var strong = ["BOARDING", "FINAL CALL"].indexOf(f.remarks) >= 0 || f.remarks.indexOf("DELAYED") === 0;
-    stEl("span", "j-rem" + (strong ? " strong" : ""), row, (f.black || isTextBoard()) ? "" : remarkDe(f.remarks));
+    var remEl = stEl("span", "j-rem" + (strong ? " strong" : ""), row, (f.black || isTextBoard()) ? "" : remarkDe(f.remarks));
+    if(data[ri]) styledState.remSpots.push({ kind: "projekt", rem: remEl, pic: pic, idx: stPageOff + ri });
     if(cascade){
       row.classList.add("flip"); row.style.animationDelay = (ri * 120) + "ms";
       if(!inQuietHours()) stTimeout(function(){ playStep(); }, ri * 120);
@@ -3790,6 +3942,21 @@ function simHHMM(ms){
   var d = new Date(ms);
   return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
 }
+/* The remark ladder itself, one definition shared by the simulation
+   and by composed boards (see the evolution block below): CANCELLED
+   before everything; beyond 40 minutes out, DELAYED for a delayed
+   flight and ON TIME otherwise; BOARDING inside 40; FINAL CALL
+   inside 15; DEPARTED from the departure time. In the simulation a
+   flight leaves the board ten minutes after its time; a composed
+   line stays on its board, and its clock rolls to the next day's
+   departure at that same ten minute mark. */
+function simLadder(delta, delayed, cancelled){
+  if(cancelled) return "CANCELLED";
+  if(delta > 40 * 60000) return delayed ? "DELAYED" : "ON TIME";
+  if(delta > 15 * 60000) return "BOARDING";
+  if(delta > 0) return "FINAL CALL";
+  return "DEPARTED";
+}
 function simFlightsFor(b, nowMs){
   var now = new Date(nowMs);
   var found = [];
@@ -3800,12 +3967,7 @@ function simFlightsFor(b, nowMs){
       var depAbs = dayStart + f.depMin * 60000;
       var delta = depAbs - nowMs;
       if(delta <= -10 * 60000 || delta > 3 * 3600000) return;
-      var remarks;
-      if(f.cancelled) remarks = "CANCELLED";
-      else if(delta > 40 * 60000) remarks = f.delayed ? "DELAYED" : "ON TIME";
-      else if(delta > 15 * 60000) remarks = "BOARDING";
-      else if(delta > 0) remarks = "FINAL CALL";
-      else remarks = "DEPARTED";
+      var remarks = simLadder(delta, f.delayed, f.cancelled);
       found.push({ depAbs: depAbs, row: { time: simHHMM(depAbs), destination: f.dest,
         flight: f.flight, gate: f.gate, remarks: remarks, black: false } });
     });
@@ -3819,10 +3981,70 @@ function simSignature(b, nowMs){
   }).join("|");
 }
 /* ================= end simulation ================= */
+/* ================= Composed remark evolution =================
+   A composed departures or arrivals board (stored timed lines, not
+   the simulation, not a live-feed board, not the tracked board)
+   derives each timed line's remark from the wall clock by time to
+   departure, through the simulation's own ladder (simLadder above),
+   so the board lives and flips through the day. The stored remark
+   carries the flight's character into the ladder: a line stored
+   CANCELLED stays CANCELLED, a line stored DELAYED is the ladder's
+   delayed flight, and any other ladder status (ON TIME, BOARDING,
+   FINAL CALL, DEPARTED, and for arrivals EXPECTED and LANDED) is an
+   on-time flight whose remark the clock now speaks for. A timed
+   line whose stored remark is none of those words is written text,
+   not a status, and keeps it; a line without a parseable time keeps
+   its stored remark untouched. The line's time is read as a daily
+   time: once a departure is ten minutes past, the next one is
+   tomorrow's, exactly where the simulation's DEPARTED window ends,
+   so after the last threshold the remark returns to the top of the
+   ladder for the next day. Arrivals speak their own standing words
+   over the same clock: EXPECTED while an on-time arrival is still
+   to come, DELAYED while a delayed one is, and LANDED in the
+   DEPARTED slot, from the arrival time through the same ten
+   minutes. The evolution is computed at render and on the 30 second
+   signature tick; stored board data is never rewritten. */
+function ladderRemarkFor(f, kind, nowMs){
+  var m = /^(\d{1,2}):(\d{2})$/.exec(String(f.time || "").trim());
+  if(!m) return null;
+  var stored = String(f.remarks || "").toUpperCase();
+  var delayed = stored.indexOf("DELAYED") === 0;
+  var cancelled = stored.indexOf("CANCELLED") === 0;
+  if(!cancelled && !delayed
+     && ["", "ON TIME", "BOARDING", "FINAL CALL", "DEPARTED", "EXPECTED", "LANDED"].indexOf(stored) < 0)
+    return null;
+  var now = new Date(nowMs);
+  var dep = new Date(now.getFullYear(), now.getMonth(), now.getDate(), +m[1], +m[2]).getTime();
+  if(nowMs - dep > 10 * 60000) dep += 24 * 3600000;
+  var delta = dep - nowMs;
+  if(cancelled) return "CANCELLED";
+  if(kind === "arrivals"){
+    if(delta <= 0) return "LANDED";
+    return delayed ? "DELAYED" : "EXPECTED";
+  }
+  return simLadder(delta, delayed, false);
+}
+function evolveFlights(b, rows, nowMs){
+  if(!b || b.simulation || b.id === "board-tracked") return rows;
+  var kind = b.kind || (b.shows === "arrivals" ? "arrivals" : "departures");
+  if(kind !== "departures" && kind !== "arrivals") return rows;
+  return rows.map(function(f){
+    if(!f || f.black) return f;
+    var r = ladderRemarkFor(f, kind, nowMs);
+    if(r === null || r === f.remarks) return f;
+    var c = {}; for(var k in f) c[k] = f[k]; c.remarks = r; return c;
+  });
+}
+function composedSignature(b, nowMs){
+  return evolveFlights(b, (b && b.flights) || [], nowMs).map(function(f){
+    return (f.black ? "#" : "") + f.time + " " + f.destination + " " + f.flight + " " + f.gate + " " + f.remarks;
+  }).join("|");
+}
+/* ================= end composed remark evolution ================= */
 function effFlights(){
   if(board && board.simulation) return simFlightsFor(board, Date.now());
   if(board && board.id === "board-tracked") return trackedFlights(board);
-  return board.flights || [];
+  return evolveFlights(board, (board && board.flights) || [], Date.now());
 }
 
 /* ---- Markets: Yahoo chart feed (Alpaca slot: see the layer note) ---- */
@@ -4080,13 +4302,28 @@ refreshLive();
 setInterval(refreshLive, 10 * 60 * 1000);
 /* A simulation board changes on its own clock, far oftener than the
    ten minute feed cycle: check its signature every 30 seconds and
-   cascade only when the generated board has actually moved. */
+   cascade only when the generated board has actually moved. A
+   composed board's remarks move on the same clock (see the evolution
+   block): the same 30 second check watches its composed signature,
+   and a change there flips only the changed lines' remark tiles
+   through applyRemarkChange, never a full re-cascade. */
 setInterval(function(){
   if(board && board.simulation){
     var sig = simSignature(board, Date.now());
     if(LIVE.sigSim === undefined){ LIVE.sigSim = sig; }
     else if(sig !== LIVE.sigSim){ LIVE.sigSim = sig; renderBoard(true); }
+    return;
   }
+  if(!board || board.id === "board-tracked" || board.type === "colour" || isTextBoard()) return;
+  var csig = composedSignature(board, Date.now());
+  if(LIVE.sigComp === undefined){
+    /* First check on this board: a threshold may have crossed while
+       the opening cascade was still running, after the render read
+       the remarks. Apply as well as store, so the board catches up;
+       applyRemarkChange moves nothing whose tiles already match. */
+    LIVE.sigComp = csig; applyRemarkChange();
+  }
+  else if(csig !== LIVE.sigComp){ LIVE.sigComp = csig; applyRemarkChange(); }
 }, 30000);
 function tickClock(){
   var d = new Date();
