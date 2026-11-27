@@ -262,7 +262,7 @@
   .pvst-gallery .g-clock{ text-align:right; }
   .pvst-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1; }
   .pvst-gallery .g-clock .l{ letter-spacing:.26em; color:#7a7261; font-weight:600; }
-  .pvst-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); border:1px solid #2c2c2c; border-radius:6px; box-shadow:0 14px 28px -12px rgba(30,25,15,.45); margin:0 auto; }
+  .pvst-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); margin:0 auto; }
   .pvst-gallery .g-grid{ display:grid; }
   .pvst-gallery .g-tile{ background:linear-gradient(180deg,#262624 0%,#1b1b1a 49%,#141413 50%,#1e1e1d 100%); color:#f2efe3; font-family:Archivo,"Helvetica Neue",sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:2px; width:100%; height:100%; }
   .pvst-gallery .g-foot{ display:flex; align-items:center; justify-content:space-between; color:#8f887a; letter-spacing:.24em; font-weight:600; }
@@ -4192,7 +4192,7 @@ function pvBuildGallery(b, W, H){
   tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
   var tileH = tileW * 1.717;
   var panel = pvStEl("div", "g-board", root);
-  panel.style.padding = Math.round(tileW * 0.55) + "px";
+  panel.style.padding = (Math.round(tileW * 0.55) + 1) + "px"; /* +1: the removed panel border's thickness, so the panel's size and the grid's position are unchanged */
   panel.style.marginTop = (H * 0.014) + "px";
   var grid = pvStEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";

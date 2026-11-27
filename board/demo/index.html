@@ -133,7 +133,7 @@
   .st-gallery .g-clock{ text-align:right; }
   .st-gallery .g-clock .t{ font-family:Fraunces, Georgia, serif; font-weight:600; color:#221f1a; line-height:1; }
   .st-gallery .g-clock .l{ letter-spacing:.26em; color:#7a7261; font-weight:600; }
-  .st-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); border:1px solid #2c2c2c; border-radius:10px; box-shadow:0 30px 60px -18px rgba(30,25,15,.45), 0 90px 140px -60px rgba(30,25,15,.35); margin:0 auto; }
+  .st-gallery .g-board{ background:linear-gradient(180deg,#1d1d1c,#101010); margin:0 auto; }
   .st-gallery .g-grid{ display:grid; }
   .st-gallery .g-tile{ background:linear-gradient(180deg,#262624 0%,#1b1b1a 49%,#141413 50%,#1e1e1d 100%); color:#f2efe3; font-family:Archivo,"Helvetica Neue",sans-serif; font-weight:600; display:flex; align-items:center; justify-content:center; border-radius:3px; position:relative; overflow:hidden; width:100%; height:100%; }
   .st-gallery .g-tile::after{ content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(0,0,0,.6); }
@@ -1121,7 +1121,7 @@ function showCarouselBoard(car, idx){
   fitBoard();
   if(AC){ applyLevels(); loadSet(board.clackSet); setupBed(); }
   if(evtNow) stopEvent(true);
-  nextPaAt = Date.now() + 20000;
+  armFirstPa();
   wasQuiet = inQuietHours();
   renderBoard(true);
   renderLamp();
@@ -2254,6 +2254,18 @@ function playAnnouncement(scriptId){
     a.play().catch(paDone);
   });
 }
+/* Settled rule (Nov 27, 2026): the first announcement after a board
+   opens lands within two minutes of the opening, at a natural point
+   inside that window, never at a fixed second. Every board opening
+   arms it here: the page load, a carousel rotation, and a board
+   published into the open page. Later announcements keep the
+   configured interval, armed by paDone() from each announcement's
+   end. Quiet hours still suppress announcements entirely: an arm
+   whose moment passes inside quiet hours fires on the first tick
+   after they end. */
+function armFirstPa(){
+  nextPaAt = Date.now() + (20 + Math.random() * 100) * 1000;
+}
 /* The configured interval is the pause BETWEEN announcements, so the
    next one is scheduled from the moment this one ends. (Scheduling
    from the start instead made the pause shrink by the announcement's
@@ -2267,7 +2279,8 @@ function paDone(){
   var span = Math.max(0, hi - lo);
   nextPaAt = Date.now() + (lo + Math.random()*span) * 1000;
 }
-var nextPaAt = Date.now() + 20000, paIdx = 0;
+var nextPaAt = 0, paIdx = 0;
+armFirstPa();
 var wasQuiet = inQuietHours();
 setInterval(function(){
   /* Quiet hours begin and end on their own clock: when the board
@@ -2650,7 +2663,7 @@ function buildGallery(W, H, cascade){
   tileW = Math.min((availW - 21 * gap) / 22, (availH - 6 * gap) / 6.30 / 1.717);
   var tileH = tileW * 1.717;
   var panel = stEl("div", "g-board", root);
-  panel.style.padding = Math.round(tileW * 0.55) + "px";
+  panel.style.padding = (Math.round(tileW * 0.55) + 1) + "px"; /* +1: the removed panel border's thickness, so the panel's size and the grid's position are unchanged */
   panel.style.marginTop = (H * 0.014) + "px";
   var grid = stEl("div", "g-grid", panel);
   grid.style.gridTemplateColumns = "repeat(22, " + tileW + "px)";
@@ -4094,6 +4107,7 @@ window.addEventListener("storage", function(e){
       var setChanged = nb.clackSet !== board.clackSet;
       var bedChanged = nb.ambience.bed !== board.ambience.bed || nb.ambience.on !== board.ambience.on;
       board = nb;
+      armFirstPa();
       fitBoard();
       if(AC){ applyLevels(); if(setChanged) loadSet(board.clackSet); if(bedChanged) setupBed(); }
       renderBoard(true);
