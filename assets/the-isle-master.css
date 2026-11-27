@@ -2249,3 +2249,46 @@ html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-dark { display: none
 :where(html.pg-viewer) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
 :where(html.pg-viewer) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
 :where(html.pg-viewer) [hidden] { display: none !important; }
+
+/* ---------- Secure Test Zone, the /secure/ inner page ---------- */
+:where(html.pg-zone) body { transition: background 0.4s ease, color 0.4s ease; }
+:where(html.pg-zone) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
+:where(html.pg-zone) header { padding: 8svh 0 0 0; text-align: center; }
+:where(html.pg-zone) .lockup { text-align: center; margin-bottom: 26px; }
+:where(html.pg-zone) .lockup img { display: block; margin: 0 auto; width: min(252px, 72%); height: auto; }
+:where(html.pg-zone) .lockup img.mark-colour { display: none; }
+html:where(.pg-zone)[data-theme="light"] .lockup img.mark-colour { display: block; }
+html:where(.pg-zone)[data-theme="light"] .lockup img.mark-dark { display: none; }
+:where(html.pg-zone) h1 { font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.15; margin: 0; }
+:where(html.pg-zone) .line { font-size: 17px; line-height: 1.65; margin: 16px auto 0 auto; max-width: 56ch; }
+:where(html.pg-zone) .rule { border-top: 1px solid var(--gold-line); margin: 30px 0 0 0; }
+:where(html.pg-zone) .idx { margin-top: 38px; }
+:where(html.pg-zone) .idxhead { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding-bottom: 10px; border-bottom: 1px solid var(--gold-line); margin-bottom: 4px; }
+:where(html.pg-zone) .idxrow { display: block; padding: 14px 0; border-bottom: 1px solid var(--gold-line-soft); text-decoration: none; color: var(--ivory); }
+:where(html.pg-zone) .idxrow .t { font-weight: 600; font-size: 17px; }
+:where(html.pg-zone) .idxrow .d { display: block; margin-top: 4px; font-size: 17px; line-height: 1.65; color: var(--ivory-soft); }
+:where(html.pg-zone) .idxrow .when { display: block; margin-top: 4px; font-size: 12px; color: var(--dim-sm); }
+:where(html.pg-zone) .idxrow:hover .t { text-decoration: underline; }
+:where(html.pg-zone) #record { margin-top: 38px; }
+:where(html.pg-zone) figure { margin: 30px auto 38px auto; max-width: 400px; }
+:where(html.pg-zone) figure img { display: block; width: 100%; height: auto; border: 1px solid var(--gold-line); }
+:where(html.pg-zone) figcaption { margin-top: 10px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); line-height: 1.7; }
+:where(html.pg-zone) table { width: 100%; border-collapse: collapse; font-size: 17px; line-height: 1.65; }
+:where(html.pg-zone) th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding: 0 14px 10px 0; border-bottom: 1px solid var(--gold-line); }
+:where(html.pg-zone) th:last-child { text-align: right; padding-right: 0; }
+:where(html.pg-zone) td { padding: 14px 14px 14px 0; border-bottom: 1px solid var(--gold-line-soft); vertical-align: top; }
+:where(html.pg-zone) td.check { white-space: nowrap; font-weight: 600; }
+:where(html.pg-zone) td.date { white-space: nowrap; color: var(--dim-sm); text-align: right; padding-right: 0; }
+:where(html.pg-zone) .item { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 30px; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory); text-decoration: none; }
+:where(html.pg-zone) .item:hover { color: var(--gold); }
+:where(html.pg-zone) footer { text-align: center; padding: 30px 0 34px 0; }
+:where(html.pg-zone) .foot { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
+:where(html.pg-zone) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
+@media (max-width: 640px) {
+  :where(html.pg-zone) table, :where(html.pg-zone) tbody, :where(html.pg-zone) tr, :where(html.pg-zone) td { display: block; width: 100%; }
+  :where(html.pg-zone) tr.head { display: none; }
+  :where(html.pg-zone) td { padding: 4px 0 14px 0; border-bottom: none; }
+  :where(html.pg-zone) td.check { white-space: normal; padding-top: 14px; }
+  :where(html.pg-zone) td.date { text-align: left; padding-bottom: 14px; border-bottom: 1px solid var(--gold-line-soft); }
+  :where(html.pg-zone) tr { border-bottom: none; }
+}
