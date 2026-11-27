@@ -133,25 +133,57 @@
             display:flex; align-items:center; justify-content:center; border-radius: 8px; }
   .tv-neck{ width:110px; height:24px; margin:0 auto; background:#101013; }
   .tv-stand{ height:7px; max-width:430px; margin:0 auto; background:#1b1b1f; border-radius:4px; }
-  /* the caption rides up beside the stand: its negative top margin lifts
-     it past the neck and stand (24px + 7px) so the caption text sits 5px
-     under the frame's own lower edge at the left, where the frame's edge
-     is higher than the stand's foot. The flex gap grows by the same 2px
-     the button row would otherwise take into the stand's band, so the
-     buttons begin exactly at the stand's bottom edge and never overlap
-     it. On narrow screens the neck leaves no room beside it (the caption
-     text is wider than the space left of the neck), so the caption keeps
-     its place under the stand there. */
-  .tv-caption{ max-width: 1094px; margin: -26px auto 0; display:flex; flex-direction: column;
-               align-items: stretch; gap: 12px; }
+  /* the line under the television is the shared component's line:
+     it rides up beside the stand, its negative top margin lifting it
+     past the neck and stand (24px + 7px) so the caption text sits 5px
+     under the frame's own lower edge at the left, where the frame's
+     edge is higher than the stand's foot, and the icon controls sit
+     at the right on that same line. Where the caption or the controls
+     would reach the stand at that raised position, the line rests
+     under the stand instead, its top 5px below the stand's foot; the
+     choice is made by measurement (fitTvLine, with the preview's
+     sizing), not by a width breakpoint, so it holds for any caption
+     length at any size. */
+  .tv-caption{ max-width: 1094px; margin: -26px auto 0; display:flex; flex-direction: row;
+               justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .tv-caption.rest{ margin-top: 5px; }
   @media (max-width: 600px){
-    .tv-caption{ margin-top: 5px; gap: 10px; }
+    .tv-caption{ gap: 10px; }
   }
   /* the caption starts where the picture starts: inset past the frame's
-     border and padding (1px + 16px), under the screen's left edge */
-  .tv-caption .cap-name{ align-self: flex-start; margin-left: 29px; }
-  .tv-caption .cap-name{ font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
-  .tv-caption .cap-name b{ color: var(--ink); font-weight: 700; }
+     border and padding (1px + 16px), under the screen's left edge.
+     The line's colours are the Systems Status console palette, as on
+     the demo page: its muted secondary text #7d8590 for the word and
+     the separator, its primary text #c9cfd6 for the board name. */
+  .tv-caption .cap-name{ align-self: flex-start; margin-left: 29px; padding-top: 15px; }
+  .tv-caption .cap-name{ font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #7d8590; }
+  .tv-caption .cap-name b{ color: #c9cfd6; font-weight: 700; }
+  /* ---- the demo popover: the television page, framed over Settings ----
+     A tile's Demo opens a large popover over Settings: a dimmed
+     backdrop with the one demo television page (/board/demo) framed
+     inside it in its preview context, which shows the demoed board.
+     There is no second copy of the television anywhere: the framed
+     page is the same page the menu links to. The overlay and its
+     closing (backdrop tap, Escape) belong to Settings; the framed
+     page forwards Escape from inside itself. Closing unloads the
+     frame, so the demo's sound stops with it. */
+  #demo-popover{ position: fixed; inset: 0; z-index: 200; background: rgba(4,4,5,.86);
+                 display: flex; align-items: center; justify-content: center; padding: 18px; }
+  #demo-popover[hidden]{ display: none; }
+  #demo-popover iframe{ width: min(1134px, 96vw); height: min(750px, calc(96vw * 750 / 1134), 88vh);
+                        border: 0; background: #000; border-radius: 4px; }
+  /* small screens: the desktop aspect formula would give the frame
+     so little height that the framed page sizes its television by
+     that height and the television's own line no longer fits inside
+     it. At these sizes the frame instead takes the screen's width
+     and a height that lets the framed page size its television by
+     width and hold the whole component, line included, without
+     scrolling. Behaviour and look at larger sizes are unchanged. */
+  @media (max-width: 600px){
+    #demo-popover{ padding: 8px; }
+    #demo-popover iframe{ width: calc(100vw - 16px);
+                          height: min(88vh, calc((100vw - 16px) / 1.78 + 232px)); }
+  }
   #pv-board{ padding: var(--pv-pad-y, 3px) var(--pv-pad-x, 4px); }
   #pv-head{ display:flex; justify-content: space-between; align-items: baseline; color: var(--ink);
             font-weight: 700; letter-spacing: .34em; line-height: 1.1; white-space: nowrap;
@@ -185,10 +217,22 @@
   .pvgrid .px{ border-radius: 2px; width: var(--pv-px, 10px); height: var(--pv-px, 10px); }
   .pvgrid .px.shimmer{ animation: pxflip 170ms ease-out; }
   @keyframes pxflip{ 0%{ transform: perspective(220px) rotateX(0deg); } 50%{ transform: perspective(220px) rotateX(-42deg); filter: brightness(1.35); } 100%{ transform: perspective(220px) rotateX(0deg); } }
-  #pv-foot{ display:flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0;
-            color: var(--mut); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-  #pv-sound, #pv-cascade, #pv-full{ min-height: 44px; padding: 4px 12px; font-size: 11px;
-            text-transform: uppercase; letter-spacing: .2em; }
+  /* the controls sit in from the right as the caption sits in from
+     the left: the icon is centred in its 44px target (14.5px each
+     side), so a 14.5px right margin puts the rightmost icon's edge
+     12px inside the screen's right edge, mirroring the caption */
+  #pv-foot{ display:flex; justify-content: flex-end; align-items: flex-start; gap: 8px; flex-wrap: wrap; margin: 0 14.5px 0 0; }
+  /* the line's controls are the shared television component's:
+     icon only, no boxes, the name kept in the markup as an
+     accessible label; the speaker reads sound or mute by state */
+  #pv-sound, #pv-cascade, #pv-full{ background: none; border: none; border-radius: 0; padding: 0;
+            min-width: 44px; min-height: 44px; display: inline-flex; align-items: center;
+            justify-content: center; color: #7d8590; }
+  #pv-sound:hover, #pv-cascade:hover, #pv-full:hover{ color: #c9cfd6; }
+  .pv-ico{ width: 15px; height: 15px; flex: none; display: block; }
+  #pv-sound .ico-off{ display: none; }
+  #pv-sound[data-on="false"] .ico-on{ display: none; }
+  #pv-sound[data-on="false"] .ico-off{ display: block; }
   #btn-test-all.playing{ background:#1e1f23; color: var(--ink); border-color: var(--ink); }
 
   /* ============ Preview: board styles ============ */
@@ -344,8 +388,10 @@
 </head>
 <body>
 <div class="wrap">
+  <header class="page-header">
   <h1>THE ISLE <span class="dot">·</span> FLIGHT BOARD</h1>
   <div class="sub">Settings. Pick a board below to edit it, demo it on this device, or publish it to the live board. Editing is a session: Save keeps your changes, Cancel throws them away.</div>
+  </header>
 
   <div id="library-sections">
   <h2>Boards</h2>
@@ -384,7 +430,7 @@
     </div>
     <div class="tv-caption">
       <span class="cap-name">Demo · <b id="tv-board-name"></b></span>
-      <div id="pv-foot"><button id="pv-cascade" type="button">REPLAY CASCADE</button><button id="pv-full" type="button">FULL SCREEN</button><button id="pv-sound" type="button">PREVIEW SOUND: OFF</button></div>
+      <div id="pv-foot"><button id="pv-cascade" type="button" aria-label="Replay"><svg class="pv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.2A8.5 8.5 0 1 1 3.2 13"/><path d="M3.2 3.8v4.6h4.6"/></svg></button><button id="pv-full" type="button" aria-label="Full screen"><svg class="pv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></svg></button><button id="pv-sound" type="button" aria-label="Preview sound: off" data-on="false"><svg class="pv-ico ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M15.5 9.8a3.4 3.4 0 0 1 0 4.4"/><path d="M18 7.2a7 7 0 0 1 0 9.6"/></svg><svg class="pv-ico ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M16 9.5l5 5"/><path d="M21 9.5l-5 5"/></svg></button></div>
     </div>
   </div>
   <div id="pv-feeds" hidden></div>
@@ -1836,7 +1882,30 @@ function tileDemo(kind, key){
     persistStaged();
   }
   renderStatus();
-  window.open("../live/?demo=1", "_blank");
+  if(selected.kind === "carousel" && c && c.boardIds && c.boardIds.length) editingId = c.boardIds[0];
+  pvRender(true);
+  openDemoPopover();
+}
+/* The demo popover: the overlay frames the one demo television
+   page in its preview context, so the framed page shows the board
+   staged above. Opening loads the frame; closing unloads it, which
+   stops the demo's sound, and Settings underneath is untouched:
+   the in-page television never moves. */
+function openDemoPopover(){
+  var pop = document.getElementById("demo-popover");
+  var fr = document.getElementById("demo-pop-frame");
+  if(!pop || !fr) return;
+  fr.src = "../demo/?ctx=preview";
+  pop.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeDemoPopover(){
+  var pop = document.getElementById("demo-popover");
+  if(!pop || pop.hidden) return;
+  var fr = document.getElementById("demo-pop-frame");
+  if(fr) fr.src = "about:blank";
+  pop.hidden = true;
+  document.body.style.overflow = "";
 }
 function tilePublish(kind, key){
   selected = { kind: kind, key: key };
@@ -3717,6 +3786,29 @@ function pvTitle(b){
    the frame at the television's own proportions, never as a strip. */
 var PV_INSET_X = 0.02, PV_INSET_Y = 0.025; /* the display's INSET_X / INSET_Y */
 var pvCols = 46; /* tiles across a text line at the current fit; the display's TEXT_COLS */
+/* The caption line's resting place, decided by measurement, as on
+   the demo page: held at its raised position, if the caption or the
+   controls reach the stand the line rests under the stand instead.
+   Runs wherever the preview is sized (pvFrame), on resize, and when
+   the board name in the caption changes. */
+function fitTvLine(){
+  var line = document.querySelector(".tv-caption");
+  var cap = line ? line.querySelector(".cap-name") : null;
+  var ctr = document.getElementById("pv-foot");
+  var stand = document.querySelector("#preview-wrap .tv-stand");
+  if(!line || !cap || !stand) return;
+  line.classList.remove("rest");
+  var s = stand.getBoundingClientRect();
+  function hits(r){ return !(r.right <= s.left || r.left >= s.right || r.bottom <= s.top || r.top >= s.bottom); }
+  if(hits(cap.getBoundingClientRect()) || (ctr && hits(ctr.getBoundingClientRect())))
+    line.classList.add("rest");
+}
+window.addEventListener("resize", function(){ pvFrame(); });
+(function(){
+  var tn = document.getElementById("tv-board-name");
+  if(tn && window.MutationObserver)
+    new MutationObserver(fitTvLine).observe(tn, { childList: true, characterData: true, subtree: true });
+})();
 function pvFrame(){
   var frame = document.getElementById("preview");
   var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
@@ -3730,6 +3822,7 @@ function pvFrame(){
     var sw = frame.clientWidth || window.innerWidth;
     var sh = frame.clientHeight || window.innerHeight;
     var fw = Math.min(sw, Math.floor(sh * 16 / 9));
+    fitTvLine();
     return { w: fw, h: Math.round(fw * 9 / 16) };
   }
   /* The television resizes to the page it sits on: its width follows
@@ -3738,9 +3831,11 @@ function pvFrame(){
      never stretched or reshaped. */
   var frameEl = document.querySelector(".tv-frame");
   var avail = frameEl ? frameEl.clientWidth - 32 : window.innerWidth;
-  var w = Math.max(220, Math.min(avail, 1060));
+  var capW = 1060;
+  var w = Math.max(220, Math.min(avail, capW));
   var h = Math.round(w * 9 / 16);
   frame.style.width = w + "px"; frame.style.height = h + "px";
+  fitTvLine();
   return { w: w, h: h };
 }
 function pvFit(text){
@@ -3913,7 +4008,8 @@ function pvQueueRender(){
 }
 document.getElementById("pv-sound").addEventListener("click", function(){
   pvSoundOn = !pvSoundOn;
-  this.textContent = pvSoundOn ? "PREVIEW SOUND: ON" : "PREVIEW SOUND: OFF";
+  this.dataset.on = pvSoundOn ? "true" : "false";
+  this.setAttribute("aria-label", pvSoundOn ? "Preview sound: on" : "Preview sound: off");
   if(pvSoundOn) pvRender(true);
 });
 function pvReplayCascade(){
@@ -5141,6 +5237,20 @@ function renderAll(){
   fitBarPadding();
 }
 renderAll();
+</script>
+<div id="demo-popover" hidden><iframe id="demo-pop-frame" title="Demo board" allow="autoplay; fullscreen"></iframe></div>
+<script>
+document.getElementById("demo-popover").addEventListener("click", function(e){
+  if(e.target === this) closeDemoPopover();
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") closeDemoPopover();
+});
+/* Escape pressed while the framed demo page holds the focus is
+   forwarded by that page; it closes the overlay just the same. */
+window.addEventListener("message", function(e){
+  if(e.origin === location.origin && e.data && e.data.type === "isle-demo-escape") closeDemoPopover();
+});
 </script>
 </body>
 </html>

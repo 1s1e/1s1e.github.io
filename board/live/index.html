@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
-<title>The Isle · Flight Board</title>
+<title>The Isle · Flight Board · Live</title>
 <style>
   :root{
     --tile-w: clamp(18px, 2.05vw, 84px);
@@ -99,11 +99,6 @@
     0%{ transform: perspective(220px) rotateX(0deg); }
     50%{ transform: perspective(220px) rotateX(-42deg); filter: brightness(1.35); }
     100%{ transform: perspective(220px) rotateX(0deg); }
-  }
-  #demo-marker{
-    position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
-    background: var(--amber); color:#111; font-weight:700; letter-spacing:.25em;
-    font-size: 13px; padding: 6px 16px 6px 19px; border-radius: 4px; display:none; z-index: 40;
   }
   /* ============ Board styles: per-board display languages ============ */
   #styled{ display:none; width:100%; height:100%; position:relative; overflow:hidden; }
@@ -240,7 +235,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div id="demo-marker">DEMO</div>
 <main id="board" aria-label="Departures board">
   <header>
     <div class="title" id="board-title">THE ISLE <span class="dot">·</span> DEPARTURES</div>
@@ -961,33 +955,10 @@ function loadConfig(){
   }
   return res.cfg;
 }
-var stagedCfgObj = null;
-function stagedBoard(){
-  try{
-    var raw = localStorage.getItem("isle-board-demo-v1");
-    if(!raw) return null;
-    var parsed = JSON.parse(raw);
-    if(!parsed || !parsed.boards) return null;
-    stagedCfgObj = parsed;
-    var res = mergeSeeds(parsed);
-    if(res.changed){
-      try{ localStorage.setItem("isle-board-demo-v1", JSON.stringify(res.cfg)); }catch(e){}
-    }
-    /* The staged config names the board being edited (demoBoardId, written
-       by settings on every staged save): a demo shows THAT board, not
-       whichever board happens to be live. Staged configs saved before the
-       field existed fall back to the live board. */
-    return res.cfg.boards[res.cfg.demoBoardId] || res.cfg.boards[res.cfg.liveBoardId] || null;
-  }catch(e){}
-  return null;
-}
-
 /* ============ Mode and state ============ */
-var DEMO = new URLSearchParams(location.search).get("demo") === "1";
 var WANTFS = new URLSearchParams(location.search).get("fs") === "1";
 var config = loadConfig();
 var board = null;
-if(DEMO){ board = stagedBoard(); if(board) document.getElementById("demo-marker").style.display = "block"; }
 if(!board) board = config.boards[config.liveBoardId] || demoBoards()[0];
 
 /* ============ Carousels ============
@@ -1016,9 +987,9 @@ function fillBoardFields(nb){
   if(!nb.style) nb.style = "isle";
   if(!nb.sceneSounds) nb.sceneSounds = { on: false, level: 0.5 };
 }
-function carouselFrom(cfg, demo){
+function carouselFrom(cfg){
   if(!cfg) return null;
-  var cid = demo ? cfg.demoCarouselId : cfg.liveCarouselId;
+  var cid = cfg.liveCarouselId;
   if(!cid || !cfg.carousels || !cfg.carousels[cid]) return null;
   var def = cfg.carousels[cid];
   var list = (def.boardIds || []).map(function(id){ return cfg.boards[id]; }).filter(Boolean);
@@ -1049,7 +1020,7 @@ function showCarouselBoard(car, idx){
   renderBoard(true);
   renderLamp();
 }
-carousel = DEMO ? carouselFrom(stagedCfgObj, true) : carouselFrom(config, false);
+carousel = carouselFrom(config);
 if(carousel){
   carousel.idx = carouselIdx(carousel);
   board = effectiveBoard(carousel.list[carousel.idx], carousel);
@@ -2205,10 +2176,10 @@ setInterval(function(){
      ambience switching off or by quiet hours beginning fades out, and
      new events start only while the bed is playing. */
   if(evtNow && (!board.ambience.on || qNow)) stopEvent(true);
-  if(AC && !DEMO && board.ambience.on && !qNow
+  if(AC && board.ambience.on && !qNow
      && board.ambience.levels.events > 0 && !evtNow && Date.now() >= nextEventAt)
     playEvent();
-  if(!AC || DEMO) return;
+  if(!AC) return;
   if(!board.announcements.on || inQuietHours() || paPlaying) return;
   if(Date.now() < nextPaAt) return;
   var rot = board.announcements.rotation && board.announcements.rotation.length
@@ -3989,12 +3960,11 @@ function askFullscreen(){
 askFullscreen();
 document.addEventListener("pointerdown", askFullscreen);
 document.addEventListener("keydown", askFullscreen);
-if(!DEMO){
-  window.addEventListener("storage", function(e){
+window.addEventListener("storage", function(e){
     if(e.key !== "isle-board-config-v1" || !e.newValue) return;
     try{
       config = JSON.parse(e.newValue);
-      var nc = carouselFrom(config, false);
+      var nc = carouselFrom(config);
       if(nc){
         carousel = nc;
         nc.idx = carouselIdx(nc);
@@ -4021,7 +3991,6 @@ if(!DEMO){
       renderBoard(true);
     }catch(err){}
   });
-}
 </script>
 </body>
 </html>
