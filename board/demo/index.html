@@ -2728,14 +2728,11 @@ function buildGallery(W, H, cascade){
   var foot = stEl("div", "g-foot", panel);
   foot.style.marginTop = Math.round(tileW * 0.4) + "px";
   foot.style.fontSize = (H * 0.0135) + "px";
-  stEl("span", "", foot, "GALLERY SIX");
-  stEl("span", "", foot, "FLIGHTS");
-  var dots = stEl("span", "g-dots", foot);
-  ["#cf3527", "#eec41c", "#2f9e5f", "#2f6fd0"].forEach(function(cc){
-    var d = stEl("i", "", dots); d.style.background = cc;
-    d.style.width = d.style.height = Math.round(tileW * 0.22) + "px";
-    d.style.marginLeft = Math.round(tileW * 0.10) + "px";
-  });
+  /* The foot band carries no content (Nov 27, 2026): the words and
+     the coloured dots are removed. A single blank strut keeps the
+     band at the height its text line set, so the panel's size, the
+     grid and the tiles are unchanged. */
+  stEl("span", "", foot, "\u00A0");
   styledState.gCells = cells;
   styledState.gPages = gCompose();
   styledState.gPage = 0;

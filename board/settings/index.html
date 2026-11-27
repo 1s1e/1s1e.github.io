@@ -4221,9 +4221,10 @@ function pvBuildGallery(b, W, H){
   var foot = pvStEl("div", "g-foot", panel);
   foot.style.marginTop = Math.round(tileW * 0.4) + "px";
   foot.style.fontSize = Math.max(6, H * 0.0135) + "px";
-  pvStEl("span", "", foot, "GALLERY SIX");
-  pvStEl("span", "", foot, pvIsText(b) ? "NOTES" : "FLIGHTS");
-  pvStEl("span", "", foot, "● ● ● ●");
+  /* The foot band carries no content (Nov 27, 2026), as on the live
+     board: a single blank strut keeps the band at the height its
+     text line set. */
+  pvStEl("span", "", foot, "\u00A0");
 }
 
 /* Clipper miniature */
