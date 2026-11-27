@@ -3935,6 +3935,9 @@ function pvBuildRows(b, text, rows){
 }
 function pvRender(cascade){
   var b = board(); pvB = b;
+  /* A board opening in the preview arms the first-clack watch, the
+     settled rule in the preview's own form (see pvArmFirstClack). */
+  if(b && pvClackBoardId !== b.id){ pvClackBoardId = b.id; pvArmFirstClack(); }
   var tn = document.getElementById("tv-board-name");
   if(tn) tn.textContent = b.name || "";
   document.getElementById("pv-title").innerHTML = pvTitle(b);
@@ -4008,6 +4011,7 @@ function pvPlayCascade(){
   loadSetBuffers(sndTarget().clackSet, function(bufs){
     if(!bufs || !bufs.steps.length || !pvSoundOn) return;
     var ac = testCtx(); if(!ac) return;
+    pvNoteClack();
     var g = ac.createGain(); g.gain.value = levelOf("clack"); g.connect(ac.destination);
     var t = ac.currentTime + 0.05, i, src;
     for(i = 0; i < 14; i++){
@@ -4019,6 +4023,37 @@ function pvPlayCascade(){
     setTimeout(function(){ try{ g.disconnect(); }catch(e){} }, 2500);
   });
 }
+/* Settled rule (Nov 27, 2026), the preview's mirror of the live page's
+   armFirstClack: the first clack lands within two minutes of a board
+   opening. A board opens in the preview when it becomes the board the
+   television is showing (pvRender notes the change of board and arms
+   the watch). A cascade that actually sounds settles the watch through
+   pvNoteClack(); if the drawn point inside two minutes passes with
+   nothing heard, the watch runs one cascade so the clack is heard.
+   The preview's own sound discipline governs throughout: while Preview
+   sound is off the preview creates no audio at all, so the watch can
+   only fire while it is on, and only the Isle path sounds a cascade in
+   the preview, so the forced cascade is limited to that path. The
+   forced cascade goes through pvReplayCascade, the preview's own
+   re-flip: a plain pvRender(true) against a board already showing its
+   content would flip nothing and sound nothing. Colour boards have
+   no flips and are outside it, as on the live page. */
+var pvClackDueAt = 0, pvClackHeard = true, pvClackBoardId = null;
+function pvArmFirstClack(){
+  pvClackHeard = false;
+  pvClackDueAt = Date.now() + (20 + Math.random() * 100) * 1000;
+}
+function pvNoteClack(){
+  if(levelOf("clack") > 0 && testAC && testAC.state === "running") pvClackHeard = true;
+}
+setInterval(function(){
+  if(!pvClackHeard && pvClackDueAt && Date.now() >= pvClackDueAt
+     && pvSoundOn && levelOf("clack") > 0
+     && pvB && pvB.type !== "colour" && (pvB.style || "isle") === "isle"){
+    pvClackHeard = true;
+    pvReplayCascade();
+  }
+}, 1000);
 function pvQueueRender(){
   if(pvQueued) return; pvQueued = true;
   setTimeout(function(){ pvQueued = false; pvRender(true); }, 80);
