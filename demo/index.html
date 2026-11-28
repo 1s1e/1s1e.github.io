@@ -327,6 +327,21 @@ a.hh-crumb:hover{color:var(--ink);}
    (64px at phone), the row centred on it. Both files are shared
    assets at their standing addresses; no copies are made. */
 .fh3r-palm{display:block;height:40px;width:auto;justify-self:center;}
+/* Footer brought in to the body's measure, this sample (see
+   notes.md): the footer wrap takes side padding of 40px at
+   desktop widths and 16px at 820px and under, the panel's own
+   side padding (39px, 15px) plus the panel's 1px edge hairline,
+   which the footer band does not carry, so THE ISLE stands
+   exactly over the menu line's left edge and 1S1E.COM exactly
+   under the body content's right edge. The insets are equal on
+   both sides, so the row's centre, and the palm centred on it,
+   stays on the panel's centre. The band's height, the words'
+   settings and the palm stand unchanged. Nothing else differs
+   from the base. */
+.band-bot .wrap{padding-left:40px;padding-right:40px;}
+@media (max-width:820px){
+ .band-bot .wrap{padding-left:16px;padding-right:16px;}
+}
 </style>
 </head>
 <body>
