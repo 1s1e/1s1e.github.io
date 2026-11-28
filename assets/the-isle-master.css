@@ -1047,14 +1047,10 @@ html:where(.pg-ref) { scroll-behavior: smooth; touch-action: manipulation; -webk
         background: var(--navy-deep); color: #d9d0ba;
         padding: 56px 20px 48px; text-align: center;
       }
-:where(html.pg-ref) footer .f-title {
-        font-family: var(--serif); font-size: 30px; font-weight: 500; color: #f0e8d5; margin: 18px auto 0;
-      }
 :where(html.pg-ref) footer .f-title-row {
         display: flex; align-items: center; justify-content: center; gap: 10px;
         margin: 18px auto 0;
       }
-:where(html.pg-ref) footer .f-title-row .f-title { margin: 0; }
 :where(html.pg-ref) footer .f-imprint {
         margin: 5px auto 0; font-size: 13px; font-weight: 600;
         letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase; color: var(--gold-const-bright);
@@ -1070,10 +1066,6 @@ html:where(.pg-ref) { scroll-behavior: smooth; touch-action: manipulation; -webk
 :where(html.pg-ref) footer .f-title-row .f-one {
         max-width: none; width: 222.5px; height: auto;
         margin: 10.1px 0 5.14px;
-      }
-:where(html.pg-ref) footer .f-title .f-wordmark {
-        display: block; max-width: none; width: 121.51px; height: auto;
-        margin: -0.77px -3.68px -0.11px -4.51px;
       }
 :where(html.pg-ref) footer .f-line { width: min(880px, 90%); height: 1px; background: rgba(192, 192, 192, 0.35); margin: 30px auto 0; }
 :where(html.pg-ref) footer p { margin: 18px auto 0; max-width: 560px; font-size: 14px; line-height: 1.65; color: #a89f88; }
