@@ -2894,24 +2894,172 @@ function peakOf(buf){
 function startAligned(src, tick){
   src.start(Math.max(tick - 0.04, tick + 0.045 - peakOf(src.buffer)));
 }
+/* ---- the clack chain on the test context ----
+   The display engine's ported chain (the approved sample's,
+   Nov 26, 2026), mirrored for this page's two clack players, the
+   sound tests and the preview television's cascade: the same
+   master chain (glue compressor, then a limiter near -1 dB), the
+   same clack bus (75 Hz high-pass, shared small-room convolution
+   send), the same voice player (column pan, per-voice low-pass
+   wander, onset spacing, density trim, voice cap). Built once on
+   the shared test context; the bus gain carries the level of the
+   test or preview that is playing.
+   Voices start only once the context is running. testCtx resumes
+   a suspended context, but the resume lands asynchronously
+   (WebKit lags seconds behind the gesture), and a source started
+   into the hold never plays and never ends. whenRunning waits
+   for the running state and drops the play if it never comes, so
+   nothing is ever started into a held context; every started
+   voice releases on its onended and on a timer past its end. */
+var tChain = null;
+function testClackBus(level){
+  var ac = testCtx(); if(!ac) return null;
+  if(!tChain){
+    var limiter = ac.createDynamicsCompressor();
+    limiter.threshold.value = -1.5; limiter.ratio.value = 20;
+    limiter.attack.value = 0.001; limiter.release.value = 0.15;
+    limiter.connect(ac.destination);
+    var comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -18; comp.ratio.value = 2;
+    comp.attack.value = 0.003; comp.release.value = 0.2;
+    comp.connect(limiter);
+    var master = ac.createGain(); master.gain.value = 1;
+    master.connect(comp);
+    var bus = ac.createGain();
+    var hpF = ac.createBiquadFilter();
+    hpF.type = "highpass"; hpF.frequency.value = 75; hpF.Q.value = 0.4;
+    bus.connect(hpF); hpF.connect(master);
+    var conv = ac.createConvolver();
+    var irLen = Math.floor(ac.sampleRate * 0.35);
+    var ir = ac.createBuffer(2, irLen, ac.sampleRate);
+    for(var ch = 0; ch < 2; ch++){
+      var cd = ir.getChannelData(ch);
+      for(var s2 = 0; s2 < irLen; s2++)
+        cd[s2] = (Math.random() * 2 - 1) * Math.pow(1 - s2 / irLen, 2.6);
+    }
+    conv.buffer = ir;
+    var wetLP = ac.createBiquadFilter(); wetLP.type = "lowpass"; wetLP.frequency.value = 3800;
+    var wet = ac.createGain(); wet.gain.value = 0.07;
+    bus.connect(conv); conv.connect(wetLP); wetLP.connect(wet); wet.connect(master);
+    tChain = bus;
+  }
+  tChain.gain.value = level;
+  return tChain;
+}
+function whenRunning(ac, fn){
+  if(ac.state === "running"){ fn(); return; }
+  var done = false;
+  function go(){
+    if(done) return; done = true;
+    if(ac.state === "running") fn();
+  }
+  try{ var p = ac.resume(); if(p && p.then) p.then(go); }catch(e){}
+  if(ac.addEventListener) ac.addEventListener("statechange", go);
+  setTimeout(go, 1500);
+}
+function tJitterDb(db){ return Math.pow(10, ((Math.random() * 2 - 1) * db) / 20); }
+var tActiveVoices = 0, tLastOnsetAt = 0;
+function tDensityTrim(){
+  if(tActiveVoices <= 1) return 1;
+  var db = -0.9 * Math.log(tActiveVoices) / Math.LN2;
+  return Math.pow(10, Math.max(-9, db) / 20);
+}
+function tPlayBuf(ac, bus, buf, opts){
+  if(!buf || !ac || ac.state !== "running") return false;
+  if(tActiveVoices >= 10) return false;
+  opts = opts || {};
+  var when = opts.when != null ? opts.when : ac.currentTime;
+  if(!opts.free){
+    var earliest = tLastOnsetAt + 0.025;
+    if(when < earliest){
+      if(earliest - when > 0.09) return false;
+      when = earliest;
+    }
+    tLastOnsetAt = when;
+  }
+  tActiveVoices++;
+  var src = ac.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = opts.rate || 1;
+  var g = ac.createGain();
+  g.gain.value = (opts.gain != null ? opts.gain : 0.95) * (opts.trim === false ? 1 : tDensityTrim());
+  var node = g;
+  if(opts.lp || opts.hp){
+    var f = ac.createBiquadFilter();
+    if(opts.hp){ f.type = "highpass"; f.frequency.value = opts.hp; }
+    else { f.type = "lowpass"; f.frequency.value = opts.lp; }
+    g.connect(f); node = f;
+  }
+  src.connect(g);
+  if(ac.createStereoPanner && opts.pan){
+    var p = ac.createStereoPanner(); p.pan.value = Math.max(-0.7, Math.min(0.7, opts.pan));
+    node.connect(p); p.connect(bus);
+  } else node.connect(bus);
+  var done = false;
+  function dec(){ if(!done){ done = true; tActiveVoices = Math.max(0, tActiveVoices - 1); } }
+  src.onended = dec;
+  setTimeout(dec, ((when - ac.currentTime) + buf.duration / (opts.rate || 1) + 0.15) * 1000);
+  if(opts.track) opts.track.push(src);
+  try { src.start(when); } catch(e){ dec(); return false; }
+  return true;
+}
+/* startAligned's arithmetic as a time, for the chain player: the
+   source starts so its measured impact lands on the tick. */
+function alignedWhen(buf, tick){
+  return Math.max(tick - 0.04, tick + 0.045 - peakOf(buf));
+}
+/* The sample's layered landing on the test chain: attack (a step
+   take, high-passed, wider detune, its impact 3 ms ahead), body
+   (a full flap event), resonance (a step take, low-passed, quiet,
+   just after), all at one pan, times set against the body's
+   measured impact. */
+function tPlayLanding(ac, bus, bufs, tick, pan, drift, track){
+  if(!bufs.flaps.length) return;
+  var body = bufs.flaps[Math.floor(Math.random() * bufs.flaps.length)];
+  var bt = alignedWhen(body, tick), pk = peakOf(body);
+  var atk = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+  if(atk) tPlayBuf(ac, bus, atk, { when: Math.max(ac.currentTime, bt + pk - peakOf(atk) - 0.003),
+    pan: pan, gain: 0.34, rate: (0.92 + Math.random() * 0.18) * drift, hp: 2600, free: true, track: track });
+  var blp = 7000 + Math.random() * 7000;
+  tPlayBuf(ac, bus, body, { when: bt, pan: pan, gain: 1 * tJitterDb(1.25),
+    rate: (0.97 + Math.random() * 0.06) * drift, lp: blp * (0.9 + Math.random() * 0.2), track: track });
+  var res = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+  if(res) tPlayBuf(ac, bus, res, { when: bt + pk + 0.055 + Math.random() * 0.03 - peakOf(res),
+    pan: pan, gain: 0.16, rate: (0.9 + Math.random() * 0.08) * drift, lp: 950, free: true, track: track });
+}
 function playCascade(sess, setName, level){
   loadSetBuffers(setName, function(bufs){
     if(layers[sess.layer] !== sess || !bufs || !bufs.steps.length) return;
     var ac = testCtx(); if(!ac) return;
-    var g = ac.createGain(); g.gain.value = level; g.connect(ac.destination); sess.gains.push(g);
-    var t = ac.currentTime + 0.05, i, src;
-    for(i = 0; i < 16; i++){
-      src = ac.createBufferSource();
-      src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
-      src.playbackRate.value = 0.97 + Math.random() * 0.06;
-      src.connect(g); startAligned(src, t + i * 0.055 + Math.random() * 0.02); sess.sources.push(src);
-    }
-    if(bufs.flaps.length){
-      src = ac.createBufferSource();
-      src.buffer = bufs.flaps[Math.floor(Math.random() * bufs.flaps.length)];
-      src.connect(g); startAligned(src, t + 16 * 0.055 + 0.06); sess.sources.push(src);
-    }
-    sess.finishIn(16 * 55 + 1000);
+    whenRunning(ac, function(){
+      if(layers[sess.layer] !== sess) return;
+      var bus = testClackBus(level); if(!bus) return;
+      var drift = 0.98 + Math.random() * 0.04; /* one motor, slightly loaded, per cascade (the sample) */
+      /* The steps are dealt in real time, one per tick, the way
+         the sample's scheduler deals them: scheduling the whole
+         cascade in one burst would count every voice against the
+         cap at once and starve its own tail. */
+      var i;
+      for(i = 0; i < 16; i++){
+        (function(i){
+          setTimeout(function(){
+            if(layers[sess.layer] !== sess) return;
+            var buf = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+            var lp = 6000 + Math.random() * 8000;
+            tPlayBuf(ac, bus, buf, {
+              when: alignedWhen(buf, ac.currentTime + 0.05 + Math.random() * 0.02),
+              pan: (i / 15) * 2 - 1, gain: 0.95 * tJitterDb(1.25),
+              rate: (0.97 + Math.random() * 0.06) * drift, lp: lp * (0.9 + Math.random() * 0.2),
+              track: sess.sources
+            });
+          }, i * 55);
+        })(i);
+      }
+      setTimeout(function(){
+        if(layers[sess.layer] !== sess) return;
+        tPlayLanding(ac, bus, bufs, ac.currentTime + 0.11, 1, drift, sess.sources);
+      }, 16 * 55);
+      sess.finishIn(16 * 55 + 1000);
+    });
   });
 }
 /* Recorded signals: real PA chimes, played as files. Durations measured
@@ -4098,16 +4246,33 @@ function pvPlayCascade(){
   loadSetBuffers(sndTarget().clackSet, function(bufs){
     if(!bufs || !bufs.steps.length || !pvSoundOn) return;
     var ac = testCtx(); if(!ac) return;
-    pvNoteClack();
-    var g = ac.createGain(); g.gain.value = levelOf("clack"); g.connect(ac.destination);
-    var t = ac.currentTime + 0.05, i, src;
-    for(i = 0; i < 14; i++){
-      src = ac.createBufferSource();
-      src.buffer = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
-      src.playbackRate.value = 0.97 + Math.random() * 0.06;
-      src.connect(g); startAligned(src, t + i * 0.055 + Math.random() * 0.02);
-    }
-    setTimeout(function(){ try{ g.disconnect(); }catch(e){} }, 2500);
+    whenRunning(ac, function(){
+      if(!pvSoundOn) return;
+      pvNoteClack();
+      var bus = testClackBus(levelOf("clack")); if(!bus) return;
+      var drift = 0.98 + Math.random() * 0.04; /* one motor, slightly loaded, per cascade (the sample) */
+      /* Steps dealt in real time, one per tick, as in the test
+         player above and the sample's scheduler. */
+      var i;
+      for(i = 0; i < 14; i++){
+        (function(i){
+          setTimeout(function(){
+            if(!pvSoundOn) return;
+            var buf = bufs.steps[Math.floor(Math.random() * bufs.steps.length)];
+            var lp = 6000 + Math.random() * 8000;
+            tPlayBuf(ac, bus, buf, {
+              when: alignedWhen(buf, ac.currentTime + 0.05 + Math.random() * 0.02),
+              pan: (i / 13) * 2 - 1, gain: 0.95 * tJitterDb(1.25),
+              rate: (0.97 + Math.random() * 0.06) * drift, lp: lp * (0.9 + Math.random() * 0.2)
+            });
+          }, i * 55);
+        })(i);
+      }
+      setTimeout(function(){
+        if(!pvSoundOn) return;
+        tPlayLanding(ac, bus, bufs, ac.currentTime + 0.11, 1, drift, null);
+      }, 14 * 55);
+    });
   });
 }
 /* Settled rule (Nov 27, 2026), the preview's mirror of the live page's

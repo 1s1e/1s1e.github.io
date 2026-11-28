@@ -1035,7 +1035,7 @@ function showCarouselBoard(car, idx){
   armFirstPa();
   armFirstClack();
   wasQuiet = inQuietHours();
-  renderBoard(true);
+  renderBoardWhenReady();
   renderLamp();
 }
 carousel = carouselFrom(config);
@@ -1892,8 +1892,9 @@ function stopColour(){
 
 /* ============ Audio engine ============ */
 var AC = null, clackBus = null, eventBus = null, ambBus = null, paBus = null;
+var masterBus = null, compNode = null, limiterNode = null;
 var evtGain = null; /* soundscape events feed the events bus through this node, so announcements can duck them */
-var stepBufs = [], flapBufs = [], buffersReady = false;
+var stepBufs = [], flapBufs = [], runBuf = null, buffersReady = false;
 var bedEl = null, bedBaseGain = 0, duckUntil = 0;
 function initAudio(){
   if(AC) {
@@ -1905,11 +1906,47 @@ function initAudio(){
     return;
   }
   try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return; }
-  clackBus = AC.createGain(); clackBus.connect(AC.destination);
-  eventBus = AC.createGain(); eventBus.connect(AC.destination);
+  /* Master chain, the approved sample's (Nov 26, 2026): glue
+     compression, then a limiter near -1 dB so cascade peaks stay
+     broadcast-polite on a television. Every bus joins it: the
+     clack bus through the master gain, the rest at the compressor,
+     the way the sample's ambience bus joins there. */
+  limiterNode = AC.createDynamicsCompressor();
+  limiterNode.threshold.value = -1.5; limiterNode.ratio.value = 20;
+  limiterNode.attack.value = 0.001; limiterNode.release.value = 0.15;
+  limiterNode.connect(AC.destination);
+  compNode = AC.createDynamicsCompressor();
+  compNode.threshold.value = -18; compNode.ratio.value = 2;
+  compNode.attack.value = 0.003; compNode.release.value = 0.2;
+  compNode.connect(limiterNode);
+  masterBus = AC.createGain(); masterBus.gain.value = 1;
+  masterBus.connect(compNode);
+  /* Clack bus: every flap voice routes here, through a gentle
+     75 Hz high-pass (the sub-rumble goes, the sub-200 Hz thump
+     stays), then dry to the master plus a shared small-room
+     convolution send: a generated 0.35 s decaying-noise impulse at
+     about -23 dB wet, so all slices sit in one mechanism in one
+     room. */
+  clackBus = AC.createGain();
+  var clackHP = AC.createBiquadFilter();
+  clackHP.type = "highpass"; clackHP.frequency.value = 75; clackHP.Q.value = 0.4;
+  clackBus.connect(clackHP); clackHP.connect(masterBus);
+  var conv = AC.createConvolver();
+  var irLen = Math.floor(AC.sampleRate * 0.35);
+  var ir = AC.createBuffer(2, irLen, AC.sampleRate);
+  for(var ch = 0; ch < 2; ch++){
+    var cd = ir.getChannelData(ch);
+    for(var s2 = 0; s2 < irLen; s2++)
+      cd[s2] = (Math.random() * 2 - 1) * Math.pow(1 - s2 / irLen, 2.6);
+  }
+  conv.buffer = ir;
+  var wetLP = AC.createBiquadFilter(); wetLP.type = "lowpass"; wetLP.frequency.value = 3800;
+  var wet = AC.createGain(); wet.gain.value = 0.07;
+  clackBus.connect(conv); conv.connect(wetLP); wetLP.connect(wet); wet.connect(masterBus);
+  eventBus = AC.createGain(); eventBus.connect(compNode);
   evtGain = AC.createGain(); evtGain.connect(eventBus);
-  ambBus   = AC.createGain(); ambBus.connect(AC.destination);
-  paBus    = AC.createGain(); paBus.connect(AC.destination);
+  ambBus   = AC.createGain(); ambBus.connect(compNode);
+  paBus    = AC.createGain(); paBus.connect(compNode);
   applyLevels();
   loadSet(board.clackSet);
   setupBed();
@@ -1924,7 +1961,7 @@ function applyLevels(){
   ambBus.gain.setTargetAtTime(bedBaseGain * (Date.now() < duckUntil ? 0.4 : 1), AC.currentTime, 0.4);
 }
 function loadSet(setName){
-  stepBufs = []; flapBufs = []; buffersReady = false;
+  stepBufs = []; flapBufs = []; runBuf = null; buffersReady = false;
   if(!AC) return;
   var files = SET_FILES[setName] || SET_FILES.pragotron;
   var pending = 0;
@@ -1938,6 +1975,16 @@ function loadSet(setName){
   }
   files.steps.forEach(function(i){ grab("../assets/audio/sets/" + setName + "/step-" + pad2(i) + ".mp3", stepBufs); });
   files.flaps.forEach(function(i){ grab("../assets/audio/sets/" + setName + "/flap-" + pad2(i) + ".mp3", flapBufs); });
+  /* The set's run segment: 1.25 s of its own source stepping
+     continuously, cut with the slices; long travels ride on it
+     instead of a step voice per tick (the sample's run segment). */
+  pending++;
+  fetch("../assets/audio/sets/" + setName + "/run.mp3")
+    .then(function(r){ return r.arrayBuffer(); })
+    .then(function(ab){ return AC.decodeAudioData(ab); })
+    .then(function(buf){ runBuf = buf; })
+    .catch(function(){})
+    .then(function(){ if(--pending === 0) buffersReady = true; });
 }
 /* Round-robin bags: shuffled, never an immediate repeat */
 function makeBag(n){ var a = []; for(var i=0;i<n;i++) a.push(i); for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
@@ -1951,16 +1998,74 @@ function nextFrom(bagName, pool){
   if(bagName === "step") lastStep = idx; else lastFlap = idx;
   return pool[idx];
 }
-var activeVoices = 0;
-function playBuf(buf, bus, when, rate, gainMul){
-  if(!AC || !buf || activeVoices >= 24) return;
-  var src = AC.createBufferSource(); src.buffer = buf;
-  src.playbackRate.value = rate;
-  var g = AC.createGain(); g.gain.value = gainMul;
-  src.connect(g); g.connect(bus);
-  src.onended = function(){ activeVoices--; };
+/* ---- The flap playback chain, ported from the approved sample
+   (Nov 26, 2026, flight-board-sample.html) with its parameters
+   copied from that code, playing this engine's re-cut set files.
+   One sample voice, routed to the clack bus (75 Hz high-pass and
+   the shared small-room send beyond it), panned by column, with an
+   optional per-voice low-pass (tight randomisation + velocity
+   darkness) or high-pass (the landing's attack layer). Onsets are
+   spaced at least 25 ms apart, the splitflap.org limit, by
+   delaying a voice a few milliseconds, and past about 90 ms of
+   queue the voice is dropped instead: a clack that lands
+   noticeably after its flap reads as a mistake.
+   Voices are started only while the context is running and count
+   only once started. The player this replaces started sources
+   into suspended and interrupted contexts and released them only
+   on onended; a source started into a held context never plays
+   and never ends, so flips during the hold consumed the voice
+   pool permanently and a board left untouched stayed silent for
+   the session (diagnosis, Nov 27, 2026). Every started voice here
+   releases twice over, on its onended and on a timer set past its
+   end, so no voice can be counted forever. */
+var activeVoices = 0, lastOnsetAt = 0, cascadeDrift = 1, lastRunAt = 0;
+function voiceCap(){ return 10; }
+function jitterDb(db){ return Math.pow(10, ((Math.random() * 2 - 1) * db) / 20); }
+function gauss(){ return (Math.random() + Math.random() + Math.random()) / 1.5 - 1; } /* ~ -1..1, centre-weighted */
+/* Density trim: as simultaneous voices rise, each voice gives a
+   little back, so a full cascade lands only ~8-12 dB above a
+   single flap instead of summing raw. */
+function densityTrim(){
+  if(activeVoices <= 1) return 1;
+  var db = -0.9 * Math.log(activeVoices) / Math.LN2;
+  return Math.pow(10, Math.max(-9, db) / 20);
+}
+function playBuf(buf, opts){
+  if(!buf || !AC || AC.state !== "running") return false;
+  if(activeVoices >= voiceCap()) return false;
+  opts = opts || {};
+  var when = opts.when != null ? opts.when : AC.currentTime;
+  if(!opts.free){
+    var earliest = lastOnsetAt + 0.025;
+    if(when < earliest){
+      if(earliest - when > 0.09) return false;
+      when = earliest;
+    }
+    lastOnsetAt = when;
+  }
   activeVoices++;
-  src.start(when);
+  var src = AC.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = (opts.rate || 1) * cascadeDrift;
+  var g = AC.createGain();
+  g.gain.value = (opts.gain != null ? opts.gain : 0.95) * (opts.trim === false ? 1 : densityTrim());
+  var node = g;
+  if(opts.lp || opts.hp){
+    var f = AC.createBiquadFilter();
+    if(opts.hp){ f.type = "highpass"; f.frequency.value = opts.hp; }
+    else { f.type = "lowpass"; f.frequency.value = opts.lp; }
+    g.connect(f); node = f;
+  }
+  src.connect(g);
+  if(AC.createStereoPanner && opts.pan){
+    var p = AC.createStereoPanner(); p.pan.value = Math.max(-0.7, Math.min(0.7, opts.pan));
+    node.connect(p); p.connect(clackBus);
+  } else node.connect(clackBus);
+  var done = false;
+  function dec(){ if(!done){ done = true; activeVoices = Math.max(0, activeVoices - 1); } }
+  src.onended = dec;
+  setTimeout(dec, ((when - AC.currentTime) + buf.duration / (opts.rate || 1) + 0.15) * 1000);
+  try { src.start(when); } catch(e){ dec(); return false; }
+  return true;
 }
 var IMPACT_LEAD = 0.045; /* the design point: a slice's impact sounds 45 ms after its start */
 /* Each buffer's loudest point (its impact) is measured once, when first
@@ -1988,17 +2093,68 @@ function impactWhen(buf){
      the 45 ms lead plus the impact's own 45 ms design offset */
   return AC.currentTime + Math.max(0.005, 2 * IMPACT_LEAD - peakOf(buf));
 }
-function playStep(colFrac){
+/* One step voice, the sample's tight randomisation: body rate
+   0.97-1.03, gain jitter +/-1.25 dB, per-voice low-pass wandered
+   +/-10% around a 6-14 kHz draw. Pan is the tile's column, -1..1;
+   the player clamps it to the sample's +/-0.7. */
+function playStep(pan){
   if(!AC || !buffersReady || !stepBufs.length) return;
   noteClack(clackBus.gain.value);
-  var buf = nextFrom("step", stepBufs);
-  playBuf(buf, clackBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.85 + Math.random()*0.3);
+  var buf = nextFrom("step", stepBufs); if(!buf) return;
+  var lp = 6000 + Math.random() * 8000;
+  playBuf(buf, {
+    when: impactWhen(buf),
+    pan: pan, gain: 0.95 * jitterDb(1.25),
+    rate: 0.97 + Math.random() * 0.06, lp: lp * (0.9 + Math.random() * 0.2)
+  });
 }
-function playFlap(){
+/* A landing as three layers from three different takes, re-rolled
+   independently (the sample's layered flap): attack (a step take,
+   high-passed, wider detune, its impact 3 ms ahead of the body's),
+   body (a full flap event), resonance (a step take, low-passed,
+   quiet, just after the body's impact). Routed through the clack
+   bus at the clack level, as the sample routes landings; the
+   player this replaces sent them down the events bus. Layer times
+   are set against the body's measured impact, the way the sample
+   sets them against its slices' fixed 45 ms impact. */
+function playFlap(pan){
   if(!AC || !buffersReady || !flapBufs.length) return;
-  noteClack(eventBus.gain.value);
-  var buf = nextFrom("flap", flapBufs);
-  playBuf(buf, eventBus, impactWhen(buf), 0.97 + Math.random()*0.06, 0.9 + Math.random()*0.25);
+  noteClack(clackBus.gain.value);
+  var body = nextFrom("flap", flapBufs); if(!body) return;
+  var t = impactWhen(body), pk = peakOf(body);
+  var atk = nextFrom("step", stepBufs);
+  if(atk) playBuf(atk, { when: Math.max(AC.currentTime, t + pk - peakOf(atk) - 0.003), pan: pan,
+    gain: 0.34, rate: 0.92 + Math.random() * 0.18, hp: 2600, free: true });
+  var lp = 7000 + Math.random() * 7000;
+  playBuf(body, {
+    when: t,
+    pan: pan, gain: 1 * jitterDb(1.25),
+    rate: 0.97 + Math.random() * 0.06, lp: lp * (0.9 + Math.random() * 0.2)
+  });
+  var res = nextFrom("step", stepBufs);
+  if(res) playBuf(res, { when: t + pk + 0.055 + Math.random() * 0.03 - peakOf(res), pan: pan,
+    gain: 0.16, rate: 0.9 + Math.random() * 0.08, lp: 950, free: true });
+}
+/* Long travels: the set's own continuous stepping carries the
+   middle, throttled so a boardful of travellers shares a few runs
+   (the sample's run segment and its 220 ms throttle). */
+function playRunSegment(pan){
+  var now = performance.now();
+  if(now - lastRunAt < 220 || !runBuf) return;
+  lastRunAt = now;
+  playBuf(runBuf, { pan: pan, gain: 0.5 * jitterDb(2), rate: 0.96 + Math.random() * 0.08 });
+}
+/* A tile element's pan from its laid-out position across the
+   board, for the renderers whose jobs carry elements rather than
+   column indices. Both rects carry the stage's scale transform,
+   so the fraction is scale-free. */
+function elPan(el){
+  var b = document.getElementById("board");
+  if(!el || !b || !el.getBoundingClientRect) return 0;
+  var er = el.getBoundingClientRect(), br = b.getBoundingClientRect();
+  if(!br.width) return 0;
+  var frac = (er.left + er.width / 2 - br.left) / br.width;
+  return Math.max(-1, Math.min(1, frac * 2 - 1));
 }
 function duck(ms){
   if(!AC) return;
@@ -2260,6 +2416,7 @@ function inQuietHours(){
 /* ============ Cascade rendering ============ */
 var STEP_MS = 85;
 function renderBoard(cascade){
+  if(cascade) cascadeDrift = 0.98 + Math.random() * 0.04; /* one motor, slightly loaded, per cascade (the sample) */
   var st = boardStyle();
   if(st === "flappix"){ stopStyled(); showColour(); showPixCap(); return; }
   hidePixCap();
@@ -2290,11 +2447,14 @@ function renderBoard(cascade){
         var stepsL = (ringIdx(targetLine[k]) - ringIdx(fromL) + RING.length) % RING.length;
         if(!cascade) stepsL = 0;
         jobs.push({ tile: tt, from: fromL, to: targetLine[k], steps: stepsL,
+                    pan: (k + 0.5) / TEXT_COLS * 2 - 1,
                     delay: r * 55 + k * 26 + Math.random() * 22, silent: !!ln.black });
       }
     }
   } else {
     var fl = pageSlice(effFlights(), count);
+    var colOff = [], colTot = 0;
+    COLS.forEach(function(c){ colOff.push(colTot); colTot += c.width; });
     for(r = 0; r < count; r++){
       var f = fl[r] || null;
       var silent = !f || !!f.black; /* blank and black rows make no clack of their own */
@@ -2307,6 +2467,7 @@ function renderBoard(cascade){
           var steps = (ringIdx(target[k2]) - ringIdx(from) + RING.length) % RING.length;
           if(!cascade) steps = 0;
           jobs.push({ tile: tile, from: from, to: target[k2], steps: steps,
+                      pan: (colOff[ci] + k2 + 0.5) / colTot * 2 - 1,
                       delay: r * 55 + ci * 130 + k2 * 26 + Math.random() * 22, silent: silent });
         }
       });
@@ -2330,12 +2491,18 @@ function renderBoard(cascade){
         var ch = RING[pos];
         j.tile.textContent = ch;
         j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
-        if(!quiet && !j.silent && Math.random() > thinning) playStep();
+        var idx = j.steps - remaining;
+        if(!quiet && !j.silent){
+          /* Long travel: the run segment carries the middle, as in
+             the sample; only the last three steps tick individually. */
+          if(j.steps > 24 && remaining > 3){ if(idx === 0) playRunSegment(j.pan); }
+          else if(Math.random() > thinning) playStep(j.pan);
+        }
         if(--remaining <= 0){
           clearInterval(iv);
           j.tile.dataset.ch = j.to;
           j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-          if(!quiet && !j.silent) playFlap();
+          if(!quiet && !j.silent) playFlap(j.pan);
         }
       }, STEP_MS);
     }, j.delay);
@@ -2370,6 +2537,8 @@ function flipRemarkTiles(){
   var count = boardRows();
   var fl = pageSlice(effFlights(), count);
   var width = COLS[ci].width, jobs = [], r, k;
+  var colOff = 0, colTot = 0;
+  COLS.forEach(function(c, i){ if(i < ci) colOff += c.width; colTot += c.width; });
   for(r = 0; r < count; r++){
     var f = fl[r] || null;
     if(!f || f.black || !tileGrid[r] || !tileGrid[r][ci]) continue;
@@ -2385,6 +2554,7 @@ function flipRemarkTiles(){
       var from = tile.dataset.ch || " ";
       var steps = (ringIdx(target[k]) - ringIdx(from) + RING.length) % RING.length;
       jobs.push({ tile: tile, from: from, to: target[k], steps: steps,
+                  pan: (colOff + k + 0.5) / colTot * 2 - 1,
                   delay: r * 55 + ci * 130 + k * 26 + Math.random() * 22, silent: false });
     }
   }
@@ -2407,12 +2577,16 @@ function flipRemarkTiles(){
         var ch = RING[pos];
         j.tile.textContent = ch;
         j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
-        if(!quiet && Math.random() > thinning) playStep();
+        var idx = j.steps - remaining;
+        if(!quiet){
+          if(j.steps > 24 && remaining > 3){ if(idx === 0) playRunSegment(j.pan); }
+          else if(Math.random() > thinning) playStep(j.pan);
+        }
         if(--remaining <= 0){
           clearInterval(iv);
           j.tile.dataset.ch = j.to;
           j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-          if(!quiet) playFlap();
+          if(!quiet) playFlap(j.pan);
         }
       }, STEP_MS);
     }, j.delay);
@@ -2499,16 +2673,20 @@ function stFlipTiles(jobs, opts){
     var steps = (ti - fi + ring.length) % ring.length;
     if(steps === 0){ j.el.textContent = j.to; j.el.dataset.ch = j.to; return; }
     stTimeout(function(){
-      var pos = fi, remaining = steps;
+      var pos = fi, remaining = steps, pan = elPan(j.el);
       var iv = setInterval(function(){
         pos = (pos + 1) % ring.length;
         j.el.textContent = ring[pos];
         j.el.classList.remove("flip"); void j.el.offsetWidth; j.el.classList.add("flip");
-        if(opts.sound && !quiet && Math.random() > 0.4) playStep();
+        var idx = steps - remaining;
+        if(opts.sound && !quiet){
+          if(steps > 24 && remaining > 3){ if(idx === 0) playRunSegment(pan); }
+          else if(Math.random() > 0.4) playStep(pan);
+        }
         if(--remaining <= 0){
           clearInterval(iv);
           j.el.textContent = j.to; j.el.dataset.ch = j.to;
-          if(opts.sound && !quiet) playFlap();
+          if(opts.sound && !quiet) playFlap(pan);
         }
       }, stepMs);
       styledState.ivs.push(iv);
@@ -2656,7 +2834,7 @@ function gSetCell(el, tg){
   else { el.textContent = tg.v; el.style.background = ""; el.classList.remove("col"); }
 }
 var gLastTick = 0;
-function gFlipCell(el, tg, delay, stepMs){
+function gFlipCell(el, tg, delay, stepMs, pan){
   stTimeout(function(){
     var ringArr, pos, steps;
     var isCol = tg.t === "col" && el.dataset.t === "col";
@@ -2670,6 +2848,7 @@ function gFlipCell(el, tg, delay, stepMs){
       steps = (ti - pos + ringArr.length) % ringArr.length;
     } else { ringArr = G_CHARSET; pos = 0; steps = 3; }
     if(steps === 0){ gSetCell(el, tg); return; }
+    var totalSteps = steps, runPlayed = false;
     var iv = setInterval(function(){
       if(isCol){
         pos = (pos + 1) % ringArr.length;
@@ -2679,12 +2858,15 @@ function gFlipCell(el, tg, delay, stepMs){
         el.dataset.v = ringArr[pos]; el.textContent = ringArr[pos]; el.style.background = ""; el.classList.remove("col");
       }
       var now = performance.now();
-      if(now - gLastTick > 34){ gLastTick = now; if(!inQuietHours()) playStep(); }
+      if(totalSteps > 24 && steps > 3){
+        if(!runPlayed){ runPlayed = true; if(!inQuietHours()) playRunSegment(pan); }
+      }
+      else if(now - gLastTick > 34){ gLastTick = now; if(!inQuietHours()) playStep(pan); }
       if(--steps <= 0){
         clearInterval(iv);
         gSetCell(el, tg);
         el.classList.remove("settle"); void el.offsetWidth; el.classList.add("settle");
-        if(Math.random() < 0.3 && !inQuietHours()) playFlap();
+        if(Math.random() < 0.3 && !inQuietHours()) playFlap(pan);
       }
     }, stepMs);
     styledState.ivs.push(iv);
@@ -2709,7 +2891,7 @@ function gShowPage(idx, animate){
     var el = styledState.gCells[r][c], tg = target[r][c];
     if(!animate){ gSetCell(el, tg); continue; }
     if(el.dataset.t === tg.t && el.dataset.v === tg.v) continue;
-    gFlipCell(el, tg, 120 + c * 46 + r * 130 + Math.random() * 70, stepMs);
+    gFlipCell(el, tg, 120 + c * 46 + r * 130 + Math.random() * 70, stepMs, (c + 0.5) / 22 * 2 - 1);
   }
 }
 function buildGallery(W, H, cascade){
@@ -2999,7 +3181,7 @@ function buildPatapata(W, H, cascade){
       var showJp = ((ri + styledState.pPhase) % 2) === 1;
       el.textContent = showJp ? el.dataset.jp : el.dataset.en;
       el.classList.remove("flip"); void el.offsetWidth; el.classList.add("flip");
-      if(!quiet) playFlap();
+      if(!quiet) playFlap(elPan(el));
     });
   }, 20000);
 }
@@ -3247,7 +3429,7 @@ function buildProjekt(W, H, cascade){
     if(data[ri]) styledState.remSpots.push({ kind: "projekt", rem: remEl, pic: pic, idx: stPageOff + ri });
     if(cascade){
       row.classList.add("flip"); row.style.animationDelay = (ri * 120) + "ms";
-      if(!inQuietHours()) stTimeout(function(){ playStep(); }, ri * 120);
+      if(!inQuietHours()) stTimeout(function(){ playStep(elPan(row)); }, ri * 120);
     }
   }
   var strip = stEl("div", "j-strip", root);
@@ -3281,7 +3463,7 @@ function sceneSoundFiles(){
 }
 function updateSceneSounds(qNow){
   if(!AC) return;
-  if(!sceneBus){ sceneBus = AC.createGain(); sceneBus.gain.value = 0; sceneBus.connect(AC.destination); }
+  if(!sceneBus){ sceneBus = AC.createGain(); sceneBus.gain.value = 0; sceneBus.connect(compNode || AC.destination); }
   var want = qNow ? null : sceneSoundFiles();
   var lvl = board.sceneSounds ? (board.sceneSounds.level || 0) : 0;
   var key = want ? want.join(",") + "|" + lvl : "";
@@ -4260,7 +4442,28 @@ function tickClock(){
 }
 tickClock(); setInterval(tickClock, 1000);
 renderBoard(false);
-setTimeout(function(){ renderBoard(true); }, 600); /* opening cascade */
+/* A cascade that opens a board waits for the clack buffers when
+   sound exists at all. The page this replaces fired its opening
+   cascade 600 ms after load whether or not the set had finished
+   decoding, and every step before buffersReady was silently
+   discarded, so the first cascade a viewer saw was often the one
+   they never heard (diagnosis, Nov 27, 2026). The board itself is
+   already rendered above; the cascade runs when the buffers land,
+   or after 3 s if they never do (a failed set sounds nothing
+   either way). Where the browser holds the context until a first
+   touch, the cascade still renders, no voice is started into the
+   hold (the chain refuses a non-running context), and the
+   first-clack watch fires the cascade that sounds in full once
+   the touch starts the sound. */
+function renderBoardWhenReady(){
+  if(!AC || buffersReady){ renderBoard(true); return; }
+  var waited = 0;
+  var wiv = setInterval(function(){
+    waited += 100;
+    if(buffersReady || waited >= 3000){ clearInterval(wiv); renderBoard(true); }
+  }, 100);
+}
+setTimeout(function(){ renderBoardWhenReady(); }, 600); /* opening cascade */
 
 /* Sound starts from the board's own configuration, with no on-page
    control of any kind. Where the browser permits audio without a
@@ -4316,7 +4519,7 @@ window.addEventListener("storage", function(e){
       armFirstClack();
       fitBoard();
       if(AC){ applyLevels(); if(setChanged) loadSet(board.clackSet); if(bedChanged) setupBed(); }
-      renderBoard(true);
+      if(AC && setChanged) renderBoardWhenReady(); else renderBoard(true);
     }catch(err){}
   });
 </script>
