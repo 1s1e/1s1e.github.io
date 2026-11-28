@@ -472,7 +472,7 @@ html:where(.pg-build)[data-theme="light"] .page { background:var(--sea); }
   }
 :where(html.pg-build) .lockup img.mark-colour { display:none; }
 html:where(.pg-build)[data-theme="light"] .lockup img.mark-colour { display:block; }
-html:where(.pg-build)[data-theme="light"] .lockup img.mark-dark { display:none; }
+html:where(.pg-build)[data-theme="light"] .lockup img.mark-silver { display:none; }
 :where(html.pg-build) .tagline {
     margin:26px auto 0;
     max-width:36ch;
@@ -2226,7 +2226,7 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-viewer) .lockup img { display: block; margin: 0 auto; width: min(252px, 72%); height: auto; }
 :where(html.pg-viewer) .lockup img.mark-colour { display: none; }
 html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-colour { display: block; }
-html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-dark { display: none; }
+html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-silver { display: none; }
 :where(html.pg-viewer) .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
 :where(html.pg-viewer) h1 { font-family: var(--serif); font-size: 36px; font-weight: 600; margin: 12px 0 0 0; }
 :where(html.pg-viewer) h2 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin: 34px 0 4px 0; overflow-wrap: anywhere; }
