@@ -2523,7 +2523,17 @@ function showStyled(st, cascade){
   styledEl.style.display = "block";
   var b = document.getElementById("board");
   var W = VW * (1 - 2 * INSET_X), H = VH * (1 - 2 * INSET_Y);
-  b.style.width = W + "px"; b.style.height = H + "px"; b.style.padding = "0px";
+  b.style.padding = "0px";
+  /* The frame is a position as well as a size: the styled stage
+     takes the frame's box inside the full-canvas board, inset on
+     every side, so the composition sits centred on the canvas.
+     (Shrinking #board itself to the frame's size left the frame in
+     the canvas's top-left corner, one inset left of centre.) */
+  styledEl.style.position = "absolute";
+  styledEl.style.left = (VW * INSET_X) + "px";
+  styledEl.style.top = (VH * INSET_Y) + "px";
+  styledEl.style.width = W + "px";
+  styledEl.style.height = H + "px";
   clearStyledTimers();
   styledEl.innerHTML = "";
   document.body.style.background = "";
@@ -2541,6 +2551,8 @@ function stopStyled(){
   clearStyledTimers();
   styledState.style = null;
   styledEl.style.display = "none"; styledEl.innerHTML = "";
+  styledEl.style.position = ""; styledEl.style.left = ""; styledEl.style.top = "";
+  styledEl.style.width = ""; styledEl.style.height = "";
   document.body.style.background = "";
   var b = document.getElementById("board");
   b.style.width = ""; b.style.height = ""; b.style.padding = "";
@@ -3336,8 +3348,13 @@ function fitBoard(){
   var boardW = iw * (1 - 2 * INSET_X);
   var boardH = ih * (1 - 2 * INSET_Y);
   var pad = boardPads(fs, iw, ih);
-  root.style.setProperty("--pad-x", pad.x + "px");
-  root.style.setProperty("--pad-y", pad.y + "px");
+  /* The padding is the settled inset PLUS the inner pad. The sizing
+     formulas below work inside the frame (iw*(1-2*INSET_X) wide), so
+     the frame's edges have to be part of the padding: with the inner
+     pad alone the composition starts at the canvas's own edge and
+     the whole board sits one inset left of, and above, centre. */
+  root.style.setProperty("--pad-x", (iw * INSET_X + pad.x) + "px");
+  root.style.setProperty("--pad-y", (ih * INSET_Y + pad.y) + "px");
   /* Tile size in the fill model: the width alone sets it, from the
      columns across the frame, at the FIXED 1.42 aspect (height /
      width) the --tile-h calc holds. The row count is computed from

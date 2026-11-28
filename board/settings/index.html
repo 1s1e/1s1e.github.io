@@ -3954,8 +3954,12 @@ function pvFit(text){
   wrap.style.setProperty("--pv-tile", w + "px");
   wrap.style.setProperty("--pv-gap", (w * 0.14) + "px");
   wrap.style.setProperty("--pv-rowpad", rowPad + "px");
-  wrap.style.setProperty("--pv-pad-x", padX + "px");
-  wrap.style.setProperty("--pv-pad-y", padY + "px");
+  /* The preview's padding is the inset plus the inner pad, as on
+     the display: the sizing works inside the frame, so the frame's
+     edges are part of the padding, or the preview sits one inset
+     left of the screen's centre just as the display did. */
+  wrap.style.setProperty("--pv-pad-x", (iw * PV_INSET_X + padX) + "px");
+  wrap.style.setProperty("--pv-pad-y", (ih * PV_INSET_Y + padY) + "px");
   pvCols = Math.max(8, Math.floor(((boardW - 2 * padX) / w + 0.14) / 1.14)); /* the display's colsFit */
   return rows;
 }
