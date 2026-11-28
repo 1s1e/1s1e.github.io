@@ -9,6 +9,16 @@
    folder keeps a sheet of its own only for a genuine exception, and
    that sheet holds only the exception. */
 
+/* SHARED ASSETS, a standing note (settled November 27, 2026):
+   every asset stands once, at one address, and is used by every
+   page that needs it, rather than copied per page. The frame's
+   header wordmark is the splash's own file,
+   /assets/the-isle-text-silver.svg, and its footer palm is
+   /assets/the-isle-tree.png, each referenced at its standing
+   address by every page that carries the frame. A page that needs
+   an asset the site already holds references the standing
+   address; it does not take a copy. */
+
 /* Type, loaded once, exactly this line:
    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" /> */
 
@@ -1522,6 +1532,42 @@ html:where(.pg-secure)[data-theme="light"] body { color:#1d2a3b; }
   :where(html.pg-style) .sx-mrow { grid-template-columns:1fr; row-gap:4px; }
 }
 
+/* The console specimen on the Style page (section 3, The
+   console): the specimen panel of the Systems Status palette,
+   standing on the console ground in both of the page's modes.
+   The console's own page keeps its styling as its settled
+   exception; these rules carry only the specimen shown here. */
+:where(html.pg-style) .cx-panel{background:#0a0c0e;color:#c9cfd6;font-family:"Roboto Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;padding:22px 26px 18px;margin:18px 0 0;-webkit-font-smoothing:antialiased}
+:where(html.pg-style) .cx-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #22272d;padding-bottom:12px}
+:where(html.pg-style) .cx-title{font-size:15px;font-weight:700;letter-spacing:.12em;color:#e8ecf0}
+:where(html.pg-style) .cx-pagelamp{margin-left:auto;display:flex;align-items:center;gap:8px;color:#c9d1d9;font-size:12.5px;letter-spacing:.1em}
+:where(html.pg-style) .cx-lamp{width:11px;height:11px;border-radius:50%;flex:none}
+:where(html.pg-style) .cx-lamp.big{width:14px;height:14px}
+:where(html.pg-style) .cx-lamp.g{background:#3fb950;box-shadow:0 0 4px rgba(63,185,80,.45)}
+:where(html.pg-style) .cx-lamp.big.g{box-shadow:0 0 5px rgba(63,185,80,.45)}
+:where(html.pg-style) .cx-lamp.a{background:#d29922;box-shadow:0 0 4px rgba(210,153,34,.45)}
+:where(html.pg-style) .cx-lamp.r{background:#f85149;box-shadow:0 0 4px rgba(248,81,73,.45)}
+:where(html.pg-style) .cx-lamp.y{background:#484f58}
+:where(html.pg-style) .cx-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:10px;color:#7d8590;font-size:12px}
+:where(html.pg-style) .cx-meta b{color:#c9cfd6;font-weight:500}
+:where(html.pg-style) .cx-meta .k{color:#737e88;letter-spacing:.08em;font-size:11px;margin-right:8px}
+:where(html.pg-style) .cx-group{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #22272d;padding-bottom:5px;margin-top:18px}
+:where(html.pg-style) .cx-group .h{font-size:12px;font-weight:700;letter-spacing:.16em;color:#e8ecf0}
+:where(html.pg-style) .cx-src{margin-left:auto;font-size:10.5px;letter-spacing:.1em;color:#737e88;white-space:nowrap}
+:where(html.pg-style) .cx-row{display:grid;grid-template-columns:21px 190px 1fr auto;align-items:start;column-gap:10px;padding:5px 0;border-bottom:1px solid #171b1f}
+:where(html.pg-style) .cx-row .cx-lamp{margin-top:4px}
+:where(html.pg-style) .cx-name{color:#c9cfd6;white-space:nowrap}
+:where(html.pg-style) .cx-state{color:#7d8590}
+:where(html.pg-style) .cx-state .tag-a{color:#d29922}
+:where(html.pg-style) .cx-state .tag-y{color:#727e8c}
+:where(html.pg-style) .cx-age{color:#737e88;text-align:right;white-space:nowrap;padding-left:24px}
+@media (max-width:700px){
+  :where(html.pg-style) .cx-panel{padding:18px 16px 14px;font-size:12px}
+  :where(html.pg-style) .cx-row{grid-template-columns:19px 96px 1fr auto;column-gap:8px}
+  :where(html.pg-style) .cx-name{white-space:normal}
+  :where(html.pg-style) .cx-age{padding-left:8px}
+}
+
 /* ---------- 3D Model, /build/3d/, the viewer's base ---------- */
 :where(html.pg-3d) *, :where(html.pg-3d) *::before, :where(html.pg-3d) *::after {
   box-sizing: border-box;
@@ -2051,134 +2097,126 @@ html:where(.pg-3d), :where(html.pg-3d) body { height: 100%; overflow: hidden; }
 :where(html.pg-3d) #pane-layers .oprange::-moz-range-thumb { width: 16px; height: 16px; background: var(--gold); border: none; border-radius: 0; }
 :where(html.pg-3d) #pane-layers .pct { font-size: 12px; color: var(--dim-sm); width: 36px; flex: none; text-align: right; font-variant-numeric: tabular-nums; }
 
-/* ---------- Pages, /pages/ ----------
-   This sheet is the pg-pages block exactly as it will stand in
-   the master style sheet at publish: every rule scoped to its
-   page by :where(html.pg-pages), at unchanged specificity, after
-   the shared layer. At publish the block lifts into
-   the-isle-master.css unchanged and the page links the master
-   alone. Values are the settled ones: the single column and
-   header of Permits & Documents, the entry form of The Build. */
+/* ---------- The frame, and The Directory, /dir/ ----------
+   The settled frame (November 27, 2026), the standard every page
+   after the splash is built inside: The Isle Navy header and
+   footer bands, the body standing as an ivory panel at 1020px
+   closed by the silver hairline rgba(192,192,192,.30) on all
+   four sides, the wordmark alone in the header band, the depth
+   line at the head of the panel, and the footer row of THE ISLE,
+   the palm and 1S1E.COM, its words inset to the body's measure.
+   The frame's values are keyed by ground, not by mode: the bands
+   carry the dark ground's steps, the panel the light ground's.
+   The header wordmark is the shared file
+   /assets/the-isle-text-silver.svg, rendered one step above the
+   splash's own sizes at desktop and tablet and shifted by the
+   proportions recorded in the Directory generator's notes, so
+   its drawn lettering stands on the panel's left edge at
+   desktop and tablet and centred at phone; the footer palm is
+   the shared file /assets/the-isle-tree.png at 40px high. The
+   Directory's body stands in this block under the frame. The
+   Reference Catalogues are not framed: their block stands
+   untouched. */
 
-:where(html.pg-pages) body { transition: background 0.4s ease, color 0.4s ease; }
-:where(html.pg-pages) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
-:where(html.pg-pages) header { padding: 8svh 0 0 0; text-align: center; }
-:where(html.pg-pages) .eye { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
-:where(html.pg-pages) h1 { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: 0.02em; margin: 12px 0 0 0; }
-:where(html.pg-pages) .line { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ivory-soft); margin: 16px auto 0 auto; max-width: 56ch; }
-:where(html.pg-pages) .rule { border-top: 1px solid var(--gold-line); margin: 34px 0 0 0; }
-:where(html.pg-pages) .group { margin-top: 44px; }
-:where(html.pg-pages) .group-head {
-  margin: 0;
-  font-family: var(--sans);
-  font-size: 11px; font-weight: 600;
-  letter-spacing: .34em;
-  color: var(--gold-bright);
-  display: flex; align-items: center; gap: 10px;
+:where(html.pg-dir){
+  --ground:#f0e8d5; --ink:#1d2a3b; --dim:#3c4763;
+  --accent:#686868; --line:rgba(104,104,104,.38); --line-soft:rgba(104,104,104,.20);
 }
-:where(html.pg-pages) .entries { margin-top: 10px; }
-:where(html.pg-pages) .entries > * + * { border-top: 1px solid var(--gold-line-soft); }
-:where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 8px 22px;
-  padding: 30px 14px 28px;
-  text-decoration: none;
-  position: relative;
-  transition: background .35s ease;
+:where(html.pg-dir) *{ margin:0; padding:0; }
+:where(html.pg-dir) body{
+  background:#1d2a3b; color:var(--ink); font-size:17px; line-height:1.65;
+  -webkit-font-smoothing:auto; overflow-x:visible;
 }
-:where(html.pg-pages) .entry-parent { display: block; padding: 0; }
-:where(html.pg-pages) .entry:hover, :where(html.pg-pages) .entry:focus-visible,
-:where(html.pg-pages) .entry-main:hover, :where(html.pg-pages) .entry-main:focus-visible { background: var(--entry-hover); }
-:where(html.pg-pages) .entry:focus-visible, :where(html.pg-pages) .entry-main:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
-:where(html.pg-pages) .num {
-  grid-row: 1 / span 4;
-  font-family: var(--serif);
-  font-size: 58px; line-height: .95; font-weight: 500;
-  color: var(--num-c);
-  font-variant-numeric: lining-nums;
-  padding-top: 2px;
-  transition: color .35s ease;
+:where(html.pg-dir) a{ text-decoration:none; }
+:where(html.pg-dir) img{ display:block; }
+:where(html.pg-dir) .band-navy, :where(html.pg-dir) .band-deep{
+  color:#f0e8d5; background:#1d2a3b;
+  --ink:#f0e8d5; --dim:#a89f88; --accent:#C0C0C0;
+  --line:rgba(192,192,192,.30); --line-soft:rgba(192,192,192,.16);
 }
-:where(html.pg-pages) .entry:hover .num, :where(html.pg-pages) .entry-main:hover .num { color: var(--num-h); }
-:where(html.pg-pages) .eyebrow {
-  font-family: var(--sans);
-  font-size: 10.5px; font-weight: 600;
-  letter-spacing: .32em;
-  color: var(--gold-bright);
-  margin: 2px 0 0;
+:where(html.pg-dir) .wrap{ max-width:1020px; margin:0 auto; padding:0 40px; }
+
+/* The Directory's body */
+:where(html.pg-dir) .cols{ display:grid; grid-template-columns:1fr 1fr; margin-top:12px; border-top:1px solid var(--line); }
+:where(html.pg-dir) .col-l{ padding:30px 44px 6px 0; }
+:where(html.pg-dir) .col-r{ padding:30px 0 6px 44px; border-left:1px solid var(--line); }
+:where(html.pg-dir) .group-head{ display:flex; justify-content:space-between; align-items:baseline; padding-bottom:8px; }
+:where(html.pg-dir) .group-head .g{ font-size:11px; font-weight:600; letter-spacing:.34em; text-transform:uppercase; }
+:where(html.pg-dir) .group-head .n{ font-size:11px; font-weight:600; letter-spacing:.34em; text-transform:uppercase; color:var(--dim); }
+:where(html.pg-dir) .entry{ display:block; padding:15px 0 13px; border-top:1px solid var(--line-soft); }
+:where(html.pg-dir) .entry .top{ display:flex; justify-content:space-between; align-items:baseline; gap:14px; }
+:where(html.pg-dir) .entry .name{ font-family:var(--serif); font-weight:500; font-size:34px; line-height:1.15; }
+:where(html.pg-dir) .entry .loc{ font-size:10.5px; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
+:where(html.pg-dir) .entry .cat{ font-size:10.5px; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--dim); margin-top:2px; }
+:where(html.pg-dir) .entry .desc{ color:var(--dim); font-size:17px; margin-top:2px; }
+:where(html.pg-dir) .entry:hover .name{ color:var(--accent); }
+:where(html.pg-dir) .records{ margin:2px 0 14px 16px; border-left:1px solid var(--line); padding-left:18px; }
+:where(html.pg-dir) .record{ display:block; padding:9px 0 7px; border-top:1px solid var(--line-soft); }
+:where(html.pg-dir) .record:first-child{ border-top:none; }
+:where(html.pg-dir) .record .top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:8px; }
+:where(html.pg-dir) .record .rid{ font-family:var(--serif); font-weight:600; font-size:21px; overflow-wrap:anywhere; transition:color .25s ease; }
+:where(html.pg-dir) .record .cat{ font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); }
+:where(html.pg-dir) .record .desc{ color:var(--dim); font-size:13.5px; line-height:1.6; margin-top:6px; }
+:where(html.pg-dir) .record:hover .rid{ color:var(--accent); }
+@media (max-width:820px){
+  :where(html.pg-dir) .wrap{ padding:0 26px; }
+  :where(html.pg-dir) .cols{ grid-template-columns:1fr; }
+  :where(html.pg-dir) .col-l{ padding:26px 0 0; }
+  :where(html.pg-dir) .col-r{ padding:30px 0 0; border-left:none; }
 }
-:where(html.pg-pages) .entry h3, :where(html.pg-pages) .entry-main h3 {
-  margin: 7px 0 0;
-  font-family: var(--serif);
-  font-size: clamp(28px, 3vw, 36px);
-  font-weight: 600; line-height: 1.08;
-  color: var(--ivory);
+
+/* The header band: the wordmark alone */
+:where(html.pg-dir) .hh-r1{ display:flex; justify-content:space-between; align-items:center; gap:24px; padding-top:16px; padding-bottom:16px; }
+:where(html.pg-dir) .hh-home{ display:block; flex:none; }
+:where(html.pg-dir) .hh-lockup{ width:441.38px; height:auto; transform:translateX(-2.6492%); }
+@media (max-width:820px){
+  :where(html.pg-dir) .hh-lockup{ width:433.00px; transform:translateX(-2.2622%); }
 }
-:where(html.pg-pages) .desc {
-  margin: 9px 0 0;
-  font-family: var(--sans);
-  font-size: 16.5px; line-height: 1.55; font-weight: 400;
-  color: var(--ivory-soft);
-  max-width: 60ch;
+@media (max-width:560px){
+  :where(html.pg-dir) .hh-r1{ justify-content:center; gap:14px; }
+  :where(html.pg-dir) .hh-home{ display:flex; align-items:center; min-height:44px; }
+  :where(html.pg-dir) .hh-lockup{ width:272.27px; transform:translateX(0.1410%); }
 }
-:where(html.pg-pages) .entry .addr, :where(html.pg-pages) .entry-main .addr {
-  margin: 15px 0 0;
-  display: flex; align-items: center; gap: 12px;
-  font-family: var(--sans);
-  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
-  color: var(--dim-sm);
+
+/* The panel */
+:where(html.pg-dir) .panel{
+  position:relative; background:var(--ground); max-width:1020px;
+  padding-left:39px; padding-right:39px; padding-bottom:52px;
+  border:1px solid rgba(192,192,192,.30);
 }
-:where(html.pg-pages) .entry .addr::before, :where(html.pg-pages) .entry-main .addr::before {
-  content: ""; width: 26px; height: 1px; background: var(--gold); flex: none;
+:where(html.pg-dir) header .wrap, :where(html.pg-dir) .band-bot .wrap{ max-width:1020px; padding-left:0; padding-right:0; }
+@media (max-width:820px){
+  :where(html.pg-dir) header .wrap, :where(html.pg-dir) .band-bot .wrap{ max-width:calc(100% - 20px); }
+  :where(html.pg-dir) .panel{ max-width:calc(100% - 20px); padding-left:15px; padding-right:15px; }
 }
-:where(html.pg-pages) .records { margin: 2px 0 10px 118px; }
-:where(html.pg-pages) .record {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  border-top: 1px solid var(--gold-line-soft);
-  padding: 18px 14px 16px 0;
-  transition: background .35s ease;
+
+/* The depth line at the head of the panel: ancestors as links in
+   the ground's accent, the current page plain in the body ink */
+:where(html.pg-dir) .hh-trail{ display:flex; align-items:center; flex-wrap:nowrap; gap:0; margin-top:12px; padding:4px 0; }
+:where(html.pg-dir) .hh-crumb{ font-size:13px; font-weight:600; letter-spacing:.30em; text-transform:uppercase; color:var(--accent); white-space:nowrap; display:flex; align-items:center; }
+:where(html.pg-dir) a.hh-crumb:hover{ color:var(--ink); }
+:where(html.pg-dir) .hh-crumb.cur{ color:var(--ink); }
+:where(html.pg-dir) .hh-sep{ color:var(--dim); font-size:13px; font-weight:600; letter-spacing:.30em; flex:none; }
+:where(html.pg-dir) .hh-ellipsis{ display:none; color:#a89f88; font-size:12px; font-weight:600; min-height:44px; align-items:center; }
+:where(html.pg-dir) .hh-sep-ell{ display:none; }
+@media (max-width:560px){
+  :where(html.pg-dir) .hh-upper{ display:none; }
+  :where(html.pg-dir) .hh-ellipsis{ display:flex; }
+  :where(html.pg-dir) .hh-sep-ell{ display:block; }
 }
-:where(html.pg-pages) .record:hover, :where(html.pg-pages) .record:focus-visible { background: var(--entry-hover); }
-:where(html.pg-pages) .record:focus-visible { outline: 1px solid var(--gold-line); outline-offset: -1px; }
-:where(html.pg-pages) .record .eye { display: block; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
-:where(html.pg-pages) .record b {
-  display: block;
-  font-family: var(--serif);
-  font-size: 21px; font-weight: 600;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-  transition: color 0.25s ease;
+
+/* The footer band */
+:where(html.pg-dir) .fh3r-in{ padding-top:16px; padding-bottom:16px; }
+:where(html.pg-dir) .band-bot .wrap{ padding-left:40px; padding-right:40px; }
+:where(html.pg-dir) .fh3r-row{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; font-size:13px; font-weight:600; letter-spacing:.34em; text-transform:uppercase; white-space:nowrap; }
+:where(html.pg-dir) .fh3r-l{ justify-self:start; color:#C0C0C0; }
+:where(html.pg-dir) .fh3r-r{ justify-self:end; color:#C0C0C0; }
+:where(html.pg-dir) .fh3r-palm{ display:block; height:40px; width:auto; justify-self:center; }
+@media (max-width:820px){
+  :where(html.pg-dir) .band-bot .wrap{ padding-left:16px; padding-right:16px; }
 }
-:where(html.pg-pages) .record:hover b, :where(html.pg-pages) .record:focus-visible b { color: var(--gold); }
-:where(html.pg-pages) .record .d { display: block; font-size: 13.5px; line-height: 1.6; color: var(--ivory-soft); margin-top: 6px; }
-:where(html.pg-pages) .record .addr {
-  display: block;
-  margin-top: 10px;
-  font-family: var(--sans);
-  font-size: 10.5px; font-weight: 600; letter-spacing: .26em;
-  color: var(--dim-sm);
-}
-:where(html.pg-pages) footer {
-  margin-top: 52px;
-  display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; row-gap: 8px;
-  font-family: var(--sans);
-  font-size: 11px; font-weight: 400; letter-spacing: .26em;
-  color: var(--dim-sm);
-  white-space: nowrap;
-}
-:where(html.pg-pages) footer .site { color: var(--ivory-soft); }
-:where(html.pg-pages) .switch { cursor: pointer; flex: none; }
-@media (max-width: 760px) {
-  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main { grid-template-columns: 64px 1fr; padding: 24px 6px 22px; }
-  :where(html.pg-pages) .num { font-size: 40px; }
-  :where(html.pg-pages) .records { margin-left: 86px; }
-  :where(html.pg-pages) footer { flex-wrap: wrap; white-space: normal; row-gap: 6px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  :where(html.pg-pages) .entry, :where(html.pg-pages) .entry-main, :where(html.pg-pages) .record { transition: none; }
+@media (max-width:560px){
+  :where(html.pg-dir) .fh3r-in{ padding-top:12px; padding-bottom:12px; }
 }
 
 /* ---------- Permit Documents viewer, /secure/permits/ ---------- */
@@ -2233,46 +2271,3 @@ html:where(.pg-viewer)[data-theme="light"] .lockup img.mark-dark { display: none
 :where(html.pg-viewer) footer .dom { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
 :where(html.pg-viewer) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
 :where(html.pg-viewer) [hidden] { display: none !important; }
-
-/* ---------- Secure Test Zone, the /secure/ inner page ---------- */
-:where(html.pg-zone) body { transition: background 0.4s ease, color 0.4s ease; }
-:where(html.pg-zone) .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px 40px 26px; }
-:where(html.pg-zone) header { padding: 8svh 0 0 0; text-align: center; }
-:where(html.pg-zone) .lockup { text-align: center; margin-bottom: 26px; }
-:where(html.pg-zone) .lockup img { display: block; margin: 0 auto; width: min(252px, 72%); height: auto; }
-:where(html.pg-zone) .lockup img.mark-colour { display: none; }
-html:where(.pg-zone)[data-theme="light"] .lockup img.mark-colour { display: block; }
-html:where(.pg-zone)[data-theme="light"] .lockup img.mark-dark { display: none; }
-:where(html.pg-zone) h1 { font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.15; margin: 0; }
-:where(html.pg-zone) .line { font-size: 17px; line-height: 1.65; margin: 16px auto 0 auto; max-width: 56ch; }
-:where(html.pg-zone) .rule { border-top: 1px solid var(--gold-line); margin: 30px 0 0 0; }
-:where(html.pg-zone) .idx { margin-top: 38px; }
-:where(html.pg-zone) .idxhead { font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding-bottom: 10px; border-bottom: 1px solid var(--gold-line); margin-bottom: 4px; }
-:where(html.pg-zone) .idxrow { display: block; padding: 14px 0; border-bottom: 1px solid var(--gold-line-soft); text-decoration: none; color: var(--ivory); }
-:where(html.pg-zone) .idxrow .t { font-weight: 600; font-size: 17px; }
-:where(html.pg-zone) .idxrow .d { display: block; margin-top: 4px; font-size: 17px; line-height: 1.65; color: var(--ivory-soft); }
-:where(html.pg-zone) .idxrow .when { display: block; margin-top: 4px; font-size: 12px; color: var(--dim-sm); }
-:where(html.pg-zone) .idxrow:hover .t { text-decoration: underline; }
-:where(html.pg-zone) #record { margin-top: 38px; }
-:where(html.pg-zone) figure { margin: 30px auto 38px auto; max-width: 400px; }
-:where(html.pg-zone) figure img { display: block; width: 100%; height: auto; border: 1px solid var(--gold-line); }
-:where(html.pg-zone) figcaption { margin-top: 10px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); line-height: 1.7; }
-:where(html.pg-zone) table { width: 100%; border-collapse: collapse; font-size: 17px; line-height: 1.65; }
-:where(html.pg-zone) th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dim-sm); padding: 0 14px 10px 0; border-bottom: 1px solid var(--gold-line); }
-:where(html.pg-zone) th:last-child { text-align: right; padding-right: 0; }
-:where(html.pg-zone) td { padding: 14px 14px 14px 0; border-bottom: 1px solid var(--gold-line-soft); vertical-align: top; }
-:where(html.pg-zone) td.check { white-space: nowrap; font-weight: 600; }
-:where(html.pg-zone) td.date { white-space: nowrap; color: var(--dim-sm); text-align: right; padding-right: 0; }
-:where(html.pg-zone) .item { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 30px; font-size: 11px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory); text-decoration: none; }
-:where(html.pg-zone) .item:hover { color: var(--gold); }
-:where(html.pg-zone) footer { text-align: center; padding: 30px 0 34px 0; }
-:where(html.pg-zone) .foot { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ivory-dim); opacity: 0.75; }
-:where(html.pg-zone) .switch { cursor: pointer; margin: 16px auto 0 auto; display: block; }
-@media (max-width: 640px) {
-  :where(html.pg-zone) table, :where(html.pg-zone) tbody, :where(html.pg-zone) tr, :where(html.pg-zone) td { display: block; width: 100%; }
-  :where(html.pg-zone) tr.head { display: none; }
-  :where(html.pg-zone) td { padding: 4px 0 14px 0; border-bottom: none; }
-  :where(html.pg-zone) td.check { white-space: normal; padding-top: 14px; }
-  :where(html.pg-zone) td.date { text-align: left; padding-bottom: 14px; border-bottom: 1px solid var(--gold-line-soft); }
-  :where(html.pg-zone) tr { border-bottom: none; }
-}
