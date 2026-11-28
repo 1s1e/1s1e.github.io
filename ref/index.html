@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" class="pg-ref">
+<html lang="en" class="pg-ref" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="light" />
     <meta name="description" content="The Isle reference catalogues by M & D Silver: Volume One Furniture, Volume Two Decor, Volume Three Build Selections, and Appendix, the Inspiration. Covers, contents and the complete PDF of each catalogue." />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png" />
@@ -14,17 +14,15 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#1d2a3b" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
-    <meta name="theme-color" id="themeColor" content="#1d2a3b" />
+    <meta name="theme-color" content="#f0e8d5" />
     <title>The Isle &#183; Reference Catalogues</title>
     <script>window.goatcounter = { no_onload: true };</script>
-    <script>try { var savedTheme = localStorage.getItem("isle-theme"); var startTheme = (savedTheme === "dark" || savedTheme === "light") ? savedTheme : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); document.documentElement.setAttribute("data-theme", startTheme); var tcMeta = document.getElementById("themeColor"); if (tcMeta) { tcMeta.setAttribute("content", startTheme === "dark" ? "#1d2a3b" : "#f0e8d5"); } } catch (e) {}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/the-isle-master.css" />
   </head>
   <body>
-    <button id="themeToggle" class="switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-mode="light"><span class="glyph sun" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="glyph moon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="knob" aria-hidden="true"><span class="knob-glyph k-sun"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5 5l1.8 1.8M17.2 17.2L19 19M19 5l-1.8 1.8M6.8 17.2L5 19"/></svg></span><span class="knob-glyph k-moon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></span></button>
     <div id="view-home">
     <!-- ================= HERO ================= -->
     <header class="hero">
@@ -1954,33 +1952,5 @@
     </script>
     <script data-goatcounter="https://1s1e.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
-  
-    <script>
-      (function () {
-        var btn = document.getElementById("themeToggle");
-        if (!btn) return;
-        var root = document.documentElement;
-        var mq = window.matchMedia("(prefers-color-scheme: dark)");
-        function effective() {
-          return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
-        }
-        function sync() {
-          try { if (!localStorage.getItem("isle-theme")) root.setAttribute("data-theme", mq.matches ? "dark" : "light"); } catch (e) {}
-          var mode = effective();
-          btn.setAttribute("data-mode", mode);
-          btn.setAttribute("aria-checked", mode === "dark" ? "true" : "false");
-          var tc = document.getElementById("themeColor");
-          if (tc) { tc.setAttribute("content", mode === "dark" ? "#1d2a3b" : "#f0e8d5"); }
-        }
-        btn.addEventListener("click", function () {
-          var nextTheme = effective() === "dark" ? "light" : "dark";
-          root.setAttribute("data-theme", nextTheme);
-          try { localStorage.setItem("isle-theme", nextTheme); } catch (e) {}
-          sync();
-        });
-        if (typeof mq.addEventListener === "function") mq.addEventListener("change", sync);
-        sync();
-      })();
-    </script>
   </body>
 </html>
