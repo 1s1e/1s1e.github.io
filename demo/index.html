@@ -370,6 +370,50 @@ a.hh-crumb:hover{color:var(--ink);}
 @media (max-width:560px){
  .hh-lockup{width:272.27px;}
 }
+
+/* Header wordmark offset for the shared file's own internal
+   margins, generated (see the Directory generator's notes.md
+   for the full measurement record): the lettering inside
+   /assets/the-isle-text-silver.svg does not fill its viewBox
+   (0 0 1307 296). Measured from the file's own path geometry,
+   the lettering's bounding box runs from x 29.1708 to
+   x 1274.1433, so the file carries an internal margin of
+   29.1708 units, 2.2319 percent of its width, at the left
+   and 32.8567 units, 2.5139 percent, at the right. The shared
+   file stands unaltered; the rendered wordmark is shifted by
+   those proportions instead, so the visible lettering, not
+   the file's box, is what stands placed. At desktop and
+   tablet widths, where the wordmark stands at the left, the
+   shift puts the lettering's first drawn edge exactly on
+   the panel's left edge; at phone width, where the wordmark
+   is centred by its box, the shift is half the difference
+   of the margins, 0.1410 percent to the right, so the
+   lettering's own centre stands on the panel's centre.
+   The desktop and tablet percentages carry, on top of the
+   2.2319 percent margin, a small measured correction for
+   the renderer: WebKit draws the SVG through a bitmap whose
+   height is the box height taken whole (99 of 99.95px at
+   desktop, 98 of 98.06px at tablet), so the drawn ink
+   stands inset from the file geometry by a further 1.84px
+   at desktop and 0.13px at tablet, fitted from the drawn
+   letter stems to within 0.02px. The percentages below are
+   the margin plus that correction at each of the design's
+   fixed sizes (2.6492 percent desktop, 2.2622 percent at
+   820px and under), so the drawn edge, not only the
+   geometry, lands on the panel's edge. At phone width the
+   inset is symmetric and the drawn centre already lands
+   exact, so the pure margin proportion stands there.
+   translateX percentages take the element's own width, so
+   each shift scales with the wordmark at its size. The
+   shift is a transform: the band's layout, its heights and
+   the wordmark's vertical placement are untouched. */
+.hh-lockup{transform:translateX(-2.6492%);}
+@media (max-width:820px){
+ .hh-lockup{transform:translateX(-2.2622%);}
+}
+@media (max-width:560px){
+ .hh-lockup{transform:translateX(0.1410%);}
+}
 </style>
 </head>
 <body>
