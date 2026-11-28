@@ -351,6 +351,25 @@ a.hh-crumb:hover{color:var(--ink);}
    continuous letterspaced run. */
 .hh-trail{gap:0;}
 .hh-sep{letter-spacing:.30em;}
+
+/* Header wordmark one step up, generated (see the Directory
+   generator's notes.md): at desktop and tablet widths the
+   wordmark renders one step, a factor of 1.10, above the
+   splash's own rendered sizes, 401.25px to 441.38px at desktop
+   and 393.64px to 433.00px at 820px and under, by the user's
+   pick. The shared file at /assets/the-isle-text-silver.svg
+   stands unaltered; only its rendered size changes. The band's
+   even 16px space above and below the wordmark stands, so the
+   band grows only by the wordmark's added height. At phone
+   width the size stands at the splash's own 272.27px,
+   restated here so the step does not reach it. */
+.hh-lockup{width:441.38px;}
+@media (max-width:820px){
+ .hh-lockup{width:433.00px;}
+}
+@media (max-width:560px){
+ .hh-lockup{width:272.27px;}
+}
 </style>
 </head>
 <body>
