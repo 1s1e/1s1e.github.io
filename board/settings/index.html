@@ -579,7 +579,7 @@
 
   <div class="card" id="live-card" style="display:none;">
     <label>Live board</label>
-    <div class="note-text">This board is fed live by the OpenSky Network: aircraft over the house, refreshed every ten minutes. There is nothing to type; its content is the feed.</div>
+    <div class="note-text">This board is fed live by the OpenSky Network: aircraft over The Isle, refreshed every ten minutes. There is nothing to type; its content is the feed.</div>
   </div>
 
   <div class="sound-grid">
@@ -974,7 +974,7 @@ function demoBoards(){
       quietHours: { on:true, start:"23:00", end:"07:00" }
     },
     {
-      id: "board-today", name: "Today at the House", type: "departures", kind: "custom", customTitle: "TODAY AT THE HOUSE",
+      id: "board-today", name: "Today at The Isle", type: "departures", kind: "custom", customTitle: "TODAY AT THE ISLE",
       flights: [],
       lines: [
         {text:"8 00 AM \u00b7 YOGA ON THE DOCK", black:false},
@@ -1255,7 +1255,7 @@ function demoBoards(){
         {text:"NO ACTIVE STORM \u00b7 SAMPLE", black:false},
         {text:"HURRICANE SEASON TO NOV 30", black:false},
         {text:"NEXT NHC UPDATE \u00b7 AS ISSUED", black:false},
-        {text:"HOUSE PLAN \u00b7 OWNER TEXT", black:false}
+        {text:"THE ISLE PLAN \u00b7 OWNER TEXT", black:false}
       ],
       clackSet: "pragotron",
       ambience: { on:true, bed:"kualalumpur",
@@ -1269,7 +1269,7 @@ function demoBoards(){
       flights: [],
       lines: [
         {text:"GUEST FAMILY \u00b7 TO DEC 1", black:false},
-        {text:"WI-FI AND HOUSE NOTES: ASK ANY OF US", black:false},
+        {text:"WI-FI AND ISLE NOTES: ASK ANY OF US", black:false},
         {text:"BOAT LEAVES DOCK AT 10 30 AM", black:false},
         {text:"SUNSET TONIGHT 5 33 PM \u00b7 BEACH", black:false},
         {text:"HAPPY ANNIVERSARY \u00b7 SAMPLE", black:false}
@@ -1364,6 +1364,25 @@ function mergeSeeds(cfg){
     if(!b.sceneSounds){ b.sceneSounds = { on:false, level:0.5 }; changed = true; }
     if(!b.flights){ b.flights = []; changed = true; }
     if(!b.lines){ b.lines = []; changed = true; }
+  });
+  /* The Isle wording migration (user decision, Nov 28, 2026): the
+     seed texts that called The Isle a house take The Isle forms in
+     stored configurations too. Exact matches only, on the boards
+     that carry those seed texts; a board the user has renamed or
+     edited carries different strings and is left entirely alone.
+     Idempotent: once migrated, no old string remains to match. */
+  var migToday = cfg.boards["board-today"];
+  if(migToday){
+    if(migToday.name === "Today at the House"){ migToday.name = "Today at The Isle"; changed = true; }
+    if(migToday.customTitle === "TODAY AT THE HOUSE"){ migToday.customTitle = "TODAY AT THE ISLE"; changed = true; }
+  }
+  [["board-storm", "HOUSE PLAN \u00b7 OWNER TEXT", "THE ISLE PLAN \u00b7 OWNER TEXT"],
+   ["board-welcome", "WI-FI AND HOUSE NOTES: ASK ANY OF US", "WI-FI AND ISLE NOTES: ASK ANY OF US"]].forEach(function(m){
+    var mb = cfg.boards[m[0]];
+    if(!mb || !mb.lines) return;
+    mb.lines.forEach(function(l){
+      if(l && l.text === m[1]){ l.text = m[2]; changed = true; }
+    });
   });
   if(!cfg.liveBoardId || !cfg.boards[cfg.liveBoardId]){
     cfg.liveBoardId = (wasEmpty && cfg.boards["board-terminal-one"])
