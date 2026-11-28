@@ -71,7 +71,7 @@ img{display:block;}
 .hh-r1{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-top:28px;padding-bottom:8px;}
 .hh-home{display:block;flex:none;}
 .hh-lockup{width:336px;height:auto;}
-.hh-trail{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:nowrap;padding:4px 0 8px;}
+.hh-trail{border-top:1px solid rgba(192,192,192,.30);display:flex;align-items:center;gap:12px;flex-wrap:nowrap;padding:4px 0 8px;}
 .hh-crumb{font-size:13px;font-weight:600;letter-spacing:.30em;text-transform:uppercase;color:#C0C0C0;white-space:nowrap;min-height:44px;display:flex;align-items:center;}
 a.hh-crumb:hover{color:#f0e8d5;}
 .hh-crumb.cur{color:#f0e8d5;}
@@ -264,20 +264,6 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
    the trail's links, separator, colours, 13px size and the
    crumbs' 44px minimum touch height stand. Nothing else
    differs from the base at any width. */
-/* Menu bar to the right, The Isle dropped, divider removed,
-   this sample (see notes.md): the depth trail stands right
-   aligned at every width, its row taking
-   justify-content:flex-end, so the trail sits at the right
-   end of the header wrap and a longer trail grows to the
-   left; the crumbs keep their order, ancestors first and the
-   current page last at the far right. "The Isle" and its
-   separator come out of the trail, which now shows only the
-   path below home; on this page it reads simply "PAGES".
-   The divider line above the trail, the silver hairline
-   between the lockup row and the trail row, is removed; the
-   trail row's own padding stands. The lockup above remains
-   the home link, unchanged. Nothing else differs from the
-   base. */
 </style>
 </head>
 <body>
@@ -288,6 +274,8 @@ header .wrap,.band-bot .wrap{max-width:1020px;padding-left:0;padding-right:0;}
    <a class="hh-home" href="https://1s1e.com/" aria-label="The Isle, home"><img class="hh-lockup" src="assets/the-isle-horizontal-silver-colourtree.svg" alt="The Isle"></a>
   </div>
   <nav class="hh-trail" aria-label="Depth">
+   <a class="hh-crumb" href="https://1s1e.com/">The Isle</a>
+   <span class="hh-sep" aria-hidden="true">/</span>
    <span class="hh-crumb cur" aria-current="page">Pages</span>
   </nav>
  </div>
