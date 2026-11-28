@@ -298,6 +298,23 @@ a.hh-crumb:hover{color:var(--ink);}
 .hh-crumb.cur{color:var(--ink);}
 .hh-sep{color:var(--dim);}
 .cols{margin-top:16px;}
+/* Menu line tightened, this sample (see notes.md): the menu
+   line's opening inside the panel is tightened at the user's
+   direction. The space above the line goes from 24px to 12px;
+   the crumbs' 44px minimum height comes out for this line,
+   and the trail takes 4px above and 4px below the text, so
+   the row stands at the text's own height, about 29px in all;
+   and the gap below the line to the columns' top rule goes
+   from 16px to 12px, the columns' own top border standing as
+   it is. The line's 13px size, .30em letterspacing and
+   colours stand, and its wording takes the settled form in
+   this sample: "/ Directory /", the page's name without its
+   article, in the path form with a slash at both ends, like
+   the location labels on the page itself. Nothing else
+   differs from the base. */
+.hh-trail{margin-top:12px;padding-top:4px;padding-bottom:4px;}
+.hh-crumb{min-height:0;}
+.cols{margin-top:12px;}
 </style>
 </head>
 <body>
@@ -313,7 +330,8 @@ a.hh-crumb:hover{color:var(--ink);}
 <div class="wrap panel">
  <nav class="hh-trail" aria-label="Depth">
   <span class="hh-sep" aria-hidden="true">/</span>
-  <span class="hh-crumb cur" aria-current="page">Dir</span>
+  <span class="hh-crumb cur" aria-current="page">Directory</span>
+  <span class="hh-sep" aria-hidden="true">/</span>
  </nav>
  <div class="cols">
   <div class="col-l">
