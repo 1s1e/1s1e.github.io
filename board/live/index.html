@@ -79,30 +79,62 @@
   .row{ padding: var(--row-pad, 0.55vh) 0; }
   .cell{ display:flex; gap: var(--gap); }
   .spacer{ width: calc(var(--tile-w) * 1.15); flex: none; }
+  /* One split-flap tile, the original board's construction: static
+     top and bottom halves, a falling flap, a landing flap, a shadow
+     that sweeps the lower half and a constant hinge line. The outer
+     box is the settled tile box; the halves carry the tile's own
+     gradient, each showing its half of it. */
   .tile{
     width: var(--tile-w); height: var(--tile-h); flex: none;
-    background: linear-gradient(to bottom, #1d1e21 0%, #17181a 49.4%, #060607 49.6%, #060607 50.4%, #131416 50.6%, #101112 100%);
+    position: relative; overflow: hidden;
     border-radius: calc(var(--tile-w) * 0.09);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.045), inset 0 -6px 10px rgba(0,0,0,.55);
-    display:flex; align-items:center; justify-content:center;
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: calc(var(--tile-w) * 0.94);
-    font-weight: 700; line-height: 1; color: var(--ink);
+    font-weight: 600; line-height: 1; color: var(--ink);
     text-shadow: 0 1px 0 rgba(0,0,0,.6);
-    transform-origin: 50% 50%;
+    perspective: 420px;
+    transform: rotate(var(--tilt, 0deg));
     user-select:none;
   }
-  .tile.flip{ animation: tileflip 85ms ease-in; }
-  @keyframes tileflip{
-    0%{ transform: perspective(300px) rotateX(0deg); }
-    55%{ transform: perspective(300px) rotateX(-38deg); filter: brightness(1.25); }
-    100%{ transform: perspective(300px) rotateX(0deg); }
+  .tile::after{
+    content:""; position:absolute; inset:0; z-index:8; pointer-events:none;
+    border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.045);
   }
-  .tile.land{ animation: tileland 130ms ease-out; }
-  @keyframes tileland{
-    0%{ transform: scale(1.035); } 100%{ transform: scale(1); }
+  .tile .half{
+    position:absolute; left:0; width:100%; height:50%; overflow:hidden;
+    backface-visibility:hidden;
+    background: linear-gradient(to bottom, #1d1e21 0%, #17181a 49.4%, #060607 49.6%, #060607 50.4%, #131416 50.6%, #101112 100%);
+    background-size: 100% 200%;
+  }
+  .tile .half .glyph{
+    position:absolute; left:0; width:100%; height:200%;
+    line-height: var(--tile-h); font-size: 1em; display:block; text-align:center;
+  }
+  .tile .half.top{ top:0; background-position: 0 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.055); }
+  .tile .half.top .glyph{ top:0; }
+  .tile .half.bottom{ bottom:0; background-position: 0 100%; box-shadow: inset 0 -6px 10px rgba(0,0,0,.55), inset 0 -1px 0 rgba(0,0,0,.65); }
+  .tile .half.bottom .glyph{ top:-100%; }
+  .tile .flap-fall{ z-index:5; transform-origin: 50% 100%; display:none; will-change: transform, filter; }
+  .tile .flap-land{ z-index:6; transform-origin: 50% 0%; display:none; will-change: transform, filter; transform: rotateX(90deg); }
+  .tile .cell-shadow{
+    position:absolute; left:0; bottom:0; width:100%; height:50%; z-index:4; pointer-events:none;
+    background: linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15)); opacity:0;
+  }
+  .tile .hinge{
+    position:absolute; left:0; top:50%; width:100%; height:1px; margin-top:-1px; z-index:7; pointer-events:none;
+    background:#000; box-shadow: 0 1px 0 rgba(255,255,255,.05);
   }
   .row .remarks .tile{ color: var(--ink); }
-  .row .remarks .tile.hot{ color: var(--amber); }
+  /* Whole-row status colour, the original board's row classes:
+     every tile in the row takes the status colour. */
+  .row.st-boarding .tile{ color:#7fb069; }
+  .row.st-final .tile{ color:#d9b36a; }
+  .row.st-delayed .tile, .row.st-cancelled .tile{ color:#c96a5e; }
+  .row.st-departed .tile{ color:#97938a; }
+  .row.msgrow .tile{ color:#d9b36a; }
+  @media (prefers-reduced-motion: reduce){
+    .tile.flip, .tile.land, .g-tile.settle, .px.shimmer{ animation: none !important; }
+  }
   /* ---- colour board ---- */
   #colour{ display:none; }
   #colour .pxgrid{ display:grid; gap: 2px; justify-content:center; }
@@ -249,7 +281,7 @@
   #lampwrap{ position:absolute; top: calc(var(--pad-y, 2vh) * 0.30); right: var(--pad-x, 2vw);
     z-index:6; pointer-events:none; font-size: calc(var(--tile-w, 18px) * 1.02); }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <main id="board" aria-label="Departures board">
@@ -1069,7 +1101,7 @@ setInterval(function(){
 }, 1000);
 
 /* ============ Flap machinery ============ */
-var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
+var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.·";
 function ringIdx(ch){ var i = RING.indexOf(ch); return i < 0 ? 0 : i; }
 function cleanRaw(text){
   text = String(text == null ? "" : text).toUpperCase();
@@ -1135,7 +1167,9 @@ function isleRowsFor(iw, ih, fs, text){
   var pad = boardPads(fs, iw, ih);
   var headerEtc = text ? 1.85 : 2.52;
   var avail = ih * (1 - 2 * INSET_Y) - 2 * pad.y - 2 - headerEtc * w;
-  return Math.max(1, Math.floor(avail / (FILL_PITCH * w)));
+  var rows = Math.max(1, Math.floor(avail / (FILL_PITCH * w)));
+  if(!text) rows = Math.max(1, rows - 1); /* the message row under the flights takes one pitch of the fill */
+  return rows;
 }
 var fillKey = "", fillRows = 0;
 function boardRows(){
@@ -1206,43 +1240,113 @@ function applyHeadings(){
 var tileGrid = []; /* [row][col] -> [tile elements] */
 var rowsBuilt = false, builtRowCount = 0;
 var TEXT_COLS = 46; /* tiles across a text-board line, computed by fitBoard */
-function buildOneRow(colsDef, black, flight){
-  var rowEl = document.createElement("div"); rowEl.className = "row";
+/* ============ Split-flap tiles: the original board's cell ============
+   Each tile is built from static top and bottom halves, a falling
+   flap, a landing flap, a shadow and a hinge, and carries a fixed
+   per-tile identity from its position: its own motor rate (0.96 to
+   1.04), its own start jitter (0 to 20 ms) and its own slight tilt
+   (plus or minus 0.25 degrees), all from the sample's stable hash
+   of the tile's seed, so the same tile keeps the same motor on
+   every render. */
+var TILE_HTML =
+  '<div class="half top s-top"><span class="glyph"></span></div>' +
+  '<div class="half bottom s-bot"><span class="glyph"></span></div>' +
+  '<div class="cell-shadow"></div>' +
+  '<div class="half top flap-fall"><span class="glyph"></span></div>' +
+  '<div class="half bottom flap-land"><span class="glyph"></span></div>' +
+  '<div class="hinge"></div>';
+function tileHash(n){ var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function dispChar(ch){ return ch === " " ? "\u00A0" : ch; }
+function setTileStatic(t, ch){
+  if(t._p){ t._p.sTop.textContent = dispChar(ch); t._p.sBot.textContent = dispChar(ch); }
+  else t.textContent = ch;
+}
+function makeTile(rowIdx, globalCol){
+  var t = document.createElement("div"); t.className = "tile";
+  var seed = rowIdx * 97 + globalCol * 13 + 7;
+  t.style.setProperty("--tilt", ((tileHash(seed) - 0.5) * 0.5).toFixed(2) + "deg");
+  t.innerHTML = TILE_HTML;
+  t._p = {
+    sTop: t.querySelector(".s-top .glyph"), sBot: t.querySelector(".s-bot .glyph"),
+    fFall: t.querySelector(".flap-fall"), fFallG: t.querySelector(".flap-fall .glyph"),
+    fLand: t.querySelector(".flap-land"), fLandG: t.querySelector(".flap-land .glyph"),
+    shadow: t.querySelector(".cell-shadow")
+  };
+  t._rate = 0.96 + tileHash(seed + 31) * 0.08;      /* fixed per tile: its own motor */
+  t._jitter = Math.floor(tileHash(seed + 57) * 21); /* 0-20 ms, stable per tile */
+  t.dataset.ch = " ";
+  setTileStatic(t, " ");
+  return t;
+}
+/* Whole-row status colour, keyed to the same status the remark
+   ladder and the feeds produce, as the original board's row
+   classes were. */
+function rowStatusClass(remarks){
+  var s = String(remarks || "").toUpperCase();
+  if(/CANCEL/.test(s)) return "st-cancelled";
+  if(/DELAY/.test(s)) return "st-delayed";
+  if(/FINAL/.test(s)) return "st-final";
+  if(/BOARDING/.test(s)) return "st-boarding";
+  if(/DEPARTED|LANDED/.test(s)) return "st-departed";
+  return "";
+}
+var msgTiles = [];
+function buildOneRow(colsDef, black, flight, rowIdx){
+  var rowEl = document.createElement("div");
+  rowEl.className = "row"; /* the status class is set by renderBoard's job
+     loop, from the same flight snapshot the tiles target, so the row's
+     colour and its remarks can never come from different moments */
   var gridRow = [];
+  var gc = 0;
   colsDef.forEach(function(c, ci){
     if(ci){ var s = document.createElement("div"); s.className = "spacer"; rowEl.appendChild(s); }
     var cell = document.createElement("div"); cell.className = "cell " + c.key;
     var tiles = [];
     for(var k=0;k<c.width;k++){
-      var t = document.createElement("div"); t.className = "tile"; t.textContent = " ";
-      t.dataset.ch = " ";
-      if(!black && c.key === "remarks" && flight && /FINAL|DELAY|CANCEL/.test(flight.remarks || "")) t.classList.add("hot");
+      var t = makeTile(rowIdx, gc); gc++;
       cell.appendChild(t); tiles.push(t);
     }
     rowEl.appendChild(cell); gridRow.push(tiles);
   });
   rowsEl.appendChild(rowEl); tileGrid.push(gridRow);
 }
-/* Exactly boardRows() rows, the computed fill: content rows come
-   first (one page of them, see pageSlice), fewer flights are padded
-   with blank flap rows, and a black row is all blank. */
+/* The flipping message row under the flights, the original board's
+   message line: its own row of tiles on the flights grid, joining
+   every cascade after the last flight row. */
+function buildMessageRow(rowIdx){
+  var rowEl = document.createElement("div"); rowEl.className = "row msgrow";
+  msgTiles = [];
+  var gc = 0;
+  COLS.forEach(function(c, ci){
+    if(ci){ var s = document.createElement("div"); s.className = "spacer"; rowEl.appendChild(s); }
+    var cell = document.createElement("div"); cell.className = "cell message";
+    var tiles = [];
+    for(var k=0;k<c.width;k++){
+      var t = makeTile(rowIdx, gc); gc++;
+      cell.appendChild(t); tiles.push(t);
+    }
+    rowEl.appendChild(cell); msgTiles.push(tiles);
+  });
+  rowsEl.appendChild(rowEl);
+}
 function buildRows(){
-  rowsEl.innerHTML = ""; tileGrid = [];
+  rowsEl.innerHTML = ""; tileGrid = []; msgTiles = [];
   var count = boardRows(), i;
   builtRowCount = count;
   if(isTextBoard()){
     var lines = pageSlice(effLines(), count);
     for(i = 0; i < count; i++){
       var ln = lines[i] || { text:"", black:false };
-      buildOneRow([{ key:"line", width: TEXT_COLS }], !!ln.black, null);
+      buildOneRow([{ key:"line", width: TEXT_COLS }], !!ln.black, null, i);
     }
     return;
   }
   var fl = pageSlice(effFlights(), count);
   for(i = 0; i < count; i++){
     var f = fl[i] || null;
-    buildOneRow(COLS, !!(f && f.black), f);
+    buildOneRow(COLS, !!(f && f.black), f, i);
   }
+  buildMessageRow(count);
 }
 
 /* === SCENE ENGINE BEGIN ===
@@ -1938,7 +2042,7 @@ function initAudio(){
   compNode.threshold.value = -18; compNode.ratio.value = 2;
   compNode.attack.value = 0.003; compNode.release.value = 0.2;
   compNode.connect(limiterNode);
-  masterBus = AC.createGain(); masterBus.gain.value = 1;
+  masterBus = AC.createGain(); masterBus.gain.value = gentleOn ? 0.55 : 1;
   masterBus.connect(compNode);
   /* Clack bus: every flap voice routes here, through a gentle
      75 Hz high-pass (the sub-rumble goes, the sub-200 Hz thump
@@ -2038,7 +2142,7 @@ function nextFrom(bagName, pool){
    releases twice over, on its onended and on a timer set past its
    end, so no voice can be counted forever. */
 var activeVoices = 0, lastOnsetAt = 0, cascadeDrift = 1, lastRunAt = 0;
-function voiceCap(){ return 10; }
+function voiceCap(){ return gentleOn ? 6 : 10; }
 function jitterDb(db){ return Math.pow(10, ((Math.random() * 2 - 1) * db) / 20); }
 function gauss(){ return (Math.random() + Math.random() + Math.random()) / 1.5 - 1; } /* ~ -1..1, centre-weighted */
 /* Density trim: as simultaneous voices rise, each voice gives a
@@ -2432,10 +2536,155 @@ function inQuietHours(){
   return a <= b ? (mins >= a && mins < b) : (mins >= a || mins < b);
 }
 
+/* ============ The flip runner: the original board's motion ============
+   One step is a fall and a landing: the falling flap lets go with
+   a hesitation, falls under the gravity ease darkening as it goes,
+   the bottom half swaps mid-fall behind it, and the landing flap
+   comes down, fluttering on the final step only. Each tile steps
+   at its own fixed motor rate; a travel over 24 steps fast-forwards
+   at 30 ms a step until its last three steps, which flip fully;
+   the drum eases into its stop with a pause before the last step.
+   Gentle (the sample's soft mode) is the board in its quiet hours:
+   120 ms steps, a 60 ms column sweep, the master gain at 0.55, the
+   voice cap at 6 and the beds off, while the settled quiet-hours
+   rule still holds: in quiet hours the board flips softly and
+   makes no sound. Under reduced motion a tile sets instantly and
+   flip sound is suppressed. */
+function sleepMs(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+var reducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+if(window.matchMedia){
+  var rmQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if(rmQuery.addEventListener) rmQuery.addEventListener("change", function(e){ reducedMotion = e.matches; });
+  else if(rmQuery.addListener) rmQuery.addListener(function(e){ reducedMotion = e.matches; });
+}
+var gentleOn = false;
+function updateGentle(){
+  if(!board) return;
+  var g = inQuietHours();
+  if(g === gentleOn) return;
+  gentleOn = g;
+  if(masterBus) masterBus.gain.value = g ? 0.55 : 1;
+  if(g && bedEl && !bedEl.paused){ try{ bedEl.pause(); }catch(e){} } /* beds off in gentle */
+}
+function flipStepTile(tile, next, isFinal, stepIdx){
+  var p = tile._p;
+  if(!p){ setTileStatic(tile, next); tile.dataset.ch = next; return Promise.resolve(); }
+  var stepMs = (gentleOn ? 120 : 85) * (tile._rate || 1);
+  var fallMs = Math.round(stepMs * 0.53);
+  var landMs = Math.round(stepMs * 0.47) + (isFinal ? 130 : 0);
+  return (async function(){
+    if(stepIdx === 0) await sleepMs(8); /* hesitation: let go just past vertical */
+    p.sTop.textContent = dispChar(next);            /* static top already shows next */
+    p.fFallG.textContent = dispChar(tile.dataset.ch || " ");
+    p.fLandG.textContent = dispChar(next);
+    p.fFall.style.display = "block";
+    p.fFall.style.transform = "rotateX(0deg)";
+    p.fLand.style.display = "block";
+    p.fLand.style.transform = "rotateX(90deg)";
+    try{
+      var fallAnim = p.fFall.animate(
+        [{ transform: "rotateX(0deg)", filter: "brightness(1)" },
+         { transform: "rotateX(-90deg)", filter: "brightness(0.5)" }],
+        { duration: fallMs, easing: "cubic-bezier(0.45, 0, 1, 1)", fill: "forwards" });
+      var shAnim = p.shadow.animate(
+        [{ opacity: 0 }, { opacity: 0.38, offset: 0.8 }, { opacity: 0.3 }],
+        { duration: fallMs, easing: "ease-in", fill: "forwards" });
+      await fallAnim.finished;
+      p.sBot.textContent = dispChar(next);          /* bottom swaps mid-fall, behind the flap */
+      var frames = isFinal ?
+        [{ transform: "rotateX(90deg)", filter: "brightness(0.65)" },
+         { transform: "rotateX(-4deg)", filter: "brightness(1.06)", offset: 0.45 },
+         { transform: "rotateX(1.4deg)", filter: "brightness(1)", offset: 0.68 },
+         { transform: "rotateX(-0.6deg)", offset: 0.85 },
+         { transform: "rotateX(0deg)" }] :
+        [{ transform: "rotateX(90deg)", filter: "brightness(0.65)" },
+         { transform: "rotateX(-1deg)", filter: "brightness(1.02)", offset: 0.8 },
+         { transform: "rotateX(0deg)" }];
+      var landAnim = p.fLand.animate(frames,
+        { duration: landMs, easing: isFinal ? "cubic-bezier(0, 0, 0.3, 1.35)" : "cubic-bezier(0, 0, 0.3, 1)", fill: "forwards" });
+      var sh2 = p.shadow.animate([{ opacity: 0.3 }, { opacity: 0 }], { duration: landMs, fill: "forwards" });
+      await landAnim.finished;
+      try{ shAnim.cancel(); sh2.cancel(); }catch(e){}
+    }catch(e){}
+    p.fFall.style.display = "none";
+    p.fLand.style.display = "none";
+    p.shadow.style.opacity = "0";
+    setTileStatic(tile, next);
+    tile.dataset.ch = next;
+  })();
+}
+function runFlipJobs(jobs, soundOK){
+  var totalSteps = 0; jobs.forEach(function(j){ totalSteps += j.steps; });
+  if(!reducedMotion && totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
+  var thinning = Math.min(0.92, 0.25 + totalSteps / 260); /* dense cascades: fewer, softer ticks */
+  jobs.forEach(function(j){ runFlipJob(j, soundOK, thinning); });
+}
+function runFlipJob(j, soundOK, thinning){
+  var tile = j.tile;
+  /* Generation guard: a newer render supersedes this tile's older
+     jobs, so overlapping cascades can never strand a tile mid-flip. */
+  var gen = (tile._flipGen = (tile._flipGen || 0) + 1);
+  if(j.steps === 0 || reducedMotion){ setTileStatic(tile, j.to); tile.dataset.ch = j.to; return; }
+  setTimeout(function(){
+    if(tile._flipGen !== gen) return;
+    (async function(){
+      var pos = ringIdx(j.from), remaining = j.steps, s = 0;
+      while(remaining > 0){
+        if(tile._flipGen !== gen) return;
+        pos = (pos + 1) % RING.length;
+        var next = RING[pos];
+        var isFinal = remaining === 1;
+        if(j.steps > 24 && remaining > 3){
+          /* Fast-forward: static swaps at 30 ms a step until the
+             last three steps, which flip fully. The run segment
+             carries the sound of the middle, as in the sample. */
+          setTileStatic(tile, next); tile.dataset.ch = next;
+          if(soundOK && !j.silent && s === 0) playRunSegment(j.pan);
+          await sleepMs(Math.round(30 * (tile._rate || 1)));
+        } else {
+          if(soundOK && !j.silent){
+            if(Math.random() > thinning) playStep(j.pan);
+            if(isFinal) playFlap(j.pan);
+          }
+          await flipStepTile(tile, next, isFinal, s);
+          if(remaining === 2) await sleepMs(12);   /* drum eases into its stop */
+        }
+        s++; remaining--;
+      }
+      tile.dataset.ch = j.to;
+    })();
+  }, j.delay);
+}
+function boardMessage(){
+  var m = (board && board.message != null) ? String(board.message) : "WELCOME TO THE ISLE";
+  return m.toUpperCase();
+}
+function appendMessageJobs(jobs, count, cascade){
+  if(!msgTiles.length) return;
+  var total = 0; COLS.forEach(function(c){ total += c.width; });
+  var msg = cleanRaw(boardMessage());
+  msg = (msg + " ".repeat(total)).slice(0, total);
+  var gc = 0;
+  COLS.forEach(function(c, ci){
+    for(var k = 0; k < c.width; k++){
+      var tile = msgTiles[ci][k];
+      var from = tile.dataset.ch || " ";
+      var steps = (ringIdx(msg[gc]) - ringIdx(from) + RING.length) % RING.length;
+      if(!cascade) steps = 0;
+      jobs.push({ tile: tile, from: from, to: msg[gc], steps: steps,
+                  pan: (gc + 0.5) / total * 2 - 1,
+                  delay: (gentleOn ? 60 : 30) * Math.min(gc, 20) + 15 * count + (tile._jitter || 0) + 120,
+                  silent: false });
+      gc++;
+    }
+  });
+}
+
 /* ============ Cascade rendering ============ */
 var STEP_MS = 85;
 function renderBoard(cascade){
   if(cascade) cascadeDrift = 0.98 + Math.random() * 0.04; /* one motor, slightly loaded, per cascade (the sample) */
+  updateGentle();
   var st = boardStyle();
   if(st === "flappix"){ stopStyled(); showColour(); showPixCap(); return; }
   hidePixCap();
@@ -2467,7 +2716,7 @@ function renderBoard(cascade){
         if(!cascade) stepsL = 0;
         jobs.push({ tile: tt, from: fromL, to: targetLine[k], steps: stepsL,
                     pan: (k + 0.5) / TEXT_COLS * 2 - 1,
-                    delay: r * 55 + k * 26 + Math.random() * 22, silent: !!ln.black });
+                    delay: (gentleOn ? 60 : 30) * k + 15 * r + (tt._jitter || 0), silent: !!ln.black });
       }
     }
   } else {
@@ -2476,6 +2725,8 @@ function renderBoard(cascade){
     COLS.forEach(function(c){ colOff.push(colTot); colTot += c.width; });
     for(r = 0; r < count; r++){
       var f = fl[r] || null;
+      var rowEl = rowsEl.children[r];   /* row colour from this same snapshot */
+      if(rowEl) rowEl.className = "row" + ((f && !f.black && rowStatusClass(f.remarks)) ? " " + rowStatusClass(f.remarks) : "");
       var silent = !f || !!f.black; /* blank and black rows make no clack of their own */
       COLS.forEach(function(c, ci){
         var target = (!f || f.black) ? "" : clean(f[c.key], c.width);
@@ -2487,45 +2738,13 @@ function renderBoard(cascade){
           if(!cascade) steps = 0;
           jobs.push({ tile: tile, from: from, to: target[k2], steps: steps,
                       pan: (colOff[ci] + k2 + 0.5) / colTot * 2 - 1,
-                      delay: r * 55 + ci * 130 + k2 * 26 + Math.random() * 22, silent: silent });
+                      delay: (gentleOn ? 60 : 30) * (colOff[ci] + k2) + 15 * r + (tile._jitter || 0), silent: silent });
         }
       });
     }
   }
-  var totalSteps = 0; jobs.forEach(function(j){ totalSteps += j.steps; });
-  if(cascade && totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
-  var quiet = inQuietHours();
-  jobs.forEach(function(j){
-    /* Generation guard: a newer render supersedes this tile's older
-       jobs, so overlapping cascades can never strand a tile mid-flip. */
-    var gen = (j.tile._flipGen = (j.tile._flipGen || 0) + 1);
-    if(j.steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
-    var thinning = Math.min(0.92, 0.25 + totalSteps / 260); /* dense cascades: fewer, softer ticks */
-    setTimeout(function(){
-      if(j.tile._flipGen !== gen) return;
-      var pos = ringIdx(j.from), remaining = j.steps;
-      var iv = setInterval(function(){
-        if(j.tile._flipGen !== gen){ clearInterval(iv); return; }
-        pos = (pos + 1) % RING.length;
-        var ch = RING[pos];
-        j.tile.textContent = ch;
-        j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
-        var idx = j.steps - remaining;
-        if(!quiet && !j.silent){
-          /* Long travel: the run segment carries the middle, as in
-             the sample; only the last three steps tick individually. */
-          if(j.steps > 24 && remaining > 3){ if(idx === 0) playRunSegment(j.pan); }
-          else if(Math.random() > thinning) playStep(j.pan);
-        }
-        if(--remaining <= 0){
-          clearInterval(iv);
-          j.tile.dataset.ch = j.to;
-          j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-          if(!quiet && !j.silent) playFlap(j.pan);
-        }
-      }, STEP_MS);
-    }, j.delay);
-  });
+  if(!text) appendMessageJobs(jobs, count, cascade);
+  runFlipJobs(jobs, !inQuietHours());
   renderLamp();
 }
 
@@ -2553,6 +2772,7 @@ function flipRemarkTiles(){
   var ci = -1;
   COLS.forEach(function(c, i){ if(c.key === "remarks") ci = i; });
   if(ci < 0 || !tileGrid.length) return;
+  updateGentle();
   var count = boardRows();
   var fl = pageSlice(effFlights(), count);
   var width = COLS[ci].width, jobs = [], r, k;
@@ -2566,50 +2786,20 @@ function flipRemarkTiles(){
     var shown = "";
     for(k = 0; k < width; k++) shown += tileGrid[r][ci][k].dataset.ch || " ";
     if(shown === target) continue;
-    var hot = /FINAL|DELAY|CANCEL/.test(f.remarks || "");
+    var rowEl = rowsEl.children[r];
+    var rcls = rowStatusClass(f.remarks);
+    if(rowEl) rowEl.className = "row" + (rcls ? " " + rcls : "");
     for(k = 0; k < width; k++){
       var tile = tileGrid[r][ci][k];
-      tile.classList.toggle("hot", hot);
       var from = tile.dataset.ch || " ";
       var steps = (ringIdx(target[k]) - ringIdx(from) + RING.length) % RING.length;
       jobs.push({ tile: tile, from: from, to: target[k], steps: steps,
                   pan: (colOff + k + 0.5) / colTot * 2 - 1,
-                  delay: r * 55 + ci * 130 + k * 26 + Math.random() * 22, silent: false });
+                  delay: (gentleOn ? 60 : 30) * (colOff + k) + 15 * r + (tile._jitter || 0), silent: false });
     }
   }
   if(!jobs.length) return;
-  var totalSteps = 0; jobs.forEach(function(j){ totalSteps += j.steps; });
-  if(totalSteps > 40) duck(Math.min(9000, totalSteps * 9));
-  var quiet = inQuietHours();
-  jobs.forEach(function(j){
-    /* Generation guard, as in renderBoard: a newer render supersedes
-       this tile's older jobs. */
-    var gen = (j.tile._flipGen = (j.tile._flipGen || 0) + 1);
-    if(j.steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
-    var thinning = Math.min(0.92, 0.25 + totalSteps / 260);
-    setTimeout(function(){
-      if(j.tile._flipGen !== gen) return;
-      var pos = ringIdx(j.from), remaining = j.steps;
-      var iv = setInterval(function(){
-        if(j.tile._flipGen !== gen){ clearInterval(iv); return; }
-        pos = (pos + 1) % RING.length;
-        var ch = RING[pos];
-        j.tile.textContent = ch;
-        j.tile.classList.remove("flip"); void j.tile.offsetWidth; j.tile.classList.add("flip");
-        var idx = j.steps - remaining;
-        if(!quiet){
-          if(j.steps > 24 && remaining > 3){ if(idx === 0) playRunSegment(j.pan); }
-          else if(Math.random() > thinning) playStep(j.pan);
-        }
-        if(--remaining <= 0){
-          clearInterval(iv);
-          j.tile.dataset.ch = j.to;
-          j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-          if(!quiet) playFlap(j.pan);
-        }
-      }, STEP_MS);
-    }, j.delay);
-  });
+  runFlipJobs(jobs, !inQuietHours());
 }
 /* The styled styles' remark text, updated in place: each builder
    registers its remark elements in styledState.remSpots with the
@@ -2684,6 +2874,7 @@ function stFlipTiles(jobs, opts){
   opts = opts || {};
   var ring = opts.ring || RING, stepMs = opts.stepMs || 85;
   var quiet = inQuietHours();
+  if(reducedMotion){ jobs.forEach(function(j){ if(j.el){ j.el.textContent = j.to; j.el.dataset.ch = j.to; } }); return; }
   jobs.forEach(function(j){
     if(!j.el) return;
     var from = j.el.dataset.ch || " ";
@@ -3576,8 +3767,9 @@ function fitBoard(){
     if(rowsBuilt && isTextBoard()) renderBoard(false);
   }
   var rowsAvail = boardH - 2 * pad.y - 2 - HEADER_ETC * w;
-  var leftover = Math.max(0, rowsAvail - rows * PITCH * w);
-  var rowPad = w * 0.055 + leftover / (rows * 2);
+  var totalRows = rows + (isTextBoard() ? 0 : 1); /* flight boards carry the message row under the flights */
+  var leftover = Math.max(0, rowsAvail - totalRows * PITCH * w);
+  var rowPad = w * 0.055 + leftover / (totalRows * 2);
   root.style.setProperty("--row-pad", rowPad + "px");
 }
 document.addEventListener("fullscreenchange", function(){
@@ -4460,6 +4652,7 @@ function tickClock(){
   for(var i = 0; i < sc.length; i++) sc[i].textContent = t;
 }
 tickClock(); setInterval(tickClock, 1000);
+updateGentle(); setInterval(updateGentle, 60000);
 renderBoard(false);
 /* A cascade that opens a board waits for the clack buffers when
    sound exists at all. The page this replaces fired its opening

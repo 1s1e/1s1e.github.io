@@ -221,14 +221,43 @@
      base stack, and each styled preview root (.pvst-*) overrides it with
      that style's own family, exactly as before the interface font change. */
   #pv-board, .tile-face{ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  /* The preview's split-flap tile: the display's cell construction
+     (static halves, falling and landing flaps, shadow, hinge) and
+     its IBM Plex Mono face, at the preview's measure. */
   .pv-tile{ width: var(--pv-tile, 8px); height: calc(var(--pv-tile, 8px) * 1.42); flex: none;
+            position: relative; overflow: hidden;
+            color: var(--ink);
+            font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-weight:600; font-size: calc(var(--pv-tile, 8px) * 0.94);
+            border-radius: calc(var(--pv-tile, 8px) * 0.09);
+            perspective: 420px; transform: rotate(var(--tilt, 0deg)); user-select:none; }
+  .pv-tile::after{ content:""; position:absolute; inset:0; z-index:8; pointer-events:none;
+            border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.045); }
+  .pv-tile .half{ position:absolute; left:0; width:100%; height:50%; overflow:hidden;
+            backface-visibility:hidden;
             background: linear-gradient(#26262a 0 49%, #101012 50% 51%, #1b1b1f 51% 100%);
-            color: var(--ink); display:flex; align-items:center; justify-content:center;
-            font-weight:700; font-size: calc(var(--pv-tile, 8px) * 0.94);
-            border-radius: calc(var(--pv-tile, 8px) * 0.09); }
-  .pv-tile.hot{ color: var(--amber); }
-  .pv-tile.land{ animation: pvland 120ms ease-out; }
-  @keyframes pvland{ 0%{ transform: scale(1.07); } 100%{ transform: scale(1); } }
+            background-size: 100% 200%; }
+  .pv-tile .half .glyph{ position:absolute; left:0; width:100%; height:200%;
+            line-height: calc(var(--pv-tile, 8px) * 1.42); font-size: 1em; display:block; text-align:center; }
+  .pv-tile .half.top{ top:0; background-position: 0 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.055); }
+  .pv-tile .half.top .glyph{ top:0; }
+  .pv-tile .half.bottom{ bottom:0; background-position: 0 100%; box-shadow: inset 0 -1px 0 rgba(0,0,0,.65); }
+  .pv-tile .half.bottom .glyph{ top:-100%; }
+  .pv-tile .flap-fall{ z-index:5; transform-origin: 50% 100%; display:none; will-change: transform, filter; }
+  .pv-tile .flap-land{ z-index:6; transform-origin: 50% 0%; display:none; will-change: transform, filter; transform: rotateX(90deg); }
+  .pv-tile .cell-shadow{ position:absolute; left:0; bottom:0; width:100%; height:50%; z-index:4; pointer-events:none;
+            background: linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15)); opacity:0; }
+  .pv-tile .hinge{ position:absolute; left:0; top:50%; width:100%; height:1px; margin-top:-1px; z-index:7; pointer-events:none;
+            background:#000; box-shadow: 0 1px 0 rgba(255,255,255,.05); }
+  .pv-row.st-boarding .pv-tile{ color:#7fb069; }
+  .pv-row.st-final .pv-tile{ color:#d9b36a; }
+  .pv-row.st-delayed .pv-tile, .pv-row.st-cancelled .pv-tile{ color:#c96a5e; }
+  .pv-row.st-departed .pv-tile{ color:#97938a; }
+  .pv-row.msgrow .pv-tile{ color:#d9b36a; }
+  .pv-tile.hot{ color: var(--amber); } /* the board-face thumbnails' remark flag */
+  @media (prefers-reduced-motion: reduce){
+    .pvgrid .px.shimmer{ animation: none !important; }
+  }
   #pv-colour{ display:none; }
   .pvgrid{ display:grid; gap: 2px; margin: 0 auto; width: fit-content; }
   .pvgrid .px{ border-radius: 2px; width: var(--pv-px, 10px); height: var(--pv-px, 10px); }
@@ -401,7 +430,7 @@
   .tile-colheads{ display: flex; color: #8f8c82; letter-spacing: .26em; font-weight: 600; text-transform: uppercase; }
   #editor-sections{ scroll-margin-top: 8px; }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@600&family=Source+Sans+3:wght@400;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="wrap">
@@ -498,6 +527,10 @@
     <div id="custom-title-row" style="display:none;">
       <label for="inp-custom-title">Custom title</label>
       <input type="text" id="inp-custom-title" placeholder="e.g. Regatta">
+    </div>
+    <div id="message-row" style="display:none;">
+      <label for="inp-message">Message line</label>
+      <input type="text" id="inp-message" placeholder="WELCOME TO THE ISLE">
     </div>
     <div class="hint" id="type-hint"></div>
   </div>
@@ -672,6 +705,10 @@
     </div>
     <div class="hint">A soft wave sound under every Isle Palm scene, rain on the rain scene and distant thunder on the storm scene, each a minutes-long seamless loop. Off by default. Scene sounds follow the ambience rules: they fade in and out, duck under announcements and cascades, and stop in quiet hours. Test plays the waves loop at the set level for a few seconds.</div>
   </div>
+  </div>
+  <div class="card" id="sources-card">
+    <label>Sources</label>
+    <p class="hint">Sound: real recordings, not synthesis. Flap steps and full flap events by matucha, a single Pragotron module (Freesound 174056, CC BY-NC); the Frankfurt Airport board by iainmccurdy (Freesound 546828, CC BY); Barcelona Sants by crooner (Freesound 222362, CC BY-NC 3.0); ngruber (Freesound 261244, CC0); room tone by mab, Philadelphia 30th Street Station (Freesound 23026).</p>
   </div>
   <div class="bar" id="bar-foot" hidden>
     <div class="btns">
@@ -2539,6 +2576,8 @@ function bindEditor(){
   document.getElementById("type-hint").textContent = TYPE_HINTS[tval] || "";
   document.getElementById("custom-title-row").style.display = tval === "custom" ? "" : "none";
   document.getElementById("inp-custom-title").value = b.customTitle || "";
+  document.getElementById("message-row").style.display = type === "flights" ? "" : "none";
+  document.getElementById("inp-message").value = b.message != null ? b.message : "WELCOME TO THE ISLE";
   document.getElementById("style-card").style.display =
     (type === "flights" || type === "lines") ? "" : "none";
   document.getElementById("sel-style").value = b.style || "isle";
@@ -2632,6 +2671,9 @@ document.getElementById("sel-type").addEventListener("change", function(e){
 document.getElementById("inp-custom-title").addEventListener("input", function(e){
   board().customTitle = e.target.value; saveStaged();
 });
+document.getElementById("inp-message").addEventListener("input", function(e){
+  board().message = e.target.value; saveStaged();
+});
 document.getElementById("sw-sim").addEventListener("change", function(e){
   board().simulation = e.target.checked; saveStaged(); bindEditor();
 });
@@ -2642,8 +2684,10 @@ document.getElementById("sel-style").addEventListener("change", function(e){
        content the user has already typed is kept, never lost */
     applyStyleDefaults(b, e.target.value, session.contentTouched);
   } else {
+    /* An existing board keeps its own quiet hours, on and times: a
+       style change never touches them. The style's quiet-hours
+       default applies only to a brand-new board, above. */
     b.style = e.target.value;
-    if(b.style === "gallery") b.quietHours.on = true; /* Gallery Six keeps quiet hours on by default */
   }
   saveStaged(); bindEditor();
 });
@@ -3211,7 +3255,7 @@ document.getElementById("btn-test-all").addEventListener("click", function(){
    uses) at the top of the page, locked in place while the controls
    scroll under it. Every staged edit re-renders it with its cascade.
    It is a viewer, not an editor; its one control is its own sound. */
-var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-·:";
+var RING = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.·";
 function ringIdx(ch){ var i = RING.indexOf(ch); return i < 0 ? 0 : i; }
 
 /* ============ Live data layer (preview mirror) ============
@@ -4115,8 +4159,10 @@ function pvFit(text){
   var w = Math.max(2, (boardW - 2 * padX) / units); /* tile size from the width alone, as on the display */
   var rowsAvail = boardH - 2 * padY - 2 - HEADER_ETC * w;
   var rows = Math.max(1, Math.floor(rowsAvail / (PITCH * w))); /* the computed fill */
-  var leftover = Math.max(0, rowsAvail - rows * PITCH * w);
-  var rowPad = w * 0.055 + leftover / (rows * 2);
+  if(!text) rows = Math.max(1, rows - 1); /* the message row under the flights takes one pitch, as on the display */
+  var totalRows = rows + (text ? 0 : 1);
+  var leftover = Math.max(0, rowsAvail - totalRows * PITCH * w);
+  var rowPad = w * 0.055 + leftover / (totalRows * 2);
   var wrap = document.getElementById("preview");
   wrap.style.setProperty("--pv-tile", w + "px");
   wrap.style.setProperty("--pv-gap", (w * 0.14) + "px");
@@ -4157,9 +4203,71 @@ function pvBuildHeads(b){
     cell.appendChild(sp); head.appendChild(cell);
   });
 }
+/* ============ Split-flap tiles in the preview ============
+   The display's cell construction and fixed per-tile identity,
+   mirrored: static halves, falling and landing flaps, shadow and
+   hinge; each tile's own motor rate, start jitter and tilt from
+   the same stable hash of its position. */
+var PV_TILE_HTML =
+  '<div class="half top s-top"><span class="glyph"></span></div>' +
+  '<div class="half bottom s-bot"><span class="glyph"></span></div>' +
+  '<div class="cell-shadow"></div>' +
+  '<div class="half top flap-fall"><span class="glyph"></span></div>' +
+  '<div class="half bottom flap-land"><span class="glyph"></span></div>' +
+  '<div class="hinge"></div>';
+function pvTileHash(n){ var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function pvDispChar(ch){ return ch === " " ? "\u00A0" : ch; }
+function pvSetTileStatic(t, ch){
+  if(t._p){ t._p.sTop.textContent = pvDispChar(ch); t._p.sBot.textContent = pvDispChar(ch); }
+  else t.textContent = ch;
+}
+function pvMakeTile(rowIdx, globalCol){
+  var t = document.createElement("div"); t.className = "pv-tile";
+  var seed = rowIdx * 97 + globalCol * 13 + 7;
+  t.style.setProperty("--tilt", ((pvTileHash(seed) - 0.5) * 0.5).toFixed(2) + "deg");
+  t.innerHTML = PV_TILE_HTML;
+  t._p = {
+    sTop: t.querySelector(".s-top .glyph"), sBot: t.querySelector(".s-bot .glyph"),
+    fFall: t.querySelector(".flap-fall"), fFallG: t.querySelector(".flap-fall .glyph"),
+    fLand: t.querySelector(".flap-land"), fLandG: t.querySelector(".flap-land .glyph"),
+    shadow: t.querySelector(".cell-shadow")
+  };
+  t._rate = 0.96 + pvTileHash(seed + 31) * 0.08;
+  t._jitter = Math.floor(pvTileHash(seed + 57) * 21);
+  t.dataset.ch = " ";
+  pvSetTileStatic(t, " ");
+  return t;
+}
+function pvRowStatusClass(remarks){
+  var s = String(remarks || "").toUpperCase();
+  if(/CANCEL/.test(s)) return "st-cancelled";
+  if(/DELAY/.test(s)) return "st-delayed";
+  if(/FINAL/.test(s)) return "st-final";
+  if(/BOARDING/.test(s)) return "st-boarding";
+  if(/DEPARTED|LANDED/.test(s)) return "st-departed";
+  return "";
+}
+var pvMsgTiles = [];
+function pvBuildMsgRow(rows){
+  var host = document.getElementById("pv-rows");
+  var rowEl = document.createElement("div"); rowEl.className = "pv-row msgrow";
+  pvMsgTiles = [];
+  var gc = 0;
+  PV_COLS.forEach(function(c, ci){
+    if(ci){ var s = document.createElement("div"); s.className = "pv-spacer"; rowEl.appendChild(s); }
+    var cell = document.createElement("div"); cell.className = "pv-cell";
+    var tiles = [];
+    for(var k = 0; k < c.width; k++){
+      var t = pvMakeTile(rows, gc); gc++;
+      cell.appendChild(t); tiles.push(t);
+    }
+    rowEl.appendChild(cell); pvMsgTiles.push(tiles);
+  });
+  host.appendChild(rowEl);
+}
 function pvBuildRows(b, text, rows){
   var host = document.getElementById("pv-rows");
-  host.innerHTML = ""; pvGrid = [];
+  host.innerHTML = ""; pvGrid = []; pvMsgTiles = [];
   pvBuildHeads(b);
   for(var r = 0; r < rows; r++){
     var rowEl = document.createElement("div"); rowEl.className = "pv-row";
@@ -4168,17 +4276,18 @@ function pvBuildRows(b, text, rows){
       var cell = document.createElement("div"); cell.className = "pv-cell";
       var tiles = [];
       for(var k = 0; k < pvCols; k++){
-        var t = document.createElement("div"); t.className = "pv-tile"; t.textContent = " "; t.dataset.ch = " ";
+        var t = pvMakeTile(r, k);
         cell.appendChild(t); tiles.push(t);
       }
       rowEl.appendChild(cell); gridRow.push(tiles);
     } else {
+      var gc = 0;
       PV_COLS.forEach(function(c, ci){
         if(ci){ var s = document.createElement("div"); s.className = "pv-spacer"; rowEl.appendChild(s); }
         var cell2 = document.createElement("div"); cell2.className = "pv-cell";
         var tiles2 = [];
         for(var k2 = 0; k2 < c.width; k2++){
-          var t2 = document.createElement("div"); t2.className = "pv-tile"; t2.textContent = " "; t2.dataset.ch = " ";
+          var t2 = pvMakeTile(r, gc); gc++;
           cell2.appendChild(t2); tiles2.push(t2);
         }
         rowEl.appendChild(cell2); gridRow.push(tiles2);
@@ -4186,6 +4295,114 @@ function pvBuildRows(b, text, rows){
     }
     host.appendChild(rowEl); pvGrid.push(gridRow);
   }
+  if(!text) pvBuildMsgRow(rows);
+}
+/* ============ The preview's flip runner ============
+   The display's motion, mirrored: the two-phase fall and landing
+   at each tile's own motor rate, fast-forward on long travels,
+   the hesitation and the ease-out, the sample's sweep, gentle in
+   the board's quiet hours (120 ms steps, 60 ms sweep) and instant
+   sets under reduced motion. The preview's cascade sound stays
+   its own deal (pvPlayCascade), as it was. */
+function pvSleepMs(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+var pvReducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+if(window.matchMedia){
+  var pvRmQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if(pvRmQuery.addEventListener) pvRmQuery.addEventListener("change", function(e){ pvReducedMotion = e.matches; });
+  else if(pvRmQuery.addListener) pvRmQuery.addListener(function(e){ pvReducedMotion = e.matches; });
+}
+var pvGentle = false;
+function pvInQuiet(b){
+  var q = b && b.quietHours; if(!q || !q.on) return false;
+  var now = new Date(), mins = now.getHours() * 60 + now.getMinutes();
+  function parse(x){ var p = String(x || "0:0").split(":"); return (+p[0]) * 60 + (+p[1] || 0); }
+  var a = parse(q.start), bb = parse(q.end);
+  return a <= bb ? (mins >= a && mins < bb) : (mins >= a || mins < bb);
+}
+function pvBoardMessage(b){
+  var m = (b && b.message != null) ? String(b.message) : "WELCOME TO THE ISLE";
+  return m.toUpperCase();
+}
+function pvFlipStepTile(tile, next, isFinal, stepIdx){
+  var p = tile._p;
+  if(!p){ pvSetTileStatic(tile, next); tile.dataset.ch = next; return Promise.resolve(); }
+  var stepMs = (pvGentle ? 120 : 85) * (tile._rate || 1);
+  var fallMs = Math.round(stepMs * 0.53);
+  var landMs = Math.round(stepMs * 0.47) + (isFinal ? 130 : 0);
+  return (async function(){
+    if(stepIdx === 0) await pvSleepMs(8);
+    p.sTop.textContent = pvDispChar(next);
+    p.fFallG.textContent = pvDispChar(tile.dataset.ch || " ");
+    p.fLandG.textContent = pvDispChar(next);
+    p.fFall.style.display = "block";
+    p.fFall.style.transform = "rotateX(0deg)";
+    p.fLand.style.display = "block";
+    p.fLand.style.transform = "rotateX(90deg)";
+    try{
+      var fallAnim = p.fFall.animate(
+        [{ transform: "rotateX(0deg)", filter: "brightness(1)" },
+         { transform: "rotateX(-90deg)", filter: "brightness(0.5)" }],
+        { duration: fallMs, easing: "cubic-bezier(0.45, 0, 1, 1)", fill: "forwards" });
+      var shAnim = p.shadow.animate(
+        [{ opacity: 0 }, { opacity: 0.38, offset: 0.8 }, { opacity: 0.3 }],
+        { duration: fallMs, easing: "ease-in", fill: "forwards" });
+      await fallAnim.finished;
+      p.sBot.textContent = pvDispChar(next);
+      var frames = isFinal ?
+        [{ transform: "rotateX(90deg)", filter: "brightness(0.65)" },
+         { transform: "rotateX(-4deg)", filter: "brightness(1.06)", offset: 0.45 },
+         { transform: "rotateX(1.4deg)", filter: "brightness(1)", offset: 0.68 },
+         { transform: "rotateX(-0.6deg)", offset: 0.85 },
+         { transform: "rotateX(0deg)" }] :
+        [{ transform: "rotateX(90deg)", filter: "brightness(0.65)" },
+         { transform: "rotateX(-1deg)", filter: "brightness(1.02)", offset: 0.8 },
+         { transform: "rotateX(0deg)" }];
+      var landAnim = p.fLand.animate(frames,
+        { duration: landMs, easing: isFinal ? "cubic-bezier(0, 0, 0.3, 1.35)" : "cubic-bezier(0, 0, 0.3, 1)", fill: "forwards" });
+      var sh2 = p.shadow.animate([{ opacity: 0.3 }, { opacity: 0 }], { duration: landMs, fill: "forwards" });
+      await landAnim.finished;
+      try{ shAnim.cancel(); sh2.cancel(); }catch(e){}
+    }catch(e){}
+    p.fFall.style.display = "none";
+    p.fLand.style.display = "none";
+    p.shadow.style.opacity = "0";
+    pvSetTileStatic(tile, next);
+    tile.dataset.ch = next;
+  })();
+}
+function pvRunFlipJobs(jobs, cascade){
+  var anySteps = false;
+  jobs.forEach(function(j){
+    /* Generation guard: a newer render supersedes this tile's older
+       jobs, so overlapping cascades can never strand a tile mid-flip. */
+    var gen = (j.tile._pvGen = (j.tile._pvGen || 0) + 1);
+    var steps = (ringIdx(j.to) - ringIdx(j.from) + RING.length) % RING.length;
+    if(!cascade) steps = 0;
+    if(steps > 0) anySteps = true;
+    if(steps === 0 || pvReducedMotion){ pvSetTileStatic(j.tile, j.to); j.tile.dataset.ch = j.to; return; }
+    setTimeout(function(){
+      if(j.tile._pvGen !== gen) return;
+      (async function(){
+        var pos = ringIdx(j.from), remaining = steps, sIdx = 0;
+        while(remaining > 0){
+          if(j.tile._pvGen !== gen) return;
+          pos = (pos + 1) % RING.length;
+          var next = RING[pos];
+          var isFinal = remaining === 1;
+          if(steps > 24 && remaining > 3){
+            pvSetTileStatic(j.tile, next); j.tile.dataset.ch = next;
+            await pvSleepMs(Math.round(30 * (j.tile._rate || 1)));
+          } else {
+            await pvFlipStepTile(j.tile, next, isFinal, sIdx);
+            if(remaining === 2) await pvSleepMs(12);
+          }
+          sIdx++; remaining--;
+        }
+        j.tile.dataset.ch = j.to;
+      })();
+    }, j.delay);
+  });
+  return anySteps;
 }
 function pvRender(cascade){
   var b = board(); pvB = b;
@@ -4208,56 +4425,62 @@ function pvRender(cascade){
   var rows = pvFit(text);
   var key = (text ? "text" : pvKind(b)) + ":" + rows + ":" + (text ? pvCols : "");
   if(key !== pvKey){ pvBuildRows(b, text, rows); pvKey = key; }
+  pvGentle = pvInQuiet(b);
   var jobs = [], r, k;
+  var colOff = [], colTot = 0;
+  PV_COLS.forEach(function(c){ colOff.push(colTot); colTot += c.width; });
   if(text){
     var lines = pvEffLines(b);
     for(r = 0; r < rows; r++){
       var ln = lines[r] || { text: "", black: false };
       var target = ln.black ? "" : pvCleanRaw(ln.text);
       target = (target + " ".repeat(pvCols)).slice(0, pvCols);
-      for(k = 0; k < pvCols; k++)
-        jobs.push({ tile: pvGrid[r][0][k], to: target[k], delay: r * 40 + k * 14 });
+      for(k = 0; k < pvCols; k++){
+        var tt = pvGrid[r][0][k];
+        jobs.push({ tile: tt, from: tt.dataset.ch || " ", to: target[k],
+                    pan: (k + 0.5) / pvCols * 2 - 1,
+                    delay: (pvGentle ? 60 : 30) * k + 15 * r + (tt._jitter || 0), silent: !!ln.black });
+      }
     }
   } else {
     var fl = pvEffFlights(b);
+    var host = document.getElementById("pv-rows");
     for(r = 0; r < rows; r++){
       var f = fl[r] || null;
+      var rowEl = host.children[r];
+      var rcls = (f && !f.black) ? pvRowStatusClass(f.remarks) : "";
+      if(rowEl) rowEl.className = "pv-row" + (rcls ? " " + rcls : "");
       PV_COLS.forEach(function(c, ci){
         var target2 = (!f || f.black) ? "" : pvClean(f[c.key], c.width);
         target2 = (target2 + " ".repeat(c.width)).slice(0, c.width);
         for(var k2 = 0; k2 < c.width; k2++){
           var tile = pvGrid[r][ci][k2];
-          if(ci === 4) tile.classList.toggle("hot", !!(f && !f.black && /FINAL|DELAY|CANCEL/.test(f.remarks || "")));
-          jobs.push({ tile: tile, to: target2[k2], delay: r * 40 + ci * 60 + k2 * 14 });
+          jobs.push({ tile: tile, from: tile.dataset.ch || " ", to: target2[k2],
+                      pan: (colOff[ci] + k2 + 0.5) / colTot * 2 - 1,
+                      delay: (pvGentle ? 60 : 30) * (colOff[ci] + k2) + 15 * r + (tile._jitter || 0),
+                      silent: !f || !!f.black });
+        }
+      });
+    }
+    /* The message row under the flights, as on the display: it
+       joins the cascade after the last flight row. */
+    if(pvMsgTiles.length){
+      var msg = pvCleanRaw(pvBoardMessage(b));
+      msg = (msg + " ".repeat(colTot)).slice(0, colTot);
+      var gc = 0;
+      PV_COLS.forEach(function(c, ci){
+        for(var k3 = 0; k3 < c.width; k3++){
+          var mtile = pvMsgTiles[ci][k3];
+          jobs.push({ tile: mtile, from: mtile.dataset.ch || " ", to: msg[gc],
+                      pan: (gc + 0.5) / colTot * 2 - 1,
+                      delay: (pvGentle ? 60 : 30) * Math.min(gc, 20) + 15 * rows + (mtile._jitter || 0) + 120,
+                      silent: false });
+          gc++;
         }
       });
     }
   }
-  var anySteps = false;
-  jobs.forEach(function(j){
-    /* Generation guard: a newer render supersedes this tile's older
-       jobs, so overlapping cascades can never strand a tile mid-flip. */
-    var gen = (j.tile._pvGen = (j.tile._pvGen || 0) + 1);
-    var from = j.tile.dataset.ch || " ";
-    var steps = (ringIdx(j.to) - ringIdx(from) + RING.length) % RING.length;
-    if(!cascade) steps = 0;
-    if(steps > 0) anySteps = true;
-    if(steps === 0){ j.tile.textContent = j.to; j.tile.dataset.ch = j.to; return; }
-    setTimeout(function(){
-      if(j.tile._pvGen !== gen) return;
-      var pos = ringIdx(from), remaining = steps;
-      var iv = setInterval(function(){
-        if(j.tile._pvGen !== gen){ clearInterval(iv); return; }
-        pos = (pos + 1) % RING.length;
-        j.tile.textContent = RING[pos];
-        if(--remaining <= 0){
-          clearInterval(iv);
-          j.tile.dataset.ch = j.to;
-          j.tile.classList.remove("land"); void j.tile.offsetWidth; j.tile.classList.add("land");
-        }
-      }, 85);
-    }, j.delay);
-  });
+  var anySteps = pvRunFlipJobs(jobs, cascade);
   if(cascade && anySteps && pvSoundOn) pvPlayCascade();
   pvRenderLamp(); pvRenderFeeds();
 }
@@ -4333,7 +4556,10 @@ document.getElementById("pv-sound").addEventListener("click", function(){
   pvSoundOn = !pvSoundOn;
   this.dataset.on = pvSoundOn ? "true" : "false";
   this.setAttribute("aria-label", pvSoundOn ? "Preview sound: on" : "Preview sound: off");
-  if(pvSoundOn) pvRender(true);
+  /* Turning sound on re-flips the preview, the Replay control's own
+     re-render, so the press itself is heard even when the board is
+     already settled; turning it off creates no audio at all. */
+  if(pvSoundOn) pvReplayCascade();
 });
 function pvReplayCascade(){
   /* Replay the full cascade on the television: the whole board
@@ -4351,9 +4577,14 @@ function pvReplayCascade(){
   for(var r = 0; r < pvGrid.length; r++)
     for(var c = 0; c < pvGrid[r].length; c++)
       for(var k = 0; k < pvGrid[r][c].length; k++){
-        pvGrid[r][c][k].textContent = " ";
+        pvSetTileStatic(pvGrid[r][c][k], " ");
         pvGrid[r][c][k].dataset.ch = " ";
       }
+  for(var mc = 0; mc < pvMsgTiles.length; mc++)
+    for(var mk = 0; mk < pvMsgTiles[mc].length; mk++){
+      pvSetTileStatic(pvMsgTiles[mc][mk], " ");
+      pvMsgTiles[mc][mk].dataset.ch = " ";
+    }
   pvRender(true);
 }
 document.getElementById("pv-cascade").addEventListener("click", pvReplayCascade);
